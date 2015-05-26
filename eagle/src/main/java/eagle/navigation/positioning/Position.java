@@ -1,12 +1,12 @@
 package eagle.navigation.positioning;
 
 public abstract class Position{
-	double longitude;
-	double latitude;
-	double altitude;
-    double roll;
-	double pitch;
-	double yaw;
+	private double longitude;
+	private double latitude;
+	private double altitude;
+    private double roll;
+	private double pitch;
+	private double yaw;
 
     public Position(double longitude, double latitude, double altitude,double roll, double pitch, double yaw){
         this.longitude=longitude;
