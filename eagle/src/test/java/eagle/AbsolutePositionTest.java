@@ -1,7 +1,6 @@
 package eagle;
 
 import eagle.navigation.positioning.AbsolutePosition;
-import eagle.navigation.positioning.GPSPosition;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
