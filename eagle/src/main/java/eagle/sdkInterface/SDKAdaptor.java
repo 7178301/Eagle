@@ -2,8 +2,13 @@ package eagle.sdkInterface;
 
 import eagle.navigation.positioning.AbsolutePosition;
 import eagle.navigation.positioning.RelativePosition;
-
-public abstract class Adaptor{
+/** Abstract SDKAdaptor Class
+ * @since     09/04/2015
+ * <p>
+ * Date Modified	26/05/2015 - Nicholas
+ * @version 0.0.1
+ * @author          Nicholas Alards [7178301@student.swin.edu.au] */
+public abstract class SDKAdaptor {
 
 
     private String sdkVersion;

@@ -1,23 +1,23 @@
 package eagle;
 
-/*
- * Drone
- *
- *
- * for Drone adaptor
- *
- */
+/** Drone API
+ * @since     09/04/2015
+ * <p>
+ * Date Modified	26/05/2015 - Nicholas
+ * @version 0.0.1
+ * @author          Nicholas Alards [7178301@student.swin.edu.au]
+ * @author          Glarah */
 
 import eagle.navigation.Navigation;
-import eagle.sdkInterface.Adaptor;
-import eagle.sdkInterface.Sensor;
+import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.SensorAdaptor;
 
 public class Drone {
     final private String apiVersion = "0.0.1";
 
 
-    private Adaptor adaptor = null;
-    private Sensor[] sensors = null;
+    private SDKAdaptor adaptor = null;
+    private SensorAdaptor[] sensorAdaptors = null;
     private Navigation navigation = null;
 
     double minSpeed = -0;
@@ -42,7 +42,7 @@ public class Drone {
         return apiVersion;
     }
 
-    public Adaptor adaptor(){
+    public SDKAdaptor adaptor(){
         return this.adaptor;
     }
 }
