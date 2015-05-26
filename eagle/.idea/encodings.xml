@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/APIController.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/Drone.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/CollisionDetection.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/Navigation.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/mapping/AutomatedMapping.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/mapping/ManualMapping.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/mapping/Mapping.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/positioning/AbsolutePosition.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/positioning/Bearing.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/positioning/GPSPosition.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/navigation/positioning/RelativePosition.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/sdkInterface/Adaptor.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/eagle/sdkInterface/sdkAdaptors/DJIPhantom2Vision.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/test/java/eagle/GPSPositionTest.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/test/java/eagle/RelativePositionTest.java" charset="UTF-8" />
+  </component>
+</project>

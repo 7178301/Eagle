@@ -1,4 +1,4 @@
 package eagle.navigation.mapping;
-public class Manual{
+public class ManualMapping{
 
 }

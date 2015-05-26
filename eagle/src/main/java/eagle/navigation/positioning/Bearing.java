@@ -1,4 +1,4 @@
-package eagle.sdkInterface.positioning;
+package eagle.navigation.positioning;
 
 public class Bearing 
 {

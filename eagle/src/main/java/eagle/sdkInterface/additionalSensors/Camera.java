@@ -1,6 +1,8 @@
-package eagle.sdkInterface.sensors;
+package eagle.sdkInterface.additionalSensors;
 
-public class Camera{
+import eagle.sdkInterface.Sensor;
+
+public class Camera extends Sensor {
     //how to say if a drone is capable of taking photos or not?
     public String takePhoto() {
         // 1. Check camera.

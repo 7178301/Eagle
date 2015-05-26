@@ -28,7 +28,7 @@ task jarMake(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Gradle Jar File',
                 'Implementation-Version': version,
-                'Main-Class': 'eagle.APIController'
+                'Main-Class': 'eagle.Drone'
     }
     baseName = rootProject.name + '-all'
     version = null

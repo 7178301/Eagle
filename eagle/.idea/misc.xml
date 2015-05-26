@@ -3,6 +3,13 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Bundled (Maven 3)" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state>
@@ -11,22 +18,28 @@
             <id />
           </State>
           <State>
+            <id>Abstraction issuesJava</id>
+          </State>
+          <State>
+            <id>Android</id>
+          </State>
+          <State>
             <id>Android Lint</id>
+          </State>
+          <State>
+            <id>Annotations verifyingGroovy</id>
           </State>
           <State>
             <id>Class structureJava</id>
           </State>
           <State>
-            <id>Code maturity issuesJava</id>
+            <id>Declaration redundancyJava</id>
           </State>
           <State>
-            <id>Code style issuesJava</id>
+            <id>Error handlingJava</id>
           </State>
           <State>
-            <id>Compiler issuesJava</id>
-          </State>
-          <State>
-            <id>Finalization issuesJava</id>
+            <id>GeneralJava</id>
           </State>
           <State>
             <id>Groovy</id>
@@ -35,7 +48,10 @@
             <id>Inheritance issuesJava</id>
           </State>
           <State>
-            <id>J2ME issuesJava</id>
+            <id>JUnit issues</id>
+          </State>
+          <State>
+            <id>JUnit issuesJava</id>
           </State>
           <State>
             <id>Java</id>
@@ -44,16 +60,25 @@
             <id>Java language level migration aidsJava</id>
           </State>
           <State>
-            <id>JavaBeans issuesJava</id>
+            <id>Javadoc issuesJava</id>
           </State>
           <State>
-            <id>Javadoc issuesJava</id>
+            <id>Memory issuesJava</id>
+          </State>
+          <State>
+            <id>Method MetricsGroovy</id>
+          </State>
+          <State>
+            <id>Method metricsJava</id>
+          </State>
+          <State>
+            <id>Modularization issuesJava</id>
           </State>
           <State>
             <id>Numeric issuesJava</id>
           </State>
           <State>
-            <id>OtherGroovy</id>
+            <id>Packaging issuesJava</id>
           </State>
           <State>
             <id>Performance issuesJava</id>
@@ -62,24 +87,12 @@
             <id>Probable bugsJava</id>
           </State>
           <State>
-            <id>Security issuesJava</id>
-          </State>
-          <State>
-            <id>Serialization issuesJava</id>
-          </State>
-          <State>
             <id>TestNG</id>
-          </State>
-          <State>
-            <id>Threading issuesJava</id>
-          </State>
-          <State>
-            <id>Verbose or redundant code constructsJava</id>
           </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>Compiler issuesJava</id>
+            <id>Android</id>
           </State>
         </selected-state>
       </profile-state>
@@ -100,21 +113,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.7</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
   </component>
 </project>

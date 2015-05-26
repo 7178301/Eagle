@@ -12,6 +12,7 @@ import dji.sdk.api.DJIDrone;
 import dji.sdk.api.DJIDroneTypeDef;
 import dji.sdk.api.DJIError;
 import dji.sdk.interfaces.DJIGerneralListener;
+import eagle.Drone;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -20,6 +21,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Drone dji = new Drone();
+        Log.e(TAG, "EagleAPI Version: " + dji.getAPIVersion());
     }
 
     @Override

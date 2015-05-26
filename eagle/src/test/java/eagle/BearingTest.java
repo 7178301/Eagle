@@ -1,6 +1,6 @@
 package eagle;
 
-import eagle.sdkInterface.positioning.Bearing;
+import eagle.navigation.positioning.Bearing;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
