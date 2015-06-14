@@ -13,6 +13,7 @@ public abstract class SDKAdaptor {
 
     private String sdkVersion;
     private String adaptorVersion;
+    private SensorAdaptor[] sensorAdaptors;
 
     public abstract void init();
     public abstract void shutDown();

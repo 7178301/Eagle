@@ -1,4 +1,4 @@
-package eagle.navigation.positioning;
+package eagle.navigation;
 /** Position
  * @since     09/04/2015
  * <p>

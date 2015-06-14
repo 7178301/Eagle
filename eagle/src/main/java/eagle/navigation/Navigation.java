@@ -12,7 +12,7 @@ import eagle.navigation.positioning.RelativePosition;
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Glarah */
 
-public class Navigation{
+public class Navigation extends CollisionDetection{
 
     private Drone drone;
     private AbsolutePosition home;

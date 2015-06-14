@@ -1,4 +1,7 @@
 package eagle.navigation.positioning;
+
+import eagle.navigation.Position;
+
 /** Relative Position which extends Position
  * @since     09/04/2015
  * <p>
