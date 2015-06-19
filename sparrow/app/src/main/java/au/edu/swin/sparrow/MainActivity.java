@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.Iterator;
 
@@ -23,7 +24,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        eagle()
+        initializeUI();
     }
 
     @Override
@@ -48,17 +49,27 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void eagle(){
+    private static final String TAG = "Sparrow Debug";
+
+    private void initializeUI(){
         Drone drone = new Drone();
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
 
         Iterator it = drone.getSDKAdaptorList().iterator();
         Log.e(TAG, "Found SDK Adaptors: " + it.hasNext());
-        while(it.hasNext())
-            Log.e(TAG, "SDK Adaptors: " + it.next());
+        String SDKs = new String();
+        while(it.hasNext()){
+            SDKs+=it.next()+"\n";
+        }
+        Log.e(TAG, "SDK Adaptors: " + SDKs);
+
+        TextView defaultTextView = (TextView) findViewById(R.id.defaultTextView);
+        defaultTextView.setText(SDKs);
     }
 
-    private static final String TAG = "DJI Debug";
+    /*
+    Lara's initial DJI connection code
+
     public void start(){
         DJIDrone drone=new DJIDrone();
         drone.initWithType(this.getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
@@ -84,4 +95,5 @@ public class MainActivity extends ActionBarActivity {
         }
 
     }
+    */
 }
