@@ -1,7 +1,11 @@
 package eagle.sdkInterface;
 
+import eagle.sdkInterface.sensorAdaptors.*;
 import eagle.navigation.positioning.AbsolutePosition;
 import eagle.navigation.positioning.RelativePosition;
+
+import java.util.HashMap;
+
 /** Abstract SDKAdaptor Class
  * @since     09/04/2015
  * <p>
@@ -10,14 +14,37 @@ import eagle.navigation.positioning.RelativePosition;
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public abstract class SDKAdaptor {
 
+    private HashMap<String,Accelerometer> accelerometer = null;
+    private HashMap<String,Altimeter> altimeter = null;
+    private HashMap<String,Camera> camera = null;
+    private HashMap<String,Compass> compass = null;
+    private HashMap<String,Gyroscope> gyroscopes = null;
+    private HashMap<String,LIDAR> lidar = null;
+    private HashMap<String,RPLIDAR> rplidar = null;
+    private HashMap<String,Ultrasonic> ultrasonic = null;
 
-    private String sdkVersion;
-    private String adaptorVersion;
-    private SensorAdaptor[] sensorAdaptors;
+    private String adaptorName = null;
+    private String sdkVersion = null;
+    private String adaptorVersion = null;
 
-    public abstract void init();
-    public abstract void shutDown();
-    public abstract String getAdaptorVersion();
+    public SDKAdaptor(String adaptorName, String sdkVersion, String adaptorVersion){
+        this.adaptorName=adaptorName;
+        this.sdkVersion=sdkVersion;
+        this.adaptorVersion=adaptorVersion;
+    }
+
+    public abstract void connect();
+    public abstract void disconnect();
+    public abstract void shutdown();
+    public String getAdaptorVersion(){
+        return adaptorVersion;
+    };
+    public String getSdkVersion(){
+        return sdkVersion;
+    }
+    public String getAdaptorName(){
+        return adaptorName;
+    }
 
     public abstract boolean flyToRelative(RelativePosition position, double speed);
     public abstract boolean flyToRelative(RelativePosition position);

@@ -8,4 +8,7 @@ import eagle.sdkInterface.sensorAdaptors.RPLIDAR;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public class RoboPeakRPLIDARA1M1R1 extends RPLIDAR {
+    public RoboPeakRPLIDARA1M1R1(){
+        super("Robo Peak","RPLIDAR A1M1R1","0.0.1");
+    }
 }

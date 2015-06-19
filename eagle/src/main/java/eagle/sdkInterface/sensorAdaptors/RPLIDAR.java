@@ -1,6 +1,5 @@
 package eagle.sdkInterface.sensorAdaptors;
 
-import eagle.sdkInterface.SensorAdaptor;
 /** RPLIDAR Adaptor Interface
  * @since     09/04/2015
  * <p>
@@ -8,5 +7,9 @@ import eagle.sdkInterface.SensorAdaptor;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public abstract class RPLIDAR extends SensorAdaptor {
+
+    public RPLIDAR(String adaptorManufacturer, String adaptorModel, String adaptorVersion){
+        super(adaptorManufacturer,adaptorModel,adaptorVersion);
+    }
 
 }

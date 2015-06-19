@@ -9,26 +9,29 @@ package eagle;
  * @author          Glarah */
 
 import eagle.navigation.Navigation;
+import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
-import eagle.sdkInterface.SensorAdaptor;
+import eagle.sdkInterface.sdkAdaptors.Flyver;
+
+import java.util.HashSet;
 
 public class Drone {
     final private String apiVersion = "0.0.1";
 
 
     private SDKAdaptor adaptor = null;
-    private SensorAdaptor[] sensorAdaptors = null;
     private Navigation navigation = null;
+    private AdaptorLoader adaptorLoader = null;
 
     double minSpeed = -0;
     double maxSpeed = -0;
 
     public Drone(){
-        navigation = new Navigation(this);
+        this.adaptorLoader = new AdaptorLoader();
     }
 
     public void start(){
-        adaptor.init();
+        adaptor.connect();
         while (!adaptor.getFlagReady()) {
             try {
                 wait(1000);
@@ -42,9 +45,17 @@ public class Drone {
         return apiVersion;
     }
 
-    public SDKAdaptor adaptor(){
+    public SDKAdaptor getAdaptor(){
         return this.adaptor;
     }
+    public HashSet getSDKAdaptorList(){
+        return this.adaptorLoader.getSDKAdaptorList();
+    }
+    public void setAdaptor(String adaptor){
+        this.adaptor = this.adaptorLoader.getSDKAdaptor(adaptor);
+        this.navigation = new Navigation(this);
+    }
+
 }
 
 

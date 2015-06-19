@@ -8,4 +8,7 @@ import eagle.sdkInterface.sensorAdaptors.Camera;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public class AndroidCamera extends Camera {
+    public AndroidCamera(){
+        super("Android","Camera","0.0.1");
+    }
 }

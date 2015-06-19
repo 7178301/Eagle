@@ -35,16 +35,16 @@ public class Navigation extends CollisionDetection{
     /**Returns the displacement to home.
      *@param speed Speed to travel at (m/s)*/
     public void flyHome(double speed) {
-        drone.adaptor().flyToAbsolute(home, speed);
+        drone.getAdaptor().flyToAbsolute(home, speed);
     }
     /**Sends the drone to the home position*/
     public void flyHome() {
-        drone.adaptor().flyToAbsolute(home);
+        drone.getAdaptor().flyToAbsolute(home);
     }
     /**Returns the current position of the drone.
      *@return AbsolutePosition Absolute Position*/
     public AbsolutePosition getAbsolutePosition(){
-        return new AbsolutePosition(drone.adaptor().getLatitude(),drone.adaptor().getLongitude(),drone.adaptor().getAltitude(),drone.adaptor().getRoll(),drone.adaptor().getPitch(),drone.adaptor().getYaw());
+        return new AbsolutePosition(drone.getAdaptor().getLatitude(),drone.getAdaptor().getLongitude(),drone.getAdaptor().getAltitude(),drone.getAdaptor().getRoll(),drone.getAdaptor().getPitch(),drone.getAdaptor().getYaw());
     }
 
 }

@@ -1,8 +1,8 @@
 package eagle.sdkInterface.sdkAdaptors;
 
+import eagle.sdkInterface.SDKAdaptor;
 import eagle.navigation.positioning.AbsolutePosition;
 import eagle.navigation.positioning.RelativePosition;
-import eagle.sdkInterface.SDKAdaptor;
 
 /** DJI SDKAdaptor
  * @since     09/04/2015
@@ -14,13 +14,13 @@ public class DJIPhantom2Vision extends SDKAdaptor {
 
     //TODO Create method implementations
 
+    public DJIPhantom2Vision(){
+        super("DJI_SDK_Android","1.0.6","0.0.1");
+    }
 
-    private String sdkVersion;
-    private final String adaptorVersion="0.0.1";
-
-    public void init(){};
-    public void shutDown(){};
-    public String getAdaptorVersion(){return adaptorVersion;};
+    public void connect(){};
+    public void disconnect(){};
+    public void shutdown(){};
 
     public boolean flyToRelative(RelativePosition position, double speed){return false;};
     public boolean flyToRelative(RelativePosition position){return false;};

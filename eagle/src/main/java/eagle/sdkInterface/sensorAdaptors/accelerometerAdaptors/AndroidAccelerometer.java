@@ -8,4 +8,7 @@ import eagle.sdkInterface.sensorAdaptors.Accelerometer;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public class AndroidAccelerometer extends Accelerometer {
+    public AndroidAccelerometer(){
+        super("Android","Accelerometer","0.0.1");
+    }
 }

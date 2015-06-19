@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 import android.util.Log;
 
+import java.util.Iterator;
+
 import dji.sdk.api.DJIDrone;
 import dji.sdk.api.DJIDroneTypeDef;
 import dji.sdk.api.DJIError;
@@ -21,8 +23,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Drone dji = new Drone();
-        Log.e(TAG, "EagleAPI Version: " + dji.getAPIVersion());
+        eagle()
     }
 
     @Override
@@ -45,6 +46,16 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void eagle(){
+        Drone drone = new Drone();
+        Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
+
+        Iterator it = drone.getSDKAdaptorList().iterator();
+        Log.e(TAG, "Found SDK Adaptors: " + it.hasNext());
+        while(it.hasNext())
+            Log.e(TAG, "SDK Adaptors: " + it.next());
     }
 
     private static final String TAG = "DJI Debug";
