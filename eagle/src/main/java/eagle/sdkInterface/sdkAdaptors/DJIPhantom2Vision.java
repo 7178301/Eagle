@@ -1,5 +1,7 @@
 package eagle.sdkInterface.sdkAdaptors;
 
+import dji.sdk.api.DJIDrone;
+import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.navigation.positioning.AbsolutePosition;
 import eagle.navigation.positioning.RelativePosition;
@@ -18,42 +20,47 @@ public class DJIPhantom2Vision extends SDKAdaptor {
         super("DJI_SDK_Android","1.0.6","0.0.1");
     }
 
-    public void connect(){};
-    public void disconnect(){};
-    public void shutdown(){};
+    public void connectToDrone(){}
+    public void disconnectFronDrone(){}
+    public void shutdownDrone(){}
+    public boolean isConnectedToDrone(){return false;}
 
-    public boolean flyToRelative(RelativePosition position, double speed){return false;};
-    public boolean flyToRelative(RelativePosition position){return false;};
 
-    public boolean flyToAbsolute(AbsolutePosition position, double speed){return false;};
-    public boolean flyToAbsolute(AbsolutePosition position){return false;};
+    public boolean flyToRelative(RelativePosition position, double speed){return false;}
+    public boolean flyToRelative(RelativePosition position){return false;}
 
-    public boolean changeLongitudeRelative(double altitude,double speed){return false;};
-    public boolean changeLongitudeRelative(double altitude){return false;};
-    public boolean changeLatitudeRelative(double altitude,double speed){return false;};
-    public boolean changeLatitudeRelative(double altitude){return false;};
-    public boolean changeAltitudeRelative(double altitude,double speed){return false;};
-    public boolean changeAltitudeRelative(double altitude){return false;};
+    public Boolean flyToAbsolute(AbsolutePosition position, double speed){return false;}
+    public Boolean flyToAbsolute(AbsolutePosition position){return false;}
 
-    public boolean changeLongitudeAbsolute(double altitude,double speed){return false;};
-    public boolean changeLongitudeAbsolute(double altitude){return false;};
-    public boolean changeLatitudeAbsolute(double altitude,double speed){return false;};
-    public boolean changeLatitudeAbsolute(double altitude){return false;};
-    public boolean changeAltitudeAbsolute(double altitude,double speed){return false;};
-    public boolean changeAltitudeAbsolute(double altitude){return false;};
+    public boolean changeLongitudeRelative(double altitude,double speed){return false;}
+    public boolean changeLongitudeRelative(double altitude){return false;}
+    public boolean changeLatitudeRelative(double altitude,double speed){return false;}
+    public boolean changeLatitudeRelative(double altitude){return false;}
+    public boolean changeAltitudeRelative(double altitude,double speed){return false;}
+    public boolean changeAltitudeRelative(double altitude){return false;}
+    public boolean changeYawRelative(Bearing yaw,double speed){return false;}
+    public boolean changeYawRelative(Bearing yaw){return false;}
 
-    public boolean changeYaw(double yaw){return false;};
+    public Boolean changeLongitudeAbsolute(double altitude,double speed){return null;}
+    public Boolean changeLongitudeAbsolute(double altitude){return null;}
+    public Boolean changeLatitudeAbsolute(double altitude,double speed){return null;}
+    public Boolean changeLatitudeAbsolute(double altitude){return null;}
+    public Boolean changeAltitudeAbsolute(double altitude,double speed){return null;}
+    public Boolean changeAltitudeAbsolute(double altitude){return null;}
+    public Boolean changeYawAbsolute(Bearing yaw,double speed){
+        return null;
+    }
+    public Boolean changeYawAbsolute(Bearing yaw){
+        return null;
+    }
 
-    public double getLongitude(){return 0;};
-    public double getLatitude(){return 0;};
-    public double getAltitude(){return 0;};
-    public double getRoll(){return 0;};
-    public double getPitch(){return 0;};
-    public double getYaw(){return 0;};
 
-    //Drones that have a ready flag should return it status otherwise always true.
-    public boolean getFlagReady(){return false;};
-
+    public double getLongitude(){return 0;}
+    public double getLatitude(){return 0;}
+    public double getAltitude(){return 0;}
+    public double getRoll(){return 0;}
+    public double getPitch(){return 0;}
+    public double getYaw(){return 0;}
 }
 
 //The following are example implementations

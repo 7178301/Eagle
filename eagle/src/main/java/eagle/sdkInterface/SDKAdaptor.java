@@ -1,5 +1,6 @@
 package eagle.sdkInterface;
 
+import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.sensorAdaptors.*;
 import eagle.navigation.positioning.AbsolutePosition;
 import eagle.navigation.positioning.RelativePosition;
@@ -33,9 +34,12 @@ public abstract class SDKAdaptor {
         this.adaptorVersion=adaptorVersion;
     }
 
-    public abstract void connect();
-    public abstract void disconnect();
-    public abstract void shutdown();
+    public abstract void connectToDrone();
+    public abstract void disconnectFronDrone();
+    public abstract void shutdownDrone();
+    public abstract boolean isConnectedToDrone();
+
+
     public String getAdaptorVersion(){
         return adaptorVersion;
     };
@@ -49,8 +53,12 @@ public abstract class SDKAdaptor {
     public abstract boolean flyToRelative(RelativePosition position, double speed);
     public abstract boolean flyToRelative(RelativePosition position);
 
-    public abstract boolean flyToAbsolute(AbsolutePosition position, double speed);
-    public abstract boolean flyToAbsolute(AbsolutePosition position);
+    public Boolean flyToAbsolute(AbsolutePosition position, double speed){
+        return null;
+    }
+    public Boolean flyToAbsolute(AbsolutePosition position){
+        return null;
+    }
 
     public abstract boolean changeLongitudeRelative(double altitude,double speed);
     public abstract boolean changeLongitudeRelative(double altitude);
@@ -58,15 +66,33 @@ public abstract class SDKAdaptor {
     public abstract boolean changeLatitudeRelative(double altitude);
     public abstract boolean changeAltitudeRelative(double altitude,double speed);
     public abstract boolean changeAltitudeRelative(double altitude);
+    public abstract boolean changeYawRelative(Bearing yaw,double speed);
+    public abstract boolean changeYawRelative(Bearing yaw);
 
-    public abstract boolean changeLongitudeAbsolute(double altitude,double speed);
-    public abstract boolean changeLongitudeAbsolute(double altitude);
-    public abstract boolean changeLatitudeAbsolute(double altitude,double speed);
-    public abstract boolean changeLatitudeAbsolute(double altitude);
-    public abstract boolean changeAltitudeAbsolute(double altitude,double speed);
-    public abstract boolean changeAltitudeAbsolute(double altitude);
-
-    public abstract boolean changeYaw(double yaw);
+    public Boolean changeLongitudeAbsolute(double altitude,double speed){
+        return null;
+    }
+    public Boolean changeLongitudeAbsolute(double altitude){
+        return null;
+    }
+    public Boolean changeLatitudeAbsolute(double altitude,double speed){
+        return null;
+    }
+    public Boolean changeLatitudeAbsolute(double altitude){
+        return null;
+    }
+    public Boolean changeAltitudeAbsolute(double altitude,double speed){
+        return null;
+    }
+    public Boolean changeAltitudeAbsolute(double altitude){
+        return null;
+    }
+    public Boolean changeYawAbsolute(Bearing yaw,double speed){
+        return null;
+    }
+    public Boolean changeYawAbsolute(Bearing yaw){
+        return null;
+    }
 
     public abstract double getLongitude();
     public abstract double getLatitude();
@@ -74,8 +100,4 @@ public abstract class SDKAdaptor {
     public abstract double getRoll();
     public abstract double getPitch();
     public abstract double getYaw();
-
-    //Drones that have a ready flag should return it status otherwise always true.
-    public abstract boolean getFlagReady();
-
 }

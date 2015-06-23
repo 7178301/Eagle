@@ -31,13 +31,8 @@ public class Drone {
     }
 
     public void start(){
-        adaptor.connect();
-        while (!adaptor.getFlagReady()) {
-            try {
-                wait(1000);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
+        while (!adaptor.isConnectedToDrone()) {
+            adaptor.connectToDrone();
         }
     }
 
