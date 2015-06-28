@@ -1,8 +1,7 @@
 package eagle.navigation;
 
 import eagle.Drone;
-import eagle.navigation.positioning.AbsolutePosition;
-import eagle.navigation.positioning.RelativePosition;
+import eagle.navigation.positioning.Position;
 
 /** API Navigation
  * @since     09/04/2015
@@ -15,36 +14,12 @@ import eagle.navigation.positioning.RelativePosition;
 public class Navigation extends CollisionDetection{
 
     private Drone drone;
-    private AbsolutePosition home;
+    private Position home;
 
     /**Create the navigation logic for a drone.
      * @param drone The drone to apply navigation to*/
     public Navigation(Drone drone){
         this.drone=drone;
-    }
-    /**Sets home to be the current position*/
-    public Boolean setHome() {
-        this.home=getAbsolutePosition();
-        return true;
-    }
-    /**Returns the displacement to home.
-     *@return RelativePosition Relative Position from home*/
-    public RelativePosition getDisplacementToHome(){
-        return home.minus(getAbsolutePosition());
-    }
-    /**Returns the displacement to home.
-     *@param speed Speed to travel at (m/s)*/
-    public void flyHome(double speed) {
-        drone.getAdaptor().flyToAbsolute(home, speed);
-    }
-    /**Sends the drone to the home position*/
-    public void flyHome() {
-        drone.getAdaptor().flyToAbsolute(home);
-    }
-    /**Returns the current position of the drone.
-     *@return AbsolutePosition Absolute Position*/
-    public AbsolutePosition getAbsolutePosition(){
-        return new AbsolutePosition(drone.getAdaptor().getLatitude(),drone.getAdaptor().getLongitude(),drone.getAdaptor().getAltitude(),drone.getAdaptor().getRoll(),drone.getAdaptor().getPitch(),drone.getAdaptor().getYaw());
     }
 
 }

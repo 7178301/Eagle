@@ -11,7 +11,6 @@ package eagle;
 import eagle.navigation.Navigation;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
-import eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import java.util.HashSet;
 

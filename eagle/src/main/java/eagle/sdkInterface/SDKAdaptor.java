@@ -85,6 +85,13 @@ public abstract class SDKAdaptor {
     public abstract boolean changeYawAbsolute(Bearing yaw,double speed);
     public abstract boolean changeYawAbsolute(Bearing yaw);
 
+    public void goHome(double speed) {
+        flyToAbsolute(homePosition, speed);
+    }
+    public void goHome() {
+        flyToAbsolute(homePosition);
+    }
+
     public abstract void updateCurrentPosition();
     public Position getRelativePositionToHome(){
         updateCurrentPosition();

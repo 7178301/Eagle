@@ -7,10 +7,8 @@ import static org.junit.Assert.*;
 
 public class BearingTest
 {
-
 	@Test
-	public void testBearingToString() 
-	{
+	public void testBearingToString(){
 		Bearing temp = new Bearing(40.34722);
 		assertEquals("40\u00B020'50\"", temp.toString());
 		
@@ -22,7 +20,5 @@ public class BearingTest
 		
 		temp = new Bearing(1050);
 		assertEquals("330\u00B0", temp.toString());
-		
 	}
-
 }
