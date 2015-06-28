@@ -1,9 +1,8 @@
 package eagle.sdkInterface.sdkAdaptors;
 
 import eagle.navigation.positioning.Bearing;
+import eagle.navigation.positioning.Position;
 import eagle.sdkInterface.SDKAdaptor;
-import eagle.navigation.positioning.AbsolutePosition;
-import eagle.navigation.positioning.RelativePosition;
 
 /** Flyver SDKAdaptor
  * @since     09/04/2015
@@ -20,13 +19,16 @@ public class Flyver extends SDKAdaptor {
         super("Flyver-SDK","alpha","0.0.1");
     }
 
-    public void connectToDrone(){}
-    public void disconnectFronDrone(){}
-    public void shutdownDrone(){}
+    public boolean connectToDrone(){return false;}
+    public boolean disconnectFromDrone(){return false;}
     public boolean isConnectedToDrone(){return false;}
 
-    public boolean flyToRelative(RelativePosition position, double speed){return false;}
-    public boolean flyToRelative(RelativePosition position){return false;}
+    public boolean standbyDrone(){return false;}
+    public boolean resumeDrone(){return false;}
+    public boolean shutdownDrone(){return false;}
+
+    public boolean flyToRelative(Position position, double speed){return false;}
+    public boolean flyToRelative(Position position){return false;}
 
     public boolean changeLongitudeRelative(double altitude,double speed){return false;}
     public boolean changeLongitudeRelative(double altitude){return false;}
@@ -37,12 +39,15 @@ public class Flyver extends SDKAdaptor {
     public boolean changeYawRelative(Bearing yaw,double speed){return false;}
     public boolean changeYawRelative(Bearing yaw){return false;}
 
-    public boolean changeYaw(double yaw){return false;};
+    public boolean changeLongitudeAbsolute(double altitude,double speed){return false;}
+    public boolean changeLongitudeAbsolute(double altitude){return false;}
+    public boolean changeLatitudeAbsolute(double altitude,double speed){return false;}
+    public boolean changeLatitudeAbsolute(double altitude){return false;}
+    public boolean changeAltitudeAbsolute(double altitude,double speed){return false;}
+    public boolean changeAltitudeAbsolute(double altitude){return false;}
+    public boolean changeYawAbsolute(Bearing yaw,double speed){return false;}
+    public boolean changeYawAbsolute(Bearing yaw){return false;}
 
-    public double getLongitude(){return 0;};
-    public double getLatitude(){return 0;};
-    public double getAltitude(){return 0;};
-    public double getRoll(){return 0;};
-    public double getPitch(){return 0;};
-    public double getYaw(){return 0;};
+    public void updateCurrentPosition(){};
+
 }

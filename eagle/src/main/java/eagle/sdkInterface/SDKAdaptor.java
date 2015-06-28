@@ -1,9 +1,8 @@
 package eagle.sdkInterface;
 
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.sensorAdaptors.*;
-import eagle.navigation.positioning.AbsolutePosition;
-import eagle.navigation.positioning.RelativePosition;
 
 import java.util.HashMap;
 
@@ -28,16 +27,24 @@ public abstract class SDKAdaptor {
     private String sdkVersion = null;
     private String adaptorVersion = null;
 
+    private Position homePosition;
+    private Position currentPosition;
+
     public SDKAdaptor(String adaptorName, String sdkVersion, String adaptorVersion){
         this.adaptorName=adaptorName;
         this.sdkVersion=sdkVersion;
         this.adaptorVersion=adaptorVersion;
+        this.homePosition=new Position(0,0,0,0,0,0);
+        this.currentPosition=new Position(0,0,0,0,0,0);
     }
 
-    public abstract void connectToDrone();
-    public abstract void disconnectFronDrone();
-    public abstract void shutdownDrone();
+    public abstract boolean connectToDrone();
+    public abstract boolean disconnectFromDrone();
     public abstract boolean isConnectedToDrone();
+
+    public abstract boolean standbyDrone();
+    public abstract boolean resumeDrone();
+    public abstract boolean shutdownDrone();
 
 
     public String getAdaptorVersion(){
@@ -50,13 +57,13 @@ public abstract class SDKAdaptor {
         return adaptorName;
     }
 
-    public abstract boolean flyToRelative(RelativePosition position, double speed);
-    public abstract boolean flyToRelative(RelativePosition position);
+    public abstract boolean flyToRelative(Position position, double speed);
+    public abstract boolean flyToRelative(Position position);
 
-    public Boolean flyToAbsolute(AbsolutePosition position, double speed){
+    public Boolean flyToAbsolute(Position position, double speed){
         return null;
     }
-    public Boolean flyToAbsolute(AbsolutePosition position){
+    public Boolean flyToAbsolute(Position position){
         return null;
     }
 
@@ -69,35 +76,29 @@ public abstract class SDKAdaptor {
     public abstract boolean changeYawRelative(Bearing yaw,double speed);
     public abstract boolean changeYawRelative(Bearing yaw);
 
-    public Boolean changeLongitudeAbsolute(double altitude,double speed){
-        return null;
+    public abstract boolean changeLongitudeAbsolute(double altitude,double speed);
+    public abstract boolean changeLongitudeAbsolute(double altitude);
+    public abstract boolean changeLatitudeAbsolute(double altitude,double speed);
+    public abstract boolean changeLatitudeAbsolute(double altitude);
+    public abstract boolean changeAltitudeAbsolute(double altitude,double speed);
+    public abstract boolean changeAltitudeAbsolute(double altitude);
+    public abstract boolean changeYawAbsolute(Bearing yaw,double speed);
+    public abstract boolean changeYawAbsolute(Bearing yaw);
+
+    public abstract void updateCurrentPosition();
+    public Position getRelativePositionToHome(){
+        updateCurrentPosition();
+        return currentPosition.minus(homePosition);
     }
-    public Boolean changeLongitudeAbsolute(double altitude){
-        return null;
-    }
-    public Boolean changeLatitudeAbsolute(double altitude,double speed){
-        return null;
-    }
-    public Boolean changeLatitudeAbsolute(double altitude){
-        return null;
-    }
-    public Boolean changeAltitudeAbsolute(double altitude,double speed){
-        return null;
-    }
-    public Boolean changeAltitudeAbsolute(double altitude){
-        return null;
-    }
-    public Boolean changeYawAbsolute(Bearing yaw,double speed){
-        return null;
-    }
-    public Boolean changeYawAbsolute(Bearing yaw){
-        return null;
+    public Position getPosition(){
+        updateCurrentPosition();
+        return currentPosition;
     }
 
-    public abstract double getLongitude();
-    public abstract double getLatitude();
-    public abstract double getAltitude();
-    public abstract double getRoll();
-    public abstract double getPitch();
-    public abstract double getYaw();
+    public void setHomePosition(Position position){
+        homePosition=position;
+    }
+    public Position getHomePosition(){
+        return homePosition;
+    }
 }

@@ -1,11 +1,11 @@
-package eagle.navigation;
+package eagle.navigation.positioning;
 /** Position
  * @since     09/04/2015
  * <p>
  * Date Modified	26/05/2015 - Nicholas
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
-public abstract class Position{
+public class Position{
 	private double longitude;
 	private double latitude;
 	private double altitude;
@@ -29,5 +29,14 @@ public abstract class Position{
     public double getPitch(){return this.pitch;};
     public double getYaw(){return this.yaw;};
 
-    public abstract String toString();
+    public Position add(Position position){
+        return new Position(this.longitude+position.longitude,this.latitude+position.getLatitude(),this.altitude+position.getAltitude(),this.roll+position.getRoll(),this.pitch+position.getPitch(),this.yaw+position.getYaw());
+    }
+    public Position minus(Position position){
+        return new Position(this.longitude-position.getLongitude(),this.latitude-position.getLatitude(),this.altitude-position.getAltitude(),this.roll-position.getRoll(),this.pitch-position.getPitch(),this.yaw-position.getYaw());
+    }
+
+    public String toString(){
+        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw();
+    }
 }
