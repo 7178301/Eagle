@@ -1,13 +1,37 @@
 # Sparrow
 INSERT ABOUT PROJECT HERE
 
-##Eagle
-Gradle Project: eagle
-Tasks: clean test assemble javadoc eagleClean jarMake jarCopy
+##Eagle (Drone API)
+### IDE Recomendation
+	- Prefered IDE: IntelliJ
+	- Alternative: Android Studio or any gradle compatable IDE
+###IntelliJ Configuration
+	- Download the repository from https://github.com/7178301/Eagle.git
+	- Change to the development branch
+	- Use IntelliJ to open the eagle project in the root of the repository
+	- Click Run -> Edit Configurations
+	- Add a new Gradle configuration
+	- Add the following configurations
+	     Gradle Project: eagle
+	     Tasks: clean test assemble javadoc eagleClean jarMake jarCopy
+	- Click Run -> Run to run the gradle configuration.
 
-##Sparrow
-Gradle Project: sparrow
-Tasks: clean check assemble
+
+##Sparrow (Android Cleaning Application)
+###IDE Recomendation
+	- Prefered IDE: Android Studio
+###Android Studio Configeration
+
+	- Download the repository from https://github.com/7178301/Eagle.git
+	- Change to the development branch
+	- Use Android Studio to open the eagle project in the root of the repository
+	- Ensure yo dollow all prompts to download appropriate SDK's, build-tools, platform-tools etc...
+	- Click Run -> Edit Configurations
+	- Add a new Gradle configuration
+	- Add the following configurations
+	     Gradle Project: sparrow
+	     Tasks: clean check assemble
+	- Click Run -> Run to run the gradle configuration.
 
 ##Documentation
 All relevant project documentation will be found in the documentation folder.  
