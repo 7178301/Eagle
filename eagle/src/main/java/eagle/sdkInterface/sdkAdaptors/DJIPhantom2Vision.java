@@ -2,6 +2,7 @@ package eagle.sdkInterface.sdkAdaptors;
 
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
+import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
 /** DJI SDKAdaptor
@@ -17,6 +18,9 @@ public class DJIPhantom2Vision extends SDKAdaptor {
     public DJIPhantom2Vision(){
         super("DJI_SDK_Android","1.0.6","0.0.1");
     }
+    public void loadDefaultAdaptors(AdaptorLoader adaptorLoader){
+
+    }
 
     public boolean connectToDrone(){return false;}
     public boolean disconnectFromDrone(){return false;}
@@ -26,48 +30,15 @@ public class DJIPhantom2Vision extends SDKAdaptor {
     public boolean resumeDrone(){return false;}
     public boolean shutdownDrone(){return false;}
 
+    public boolean flyToAbsolute(Position position, double speed){return false;}
+    public boolean flyToAbsolute(Position position){return false;}
 
-    public boolean flyToRelative(Position position, double speed){return false;}
-    public boolean flyToRelative(Position position){return false;}
 
-    public Boolean flyToAbsolute(Position position, double speed){return false;}
-    public Boolean flyToAbsolute(Position position){return false;}
-
-    public boolean changeLongitudeRelative(double altitude,double speed){return false;}
-    public boolean changeLongitudeRelative(double altitude){return false;}
-    public boolean changeLatitudeRelative(double altitude,double speed){return false;}
-    public boolean changeLatitudeRelative(double altitude){return false;}
-    public boolean changeAltitudeRelative(double altitude,double speed){return false;}
-    public boolean changeAltitudeRelative(double altitude){return false;}
-    public boolean changeYawRelative(Bearing yaw,double speed){return false;}
-    public boolean changeYawRelative(Bearing yaw){return false;}
-
-    public boolean changeLongitudeAbsolute(double altitude,double speed){
-        return false;
-    }
-    public boolean changeLongitudeAbsolute(double altitude){
-        return false;
-    }
-    public boolean changeLatitudeAbsolute(double altitude,double speed){
-        return false;
-    }
-    public boolean changeLatitudeAbsolute(double altitude){
-        return false;
-    }
-    public boolean changeAltitudeAbsolute(double altitude,double speed){
-        return false;
-    }
-    public boolean changeAltitudeAbsolute(double altitude){
-        return false;
-    }
-    public boolean changeYawAbsolute(Bearing yaw,double speed){
-        return false;
-    }
-    public boolean changeYawAbsolute(Bearing yaw){
-        return false;
+    public Position getPositionInFlight(){
+        //TODO CREATE BELOW IMPLEMENTATION
+        return new Position(0,0,0,0,0,new Bearing(0));
     }
 
-    public void updateCurrentPosition(){};
 }
 
 //The following are example implementations

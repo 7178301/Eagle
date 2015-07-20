@@ -22,6 +22,14 @@ public class Position{
         this.pitch=pitch;
         this.yaw=yaw;
     }
+    public Position(Position position){
+        this.longitude=position.longitude;
+        this.latitude=position.latitude;
+        this.altitude=position.altitude;
+        this.roll=position.roll;
+        this.pitch=position.pitch;
+        this.yaw=position.yaw;
+    }
 
     public double getLongitude(){return this.longitude;};
     public double getLatitude(){return this.latitude;};
@@ -30,11 +38,17 @@ public class Position{
     public double getPitch(){return this.pitch;};
     public Bearing getYaw(){return this.yaw;};
 
-    public Position add(Position position){
-        return new Position(this.longitude+position.longitude,this.latitude+position.getLatitude(),this.altitude+position.getAltitude(),this.roll+position.getRoll(),this.pitch+position.getPitch(),this.yaw.add(position.getYaw()));
+    public void addRelative(Position position){
+        this.longitude+=position.getLongitude();
+        this.latitude+=position.getLatitude();
+        this.altitude+=position.getAltitude();
+        this.yaw.addRelative(position.getYaw());
     }
-    public Position minus(Position position){
-        return new Position(this.longitude-position.getLongitude(),this.latitude-position.getLatitude(),this.altitude-position.getAltitude(),this.roll-position.getRoll(),this.pitch-position.getPitch(),this.yaw.add(position.getYaw()));
+    public  void addAbsolute(Position position){
+        this.longitude=this.longitude-(this.longitude-position.getLongitude());
+        this.latitude=this.latitude-(this.latitude-position.getLatitude());
+        this.altitude=this.altitude-(this.altitude-position.getAltitude());
+        this.yaw.addAbsolute(position.getYaw());
     }
 
     public String toString(){
