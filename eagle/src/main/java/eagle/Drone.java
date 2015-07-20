@@ -43,10 +43,11 @@ public class Drone {
         return this.adaptor;
     }
     public HashSet getSDKAdaptorList(){
-        return this.adaptorLoader.getSDKAdaptorList();
+        return this.adaptorLoader.getAdaptorListSDKs();
     }
-    public void setAdaptor(String adaptor){
-        this.adaptor = this.adaptorLoader.getSDKAdaptor(adaptor);
+    public void setSDKAdaptor(String adaptor){
+        this.adaptor = this.adaptorLoader.getAdaptorSDKs(adaptor);
+        this.adaptor.loadDefaultAdaptors(adaptorLoader);
         this.navigation = new Navigation(this);
     }
 

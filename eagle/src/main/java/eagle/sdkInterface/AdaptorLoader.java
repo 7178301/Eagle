@@ -44,32 +44,32 @@ public class AdaptorLoader {
         ultrasonicAdaptors.add("sensorAdaptors.ultrasonicAdaptors.SeeedStudioSEN10737P");
     }
 
-    public HashSet getSDKAdaptorList(){
+    public HashSet getAdaptorListSDKs(){
         return sdkAdaptors;
     }
-    public HashSet getAccelerometerAdaptorList(){
+    public HashSet getAdaptorListAccelerometer(){
         return accelerometerAdaptors;
     }
-    public HashSet getAltimeterAdaptorList(){
+    public HashSet getAdaptorListAltimeter(){
         return altimeterAdaptors;
     }
-    public HashSet getCameraAdaptorList(){
+    public HashSet getAdaptorListCamera(){
         return cameraAdaptors;
     }
-    public HashSet getCompassAdaptorList(){
+    public HashSet getAdaptorListCompass(){
         return compassAdaptors;
     }
-    public HashSet getGyroscopeAdaptorList(){
+    public HashSet getAdaptorListGyroscope(){
         return gyroscopeAdaptors;
     }
-    public HashSet getRPLIDARAdaptorList(){
+    public HashSet getAdaptorListRPLIDAR(){
         return RPLIDARAdaptors;
     }
-    public HashSet getUltrasonicAdaptorList(){
+    public HashSet getAdaptorListUltrasonic(){
         return ultrasonicAdaptors;
     }
 
-    public SDKAdaptor getSDKAdaptor(String adaptor){
+    public SDKAdaptor getAdaptorSDKs(String adaptor){
         SDKAdaptor result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (sdkAdaptors.contains(adaptor)) {
@@ -81,7 +81,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public Accelerometer getAccelerometerAdaptor(String adaptor){
+    public Accelerometer getAdaptorAccelerometer(String adaptor){
         Accelerometer result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (accelerometerAdaptors.contains(adaptor)) {
@@ -93,7 +93,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public Altimeter getAltimeterAdaptor(String adaptor){
+    public Altimeter getAdaptorAltimeter(String adaptor){
         Altimeter result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (altimeterAdaptors.contains(adaptor)) {
@@ -105,7 +105,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public Camera getCameraAdaptor(String adaptor){
+    public Camera getAdaptorCamera(String adaptor){
         Camera result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (cameraAdaptors.contains(adaptor)) {
@@ -117,7 +117,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public Compass getCompassAdaptor(String adaptor){
+    public Compass getAdaptorCompass(String adaptor){
         Compass result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (compassAdaptors.contains(adaptor)) {
@@ -129,7 +129,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public Gyroscope getGyroscopeAdaptor(String adaptor){
+    public Gyroscope getAdaptorGyroscope(String adaptor){
         Gyroscope result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (gyroscopeAdaptors.contains(adaptor)) {
@@ -141,7 +141,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public RPLIDAR getRPLIDARAdaptor(String adaptor){
+    public RPLIDAR getAdaptorRPLIDAR(String adaptor){
         RPLIDAR result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (RPLIDARAdaptors.contains(adaptor)) {
@@ -153,7 +153,7 @@ public class AdaptorLoader {
         }
         return result;
     }
-    public Ultrasonic getUltrasonicAdaptor(String adaptor){
+    public Ultrasonic getAdaptorUltrasonic(String adaptor){
         Ultrasonic result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (ultrasonicAdaptors.contains(adaptor)) {

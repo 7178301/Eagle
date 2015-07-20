@@ -20,13 +20,17 @@ public class Bearing
 			degrees += 360;
 		}
 	}
-
-	public Bearing add(Bearing val) {
-		return new Bearing(this.degrees+val.getDegrees());
+	public Bearing(Bearing bearing){
+		this.degrees=bearing.getDegrees();
 	}
 
-	public Bearing minus(Bearing val) {
-		return new Bearing(this.degrees-val.getDegrees());
+	public void addRelative(Bearing val) {
+		//TODO 360 Degree Boundry Calculation
+		this.degrees+=val.getDegrees();
+	}
+	public void addAbsolute(Bearing bearing){
+		//TODO 360 Degree Boundry Calculation
+		this.degrees=this.degrees-(this.degrees-bearing.getDegrees());
 	}
 
 	public double getDegrees() {
@@ -38,6 +42,7 @@ public class Bearing
 	 * based of: http://zonalandeducation.com/mmts/trigonometryRealms/degMinSec/degMinSec.htm
 	 * @return string containing degrees minutes seconds
 	 */
+	//TODO Incorrectly Coded. Seconds can exist when minute is 0
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(new Double(degrees).intValue());

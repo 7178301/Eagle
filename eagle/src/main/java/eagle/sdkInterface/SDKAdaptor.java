@@ -1,17 +1,10 @@
 package eagle.sdkInterface;
 
-import java.util.HashMap;
-
-import eagle.navigation.positioning.Bearing;
 import eagle.navigation.positioning.Position;
-import eagle.sdkInterface.sensorAdaptors.Accelerometer;
-import eagle.sdkInterface.sensorAdaptors.Altimeter;
-import eagle.sdkInterface.sensorAdaptors.Camera;
-import eagle.sdkInterface.sensorAdaptors.Compass;
-import eagle.sdkInterface.sensorAdaptors.Gyroscope;
-import eagle.sdkInterface.sensorAdaptors.LIDAR;
-import eagle.sdkInterface.sensorAdaptors.RPLIDAR;
-import eagle.sdkInterface.sensorAdaptors.Ultrasonic;
+import eagle.navigation.positioning.Bearing;
+import eagle.sdkInterface.sensorAdaptors.*;
+
+import java.util.HashMap;
 
 /** Abstract SDKAdaptor Class
  * @since     09/04/2015
@@ -35,15 +28,16 @@ public abstract class SDKAdaptor {
     private String adaptorVersion = null;
 
     private Position homePosition;
-    private Position currentPosition;
+    private Position currentPositionAssigned;
 
     public SDKAdaptor(String adaptorName, String sdkVersion, String adaptorVersion){
         this.adaptorName=adaptorName;
         this.sdkVersion=sdkVersion;
         this.adaptorVersion=adaptorVersion;
         this.homePosition=new Position(0,0,0,0,0,new Bearing(0));
-        this.currentPosition=new Position(0,0,0,0,0,new Bearing(0));
+        this.currentPositionAssigned =new Position(0,0,0,0,0,new Bearing(0));
     }
+    public abstract void loadDefaultAdaptors(AdaptorLoader adaptorLoader);
 
     public abstract boolean connectToDrone();
     public abstract boolean disconnectFromDrone();
@@ -52,7 +46,6 @@ public abstract class SDKAdaptor {
     public abstract boolean standbyDrone();
     public abstract boolean resumeDrone();
     public abstract boolean shutdownDrone();
-
 
     public String getAdaptorVersion(){
         return adaptorVersion;
@@ -64,33 +57,67 @@ public abstract class SDKAdaptor {
         return adaptorName;
     }
 
-    public abstract boolean flyToRelative(Position position, double speed);
-    public abstract boolean flyToRelative(Position position);
-
-    public Boolean flyToAbsolute(Position position, double speed){
-        return null;
+    public boolean flyToRelative(Position position, double speed){
+        return flyToAbsolute(new Position(getPositionInFlight().getLongitude()+position.getLongitude(),getPositionInFlight().getLatitude()+position.getLatitude(),
+                getPositionInFlight().getAltitude()+position.getAltitude(),0,0,new Bearing(getPositionInFlight().getYaw().getDegrees()+position.getYaw().getDegrees())),speed);
     }
-    public Boolean flyToAbsolute(Position position){
-        return null;
+    public boolean flyToRelative(Position position){
+        return flyToAbsolute(new Position(getPositionInFlight().getLongitude()+position.getLongitude(),getPositionInFlight().getLatitude()+position.getLatitude(),
+                getPositionInFlight().getAltitude()+position.getAltitude(),0,0,new Bearing(getPositionInFlight().getYaw().getDegrees()+position.getYaw().getDegrees())));
     }
 
-    public abstract boolean changeLongitudeRelative(double longitude,double speed);
-    public abstract boolean changeLongitudeRelative(double longitude);
-    public abstract boolean changeLatitudeRelative(double latitude,double speed);
-    public abstract boolean changeLatitudeRelative(double latitude);
-    public abstract boolean changeAltitudeRelative(double altitude,double speed);
-    public abstract boolean changeAltitudeRelative(double altitude);
-    public abstract boolean changeYawRelative(Bearing yaw,double speed);
-    public abstract boolean changeYawRelative(Bearing yaw);
+    public abstract boolean flyToAbsolute(Position position, double speed);
+    public abstract boolean flyToAbsolute(Position position);
 
-    public abstract boolean changeLongitudeAbsolute(double longitude,double speed);
-    public abstract boolean changeLongitudeAbsolute(double longitude);
-    public abstract boolean changeLatitudeAbsolute(double latitude,double speed);
-    public abstract boolean changeLatitudeAbsolute(double latitude);
-    public abstract boolean changeAltitudeAbsolute(double altitude,double speed);
-    public abstract boolean changeAltitudeAbsolute(double altitude);
-    public abstract boolean changeYawAbsolute(Bearing yaw,double speed);
-    public abstract boolean changeYawAbsolute(Bearing yaw);
+    public boolean changeLongitudeRelative(double longitude,double speed){
+        return flyToRelative(new Position(longitude, 0, 0, 0, 0, new Bearing(0)), speed);
+    }
+    public boolean changeLongitudeRelative(double longitude){
+        return flyToRelative(new Position(longitude, 0, 0, 0, 0, new Bearing(0)));
+    }
+    public boolean changeLatitudeRelative(double latitude,double speed){
+        return flyToRelative(new Position(0, latitude, 0, 0, 0, new Bearing(0)), speed);
+    }
+    public boolean changeLatitudeRelative(double latitude){
+        return flyToRelative(new Position(0, latitude, 0, 0, 0, new Bearing(0)));
+    }
+    public boolean changeAltitudeRelative(double altitude,double speed){
+        return flyToRelative(new Position(0, 0, altitude, 0, 0, new Bearing(0)), speed);
+    }
+    public boolean changeAltitudeRelative(double altitude){
+        return flyToRelative(new Position(0,0,altitude,0,0,new Bearing(0)));
+    }
+    public boolean changeYawRelative(Bearing yaw,double speed){
+        return flyToRelative(new Position(0,0,0,0,0,yaw),speed);
+    }
+    public boolean changeYawRelative(Bearing yaw){
+        return flyToRelative(new Position(0,0,0,0,0,yaw));
+    }
+
+    public boolean changeLongitudeAbsolute(double longitude,double speed){
+        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()),speed);
+    }
+    public boolean changeLongitudeAbsolute(double longitude){
+        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()));
+    }
+    public boolean changeLatitudeAbsolute(double latitude,double speed){
+        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(),latitude, getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()),speed);
+    }
+    public boolean changeLatitudeAbsolute(double latitude){
+        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(),latitude, getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()));
+    }
+    public boolean changeAltitudeAbsolute(double altitude,double speed){
+        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(),altitude,0,0, getPositionAssigned().getYaw()),speed);
+    }
+    public boolean changeAltitudeAbsolute(double altitude){
+        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(),altitude,0,0, getPositionAssigned().getYaw()));
+    }
+    public boolean changeYawAbsolute(Bearing yaw,double speed){
+        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0,yaw),speed);
+    }
+    public boolean changeYawAbsolute(Bearing yaw){
+        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0,yaw));
+    }
 
     public void goHome(double speed) {
         flyToAbsolute(homePosition, speed);
@@ -99,15 +126,10 @@ public abstract class SDKAdaptor {
         flyToAbsolute(homePosition);
     }
 
-    public abstract void updateCurrentPosition();
-    public Position getRelativePositionToHome(){
-        updateCurrentPosition();
-        return currentPosition.minus(homePosition);
+    public Position getPositionAssigned(){
+        return currentPositionAssigned;
     }
-    public Position getPosition(){
-        updateCurrentPosition();
-        return currentPosition;
-    }
+    public abstract Position getPositionInFlight();
 
     public void setHomePosition(Position position){
         homePosition=position;
@@ -115,4 +137,48 @@ public abstract class SDKAdaptor {
     public Position getHomePosition(){
         return homePosition;
     }
+
+    public void addAdaptorAccelerometer(Accelerometer accelerometer){
+        if (this.accelerometer==null)
+            this.accelerometer=new HashMap<>();
+        this.accelerometer.put(accelerometer.getAdaptorName(),accelerometer);
+    }
+    public void addAdaptorAltimeter(Altimeter altimeter){
+        if (this.altimeter==null)
+            this.altimeter=new HashMap<>();
+        this.altimeter.put(altimeter.getAdaptorName(),altimeter);
+    }
+    public void addAdaptorCamera(Camera camera){
+        if (this.camera==null)
+            this.camera=new HashMap<>();
+        this.camera.put(camera.getAdaptorName(),camera);
+    }
+    public void addAdaptorCompass(Compass compass){
+        if (this.compass==null)
+            this.compass=new HashMap<>();
+        this.compass.put(compass.getAdaptorName(),compass);
+    }
+    public void addAdaptorGyroscope(Gyroscope gyroscopes){
+        if (this.gyroscopes==null)
+            this.gyroscopes=new HashMap<>();
+        this.gyroscopes.put(gyroscopes.getAdaptorName(),gyroscopes);
+    }
+    public void addAdaptorLIDAR(LIDAR lidar){
+        if (this.lidar==null)
+            this.lidar=new HashMap<>();
+        this.lidar.put(lidar.getAdaptorName(),lidar);
+    }
+    public void addAdaptorRPLIDAR(RPLIDAR rplidar){
+        if (this.rplidar==null)
+            this.rplidar=new HashMap<>();
+        this.rplidar.put(rplidar.getAdaptorName(),rplidar);
+    }
+    public void addAdaptorUltrasonic(Ultrasonic ultrasonic){
+        if (this.ultrasonic==null)
+            this.ultrasonic=new HashMap<>();
+        this.ultrasonic.put(ultrasonic.getAdaptorName(),ultrasonic);
+    }
+
+    //TODO Add Remove Adaptor Functions
+
 }
