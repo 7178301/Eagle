@@ -10,7 +10,8 @@ import eagle.sdkInterface.SDKAdaptor;
  * <p>
  * Date Modified	26/05/2015 - Nicholas
  * @version 0.0.1
- * @author          Nicholas Alards [7178301@student.swin.edu.au] */
+ * @author          Nicholas Alards [7178301@student.swin.edu.au]
+ * @author          Cameron Cross [7193432@student.swin.edu.au]*/
 public class Flyver extends SDKAdaptor {
     public static String adapterVersion;
 
@@ -43,4 +44,5 @@ public class Flyver extends SDKAdaptor {
         return new Position(0,0,0,0,0,new Bearing(0));
     }
 
+    public void updateCurrentPosition(){};
 }
