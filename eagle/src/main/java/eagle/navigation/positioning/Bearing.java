@@ -8,7 +8,7 @@ package eagle.navigation.positioning;
  * @author          Cameron Cross */
 public class Bearing 
 {
-	private Double degrees;
+	private double degrees;
 	
 	/**
 	 * Constructor for bearing class
@@ -21,6 +21,18 @@ public class Bearing
 		}
 	}
 
+	public Bearing add(Bearing val) {
+		return new Bearing(this.degrees+val.getDegrees());
+	}
+
+	public Bearing minus(Bearing val) {
+		return new Bearing(this.degrees-val.getDegrees());
+	}
+
+	public double getDegrees() {
+		return degrees;
+	}
+
 	/**
 	 * convert to degrees minutes and seconds.
 	 * based of: http://zonalandeducation.com/mmts/trigonometryRealms/degMinSec/degMinSec.htm
@@ -28,7 +40,7 @@ public class Bearing
 	 */
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
-		sb.append(degrees.intValue());
+		sb.append(new Double(degrees).intValue());
 		sb.append("\u00B0");
 		Double minutes = (degrees - Math.floor(degrees))*60;
 		if (minutes != 0){

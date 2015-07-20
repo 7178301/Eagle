@@ -1,10 +1,17 @@
 package eagle.sdkInterface;
 
-import eagle.navigation.positioning.Position;
-import eagle.navigation.positioning.Bearing;
-import eagle.sdkInterface.sensorAdaptors.*;
-
 import java.util.HashMap;
+
+import eagle.navigation.positioning.Bearing;
+import eagle.navigation.positioning.Position;
+import eagle.sdkInterface.sensorAdaptors.Accelerometer;
+import eagle.sdkInterface.sensorAdaptors.Altimeter;
+import eagle.sdkInterface.sensorAdaptors.Camera;
+import eagle.sdkInterface.sensorAdaptors.Compass;
+import eagle.sdkInterface.sensorAdaptors.Gyroscope;
+import eagle.sdkInterface.sensorAdaptors.LIDAR;
+import eagle.sdkInterface.sensorAdaptors.RPLIDAR;
+import eagle.sdkInterface.sensorAdaptors.Ultrasonic;
 
 /** Abstract SDKAdaptor Class
  * @since     09/04/2015
@@ -34,8 +41,8 @@ public abstract class SDKAdaptor {
         this.adaptorName=adaptorName;
         this.sdkVersion=sdkVersion;
         this.adaptorVersion=adaptorVersion;
-        this.homePosition=new Position(0,0,0,0,0,0);
-        this.currentPosition=new Position(0,0,0,0,0,0);
+        this.homePosition=new Position(0,0,0,0,0,new Bearing(0));
+        this.currentPosition=new Position(0,0,0,0,0,new Bearing(0));
     }
 
     public abstract boolean connectToDrone();
@@ -67,19 +74,19 @@ public abstract class SDKAdaptor {
         return null;
     }
 
-    public abstract boolean changeLongitudeRelative(double altitude,double speed);
-    public abstract boolean changeLongitudeRelative(double altitude);
-    public abstract boolean changeLatitudeRelative(double altitude,double speed);
-    public abstract boolean changeLatitudeRelative(double altitude);
+    public abstract boolean changeLongitudeRelative(double longitude,double speed);
+    public abstract boolean changeLongitudeRelative(double longitude);
+    public abstract boolean changeLatitudeRelative(double latitude,double speed);
+    public abstract boolean changeLatitudeRelative(double latitude);
     public abstract boolean changeAltitudeRelative(double altitude,double speed);
     public abstract boolean changeAltitudeRelative(double altitude);
     public abstract boolean changeYawRelative(Bearing yaw,double speed);
     public abstract boolean changeYawRelative(Bearing yaw);
 
-    public abstract boolean changeLongitudeAbsolute(double altitude,double speed);
-    public abstract boolean changeLongitudeAbsolute(double altitude);
-    public abstract boolean changeLatitudeAbsolute(double altitude,double speed);
-    public abstract boolean changeLatitudeAbsolute(double altitude);
+    public abstract boolean changeLongitudeAbsolute(double longitude,double speed);
+    public abstract boolean changeLongitudeAbsolute(double longitude);
+    public abstract boolean changeLatitudeAbsolute(double latitude,double speed);
+    public abstract boolean changeLatitudeAbsolute(double latitude);
     public abstract boolean changeAltitudeAbsolute(double altitude,double speed);
     public abstract boolean changeAltitudeAbsolute(double altitude);
     public abstract boolean changeYawAbsolute(Bearing yaw,double speed);
