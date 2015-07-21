@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sdkAdaptors;
+package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import eagle.navigation.positioning.Bearing;
 import eagle.navigation.positioning.Position;
