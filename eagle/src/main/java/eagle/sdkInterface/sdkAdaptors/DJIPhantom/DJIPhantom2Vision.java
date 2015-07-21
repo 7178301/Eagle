@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sdkAdaptors;
+package eagle.sdkInterface.sdkAdaptors.DJIPhantom;
 
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
