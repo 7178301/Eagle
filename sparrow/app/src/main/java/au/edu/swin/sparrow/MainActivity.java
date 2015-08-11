@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,18 +8,20 @@ import android.view.MenuItem;
 
 
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
-import dji.sdk.api.DJIDrone;
-import dji.sdk.api.DJIDroneTypeDef;
-import dji.sdk.api.DJIError;
-import dji.sdk.interfaces.DJIGerneralListener;
 import eagle.Drone;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -54,46 +58,52 @@ public class MainActivity extends ActionBarActivity {
     private void initializeUI(){
         Drone drone = new Drone();
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
+        TextView tv = (TextView)findViewById(R.id.textviewVersion);
+        tv.setText(drone.getAPIVersion());
+        //fill dropdown with adaptors
+        HashSet<String> sdkAdaptors = drone.getSDKAdaptorList();
+        Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.toString());
 
-        Iterator it = drone.getSDKAdaptorList().iterator();
-        Log.e(TAG, "Found SDK Adaptors: " + it.hasNext());
-        String SDKs = new String();
-        while(it.hasNext()){
-            SDKs+=it.next()+"\n";
-        }
-        Log.e(TAG, "SDK Adaptors: " + SDKs);
+        Spinner sp = (Spinner)findViewById(R.id.spinnerSDKs);
+        List<String> arrayOfAdaptors = new ArrayList<String>();
+        arrayOfAdaptors.addAll(sdkAdaptors);
 
-        TextView defaultTextView = (TextView) findViewById(R.id.defaultTextView);
-        defaultTextView.setText(SDKs);
+        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfAdaptors);
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp.setAdapter(ad);
+
+        //fill test dropdown with tests
+        List<String> arrayOfTests = new ArrayList<String>();
+        arrayOfTests.add("FlyUpFlyDown");
+        arrayOfTests.add("All Tests");
+
+        Spinner sp2 = (Spinner)findViewById(R.id.spinnerTests);
+        ArrayAdapter<String> ad2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfTests);
+        ad2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp2.setAdapter(ad2);
+
+
+
+
+        Button bt = (Button)findViewById(R.id.buttonRunTest);
+        bt.setOnClickListener(this);
     }
 
-    /*
-    Lara's initial DJI connection code
+    @Override
+    public void onClick(View view) {
+        Spinner sp = (Spinner)findViewById(R.id.spinnerSDKs);
+        String sdk = sp.getSelectedItem().toString();
 
-    public void start(){
-        DJIDrone drone=new DJIDrone();
-        drone.initWithType(this.getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
+        Spinner sp2 = (Spinner)findViewById(R.id.spinnerTests);
+        String test = sp2.getSelectedItem().toString();
 
-        try {
-            drone.checkPermission(this.getApplicationContext(), new DJIGerneralListener() {
-                @Override
-                public void onGetPermissionResult(int result) {
-                    // TODO Auto-generated method stub
-                    Log.e(TAG, "onGetPermissionResult = " + result);
-                    Log.e(TAG, "onGetPermissionResultDescription = "+ DJIError.getCheckPermissionErrorDescription(result));
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "************\n\n"+e+"\n\n");
-        }
-        try{
-            //drone.initWithType(this.getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
-            drone.connectToDrone();
-        }catch(Error err){
-            Log.d(TAG,"************\n\n"+ err.toString()+"\n\n");
-        }
+        Intent myIntent = new Intent(this, RunningTest.class);
+        myIntent.putExtra("sdk", sdk); //Optional parameters
+        myIntent.putExtra("test", test); //Optional parameters
+
+        startActivity(myIntent);
+
+
 
     }
-    */
 }
