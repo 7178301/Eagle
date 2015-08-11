@@ -7,9 +7,15 @@ import android.view.MenuItem;
 
 
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import dji.sdk.api.DJIDrone;
 import dji.sdk.api.DJIDroneTypeDef;
@@ -54,46 +60,16 @@ public class MainActivity extends ActionBarActivity {
     private void initializeUI(){
         Drone drone = new Drone();
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
+        TextView tv = (TextView)findViewById(R.id.textviewVersion);
+        tv.setText(drone.getAPIVersion());
 
-        Iterator it = drone.getSDKAdaptorList().iterator();
-        Log.e(TAG, "Found SDK Adaptors: " + it.hasNext());
-        String SDKs = new String();
-        while(it.hasNext()){
-            SDKs+=it.next()+"\n";
-        }
-        Log.e(TAG, "SDK Adaptors: " + SDKs);
+        HashSet<String> sdkAdaptors = drone.getSDKAdaptorList();
+        Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.toString());
 
-        TextView defaultTextView = (TextView) findViewById(R.id.defaultTextView);
-        defaultTextView.setText(SDKs);
+        Spinner sp = (Spinner)findViewById(R.id.spinnerSDKs);
+        List<String> arrayOfAdaptors = new ArrayList<String>();
+        arrayOfAdaptors.addAll(sdkAdaptors);
+
+        sp.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayOfAdaptors));
     }
-
-    /*
-    Lara's initial DJI connection code
-
-    public void start(){
-        DJIDrone drone=new DJIDrone();
-        drone.initWithType(this.getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
-
-        try {
-            drone.checkPermission(this.getApplicationContext(), new DJIGerneralListener() {
-                @Override
-                public void onGetPermissionResult(int result) {
-                    // TODO Auto-generated method stub
-                    Log.e(TAG, "onGetPermissionResult = " + result);
-                    Log.e(TAG, "onGetPermissionResultDescription = "+ DJIError.getCheckPermissionErrorDescription(result));
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e(TAG, "************\n\n"+e+"\n\n");
-        }
-        try{
-            //drone.initWithType(this.getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
-            drone.connectToDrone();
-        }catch(Error err){
-            Log.d(TAG,"************\n\n"+ err.toString()+"\n\n");
-        }
-
-    }
-    */
 }
