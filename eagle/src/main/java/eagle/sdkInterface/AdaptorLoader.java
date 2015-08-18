@@ -34,6 +34,7 @@ public class AdaptorLoader {
 
         sdkAdaptors.add("sdkAdaptors.DJIPhantom2Vision");
         sdkAdaptors.add("sdkAdaptors.Flyver");
+        sdkAdaptors.add("sdkAdaptors.Simulator");
         accelerometerAdaptors.add("sensorAdaptors.accelerometerAdaptors.AndroidAccelerometer");
         altimeterAdaptors.add("sensorAdaptors.altimeterAdaptors.AndroidAltimeter");
         cameraAdaptors.add("sensorAdaptors.cameraAdaptors.AndroidCamera");
