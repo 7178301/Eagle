@@ -30,5 +30,6 @@
     <orderEntry type="library" exported="" name="dji-core" level="project" />
     <orderEntry type="library" exported="" name="bouncycastle" level="project" />
     <orderEntry type="library" exported="" name="dji-sdk" level="project" />
+    <orderEntry type="library" exported="" name="eagle.eagle" level="project" />
   </component>
 </module>
