@@ -32,16 +32,16 @@ public class AdaptorLoader {
         RPLIDARAdaptors= new HashSet<>();
         ultrasonicAdaptors= new HashSet<>();
 
-        sdkAdaptors.add("sdkAdaptors.DJIPhantom2Vision");
-        sdkAdaptors.add("sdkAdaptors.Flyver");
-        accelerometerAdaptors.add("sensorAdaptors.accelerometerAdaptors.AndroidAccelerometer");
-        altimeterAdaptors.add("sensorAdaptors.altimeterAdaptors.AndroidAltimeter");
-        cameraAdaptors.add("sensorAdaptors.cameraAdaptors.AndroidCamera");
-        cameraAdaptors.add("sensorAdaptors.cameraAdaptors.LinkSpriteSEN12804");
-        compassAdaptors.add("sensorAdaptors.compassAdaptors.AndroidCompass");
-        gyroscopeAdaptors.add("sensorAdaptors.gyroscopeAdaptors.AndroidGyroscope");
-        RPLIDARAdaptors.add("sensorAdaptors.RPLIDARAdaptors.RoboPeakRPLIDARA1M1R1");
-        ultrasonicAdaptors.add("sensorAdaptors.ultrasonicAdaptors.SeeedStudioSEN10737P");
+        sdkAdaptors.add("DJIPhantom.DJIPhantom2Vision");
+        sdkAdaptors.add("Flyver.Flyver");
+        accelerometerAdaptors.add("AndroidAccelerometer");
+        altimeterAdaptors.add("AndroidAltimeter");
+        cameraAdaptors.add("AndroidCamera");
+        cameraAdaptors.add("LinkSpriteSEN12804");
+        compassAdaptors.add("AndroidCompass");
+        gyroscopeAdaptors.add("AndroidGyroscope");
+        RPLIDARAdaptors.add("RoboPeakRPLIDARA1M1R1");
+        ultrasonicAdaptors.add("SeeedStudioSEN10737P");
     }
 
     public HashSet getAdaptorListSDKs(){
@@ -74,7 +74,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (sdkAdaptors.contains(adaptor)) {
             try {
-                result = (SDKAdaptor) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (SDKAdaptor) classLoader.loadClass("eagle.sdkInterface.sdkAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -86,7 +86,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (accelerometerAdaptors.contains(adaptor)) {
             try {
-                result = (Accelerometer) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (Accelerometer) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -98,7 +98,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (altimeterAdaptors.contains(adaptor)) {
             try {
-                result = (Altimeter) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (Altimeter) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.altimeterAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -110,7 +110,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (cameraAdaptors.contains(adaptor)) {
             try {
-                result = (Camera) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (Camera) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.cameraAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -122,7 +122,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (compassAdaptors.contains(adaptor)) {
             try {
-                result = (Compass) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (Compass) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.compassAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -134,7 +134,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (gyroscopeAdaptors.contains(adaptor)) {
             try {
-                result = (Gyroscope) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (Gyroscope) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.gyroscopeAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -146,7 +146,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (RPLIDARAdaptors.contains(adaptor)) {
             try {
-                result = (RPLIDAR) classLoader.loadClass("eagle.sdkInterface."+adaptor).newInstance();
+                result = (RPLIDAR) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.RPLIDARAdaptors."+adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
@@ -158,7 +158,7 @@ public class AdaptorLoader {
         ClassLoader classLoader = Drone.class.getClassLoader();
         if (ultrasonicAdaptors.contains(adaptor)) {
             try {
-                result = (Ultrasonic) classLoader.loadClass("eagle.sdkInterface." +adaptor).newInstance();
+                result = (Ultrasonic) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.ultrasonicAdaptors." +adaptor).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }

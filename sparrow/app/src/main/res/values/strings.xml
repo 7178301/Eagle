@@ -1,10 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">sparrow</string>
+    <string name="app_name">Sparrow</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="api_version">API Version</string>
+    <string name="drone_adaptors">Drone Adaptors</string>
     <string name="action_settings">Settings</string>
+    <string name="adaptor_name">Adaptor Name</string>
+    <string name="sdk_version">SDK Version</string>
+    <string name="adaptor_version">Adaptor Version</string>
+    <string name="select_adaptor">Select Adaptor</string>
+    <string name="connect">Connect</string>
+    <string name="connected">Connected</string>
+    <string name="not_connected">Not Connected</string>
+
+
 
     <!-- DJI strings -->
+    <!-- Will Require These When DJI Adaptor Built
     <string name="ERR_DESCRIPTION_GET_SMART_BATTERY_INFO_FAILED">Get smart battery info failed</string>
     <string name="ERR_DESCRIPTION_GET_REMOTE_NO_MEDIA">Get remote no media</string>
     <string name="ERR_DESCRIPTION_GET_REMOTE_MEDIA_HTTP_ERROR">Get remote media http error</string>
@@ -52,6 +63,6 @@
     <string name="ErrorDetailCheckPermissionInvalidUUID">Get device uuid failed</string>
     <string name="ErrorDetailCheckPermissionServerUnknown">Server unknown error</string>
     <string name="ErrorDetailCheckPermissionGetSupport">Visit http://dev.dji.com and select "Chat Now"to get on-line technical support, if you find the prompted debugging message is not clear.</string>
-
+    -->
 
 </resources>

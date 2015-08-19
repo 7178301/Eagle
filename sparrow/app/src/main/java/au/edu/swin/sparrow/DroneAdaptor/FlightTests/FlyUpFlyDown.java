@@ -1,8 +1,6 @@
-package au.edu.swin.sparrow.FlightTests;
+package au.edu.swin.sparrow.DroneAdaptor.FlightTests;
 
-import android.util.Log;
-
-import au.edu.swin.sparrow.FlightTest;
+import au.edu.swin.sparrow.DroneAdaptor.FlightTest;
 import eagle.sdkInterface.SDKAdaptor;
 
 /**
@@ -15,14 +13,14 @@ public class FlyUpFlyDown extends FlightTest {
 
     @Override
     public void flyRoutine() {
-        try {
+        //try {
             sdkAdaptor.changeAltitudeRelative(1);
-            sdkAdaptor.delay(1000);
+            //sdkAdaptor.delay(1000);
             sdkAdaptor.changeAltitudeRelative(-1);
-            sdkAdaptor.delay(1000);
-        }
-        catch (InterruptedException e) {
-            Log.e("FlyUpFlyDown", "Something interupted the wait");
-        }
+            //sdkAdaptor.delay(1000);
+        //}
+        //catch (InterruptedException e) {
+        //    Log.e("FlyUpFlyDown", "Something interupted the wait");
+        //}
     }
 }

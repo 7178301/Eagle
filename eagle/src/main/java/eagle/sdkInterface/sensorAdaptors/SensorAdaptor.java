@@ -30,4 +30,5 @@ public abstract class SensorAdaptor {
     public String getAdaptorModel(){
         return adaptorModel;
     }
+    //public abstract boolean calibrate();
 }
