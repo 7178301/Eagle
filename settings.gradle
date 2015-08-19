@@ -1,1 +1,1 @@
-include ':eagle', ':sparrow'
+include ':eagle', ':testApp'

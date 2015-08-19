@@ -1,8 +1,6 @@
-package au.edu.swin.sparrow.FlightTests;
+package au.edu.swin.testApp.FlightTests;
 
-import android.util.Log;
-
-import au.edu.swin.sparrow.FlightTest;
+import au.edu.swin.testApp.FlightTest;
 import eagle.sdkInterface.SDKAdaptor;
 
 /**

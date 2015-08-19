@@ -1,4 +1,4 @@
-package au.edu.swin.sparrow;
+package au.edu.swin.testApp;
 
 import eagle.sdkInterface.SDKAdaptor;
 

@@ -1,17 +1,13 @@
-package au.edu.swin.sparrow;
+package au.edu.swin.testApp;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import au.edu.swin.sparrow.FlightTests.FlyUpFlyDown;
-import eagle.Drone;
+import au.edu.swin.testApp.FlightTests.FlyUpFlyDown;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.sdkAdaptors.DJIPhantom.*;
-import eagle.sdkInterface.sdkAdaptors.Flyver.*;
 
 public class RunningTest extends AppCompatActivity {
 

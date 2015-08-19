@@ -1,4 +1,4 @@
-package au.edu.swin.sparrow;
+package au.edu.swin.testApp;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
