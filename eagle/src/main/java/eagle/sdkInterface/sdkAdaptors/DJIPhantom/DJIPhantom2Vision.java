@@ -18,6 +18,7 @@ public class DJIPhantom2Vision extends SDKAdaptor {
     public DJIPhantom2Vision(){
         super("DJI_SDK_Android","1.0.6","0.0.1");
     }
+
     public void loadDefaultAdaptors(AdaptorLoader adaptorLoader){
 
     }
@@ -38,6 +39,15 @@ public class DJIPhantom2Vision extends SDKAdaptor {
         //TODO CREATE BELOW IMPLEMENTATION
         return new Position(0,0,0,0,0,new Bearing(0));
     }
+
+    @Override
+    public void delay(int milliseconds) {
+            try {
+                    Thread.sleep(milliseconds);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+        }
 
 }
 

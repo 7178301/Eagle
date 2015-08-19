@@ -28,6 +28,8 @@ public abstract class SDKAdaptor {
     private String adaptorVersion = null;
 
     private Position homePosition;
+
+    //TODO create way to set current assigned position
     private Position currentPositionAssigned;
 
     public SDKAdaptor(String adaptorName, String sdkVersion, String adaptorVersion){
@@ -178,6 +180,8 @@ public abstract class SDKAdaptor {
             this.ultrasonic=new HashMap<>();
         this.ultrasonic.put(ultrasonic.getAdaptorName(),ultrasonic);
     }
+
+    public abstract void delay(int milliseconds);
 
     //TODO Add Remove Adaptor Functions
 

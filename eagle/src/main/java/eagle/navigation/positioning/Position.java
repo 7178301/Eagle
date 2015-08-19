@@ -51,6 +51,18 @@ public class Position{
         this.yaw.addAbsolute(position.getYaw());
     }
 
+    public boolean equals(Position position) {
+        if(longitude==position.getLongitude()&&
+                latitude==position.getLatitude()&&
+                altitude==position.getAltitude()&&
+                roll==position.getRoll()&&
+                pitch==position.pitch&&
+                yaw.getDegrees()==position.getYaw().getDegrees())
+            return true;
+        else
+            return false;
+    }
+
     public String toString(){
         return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw();
     }
