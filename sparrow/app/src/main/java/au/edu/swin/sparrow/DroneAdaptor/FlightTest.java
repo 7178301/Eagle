@@ -1,4 +1,4 @@
-package au.edu.swin.sparrow;
+package au.edu.swin.sparrow.DroneAdaptor;
 
 import eagle.sdkInterface.SDKAdaptor;
 
