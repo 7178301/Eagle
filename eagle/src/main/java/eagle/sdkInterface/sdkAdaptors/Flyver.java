@@ -44,5 +44,16 @@ public class Flyver extends SDKAdaptor {
         return new Position(0,0,0,0,0,new Bearing(0));
     }
 
+    @Override
+    public void delay(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void updateCurrentPosition(){};
+
+
 }

@@ -179,6 +179,8 @@ public abstract class SDKAdaptor {
         this.ultrasonic.put(ultrasonic.getAdaptorName(),ultrasonic);
     }
 
+    public abstract void delay(int milliseconds);
+
     //TODO Add Remove Adaptor Functions
 
 }
