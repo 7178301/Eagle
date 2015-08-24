@@ -46,11 +46,13 @@ public class F450Flamewheel extends SDKAdaptor {
 
     @Override
     public void delay(int milliseconds) {
-            try {
-                    Thread.sleep(milliseconds);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
     public void updateCurrentPosition(){};
+
+
 }

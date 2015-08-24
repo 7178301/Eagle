@@ -41,15 +41,15 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     @Override
-    public void delay(int milliseconds) {
-            try {
-                    Thread.sleep(milliseconds);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+    public void delay(int milliseconds){
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
+    }
 }
+
 
 //The following are example implementations
 /*
