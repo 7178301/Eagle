@@ -11,4 +11,11 @@ public class SeeedStudioSEN10737P extends Ultrasonic {
     public SeeedStudioSEN10737P(){
         super("Seeed Studio","SEN10737P","0.0.1");
     }
+
+    public void setConfiguration(){
+
+    }
+    public double getData(){
+        return 0.0;
+    }
 }

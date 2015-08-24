@@ -3,7 +3,7 @@ INSERT ABOUT PROJECT HERE
 
 ##Eagle (Drone API)
 ### IDE Recomendation
-	- Prefered IDE: IntelliJ
+	- Prefered IDE: Android Studio
 	- Alternative: Android Studio or any gradle compatable IDE
 ###IntelliJ Configuration
 	- Download the repository from https://github.com/7178301/Eagle.git

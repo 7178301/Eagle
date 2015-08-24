@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sdkAdaptors.DJIPhantom;
+package eagle.sdkInterface.sdkAdaptors.DJI;
 
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
@@ -11,15 +11,15 @@ import eagle.sdkInterface.SDKAdaptor;
  * Date Modified	26/05/2015 - Nicholas
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
-public class DJIPhantom2Vision extends SDKAdaptor {
+public class Phantom2Vision extends SDKAdaptor {
 
     //TODO Create method implementations
 
-    public DJIPhantom2Vision(){
-        super("DJI_SDK_Android","1.0.6","0.0.1");
+    public Phantom2Vision(){
+        super("DJI","Phantom 2 Vision","1.0.6","0.0.1");
     }
-    @Override
-    public void loadDefaultAdaptors(AdaptorLoader adaptorLoader){
+
+    public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader){
 
     }
 
@@ -41,16 +41,15 @@ public class DJIPhantom2Vision extends SDKAdaptor {
     }
 
     @Override
-    public void delay(int milliseconds) {
+    public void delay(int milliseconds){
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
-
-
 }
+
 
 //The following are example implementations
 /*

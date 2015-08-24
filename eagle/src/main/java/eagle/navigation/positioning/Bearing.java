@@ -37,12 +37,20 @@ public class Bearing
 		return degrees;
 	}
 
+	public boolean equals(Bearing bearing){
+		if(degrees!=bearing.getDegrees())
+			return false;
+		else
+			return true;
+		//return Math.abs(degrees - bearing.degrees) < 0.01;
+	}
+
 	/**
 	 * convert to degrees minutes and seconds.
 	 * based of: http://zonalandeducation.com/mmts/trigonometryRealms/degMinSec/degMinSec.htm
 	 * @return string containing degrees minutes seconds
 	 */
-	//TODO Incorrectly Coded. Seconds can exist when minute is 0
+	//TODO Incorrectly Coded. Seconds should exist when minute is 0
 	public String toString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(new Double(degrees).intValue());
