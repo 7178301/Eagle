@@ -20,16 +20,16 @@ public class TestFlight2 extends TestFlight {
 
     @Override
     public boolean runTestFlight() {
-        if (!getDrone().getAdaptor().connectToDrone())
+        if (!getDrone().getSDKAdaptor().connectToDrone())
             return false;
 
 
 
         //try {
-        getDrone().getAdaptor().changeAltitudeRelative(1);
-        getDrone().getAdaptor().delay(1000);
-        getDrone().getAdaptor().changeAltitudeRelative(-1);
-        getDrone().getAdaptor().delay(1000);
+        getDrone().getSDKAdaptor().changeAltitudeRelative(1);
+        getDrone().getSDKAdaptor().delay(1000);
+        getDrone().getSDKAdaptor().changeAltitudeRelative(-1);
+        getDrone().getSDKAdaptor().delay(1000);
         //    }
         //catch (InterruptedException e) {
 
@@ -38,7 +38,7 @@ public class TestFlight2 extends TestFlight {
         //    }
 
 
-        if (!getDrone().getAdaptor().disconnectFromDrone())
+        if (!getDrone().getSDKAdaptor().disconnectFromDrone())
             return false;
         else
             return true;

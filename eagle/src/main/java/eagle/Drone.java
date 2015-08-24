@@ -12,6 +12,7 @@ import eagle.navigation.Navigation;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Drone {
@@ -27,28 +28,24 @@ public class Drone {
 
     public Drone(){
         this.adaptorLoader = new AdaptorLoader();
-    }
-
-    public void start(){
-        while (!adaptor.isConnectedToDrone()) {
-            adaptor.connectToDrone();
-        }
+        this.navigation = new Navigation(this);
     }
 
     public String getAPIVersion(){
         return apiVersion;
     }
-
-    public SDKAdaptor getAdaptor(){
+    public HashMap getSDKAdaptorMap(){
+        if(this.adaptorLoader!=null)
+            return this.adaptorLoader.getSDKAdaptorMap();
+        else
+            return new AdaptorLoader().getSDKAdaptorMap();
+    }
+    public SDKAdaptor getSDKAdaptor(){
         return this.adaptor;
     }
-    public HashSet getSDKAdaptorList(){
-        return this.adaptorLoader.getAdaptorListSDKs();
-    }
     public void setSDKAdaptor(String adaptor){
-        this.adaptor = this.adaptorLoader.getAdaptorSDKs(adaptor);
-        this.adaptor.loadDefaultAdaptors(adaptorLoader);
-        this.navigation = new Navigation(this);
+        this.adaptor = this.adaptorLoader.getSDKAdaptor(adaptor);
+        this.adaptor.loadDefaultSensorAdaptors(adaptorLoader);
     }
 
 }

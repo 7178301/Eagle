@@ -5,27 +5,27 @@ import eagle.navigation.positioning.Position;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
-/** Flyver SDKAdaptor
+/** F450Flamewheel SDKAdaptor
  * @since     09/04/2015
  * <p>
  * Date Modified	26/05/2015 - Nicholas
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross [7193432@student.swin.edu.au]*/
-public class Flyver extends SDKAdaptor {
+public class F450Flamewheel extends SDKAdaptor {
     public static String adapterVersion;
 
     //TODO Create method implementations
 
-    public Flyver(){
-        super("Flyver-SDK","alpha","0.0.1");
+    public F450Flamewheel(){
+        super("FLyver","F450 Flamewheel","alpha","0.0.1");
     }
-    public void loadDefaultAdaptors(AdaptorLoader adaptorLoader){
-        addAdaptorAccelerometer(adaptorLoader.getAdaptorAccelerometer("AndroidAccelerometer"));
-        addAdaptorAltimeter(adaptorLoader.getAdaptorAltimeter("AndroidAltimeter"));
-        addAdaptorCamera(adaptorLoader.getAdaptorCamera("AndroidCamera"));
-        addAdaptorCompass(adaptorLoader.getAdaptorCompass("AndroidCompass"));
-        addAdaptorGyroscope(adaptorLoader.getAdaptorGyroscope("AndroidGyroscope"));
+    public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader){
+        addSensorAdaptorAccelerometer(adaptorLoader.getSensorAdaptorAccelerometer("AndroidAccelerometer"));
+        addSensorAdaptorAltimeter(adaptorLoader.getSensorAdaptorAltimeter("AndroidAltimeter"));
+        addSensorAdaptorCamera(adaptorLoader.getSensorAdaptorCamera("AndroidCamera"));
+        addSensorAdaptorCompass(adaptorLoader.getSensorAdaptorCompass("AndroidCompass"));
+        addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
     }
 
     public boolean connectToDrone(){return false;}

@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import eagle.Drone;
+import eagle.sdkInterface.SDKAdaptor;
 
 
 public class MainActivity extends ListActivity{
@@ -33,13 +35,13 @@ public class MainActivity extends ListActivity{
         drone = new Drone();
         TextView tv = (TextView)findViewById(R.id.textviewVersion);
         tv.setText(getResources().getString(R.string.api_version) + ": " + drone.getAPIVersion());
-        HashSet<String> sdkAdaptors = drone.getSDKAdaptorList();
+        HashMap<String,SDKAdaptor> sdkAdaptors = drone.getSDKAdaptorMap();
 
 
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
         Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.toString());
 
-        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,sdkAdaptors.toArray(new String[sdkAdaptors.size()]));
+        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
         setListAdapter(ad);
 
         final Button selectAdaptorButton = (Button) findViewById(R.id.buttonSelectAdaptor);
@@ -67,9 +69,9 @@ public class MainActivity extends ListActivity{
         TextView sdkVersionTextView = (TextView) findViewById(R.id.textViewSDKVersion);
         TextView adaptorVersionTextView = (TextView) findViewById(R.id.textViewAdaptorVersion);
 
-        adaptorNameTextView.setText(getResources().getString(R.string.adaptor_name) + ": " + drone.getAdaptor().getAdaptorName());
-        sdkVersionTextView.setText(getResources().getString(R.string.sdk_version) + ": " + drone.getAdaptor().getSdkVersion());
-        adaptorVersionTextView.setText(getResources().getString(R.string.adaptor_version) + ": " + drone.getAdaptor().getAdaptorVersion());
+        adaptorNameTextView.setText(getResources().getString(R.string.adaptor_name) + ": " + drone.getSDKAdaptor().getAdaptorName());
+        sdkVersionTextView.setText(getResources().getString(R.string.sdk_version) + ": " + drone.getSDKAdaptor().getSdkVersion());
+        adaptorVersionTextView.setText(getResources().getString(R.string.adaptor_version) + ": " + drone.getSDKAdaptor().getAdaptorVersion());
 
         Log.e(TAG, "CHECKTHIS " + selectedItem);
     }

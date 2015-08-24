@@ -3,6 +3,8 @@ package eagle.sdkInterface;
 import eagle.Drone;
 import eagle.sdkInterface.sensorAdaptors.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /** Adaptor Loader
@@ -13,152 +15,174 @@ import java.util.HashSet;
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public class AdaptorLoader {
 
-    HashSet<String> sdkAdaptors = null;
-    HashSet<String> accelerometerAdaptors = null;
-    HashSet<String> altimeterAdaptors = null;
-    HashSet<String> cameraAdaptors = null;
-    HashSet<String> compassAdaptors = null;
-    HashSet<String> gyroscopeAdaptors = null;
-    HashSet<String> RPLIDARAdaptors = null;
-    HashSet<String> ultrasonicAdaptors = null;
+    private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision",
+            "Flyver.F450Flamewheel"));
+    private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
+    private HashSet<String> altimeterAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAltimeter"));
+    private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));
+    private HashSet<String> compassAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCompass"));
+    private HashSet<String> gyroscopeAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGyroscope"));
+    //private HashSet<String> LIDARAdaptorPaths = new HashSet<>(Arrays.asList());
+    private HashSet<String> RPLIDARAdaptorPaths = new HashSet<>(Arrays.asList("RoboPeakRPLIDARA1M1R1"));
+    private HashSet<String> ultrasonicAdaptorPaths = new HashSet<>(Arrays.asList("SeeedStudioSEN10737P"));
 
-    public AdaptorLoader(){
-        sdkAdaptors= new HashSet<>();
-        accelerometerAdaptors= new HashSet<>();
-        altimeterAdaptors= new HashSet<>();
-        cameraAdaptors= new HashSet<>();
-        compassAdaptors= new HashSet<>();
-        gyroscopeAdaptors= new HashSet<>();
-        RPLIDARAdaptors= new HashSet<>();
-        ultrasonicAdaptors= new HashSet<>();
-
-        sdkAdaptors.add("DJIPhantom.DJIPhantom2Vision");
-        sdkAdaptors.add("Flyver.Flyver");
-        accelerometerAdaptors.add("AndroidAccelerometer");
-        altimeterAdaptors.add("AndroidAltimeter");
-        cameraAdaptors.add("AndroidCamera");
-        cameraAdaptors.add("LinkSpriteSEN12804");
-        compassAdaptors.add("AndroidCompass");
-        gyroscopeAdaptors.add("AndroidGyroscope");
-        RPLIDARAdaptors.add("RoboPeakRPLIDARA1M1R1");
-        ultrasonicAdaptors.add("SeeedStudioSEN10737P");
-    }
-
-    public HashSet getAdaptorListSDKs(){
+    public HashMap getSDKAdaptorMap(){
+        HashMap<String,SDKAdaptor> sdkAdaptors = new HashMap<>();
+        for(String path:sdkAdaptorPaths)
+            sdkAdaptors.put(path, getSDKAdaptor(path));
         return sdkAdaptors;
     }
-    public HashSet getAdaptorListAccelerometer(){
+    public HashMap getSensorAdaptorAccelerometerMap(){
+        HashMap<String,Accelerometer> accelerometerAdaptors = new HashMap<>();
+        for(String path:accelerometerAdaptorPaths)
+            accelerometerAdaptors.put(path, getSensorAdaptorAccelerometer(path));
         return accelerometerAdaptors;
     }
-    public HashSet getAdaptorListAltimeter(){
+    public HashMap getSensorAdaptorAltimeterMap(){
+        HashMap<String,Altimeter> altimeterAdaptors = new HashMap<>();
+        for(String path:altimeterAdaptorPaths)
+            altimeterAdaptors.put(path, getSensorAdaptorAltimeter(path));
         return altimeterAdaptors;
     }
-    public HashSet getAdaptorListCamera(){
+    public HashMap getSensorAdaptorListCamera(){
+        HashMap<String,Camera> cameraAdaptors = new HashMap<>();
+        for(String path:cameraAdaptorPaths)
+            cameraAdaptors.put(path, getSensorAdaptorCamera(path));
         return cameraAdaptors;
     }
-    public HashSet getAdaptorListCompass(){
+    public HashMap getSensorAdaptorListCompass(){
+        HashMap<String,Compass> compassAdaptors = new HashMap<>();
+        for(String path:compassAdaptorPaths)
+            compassAdaptors.put(path, getSensorAdaptorCompass(path));
         return compassAdaptors;
     }
-    public HashSet getAdaptorListGyroscope(){
+    public HashMap getSensorAdaptorListGyroscope(){
+        HashMap<String,Gyroscope> gyroscopeAdaptors = new HashMap<>();
+        for(String path:gyroscopeAdaptorPaths)
+            gyroscopeAdaptors.put(path, getSensorAdaptorGyroscope(path));
         return gyroscopeAdaptors;
     }
-    public HashSet getAdaptorListRPLIDAR(){
+    /*public HashMap getSensorAdaptorListLIDAR(){
+        HashMap<String,RPLIDAR> LIDARAdaptors = new HashMap<>();
+        for(String path:LIDARAdaptorPaths)
+            LIDARAdaptors.put(path, getSensorAdaptorLIDAR(path));
+        return LIDARAdaptors;
+    }*/
+    public HashMap getSensorAdaptorListRPLIDAR(){
+        HashMap<String,RPLIDAR> RPLIDARAdaptors = new HashMap<>();
+        for(String path:RPLIDARAdaptorPaths)
+            RPLIDARAdaptors.put(path, getSensorAdaptorRPLIDAR(path));
         return RPLIDARAdaptors;
     }
-    public HashSet getAdaptorListUltrasonic(){
+    public HashMap getSensorAdaptorListUltrasonic(){
+        HashMap<String,Ultrasonic> ultrasonicAdaptors = new HashMap<>();
+        for(String path:ultrasonicAdaptorPaths)
+            ultrasonicAdaptors.put(path, getSensorAdaptorUltrasonic(path));
         return ultrasonicAdaptors;
     }
 
-    public SDKAdaptor getAdaptorSDKs(String adaptor){
+    public SDKAdaptor getSDKAdaptor(String path){
         SDKAdaptor result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (sdkAdaptors.contains(adaptor)) {
+        if (sdkAdaptorPaths.contains(path)) {
             try {
-                result = (SDKAdaptor) classLoader.loadClass("eagle.sdkInterface.sdkAdaptors."+adaptor).newInstance();
+                result = (SDKAdaptor) classLoader.loadClass("eagle.sdkInterface.sdkAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public Accelerometer getAdaptorAccelerometer(String adaptor){
+    public Accelerometer getSensorAdaptorAccelerometer(String path){
         Accelerometer result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (accelerometerAdaptors.contains(adaptor)) {
+        if (accelerometerAdaptorPaths.contains(path)) {
             try {
-                result = (Accelerometer) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors."+adaptor).newInstance();
+                result = (Accelerometer) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public Altimeter getAdaptorAltimeter(String adaptor){
+    public Altimeter getSensorAdaptorAltimeter(String path){
         Altimeter result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (altimeterAdaptors.contains(adaptor)) {
+        if (altimeterAdaptorPaths.contains(path)) {
             try {
-                result = (Altimeter) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.altimeterAdaptors."+adaptor).newInstance();
+                result = (Altimeter) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.altimeterAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public Camera getAdaptorCamera(String adaptor){
+    public Camera getSensorAdaptorCamera(String path){
         Camera result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (cameraAdaptors.contains(adaptor)) {
+        if (cameraAdaptorPaths.contains(path)) {
             try {
-                result = (Camera) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.cameraAdaptors."+adaptor).newInstance();
+                result = (Camera) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.cameraAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public Compass getAdaptorCompass(String adaptor){
+    public Compass getSensorAdaptorCompass(String path){
         Compass result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (compassAdaptors.contains(adaptor)) {
+        if (compassAdaptorPaths.contains(path)) {
             try {
-                result = (Compass) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.compassAdaptors."+adaptor).newInstance();
+                result = (Compass) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.compassAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public Gyroscope getAdaptorGyroscope(String adaptor){
+    public Gyroscope getSensorAdaptorGyroscope(String path){
         Gyroscope result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (gyroscopeAdaptors.contains(adaptor)) {
+        if (gyroscopeAdaptorPaths.contains(path)) {
             try {
-                result = (Gyroscope) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.gyroscopeAdaptors."+adaptor).newInstance();
+                result = (Gyroscope) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.gyroscopeAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public RPLIDAR getAdaptorRPLIDAR(String adaptor){
+    /*public RPLIDAR getSensorAdaptorLIDAR(String path){
+        LIDAR result = null;
+        ClassLoader classLoader = Drone.class.getClassLoader();
+        if (LIDARAdaptorPaths.contains(path)) {
+            try {
+                result = (LIDAR) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.LIDARAdaptors."+path).newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                System.out.println(e.toString());
+            }
+        }
+        return result;
+    }*/
+    public RPLIDAR getSensorAdaptorRPLIDAR(String path){
         RPLIDAR result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (RPLIDARAdaptors.contains(adaptor)) {
+        if (RPLIDARAdaptorPaths.contains(path)) {
             try {
-                result = (RPLIDAR) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.RPLIDARAdaptors."+adaptor).newInstance();
+                result = (RPLIDAR) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.RPLIDARAdaptors."+path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }
         }
         return result;
     }
-    public Ultrasonic getAdaptorUltrasonic(String adaptor){
+    public Ultrasonic getSensorAdaptorUltrasonic(String path){
         Ultrasonic result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
-        if (ultrasonicAdaptors.contains(adaptor)) {
+        if (ultrasonicAdaptorPaths.contains(path)) {
             try {
-                result = (Ultrasonic) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.ultrasonicAdaptors." +adaptor).newInstance();
+                result = (Ultrasonic) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.ultrasonicAdaptors." +path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }

@@ -24,6 +24,8 @@ public abstract class SDKAdaptor {
     private HashMap<String,Ultrasonic> ultrasonic = null;
 
     private String adaptorName = null;
+    private String adaptorManufacturer = null;
+    private String adaptorModel = null;
     private String sdkVersion = null;
     private String adaptorVersion = null;
 
@@ -32,14 +34,16 @@ public abstract class SDKAdaptor {
     //TODO create way to set current assigned position
     private Position currentPositionAssigned;
 
-    public SDKAdaptor(String adaptorName, String sdkVersion, String adaptorVersion){
-        this.adaptorName=adaptorName;
+    public SDKAdaptor(String adaptorManufacturer, String adaptorModel, String sdkVersion, String adaptorVersion){
+        this.adaptorName=adaptorManufacturer+" "+adaptorModel;
+        this.adaptorManufacturer=adaptorManufacturer;
+        this.adaptorModel=adaptorModel;
         this.sdkVersion=sdkVersion;
         this.adaptorVersion=adaptorVersion;
         this.homePosition=new Position(0,0,0,0,0,new Bearing(0));
-        this.currentPositionAssigned =new Position(0,0,0,0,0,new Bearing(0));
+        this.currentPositionAssigned = new Position(0,0,0,0,0,new Bearing(0));
     }
-    public abstract void loadDefaultAdaptors(AdaptorLoader adaptorLoader);
+    public abstract void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader);
 
     public abstract boolean connectToDrone();
     public abstract boolean disconnectFromDrone();
@@ -140,42 +144,42 @@ public abstract class SDKAdaptor {
         return homePosition;
     }
 
-    public void addAdaptorAccelerometer(Accelerometer accelerometer){
+    public void addSensorAdaptorAccelerometer(Accelerometer accelerometer){
         if (this.accelerometer==null)
             this.accelerometer=new HashMap<>();
         this.accelerometer.put(accelerometer.getAdaptorName(),accelerometer);
     }
-    public void addAdaptorAltimeter(Altimeter altimeter){
+    public void addSensorAdaptorAltimeter(Altimeter altimeter){
         if (this.altimeter==null)
             this.altimeter=new HashMap<>();
         this.altimeter.put(altimeter.getAdaptorName(),altimeter);
     }
-    public void addAdaptorCamera(Camera camera){
+    public void addSensorAdaptorCamera(Camera camera){
         if (this.camera==null)
             this.camera=new HashMap<>();
         this.camera.put(camera.getAdaptorName(),camera);
     }
-    public void addAdaptorCompass(Compass compass){
+    public void addSensorAdaptorCompass(Compass compass){
         if (this.compass==null)
             this.compass=new HashMap<>();
         this.compass.put(compass.getAdaptorName(),compass);
     }
-    public void addAdaptorGyroscope(Gyroscope gyroscopes){
+    public void addSensorAdaptorGyroscope(Gyroscope gyroscopes){
         if (this.gyroscopes==null)
             this.gyroscopes=new HashMap<>();
         this.gyroscopes.put(gyroscopes.getAdaptorName(),gyroscopes);
     }
-    public void addAdaptorLIDAR(LIDAR lidar){
+    public void addSensorAdaptorLIDAR(LIDAR lidar){
         if (this.lidar==null)
             this.lidar=new HashMap<>();
         this.lidar.put(lidar.getAdaptorName(),lidar);
     }
-    public void addAdaptorRPLIDAR(RPLIDAR rplidar){
+    public void addSensorAdaptorRPLIDAR(RPLIDAR rplidar){
         if (this.rplidar==null)
             this.rplidar=new HashMap<>();
         this.rplidar.put(rplidar.getAdaptorName(),rplidar);
     }
-    public void addAdaptorUltrasonic(Ultrasonic ultrasonic){
+    public void addSensorAdaptorUltrasonic(Ultrasonic ultrasonic){
         if (this.ultrasonic==null)
             this.ultrasonic=new HashMap<>();
         this.ultrasonic.put(ultrasonic.getAdaptorName(),ultrasonic);

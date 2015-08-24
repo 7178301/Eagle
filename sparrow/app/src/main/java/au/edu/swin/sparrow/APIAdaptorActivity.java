@@ -29,12 +29,12 @@ public class APIAdaptorActivity extends ActionBarActivity{
 
     private void initializeUI() {
         TextView adaptorNameTextView = (TextView) findViewById(R.id.adaptorNameTextView);
-        adaptorNameTextView.setText(drone.getAdaptor().getAdaptorName());
+        adaptorNameTextView.setText(drone.getSDKAdaptor().getAdaptorName());
         final Button selectAdaptorButton = (Button) findViewById(R.id.buttonConnect);
         selectAdaptorButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewConnectedStatus);
-                if(drone.getAdaptor().connectToDrone())
+                if(drone.getSDKAdaptor().connectToDrone())
                     adaptorNameTextView.setText(getResources().getString(R.string.connected));
                 else
                     adaptorNameTextView.setText(getResources().getString(R.string.not_connected));
