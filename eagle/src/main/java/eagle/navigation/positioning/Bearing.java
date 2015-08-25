@@ -67,4 +67,8 @@ public class Bearing
 		}
 		return sb.toString();
 	}
+
+	public boolean isEqual(Bearing bearing) {
+		return Math.abs(degrees - bearing.degrees) < 0.01;
+	}
 }

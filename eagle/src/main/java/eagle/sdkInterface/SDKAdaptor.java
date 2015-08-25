@@ -135,6 +135,9 @@ public abstract class SDKAdaptor {
     public Position getPositionAssigned(){
         return currentPositionAssigned;
     }
+    public void setPositionAssigned(Position pos) {
+        currentPositionAssigned = pos;
+    }
     public abstract Position getPositionInFlight();
 
     public void setHomePosition(Position position){

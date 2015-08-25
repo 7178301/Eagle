@@ -6,6 +6,7 @@ package eagle.navigation.positioning;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross [7193432@student.swin.edu.au]*/
+
 public class Position{
 	private double longitude;
 	private double latitude;
@@ -65,5 +66,14 @@ public class Position{
 
     public String toString(){
         return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw();
+    }
+
+    public boolean isEqual(Position position) {
+        return (Math.abs(position.getAltitude() - altitude) < 0.00001 &&
+                Math.abs(position.getLatitude() - latitude) < 0.00001 &&
+                Math.abs(position.getLongitude() - longitude) < 0.00001 &&
+                Math.abs(position.getPitch() - pitch) < 0.00001 &&
+                Math.abs(position.getRoll() - roll) < 0.00001 &&
+                position.getYaw().isEqual(yaw));
     }
 }
