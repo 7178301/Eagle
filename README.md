@@ -8,7 +8,10 @@ INSERT ABOUT PROJECT HERE
 ###IntelliJ Configuration
 	- Download the repository from https://github.com/7178301/Eagle.git
 	- Change to the development branch
-	- Use IntelliJ to open the eagle project in the root of the repository
+	- Open IntelliJ and click "Import Project"
+	- Navigate to and select the root folder "eagle"
+	- Click "Import Project from External Model" and select "gradle"
+	- Ensure a java JDK or 1.7+ is selected for "gradle JVM" and click finish. This process could take a few minutes while project dependencies are downloaded. 
 	- Click Run -> Edit Configurations
 	- Add a new Gradle configuration
 	- Add the following configurations
@@ -24,8 +27,9 @@ INSERT ABOUT PROJECT HERE
 
 	- Download the repository from https://github.com/7178301/Eagle.git
 	- Change to the development branch
-	- Use Android Studio to open the eagle project in the root of the repository
-	- Ensure yo dollow all prompts to download appropriate SDK's, build-tools, platform-tools etc...
+	- Open Android Studio and click "Import Project"
+	- Navigate to and select the root folder "sparrow"
+	- Ensure you allow dependencies to download including appropriate SDK's, build-tools, platform-tools etc...
 	- Click Run -> Edit Configurations
 	- Add a new Gradle configuration
 	- Add the following configurations
