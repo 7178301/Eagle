@@ -62,6 +62,12 @@ public abstract class SDKAdaptor {
     public String getAdaptorName(){
         return adaptorName;
     }
+    public String getAdaptorManufacturer(){
+        return adaptorManufacturer;
+    }
+    public String getAdaptorModel(){
+        return adaptorModel;
+    }
 
     public boolean flyToRelative(Position position, double speed){
         return flyToAbsolute(new Position(getPositionInFlight().getLongitude()+position.getLongitude(),getPositionInFlight().getLatitude()+position.getLatitude(),

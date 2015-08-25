@@ -39,7 +39,7 @@ public class MainActivity extends ListActivity{
 
 
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
-        Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.toString());
+        Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.keySet().toString());
 
         ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
         setListAdapter(ad);
@@ -73,7 +73,7 @@ public class MainActivity extends ListActivity{
         sdkVersionTextView.setText(getResources().getString(R.string.sdk_version) + ": " + drone.getSDKAdaptor().getSdkVersion());
         adaptorVersionTextView.setText(getResources().getString(R.string.adaptor_version) + ": " + drone.getSDKAdaptor().getAdaptorVersion());
 
-        Log.e(TAG, "CHECKTHIS " + selectedItem);
+        Log.e(TAG, "Selected Adaptor " + selectedItem);
     }
 
     private void makeSettingsVisible(){

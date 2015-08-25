@@ -16,7 +16,7 @@ import java.util.HashSet;
 public class AdaptorLoader {
 
     private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision",
-            "Flyver.F450Flamewheel"));
+            "Flyver.F450Flamewheel","Simulator.Simulator"));
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
     private HashSet<String> altimeterAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAltimeter"));
     private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));

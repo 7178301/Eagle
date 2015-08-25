@@ -13,20 +13,20 @@ public class Simulator extends SDKAdaptor {
     private int maxRotateSpeed = 0;
 
     public Simulator() {
-        super("Simulator","alpha","0.0.1");
+        super("Simulator","Siumulator","alpha","0.0.1");
         maxSpeed = 1;
         maxRotateSpeed = 30;
     }
 
 
     public Simulator(int speed, int rotateSpeed) {
-        super("Simulator","alpha","0.0.1");
+        super("Simulator","Siumulator","alpha","0.0.1");
         maxSpeed = speed;
         maxRotateSpeed = rotateSpeed;
     }
 
     @Override
-    public void loadDefaultAdaptors(AdaptorLoader adaptorLoader) {
+    public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
 
     }
 
