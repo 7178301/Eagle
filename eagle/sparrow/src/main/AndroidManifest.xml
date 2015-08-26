@@ -15,7 +15,7 @@
             android:name="com.dji.sdk.API_KEY"
             android:value="c1dbf0d7fa45d8d2697dd76b"/>
         <activity
-            android:name="au.edu.swin.testApp.MainActivity"
+            android:name="au.edu.swin.sparrow.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="au.edu.swin.testApp.APIAdaptorActivity"/>
+            android:name="au.edu.swin.sparrow.APIAdaptorActivity"/>
     </application>
 
 </manifest>

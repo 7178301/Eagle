@@ -1,4 +1,4 @@
-package au.edu.swin.testApp;
+package au.edu.swin.sparrow;
 
 import android.app.ListActivity;
 import android.content.Intent;

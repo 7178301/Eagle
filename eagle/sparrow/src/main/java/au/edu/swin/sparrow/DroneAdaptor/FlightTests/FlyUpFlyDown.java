@@ -1,6 +1,6 @@
-package au.edu.swin.testApp.DroneAdaptor.FlightTests;
+package au.edu.swin.sparrow.DroneAdaptor.FlightTests;
 
-import au.edu.swin.testApp.DroneAdaptor.FlightTest;
+import au.edu.swin.sparrow.DroneAdaptor.FlightTest;
 import eagle.sdkInterface.SDKAdaptor;
 
 /**
