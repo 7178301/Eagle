@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="au.edu.swin.sparrow.test">
+
+    <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="22" />
+
+    <application>
+        <uses-library android:name="android.test.runner" />
+    </application>
+
+    <instrumentation android:name="android.test.InstrumentationTestRunner"
+                     android:targetPackage="au.edu.swin.sparrow"
+                     android:handleProfiling="false"
+                     android:functionalTest="false"
+                     android:label="Tests for au.edu.swin.sparrow"/>
+</manifest>

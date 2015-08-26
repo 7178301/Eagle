@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/eagle.iml" filepath="$PROJECT_DIR$/eagle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eagleAPI/eagleAPI.iml" filepath="$PROJECT_DIR$/eagleAPI/eagleAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/eagleAPIAndroid/eagleAPIAndroid.iml" filepath="$PROJECT_DIR$/eagleAPIAndroid/eagleAPIAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sparrow/sparrow.iml" filepath="$PROJECT_DIR$/sparrow/sparrow.iml" />
+    </modules>
+  </component>
+</project>
