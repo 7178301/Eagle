@@ -17,6 +17,8 @@ import java.util.HashMap;
 import eagle.Drone;
 import eagle.sdkInterface.SDKAdaptor;
 
+import sparrow.R;
+
 
 public class MainActivity extends ListActivity{
 
