@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import sparrow.R;
+import au.edu.swin.sparrow.R;
 import eagle.Drone;
 
 public class APIAdaptorActivity extends ActionBarActivity{
