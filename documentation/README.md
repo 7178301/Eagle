@@ -16,7 +16,7 @@ ABOUT FILEOLDER HERE
 	- Click Run -> Edit Configurations
 	- Add a new Gradle configuration
 	- Add the following configurations
-	     Gradle Project: sparrow
+	     Gradle Project: eagle
 	     Tasks: clean check assemble
 	- Click Run -> Run to run the gradle configuration.
 

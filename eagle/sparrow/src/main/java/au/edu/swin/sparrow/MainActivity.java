@@ -17,9 +17,6 @@ import java.util.HashMap;
 import eagle.Drone;
 import eagle.sdkInterface.SDKAdaptor;
 
-import au.edu.swin.sparrow.R;
-
-
 public class MainActivity extends ListActivity{
 
     Drone drone;
@@ -36,13 +33,15 @@ public class MainActivity extends ListActivity{
         drone = new Drone();
         TextView tv = (TextView)findViewById(R.id.textviewVersion);
         tv.setText(getResources().getString(R.string.api_version) + ": " + drone.getAPIVersion());
+
+        @SuppressWarnings("unchecked")
         HashMap<String,SDKAdaptor> sdkAdaptors = drone.getSDKAdaptorMap();
 
 
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
         Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.keySet().toString());
 
-        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
+        ArrayAdapter<String> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
         setListAdapter(ad);
 
         final Button selectAdaptorButton = (Button) findViewById(R.id.buttonSelectAdaptor);

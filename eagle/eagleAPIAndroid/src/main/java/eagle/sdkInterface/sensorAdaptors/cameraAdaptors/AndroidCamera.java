@@ -12,4 +12,19 @@ public class AndroidCamera extends Camera {
     public AndroidCamera(){
         super("Android","Camera","0.0.1");
     }
+
+    //TODO Following Method Need Propper Implementation
+    public boolean calibrateSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public boolean connectToSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public boolean isConnectedToSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public void setConfiguration(){}
 }

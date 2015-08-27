@@ -18,6 +18,10 @@ public abstract class SensorAdaptor {
         this.adaptorModel=adaptorModel;
         this.adaptorVersion=adaptorVersion;
     }
+    public abstract boolean calibrateSensor();
+    public abstract boolean connectToSensor();
+    public abstract boolean isConnectedToSensor();
+    public abstract void setConfiguration();
     public String getAdaptorVersion(){
         return adaptorVersion;
     }
@@ -30,5 +34,4 @@ public abstract class SensorAdaptor {
     public String getAdaptorModel(){
         return adaptorModel;
     }
-    //public abstract boolean calibrate();
 }

@@ -12,11 +12,10 @@ public abstract class Camera extends SensorAdaptor{
     public Camera(String adaptorManufacturer, String adaptorModel, String adaptorVersion){
         super(adaptorManufacturer,adaptorModel,adaptorVersion);
     }
-    //how to say if a drone is capable of taking photos or not?
-    //public abstract String takePhoto();
-        // 1. Check camera.
-        // 2. if okay, try taking a photo.
-        // 3. Store the photo.
-        // 4. send back location of storage
+
+    //TODO Following Method Need Proper Implementation
+    //public abstract Object getData();
+        // Store the photo and send back location of storage
+        // OR send back image data
 
 }
