@@ -70,7 +70,7 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "DISCONNECTTODRONE":
+                case "DISCONNECTFROMDRONE":
                     if (array.length == 1) {
                         if (adaptor.disconnectFromDrone()) {
                             return "SUCCESS";
