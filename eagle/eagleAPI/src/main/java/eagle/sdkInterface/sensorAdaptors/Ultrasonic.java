@@ -12,6 +12,5 @@ public abstract class Ultrasonic extends SensorAdaptor {
         super(adaptorManufacturer,adaptorModel,adaptorVersion);
     }
 
-    public abstract void setConfiguration();
     public abstract double getData();
 }

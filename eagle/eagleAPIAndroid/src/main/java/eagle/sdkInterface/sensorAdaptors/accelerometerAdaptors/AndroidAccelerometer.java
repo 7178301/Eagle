@@ -13,4 +13,24 @@ public class AndroidAccelerometer extends Accelerometer {
     public AndroidAccelerometer(){
         super("Android","Accelerometer","0.0.1");
     }
+
+    //TODO Following Method Need Propper Implementation
+    public boolean calibrateSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public boolean connectToSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public boolean isConnectedToSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public void setConfiguration(){}
+    //TODO Following Method Need Propper Implementation
+    @Override
+    public AccelerometerData getData() {
+        return null;
+    }
 }

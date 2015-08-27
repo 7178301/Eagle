@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -18,9 +19,17 @@ android {
     productFlavors {
     }
 }
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:22.1.1'
     compile project(':eagleAPI')
 }
+
+
+task sourcesJar(type: Jar) {
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+artifacts {
+    archives sourcesJar
+}
+

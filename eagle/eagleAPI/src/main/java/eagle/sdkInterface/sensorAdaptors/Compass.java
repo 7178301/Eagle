@@ -12,4 +12,7 @@ public abstract class Compass extends SensorAdaptor {
         super(adaptorManufacturer,adaptorModel,adaptorVersion);
     }
 
+    //TODO Following Method Need Proper Implementation
+    //public abstract Object getData();
+
 }

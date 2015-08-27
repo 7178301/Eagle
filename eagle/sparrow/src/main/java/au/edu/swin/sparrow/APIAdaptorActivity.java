@@ -1,15 +1,15 @@
 package au.edu.swin.sparrow;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import au.edu.swin.sparrow.R;
 import eagle.Drone;
 
-public class APIAdaptorActivity extends ActionBarActivity{
+public class APIAdaptorActivity extends AppCompatActivity{
+
 
     Drone drone = new Drone();
     @Override

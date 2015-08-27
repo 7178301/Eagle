@@ -12,4 +12,19 @@ public class LinkSpriteSEN12804 extends Camera {
     public LinkSpriteSEN12804(){
         super("Link Sprite","SEN-12804","0.0.1");
     }
+
+    //TODO Following Method Need Proper Implementation
+    public boolean calibrateSensor(){
+        return true;
+    }
+    //TODO Following Method Need Proper Implementation
+    public boolean connectToSensor(){
+        return true;
+    }
+    //TODO Following Method Need Proper Implementation
+    public boolean isConnectedToSensor(){
+        return true;
+    }
+    //TODO Following Method Need Propper Implementation
+    public void setConfiguration(){}
 }
