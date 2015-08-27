@@ -15,18 +15,18 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import eagle.Drone;
+import eagle.sdkInterface.LogAndroid;
 import eagle.sdkInterface.SDKAdaptor;
 
-import au.edu.swin.sparrow.R;
 
-
-public class MainActivity extends ListActivity{
+public class MainActivity extends ListActivity {
 
     Drone drone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        eagle.Log.addCallback(LogAndroid.getInstance());
         initializeUI();
     }
 
