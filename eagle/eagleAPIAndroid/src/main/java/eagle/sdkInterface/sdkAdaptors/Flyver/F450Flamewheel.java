@@ -22,10 +22,10 @@ public class F450Flamewheel extends SDKAdaptor {
     }
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader){
         addSensorAdaptorAccelerometer(adaptorLoader.getSensorAdaptorAccelerometer("AndroidAccelerometer"));
-        addSensorAdaptorAltimeter(adaptorLoader.getSensorAdaptorAltimeter("AndroidAltimeter"));
-        addSensorAdaptorCamera(adaptorLoader.getSensorAdaptorCamera("AndroidCamera"));
-        addSensorAdaptorCompass(adaptorLoader.getSensorAdaptorCompass("AndroidCompass"));
-        addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
+        //addSensorAdaptorAltimeter(adaptorLoader.getSensorAdaptorAltimeter("AndroidAltimeter"));
+        //addSensorAdaptorCamera(adaptorLoader.getSensorAdaptorCamera("AndroidCamera"));
+        //addSensorAdaptorCompass(adaptorLoader.getSensorAdaptorCompass("AndroidCompass"));
+        //addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
     }
 
     public boolean connectToDrone(){return false;}

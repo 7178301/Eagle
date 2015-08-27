@@ -4,6 +4,7 @@ import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.sensorAdaptors.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** Abstract SDKAdaptor Class
@@ -14,14 +15,12 @@ import java.util.HashMap;
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public abstract class SDKAdaptor {
 
-    private HashMap<String,Accelerometer> accelerometer = null;
-    private HashMap<String,Altimeter> altimeter = null;
-    private HashMap<String,Camera> camera = null;
-    private HashMap<String,Compass> compass = null;
-    private HashMap<String,Gyroscope> gyroscopes = null;
-    private HashMap<String,LIDAR> lidar = null;
-    private HashMap<String,RPLIDAR> rplidar = null;
-    private HashMap<String,Ultrasonic> ultrasonic = null;
+    private ArrayList<AdaptorAccelerometer> accelerometers = null;
+    private ArrayList<AdaptorCamera> cameras = null;
+    private ArrayList<AdaptorGyroscope> gyroscopes = null;
+    private ArrayList<AdaptorLIDAR> lidars = null;
+    private ArrayList<AdaptorRPLIDAR> rplidars = null;
+    private ArrayList<AdaptorUltrasonic> ultrasonics = null;
 
     private String adaptorName = null;
     private String adaptorManufacturer = null;
@@ -100,10 +99,10 @@ public abstract class SDKAdaptor {
         return flyToRelative(new Position(0,0,altitude,0,0,new Bearing(0)));
     }
     public boolean changeYawRelative(Bearing yaw,double speed){
-        return flyToRelative(new Position(0,0,0,0,0,yaw),speed);
+        return flyToRelative(new Position(0, 0, 0, 0, 0, yaw), speed);
     }
     public boolean changeYawRelative(Bearing yaw){
-        return flyToRelative(new Position(0,0,0,0,0,yaw));
+        return flyToRelative(new Position(0, 0, 0, 0, 0, yaw));
     }
 
     public boolean changeLongitudeAbsolute(double longitude,double speed){
@@ -153,48 +152,42 @@ public abstract class SDKAdaptor {
         return homePosition;
     }
 
-    public void addSensorAdaptorAccelerometer(Accelerometer accelerometer){
-        if (this.accelerometer==null)
-            this.accelerometer=new HashMap<>();
-        this.accelerometer.put(accelerometer.getAdaptorName(),accelerometer);
+    public void addSensorAdaptorAccelerometer(AdaptorAccelerometer adaptorAccelerometer){
+        if (this.accelerometers==null)
+            this.accelerometers=new ArrayList<AdaptorAccelerometer>();
+        this.accelerometers.add(adaptorAccelerometer);
     }
-    public void addSensorAdaptorAltimeter(Altimeter altimeter){
-        if (this.altimeter==null)
-            this.altimeter=new HashMap<>();
-        this.altimeter.put(altimeter.getAdaptorName(),altimeter);
+    public void addSensorAdaptorCamera(AdaptorCamera adaptorCamera){
+        if (this.cameras==null)
+            this.cameras=new ArrayList<AdaptorCamera>();
+        this.cameras.add(adaptorCamera);
     }
-    public void addSensorAdaptorCamera(Camera camera){
-        if (this.camera==null)
-            this.camera=new HashMap<>();
-        this.camera.put(camera.getAdaptorName(),camera);
-    }
-    public void addSensorAdaptorCompass(Compass compass){
-        if (this.compass==null)
-            this.compass=new HashMap<>();
-        this.compass.put(compass.getAdaptorName(),compass);
-    }
-    public void addSensorAdaptorGyroscope(Gyroscope gyroscopes){
+    public void addSensorAdaptorGyroscope(AdaptorGyroscope gyroscopes){
         if (this.gyroscopes==null)
-            this.gyroscopes=new HashMap<>();
-        this.gyroscopes.put(gyroscopes.getAdaptorName(),gyroscopes);
+            this.gyroscopes=new ArrayList<AdaptorGyroscope>();
+        this.gyroscopes.add(gyroscopes);
     }
-    public void addSensorAdaptorLIDAR(LIDAR lidar){
-        if (this.lidar==null)
-            this.lidar=new HashMap<>();
-        this.lidar.put(lidar.getAdaptorName(),lidar);
+    public void addSensorAdaptorLIDAR(AdaptorLIDAR lidar){
+        if (this.lidars==null)
+            this.lidars=new ArrayList<AdaptorLIDAR>();
+        this.lidars.add(lidar);
     }
-    public void addSensorAdaptorRPLIDAR(RPLIDAR rplidar){
-        if (this.rplidar==null)
-            this.rplidar=new HashMap<>();
-        this.rplidar.put(rplidar.getAdaptorName(),rplidar);
+    public void addSensorAdaptorRPLIDAR(AdaptorRPLIDAR adaptorRPLIDAR){
+        if (this.rplidars==null)
+            this.rplidars=new ArrayList<AdaptorRPLIDAR>();
+        this.rplidars.add(adaptorRPLIDAR);
     }
-    public void addSensorAdaptorUltrasonic(Ultrasonic ultrasonic){
-        if (this.ultrasonic==null)
-            this.ultrasonic=new HashMap<>();
-        this.ultrasonic.put(ultrasonic.getAdaptorName(),ultrasonic);
+    public void addSensorAdaptorUltrasonic(AdaptorUltrasonic adaptorUltrasonic){
+        if (this.ultrasonics==null)
+            this.ultrasonics=new ArrayList<AdaptorUltrasonic>();
+        this.ultrasonics.add(adaptorUltrasonic);
     }
 
     public abstract void delay(int milliseconds);
+
+    public ArrayList<AdaptorAccelerometer> getAccelerometers() {
+        return accelerometers;
+    }
 
     //TODO Add Remove Adaptor Functions
 

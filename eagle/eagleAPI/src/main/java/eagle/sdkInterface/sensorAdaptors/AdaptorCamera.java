@@ -7,11 +7,13 @@ package eagle.sdkInterface.sensorAdaptors;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross */
-public abstract class Camera extends SensorAdaptor{
+public abstract class AdaptorCamera extends SensorAdaptor{
 
-    public Camera(String adaptorManufacturer, String adaptorModel, String adaptorVersion){
+    public AdaptorCamera(String adaptorManufacturer, String adaptorModel, String adaptorVersion){
         super(adaptorManufacturer,adaptorModel,adaptorVersion);
     }
+
+    public abstract boolean connectToSensor();
 
     //TODO Following Method Need Proper Implementation
     //public abstract Object getData();
