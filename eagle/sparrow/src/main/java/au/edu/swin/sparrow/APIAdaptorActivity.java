@@ -7,17 +7,33 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import eagle.Drone;
+import eagle.Log;
 
 public class APIAdaptorActivity extends AppCompatActivity{
 
 
     Drone drone = new Drone();
+    TelnetServer telnet = new TelnetServer(drone);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apiadaptor);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         initializeUI();
+        Log.addCallback(telnet);
+        telnet.execute();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.removeCallback(telnet);
+        super.onDestroy();
+    }
+
+
+    private void initializeSocket() {
+
     }
 
 

@@ -4,6 +4,9 @@ import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.sensorAdaptors.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 
 /** Abstract SDKAdaptor Class
@@ -100,17 +103,17 @@ public abstract class SDKAdaptor {
         return flyToRelative(new Position(0,0,altitude,0,0,new Bearing(0)));
     }
     public boolean changeYawRelative(Bearing yaw,double speed){
-        return flyToRelative(new Position(0,0,0,0,0,yaw),speed);
+        return flyToRelative(new Position(0, 0, 0, 0, 0, yaw), speed);
     }
     public boolean changeYawRelative(Bearing yaw){
-        return flyToRelative(new Position(0,0,0,0,0,yaw));
+        return flyToRelative(new Position(0, 0, 0, 0, 0, yaw));
     }
 
     public boolean changeLongitudeAbsolute(double longitude,double speed){
-        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()),speed);
+        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()), speed);
     }
     public boolean changeLongitudeAbsolute(double longitude){
-        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()));
+        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()));
     }
     public boolean changeLatitudeAbsolute(double latitude,double speed){
         return flyToAbsolute(new Position(getPositionAssigned().getLongitude(),latitude, getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()),speed);
