@@ -1,5 +1,6 @@
 package eagle.sdkInterface.sdkAdaptors.Simulator;
 
+import eagle.Log;
 import eagle.navigation.positioning.Position;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
@@ -33,12 +34,14 @@ public class Simulator extends SDKAdaptor {
     @Override
     public boolean connectToDrone() {
         connected = true;
+        Log.log("Connected to Drone");
         return connected;
     }
 
     @Override
     public boolean disconnectFromDrone() {
         connected = false;
+        Log.log("Disconnected to Drone");
         return true;
     }
 
@@ -115,6 +118,8 @@ public class Simulator extends SDKAdaptor {
             catch (InterruptedException e) {
 
             }
+
+            Log.log("Current Position: "+ newPos.toString());
         }
         return true;
     }
