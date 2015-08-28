@@ -449,7 +449,7 @@ public class Drone {
                     return "UNKNOWN COMMAND";
             }
         }
-        catch (Exception e) {
+        catch (NumberFormatException e) {
             throw new InvalidInstructionException(instruction);
         }
         return "SUCCESS";
