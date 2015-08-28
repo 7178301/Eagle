@@ -35,8 +35,8 @@ public class Drone {
             put("GETADAPTORNAME", "GETADAPTORNAME | Get the adaptor name");
             put("GETADAPTORMANUFACTURER", "GETADAPTORMANUFACTURER | Get the adaptor manufacturer");
             put("GETADAPTORMODEL", "GETADAPTORMODEL | Get the adaptor model");
-            put("FLYTORELATIVE", "FLYTORELATIVE _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ _[speed]_ | Fly the drone to a given relative position");
-            put("FLYTOABSOLUTE", "FLYTOABSOLUTE _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ _[speed]_ | Fly the drone to a given gps position");
+            put("FLYTORELATIVE", "FLYTORELATIVE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given relative position");
+            put("FLYTOABSOLUTE", "FLYTOABSOLUTE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given gps position");
             put("CHANGELONGITUDERELATIVE", "CHANGELONGITUDERELATIVE _longitude_ _[speed]_ | Change the longitude relative");
             put("CHANGELATITUDERELATIVE", "CHANGELATITUDERELATIVE _latitude_ _[speed]_ | Change the latitude relative");
             put("CHANGEALTITUDERELATIVE", "CHANGEALTITUDERELATIVE _altitude_ _[speed]_ | Change the altitude relative");
@@ -48,7 +48,7 @@ public class Drone {
             put("GOHOME", "GOHOME | Flys the drone to its home position");
             put("GETPOSITION", "GETPOSITION | prints out the drones current position");
             put("GETHOME", "GETHOME | prints the home position of the drone");
-            put("SETHOME", "SETHOME _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ | Set the home position");
+            put("SETHOME", "SETHOME _longitude_ _latitude_ _altitude_ _bearing_ | Set the home position");
             put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
             put("HELP","HELP _[command]_ | Prints a list of commands");
         }
@@ -184,28 +184,24 @@ public class Drone {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "FLYTORELATIVE":
-                    if (array.length == 7) {
+                    if (array.length == 5) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
-                        double rol = Double.parseDouble(array[4]);
-                        double pit = Double.parseDouble(array[5]);
-                        double bea = Double.parseDouble(array[6]);
-                        Position newPos = new Position(lon, lat, alt, rol, pit, new Bearing(bea));
+                        double bea = Double.parseDouble(array[4]);
+                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
                         if (adaptor.flyToRelative(newPos)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 8) {
+                    } else if (array.length == 6) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
-                        double rol = Double.parseDouble(array[4]);
-                        double pit = Double.parseDouble(array[5]);
-                        double bea = Double.parseDouble(array[6]);
-                        double spe = Double.parseDouble(array[7]);
-                        Position newPos = new Position(lon, lat, alt, rol, pit, new Bearing(bea));
+                        double bea = Double.parseDouble(array[4]);
+                        double spe = Double.parseDouble(array[5]);
+                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
                         if (adaptor.flyToRelative(newPos, spe)) {
                             return "SUCCESS";
                         } else {
@@ -215,28 +211,24 @@ public class Drone {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "FLYTOABSOLUTE":
-                    if (array.length == 7) {
+                    if (array.length == 5) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
-                        double rol = Double.parseDouble(array[4]);
-                        double pit = Double.parseDouble(array[5]);
-                        double bea = Double.parseDouble(array[6]);
-                        Position newPos = new Position(lon, lat, alt, rol, pit, new Bearing(bea));
+                        double bea = Double.parseDouble(array[4]);
+                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
                         if (adaptor.flyToAbsolute(newPos)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 8) {
+                    } else if (array.length == 6) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
-                        double rol = Double.parseDouble(array[4]);
-                        double pit = Double.parseDouble(array[5]);
-                        double bea = Double.parseDouble(array[6]);
-                        double spe = Double.parseDouble(array[7]);
-                        Position newPos = new Position(lon, lat, alt, rol, pit, new Bearing(bea));
+                        double bea = Double.parseDouble(array[4]);
+                        double spe = Double.parseDouble(array[5]);
+                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
                         if (adaptor.flyToAbsolute(newPos, spe)) {
                             return "SUCCESS";
                         } else {
@@ -419,14 +411,12 @@ public class Drone {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "SETHOME":
-                    if (array.length == 7) {
+                    if (array.length == 5) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
-                        double rol = Double.parseDouble(array[4]);
-                        double pit = Double.parseDouble(array[5]);
-                        double bea = Double.parseDouble(array[6]);
-                        Position newPos = new Position(lon, lat, alt, rol, pit, new Bearing(bea));
+                        double bea = Double.parseDouble(array[4]);
+                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
                         adaptor.setHomePosition(newPos);
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);

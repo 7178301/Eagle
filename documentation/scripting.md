@@ -15,8 +15,8 @@ This API comes with some basic scripting functionality. The available commands a
 | GETADAPTORNAME | GETADAPTORNAME | Get the adaptor name |
 | GETADAPTORMANUFACTURER | GETADAPTORMANUFACTURER | Get the adaptor manufacturer |
 | GETADAPTORMODEL | GETADAPTORMODEL | Get the adaptor model |
-| FLYTORELATIVE | FLYTORELATIVE _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ _[speed]_ | Fly the drone to a given relative position |
-| FLYTOABSOLUTE | FLYTOABSOLUTE _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ _[speed]_ | Fly the drone to a given gps position |
+| FLYTORELATIVE | FLYTORELATIVE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given relative position |
+| FLYTOABSOLUTE | FLYTOABSOLUTE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given gps position |
 | CHANGELONGITUDERELATIVE | CHANGELONGITUDERELATIVE _longitude_ _[speed]_ | Change the longitude relative|
 | CHANGELATITUDERELATIVE | CHANGELATITUDERELATIVE _latitude_ _[speed]_ | Change the latitude relative|
 | CHANGEALTITUDERELATIVE | CHANGEALTITUDERELATIVE _altitude_ _[speed]_ | Change the altitude relative|
@@ -28,7 +28,7 @@ This API comes with some basic scripting functionality. The available commands a
 | GOHOME | GOHOME | Flys the drone to its home position |
 | GETPOSITION | GETPOSITION | prints out the drones current position |
 | GETHOME | GETHOME | prints the home position of the drone |
-| SETHOME | SETHOME _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ | Set the home position |
+| SETHOME | SETHOME _longitude_ _latitude_ _altitude_ _bearing_ | Set the home position |
 | DELAY | DELAY _time_ | Delays for _time_ milliseconds |
 | HELP | HELP _[command]_ | Prints a list of commands |
 
