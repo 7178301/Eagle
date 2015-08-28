@@ -19,8 +19,41 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Drone {
+    static Map<String, String> commands = new HashMap<String, String>(){
+        {
+            put("CONNECTTODRONE", "CONNECTTODRONE | Connect to the drone");
+            put("DISCONNECTFROMDRONE", "DISCONNECTFROMDRONE | Disconnect from the drone");
+            put("GETISCONNECT", "GETISCONNECT | Get the status of the connection from the drone");
+            put("STANDBYDRONE", "STANDBYDRONE | Standby the drone");
+            put("RESUMEDRONE", "RESUMEDRONE | Resume the drone");
+            put("SHUTDOWNDRONE", "SHUTDOWNDRONE | Shutdown the drone");
+            put("GETADAPTORVERSION", "GETADAPTORVERSION | Get the adaptor version");
+            put("GETSDKVERSION", "GETSDKVERSION | Get the SDK version");
+            put("GETADAPTORNAME", "GETADAPTORNAME | Get the adaptor name");
+            put("GETADAPTORMANUFACTURER", "GETADAPTORMANUFACTURER | Get the adaptor manufacturer");
+            put("GETADAPTORMODEL", "GETADAPTORMODEL | Get the adaptor model");
+            put("FLYTORELATIVE", "FLYTORELATIVE _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ _[speed]_ | Fly the drone to a given relative position");
+            put("FLYTOABSOLUTE", "FLYTOABSOLUTE _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ _[speed]_ | Fly the drone to a given gps position");
+            put("CHANGELONGITUDERELATIVE", "CHANGELONGITUDERELATIVE _longitude_ _[speed]_ | Change the longitude relative");
+            put("CHANGELATITUDERELATIVE", "CHANGELATITUDERELATIVE _latitude_ _[speed]_ | Change the latitude relative");
+            put("CHANGEALTITUDERELATIVE", "CHANGEALTITUDERELATIVE _altitude_ _[speed]_ | Change the altitude relative");
+            put("CHANGEYAWRELATIVE", "CHANGEYAWRELATIVE _yaw_ _[speed]_ | Change the yaw relative");
+            put("CHANGELONGITUDEABSOLUTE", "CHANGELONGITUDEABSOLUTE _longitude_ _[speed]_ | Change the longitude absolute");
+            put("CHANGELATITUDEABSOLUTE", "CHANGELATITUDEABSOLUTE _latitude_ _[speed]_ | Change the latitude absolute");
+            put("CHANGEALTITUDEABSOLUTE", "CHANGEALTITUDEABSOLUTE _altitude_ _[speed]_ | Change the altitude absolute");
+            put("CHANGEYAWABSOLUTE", "CHANGEYAWABSOLUTE _yaw_ _[speed]_ | Change the yaw absolute");
+            put("GOHOME", "GOHOME | Flys the drone to its home position");
+            put("GETPOSITION", "GETPOSITION | prints out the drones current position");
+            put("GETHOME", "GETHOME | prints the home position of the drone");
+            put("SETHOME", "SETHOME _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ | Set the home position");
+            put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
+            put("HELP","HELP _[command]_ | Prints a list of commands");
+        }
+    };
+
     final private String apiVersion = "0.0.1";
 
 
@@ -379,6 +412,12 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
+                case "GETHOME":
+                    if (array.length == 1) {
+                        return adaptor.getHomePosition().toString();
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
                 case "SETHOME":
                     if (array.length == 7) {
                         double lon = Double.parseDouble(array[1]);
@@ -402,6 +441,19 @@ public class Drone {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                     break;
+
+                case "HELP":
+                    if (array.length == 1) {
+                        return commands.keySet().toString();
+                    } else if (array.length == 2) {
+                        if (commands.containsKey(array[1])) {
+                            return commands.get(array[1]);
+                        } else {
+                            return "UNKNOWN COMMAND";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
 
                 default:
                     return "UNKNOWN COMMAND";
