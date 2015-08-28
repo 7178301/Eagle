@@ -27,7 +27,9 @@ This API comes with some basic scripting functionality. The available commands a
 | CHANGEYAWABSOLUTE | CHANGEYAWABSOLUTE _yaw_ _[speed]_ | Change the yaw absolute|
 | GOHOME | GOHOME | Flys the drone to its home position |
 | GETPOSITION | GETPOSITION | prints out the drones current position |
+| GETHOME | GETHOME | prints the home position of the drone |
 | SETHOME | SETHOME _longitude_ _latitude_ _altitude_ _roll_ _pitch_ _bearing_ | Set the home position |
 | DELAY | DELAY _time_ | Delays for _time_ milliseconds |
+| HELP | HELP _[command]_ | Prints a list of commands |
 
 More commands will be added over time.
