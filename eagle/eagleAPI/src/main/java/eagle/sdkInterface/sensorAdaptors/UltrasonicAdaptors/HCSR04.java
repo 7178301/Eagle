@@ -53,7 +53,6 @@ public class HCSR04 extends AdaptorUltrasonic {
             return false;
     }
 
-    //TODO Following Method Need Propper Implementation
     public boolean isConnectedToSensor(){
         if(trigger != null && echo !=null ){
         return true;
