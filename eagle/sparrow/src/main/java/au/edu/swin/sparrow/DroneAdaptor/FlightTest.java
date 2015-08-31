@@ -7,6 +7,7 @@ import eagle.sdkInterface.SDKAdaptor;
  */
 public abstract class FlightTest {
     protected SDKAdaptor sdkAdaptor;
+
     protected FlightTest(SDKAdaptor sdk) {
         sdkAdaptor = sdk;
     }
@@ -14,6 +15,7 @@ public abstract class FlightTest {
     public void initDrone() {
         sdkAdaptor.connectToDrone();
     }
+
     public void shutdownDrone() {
         sdkAdaptor.shutdownDrone();
         sdkAdaptor.disconnectFromDrone();

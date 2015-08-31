@@ -1,19 +1,21 @@
 package eagle;
 
-/** Drone API
- * @since     09/04/2015
- * <p>
- * Date Modified	26/05/2015 - Nicholas
- * @version 0.0.1
- * @author          Nicholas Alards [7178301@student.swin.edu.au]
- * @author          Glarah */
-
 import eagle.navigation.Navigation;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
 import java.util.HashMap;
-import java.util.HashSet;
+
+/**
+ * Drone API
+ *
+ * @author Nicholas Alards [7178301@student.swin.edu.au]
+ * @author Glarah
+ * @version 0.0.1
+ * @since 09/04/2015
+ * <p/>
+ * Date Modified	26/05/2015 - Nicholas
+ */
 
 public class Drone {
     final private String apiVersion = "0.0.1";
@@ -26,24 +28,27 @@ public class Drone {
     double minSpeed = -0;
     double maxSpeed = -0;
 
-    public Drone(){
+    public Drone() {
         this.adaptorLoader = new AdaptorLoader();
         this.navigation = new Navigation(this);
     }
 
-    public String getAPIVersion(){
+    public String getAPIVersion() {
         return apiVersion;
     }
-    public HashMap getSDKAdaptorMap(){
-        if(this.adaptorLoader!=null)
+
+    public HashMap getSDKAdaptorMap() {
+        if (this.adaptorLoader != null)
             return this.adaptorLoader.getSDKAdaptorMap();
         else
             return new AdaptorLoader().getSDKAdaptorMap();
     }
-    public SDKAdaptor getSDKAdaptor(){
+
+    public SDKAdaptor getSDKAdaptor() {
         return this.adaptor;
     }
-    public void setSDKAdaptor(String adaptor){
+
+    public void setSDKAdaptor(String adaptor) {
         this.adaptor = this.adaptorLoader.getSDKAdaptor(adaptor);
         this.adaptor.loadDefaultSensorAdaptors(adaptorLoader);
     }

@@ -1,10 +1,14 @@
 package eagle.navigation;
-/** Navigation Collision Detection
- * @since     09/04/2015
- * <p>
- * Date Modified	26/05/2015 - Nicholas
+
+/**
+ * Navigation Collision Detection
+ *
+ * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
- * @author          Nicholas Alards [7178301@student.swin.edu.au] */
-public class CollisionDetection{
+ * @since 09/04/2015
+ * <p/>
+ * Date Modified	26/05/2015 - Nicholas
+ */
+public class CollisionDetection {
 
 }

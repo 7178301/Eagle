@@ -3,8 +3,15 @@ package eagle.sdkInterface;
 import eagle.Log;
 
 /**
- * Created by cameron on 8/27/15.
+ * Adaptor Loader
+ *
+ * @author Cameron Cross [7178301@student.swin.edu.au]
+ * @version 0.0.1
+ * @since 8/13/15
+ * <p/>
+ * Date Modified	8/13/15 - Nicholas
  */
+
 public class LogAndroid implements Log.LogCallback {
     private static LogAndroid ourInstance = new LogAndroid();
 
