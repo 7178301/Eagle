@@ -23,6 +23,7 @@ public class AdaptorLoader {
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
     private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));
     private HashSet<String> magneticAdaptorPaths = new HashSet<>(Arrays.asList("AndroidMagnetic"));
+    private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS"));
     private HashSet<String> gyroscopeAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGyroscope"));
     //private HashSet<String> LIDARAdaptorPaths = new HashSet<>(Arrays.asList());
     private HashSet<String> RPLIDARAdaptorPaths = new HashSet<>(Arrays.asList("RoboPeakRPLIDARA1M1R1"));
@@ -47,6 +48,13 @@ public class AdaptorLoader {
         for (String path : cameraAdaptorPaths)
             cameraAdaptors.put(path, getSensorAdaptorCamera(path));
         return cameraAdaptors;
+    }
+
+    public HashMap getSensorAdaptorListGPS() {
+        HashMap<String, AdaptorGPS> gpsAdaptors = new HashMap<>();
+        for (String path : gpsAdaptorPaths)
+            gpsAdaptors.put(path, getSensorAdaptorGPS(path));
+        return gpsAdaptors;
     }
 
     public HashMap getSensorAdaptorListGyroscope() {
@@ -115,6 +123,19 @@ public class AdaptorLoader {
         if (cameraAdaptorPaths.contains(path)) {
             try {
                 result = (AdaptorCamera) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.cameraAdaptors." + path).newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                System.out.println(e.toString());
+            }
+        }
+        return result;
+    }
+
+    public AdaptorGPS getSensorAdaptorGPS(String path) {
+        AdaptorGPS result = null;
+        ClassLoader classLoader = Drone.class.getClassLoader();
+        if (gpsAdaptorPaths.contains(path)) {
+            try {
+                result = (AdaptorGPS) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.gpsAdaptors." + path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }

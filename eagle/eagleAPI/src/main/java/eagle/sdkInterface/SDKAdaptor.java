@@ -19,6 +19,7 @@ public abstract class SDKAdaptor {
 
     private ArrayList<AdaptorAccelerometer> accelerometers = new ArrayList<>();
     private ArrayList<AdaptorCamera> cameras = new ArrayList<>();
+    private ArrayList<AdaptorGPS> gps = new ArrayList<>();
     private ArrayList<AdaptorGyroscope> gyroscopes = new ArrayList<>();
     private ArrayList<AdaptorLIDAR> lidars = new ArrayList<>();
     private ArrayList<AdaptorMagnetic> magnetics = new ArrayList<>();
@@ -194,8 +195,12 @@ public abstract class SDKAdaptor {
         this.cameras.add(adaptorCamera);
     }
 
-    public void addSensorAdaptorGyroscope(AdaptorGyroscope gyroscopes) {
-        this.gyroscopes.add(gyroscopes);
+    public void addSensorAdaptorGPS(AdaptorGPS adaptorGPS) {
+        this.gps.add(adaptorGPS);
+    }
+
+    public void addSensorAdaptorGyroscope(AdaptorGyroscope adaptorGyroscope) {
+        this.gyroscopes.add(adaptorGyroscope);
     }
 
     public void addSensorAdaptorLIDAR(AdaptorLIDAR lidar) {
@@ -222,6 +227,10 @@ public abstract class SDKAdaptor {
 
     public ArrayList<AdaptorCamera> getCameras() {
         return cameras;
+    }
+
+    public ArrayList<AdaptorGPS> getGPSs() {
+        return gps;
     }
 
     public ArrayList<AdaptorGyroscope> getGyroscopes() {

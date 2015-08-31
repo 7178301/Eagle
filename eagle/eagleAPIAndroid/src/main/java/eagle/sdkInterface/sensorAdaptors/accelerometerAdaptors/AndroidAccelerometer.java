@@ -20,7 +20,7 @@ import android.hardware.SensorManager;
 
 public class AndroidAccelerometer extends AdaptorAccelerometer implements SensorEventListener {
     private Context context = null;
-    private float[] accelerometerData;
+    private float[] accelerometerData = null;
 
     public AndroidAccelerometer() {
         super("Android", "Accelerometer", "0.0.1");
@@ -58,6 +58,14 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
     @Override
     public float[] getData() {
         return accelerometerData;
+    }
+
+    @Override
+    public boolean isDataReady() {
+        if (accelerometerData==null)
+            return false;
+        else
+            return true;
     }
 
     @Override

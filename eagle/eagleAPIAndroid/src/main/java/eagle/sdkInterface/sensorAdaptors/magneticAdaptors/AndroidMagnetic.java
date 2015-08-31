@@ -59,6 +59,13 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
     public float[] getData() {
         return magneticData;
     }
+    @Override
+    public boolean isDataReady() {
+        if (magneticData==null)
+            return false;
+        else
+            return true;
+    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

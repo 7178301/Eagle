@@ -25,4 +25,11 @@ public class LinkSpriteSEN12804 extends AdaptorCamera {
     public boolean isConnectedToSensor() {
         return true;
     }
+
+    //TODO Following Method Need Proper Implementation
+    public boolean isDataReady() {
+        return true;
+    }
+
+
 }

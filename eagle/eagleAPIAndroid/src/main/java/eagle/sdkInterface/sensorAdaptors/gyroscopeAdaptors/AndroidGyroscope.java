@@ -59,6 +59,13 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
     public float[] getData() {
         return gyroscopeData;
     }
+    @Override
+    public boolean isDataReady() {
+        if (gyroscopeData==null)
+            return false;
+        else
+            return true;
+    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {

@@ -50,6 +50,10 @@ public class Bearing {
             return true;
         //return Math.abs(degrees - bearing.degrees) < 0.01;
     }
+    //TODO 360 Boundary Calculation
+    public Bearing minus(Bearing bearing){
+        return new Bearing(this.degrees-bearing.getDegrees());
+    }
 
     /**
      * convert to degrees minutes and seconds.
@@ -76,6 +80,9 @@ public class Bearing {
     }
 
     public boolean isEqual(Bearing bearing) {
-        return Math.abs(degrees - bearing.degrees) < 0.01;
+        if(bearing!=null&&degrees==bearing.getDegrees())
+            return true;
+        else
+            return false;
     }
 }

@@ -16,6 +16,7 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
+import au.edu.swin.sparrow.Fragment.GPSFragment;
 import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
 import au.edu.swin.sparrow.Fragment.LIDARFragment;
 import au.edu.swin.sparrow.Fragment.MagneticFragment;
@@ -23,6 +24,7 @@ import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 import eagle.Drone;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
@@ -115,6 +117,15 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
             magnetic.setAndroidContext(this);
             magnetic.connectToSensor();
             fragment.setMagneticAdaptor(magnetic);
+            sensorFragments.add(fragment);
+            fragTransaction.add(R.id.scrollViewSensors, fragment);
+        }
+        ArrayList<AdaptorGPS> gpsAdaptors = drone.getSDKAdaptor().getGPSs();
+        for (AdaptorGPS gps : gpsAdaptors) {
+            GPSFragment fragment = GPSFragment.newInstance();
+            gps.setAndroidContext(this);
+            gps.connectToSensor();
+            fragment.setGPSAdaptor(gps);
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }
