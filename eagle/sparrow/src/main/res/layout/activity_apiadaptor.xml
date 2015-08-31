@@ -10,6 +10,7 @@
         android:text="@string/adaptor_name"
         android:id="@+id/adaptorNameTextView"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
     <Button
@@ -18,6 +19,7 @@
         android:text="@string/connect"
         android:id="@+id/buttonConnect"
         android:layout_below="@+id/adaptorNameTextView"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -26,13 +28,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/textViewConnectedStatus"
         android:layout_alignBottom="@+id/buttonConnect"
+        android:layout_toRightOf="@+id/buttonConnect"
         android:layout_toEndOf="@+id/buttonConnect" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="@string/accelerometer_x"
         android:id="@+id/textViewAccelerometerDataX"
         android:layout_below="@+id/buttonConnect"
         android:layout_alignParentLeft="true"
@@ -42,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="@string/accelerometer_y"
         android:id="@+id/textViewAccelerometerDataY"
         android:layout_below="@+id/textViewAccelerometerDataX"
         android:layout_alignParentLeft="true"
@@ -52,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="@string/accelerometer_z"
         android:id="@+id/textViewAccelerometerDataZ"
         android:layout_below="@+id/textViewAccelerometerDataY"
         android:layout_alignParentLeft="true"
