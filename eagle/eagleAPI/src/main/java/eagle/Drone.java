@@ -1,12 +1,16 @@
 package eagle;
 
-/** Drone API
- * @since     09/04/2015
- * <p>
- * Date Modified	26/05/2015 - Nicholas
+/**
+ * Drone API
+ *
  * @version 0.0.1
- * @author          Nicholas Alards [7178301@student.swin.edu.au]
- * @author          Glarah */
+ * @author Nicholas Alards [7178301@student.swin.edu.au]
+ * @author Glarah
+ * @author Cameron Cross
+ * @since 09/04/2015
+ * <p/>
+ * Date Modified	26/05/2015 - Nicholas
+ */
 
 import eagle.navigation.Navigation;
 import eagle.navigation.positioning.Bearing;
@@ -15,6 +19,7 @@ import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -22,11 +27,11 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Drone {
-    static Map<String, String> commands = new HashMap<String, String>(){
+    static Map<String, String> commands = new HashMap<String, String>() {
         {
             put("CONNECTTODRONE", "CONNECTTODRONE | Connect to the drone");
             put("DISCONNECTFROMDRONE", "DISCONNECTFROMDRONE | Disconnect from the drone");
-            put("GETISCONNECT", "GETISCONNECT | Get the status of the connection from the drone");
+            put("ISCONNECTEDTODRONE", "ISCONNECTEDTODRONE | Get the status of the connection from the drone");
             put("STANDBYDRONE", "STANDBYDRONE | Standby the drone");
             put("RESUMEDRONE", "RESUMEDRONE | Resume the drone");
             put("SHUTDOWNDRONE", "SHUTDOWNDRONE | Shutdown the drone");
@@ -46,11 +51,11 @@ public class Drone {
             put("CHANGEALTITUDEABSOLUTE", "CHANGEALTITUDEABSOLUTE _altitude_ _[speed]_ | Change the altitude absolute");
             put("CHANGEYAWABSOLUTE", "CHANGEYAWABSOLUTE _yaw_ _[speed]_ | Change the yaw absolute");
             put("GOHOME", "GOHOME | Flys the drone to its home position");
-            put("GETPOSITION", "GETPOSITION | prints out the drones current position");
-            put("GETHOME", "GETHOME | prints the home position of the drone");
-            put("SETHOME", "SETHOME _longitude_ _latitude_ _altitude_ _bearing_ | Set the home position");
+            put("GETPOSITIONASSIGNED", "GETPOSITIONASSIGNED | prints out the drones current position");
+            put("GETHOMEPOSITION", "GETHOMEPOSITION | prints the home position of the drone");
+            put("SETHOMEPOSITION", "SETHOMEPOSITION _longitude_ _latitude_ _altitude_ _bearing_ | Set the home position");
             put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
-            put("HELP","HELP _[command]_ | Prints a list of commands");
+            put("HELP", "HELP _[command]_ | Prints a list of commands");
         }
     };
 
@@ -64,24 +69,27 @@ public class Drone {
     double minSpeed = -0;
     double maxSpeed = -0;
 
-    public Drone(){
+    public Drone() {
         this.adaptorLoader = new AdaptorLoader();
         this.navigation = new Navigation(this);
     }
 
-    public String getAPIVersion(){
+    public String getAPIVersion() {
         return apiVersion;
     }
-    public HashMap getSDKAdaptorMap(){
-        if(this.adaptorLoader!=null)
+
+    public HashMap getSDKAdaptorMap() {
+        if (this.adaptorLoader != null)
             return this.adaptorLoader.getSDKAdaptorMap();
         else
             return new AdaptorLoader().getSDKAdaptorMap();
     }
-    public SDKAdaptor getSDKAdaptor(){
+
+    public SDKAdaptor getSDKAdaptor() {
         return this.adaptor;
     }
-    public void setSDKAdaptor(String adaptor){
+
+    public void setSDKAdaptor(String adaptor) {
         this.adaptor = this.adaptorLoader.getSDKAdaptor(adaptor);
         this.adaptor.loadDefaultSensorAdaptors(adaptorLoader);
     }
@@ -113,7 +121,7 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "GETISCONNECTED":
+                case "ISCONNECTEDTODRONE":
                     if (array.length == 1) {
                         if (adaptor.isConnectedToDrone()) {
                             return "TRUE";
@@ -145,7 +153,7 @@ public class Drone {
                     }
                 case "SHUTDOWNDRONE":
                     if (array.length == 1) {
-                        if (adaptor.resumeDrone()) {
+                        if (adaptor.shutdownDrone()) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -167,7 +175,7 @@ public class Drone {
                     }
                 case "GETADAPTORNAME":
                     if (array.length == 1) {
-                        return adaptor.getAdaptorVersion();
+                        return adaptor.getAdaptorName();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
@@ -398,19 +406,19 @@ public class Drone {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                     break;
-                case "GETPOSITION":
+                case "GETPOSITIONASSIGNED":
                     if (array.length == 1) {
                         return adaptor.getPositionAssigned().toString();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "GETHOME":
+                case "GETHOMEPOSITION":
                     if (array.length == 1) {
                         return adaptor.getHomePosition().toString();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "SETHOME":
+                case "SETHOMEPOSITION":
                     if (array.length == 5) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
@@ -448,8 +456,7 @@ public class Drone {
                 default:
                     return "UNKNOWN COMMAND";
             }
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new InvalidInstructionException(instruction);
         }
         return "SUCCESS";
@@ -458,15 +465,12 @@ public class Drone {
 
     public final void runRoutine(String filename) {
         try {
-            try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    executeInstruction(line);
-                }
-            } catch (InvalidInstructionException e) {
-                e.printStackTrace();
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            String line;
+            while ((line = br.readLine()) != null) {
+                executeInstruction(line);
             }
-        } catch (IOException e) {
+        } catch (IOException | InvalidInstructionException e) {
             e.printStackTrace();
         }
     }

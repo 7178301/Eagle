@@ -2,15 +2,14 @@ package eagle;
 
 import org.junit.Test;
 
-import eagle.navigation.positioning.Bearing;
-import eagle.navigation.positioning.Position;
-import eagle.sdkInterface.SDKAdaptor;
-import eagle.sdkInterface.sdkAdaptors.Simulator.Simulator;
-
-import static org.junit.Assert.assertEquals;
-
 /**
- * Created by cameron on 8/27/15.
+ * Drone Class Tester
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 27/08/2015
+ * <p/>
+ * Date Modified	27/08/2015 - Cameron
  */
 
 public class DroneTest {

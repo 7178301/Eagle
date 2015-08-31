@@ -2,8 +2,15 @@ package eagle;
 
 import java.util.Vector;
 
+
 /**
- * Created by cameron on 8/27/15.
+ * Java Logger
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 27/08/2015
+ * <p/>
+ * Date Modified	27/08/2015 - Cameron
  */
 public class Log {
     static Vector<LogCallback> callbacks = new Vector<LogCallback>();

@@ -7,6 +7,15 @@ import eagle.navigation.positioning.Position;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Position Class Tester
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 27/08/2015
+ * <p/>
+ * Date Modified	27/08/2015 - Cameron
+ */
 public class PositionTest {
 
 	@Test
