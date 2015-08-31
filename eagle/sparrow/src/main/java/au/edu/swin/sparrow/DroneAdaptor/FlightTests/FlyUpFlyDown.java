@@ -14,10 +14,10 @@ public class FlyUpFlyDown extends FlightTest {
     @Override
     public void flyRoutine() {
         //try {
-            sdkAdaptor.changeAltitudeRelative(1);
-            //sdkAdaptor.delay(1000);
-            sdkAdaptor.changeAltitudeRelative(-1);
-            //sdkAdaptor.delay(1000);
+        sdkAdaptor.changeAltitudeRelative(1);
+        //sdkAdaptor.delay(1000);
+        sdkAdaptor.changeAltitudeRelative(-1);
+        //sdkAdaptor.delay(1000);
         //}
         //catch (InterruptedException e) {
         //    Log.e("FlyUpFlyDown", "Something interupted the wait");

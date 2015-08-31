@@ -23,6 +23,7 @@ public class LIDARFragment extends SensorFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public LIDARFragment() {
     }
 
@@ -32,7 +33,7 @@ public class LIDARFragment extends SensorFragment {
         // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_basicsensor, container, false);
-        TextView title = (TextView)view.findViewById(R.id.editTextSensorName);
+        TextView title = (TextView) view.findViewById(R.id.editTextSensorName);
         title.setText("LIDAR");
         return view;
     }
@@ -40,7 +41,7 @@ public class LIDARFragment extends SensorFragment {
     public void setLIDARAdaptor(AdaptorLIDAR Lidar) {
         this.lidar = Lidar;
     }
-    
+
     @Override
     public void updateData() {
         if (view != null && lidar.isConnectedToSensor()) {

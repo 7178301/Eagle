@@ -22,6 +22,7 @@ public class UltrasonicFragment extends SensorFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public UltrasonicFragment() {
     }
 
@@ -31,7 +32,7 @@ public class UltrasonicFragment extends SensorFragment {
         // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_basicsensor, container, false);
-        TextView title = (TextView)view.findViewById(R.id.editTextSensorName);
+        TextView title = (TextView) view.findViewById(R.id.editTextSensorName);
         title.setText("Ultrasonic");
         return view;
     }
@@ -39,7 +40,7 @@ public class UltrasonicFragment extends SensorFragment {
     public void setUltrasonicAdaptor(AdaptorUltrasonic Ultrasonic) {
         this.ultrasonic = Ultrasonic;
     }
-    
+
     @Override
     public void updateData() {
         if (view != null && ultrasonic.isConnectedToSensor()) {

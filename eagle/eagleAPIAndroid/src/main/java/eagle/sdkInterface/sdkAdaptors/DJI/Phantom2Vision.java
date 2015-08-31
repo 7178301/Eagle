@@ -5,43 +5,67 @@ import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
-/** DJI SDKAdaptor
- * @since     09/04/2015
- * <p>
- * Date Modified	26/05/2015 - Nicholas
+/**
+ * DJI SDKAdaptor
+ *
+ * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
- * @author          Nicholas Alards [7178301@student.swin.edu.au] */
+ * @since 09/04/2015
+ * <p/>
+ * Date Modified	26/05/2015 - Nicholas
+ */
 public class Phantom2Vision extends SDKAdaptor {
 
     //TODO Create method implementations
 
-    public Phantom2Vision(){
-        super("DJI","Phantom 2 Vision","1.0.6","0.0.1");
+    public Phantom2Vision() {
+        super("DJI", "Phantom 2 Vision", "1.0.6", "0.0.1");
     }
 
-    public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader){
+    public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
 
     }
 
-    public boolean connectToDrone(){return false;}
-    public boolean disconnectFromDrone(){return false;}
-    public boolean isConnectedToDrone(){return false;}
+    public boolean connectToDrone() {
+        return false;
+    }
 
-    public boolean standbyDrone(){return false;}
-    public boolean resumeDrone(){return false;}
-    public boolean shutdownDrone(){return false;}
+    public boolean disconnectFromDrone() {
+        return false;
+    }
 
-    public boolean flyToAbsolute(Position position, double speed){return false;}
-    public boolean flyToAbsolute(Position position){return false;}
+    public boolean isConnectedToDrone() {
+        return false;
+    }
+
+    public boolean standbyDrone() {
+        return false;
+    }
+
+    public boolean resumeDrone() {
+        return false;
+    }
+
+    public boolean shutdownDrone() {
+        return false;
+    }
+
+    public boolean flyToAbsolute(Position position, double speed) {
+        return false;
+    }
+
+    public boolean flyToAbsolute(Position position) {
+        return false;
+    }
 
 
-    public Position getPositionInFlight(){
+    public Position getPositionInFlight() {
         //TODO CREATE BELOW IMPLEMENTATION
-        return new Position(0,0,0,0,0,new Bearing(0));
+        return new Position(0, 0, 0, 0, 0, new Bearing(0));
     }
 
     @Override
-    public void delay(int milliseconds){
+    public void delay(int milliseconds) {
         try {
             Thread.sleep(milliseconds);
         } catch (InterruptedException e) {

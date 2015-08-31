@@ -1,7 +1,5 @@
 package au.edu.swin.sparrow.Fragment;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -31,6 +29,7 @@ public class AccelerometerFragment extends SensorFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     public AccelerometerFragment() {
     }
 

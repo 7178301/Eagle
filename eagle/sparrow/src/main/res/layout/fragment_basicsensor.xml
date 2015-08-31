@@ -1,40 +1,39 @@
 <!-- TODO: Update blank fragment layout -->
 
-    <TableLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment">
+
+    <TextView
+        android:id="@+id/editTextSensorName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        style="@style/Fragment">
+        android:text="@string/sensor"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/sensor"
-            android:id="@+id/editTextSensorName" />
+            android:text="@string/distance_m_"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/editTextSensorData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:enabled="false" />
+    </TableRow>
 
-            <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/distance_m"
-                            android:id="@+id/textView" />
-
-            <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:id="@+id/editTextSensorData"
-                            android:layout_weight="1"
-                            android:enabled="false" />
-        </TableRow>
-
-    </TableLayout>
+</TableLayout>

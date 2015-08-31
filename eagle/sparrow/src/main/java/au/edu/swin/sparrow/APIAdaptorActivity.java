@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,12 +34,13 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
     protected void onStart() {
         super.onStart();
         setContentView(R.layout.activity_apiadaptor);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         initializeUI();
         updateUI();
         MyTimerTask myTask = new MyTimerTask();
         Timer myTimer = new Timer();
-        myTimer.schedule(myTask, 3000, 500);
+        myTimer.schedule(myTask, 3000, 50);
     }
 
 
@@ -97,7 +99,7 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
         fragTransaction.commit();
     }
 
-    private void updateUI(){
+    private void updateUI() {
         for (SensorFragment sensor : sensorFragments) {
             sensor.updateData();
         }
@@ -108,8 +110,8 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
 
     }
 
-    class MyTimerTask extends TimerTask{
-        public void run(){
+    class MyTimerTask extends TimerTask {
+        public void run() {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

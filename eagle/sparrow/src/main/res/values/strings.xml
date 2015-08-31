@@ -12,11 +12,11 @@
     <string name="not_connected">Not Connected</string>
     <string name="sensor_data">Sensor Data</string>
     <string name="accelerometer">Accelerometer</string>
-    <string name="x_axis">X-Axis</string>
-    <string name="y_axis">Y-Axis</string>
-    <string name="z_axis">Z-Axis</string>
+    <string name="x_axis_">X-Axis: </string>
+    <string name="y_axis_">Y-Axis: </string>
+    <string name="z_axis_">Z-Axis: </string>
     <string name="sensor">Sensor</string>
-    <string name="distance_m">Distance (m)</string>
+    <string name="distance_m_">Distance (m): </string>
 
 
 

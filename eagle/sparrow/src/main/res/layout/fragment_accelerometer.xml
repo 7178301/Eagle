@@ -1,84 +1,74 @@
 <!-- TODO: Update blank fragment layout -->
 
-    <TableLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        style="@style/Fragment">
+        android:text="@string/accelerometer"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/accelerometer"
-            android:id="@+id/textView5" />
+            android:text="@string/x_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/editTextAccelerometerDataX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/x_axis"
-                        android:id="@+id/textView" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:ems="10"
-                        android:id="@+id/editTextAccelerometerDataX"
-                        android:layout_weight="1"
-                        android:enabled="false" />
-                </TableRow>
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/y_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/editTextAccelerometerDataY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/y_axis"
-                        android:id="@+id/textView3" />
+    </TableRow>
 
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:ems="10"
-                        android:id="@+id/editTextAccelerometerDataY"
-                        android:layout_weight="1"
-                        android:enabled="false" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                </TableRow>
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/z_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/editTextAccelerometerDataZ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/z_axis"
-                        android:id="@+id/textView4" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:ems="10"
-                        android:id="@+id/editTextAccelerometerDataZ"
-                        android:layout_weight="1"
-                        android:enabled="false" />
-
-                </TableRow>
-        </TableLayout>
+    </TableRow>
+</TableLayout>

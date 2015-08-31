@@ -8,59 +8,67 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-/** Android Accelerometer Adaptor
- * @since     09/04/2015
- * <p>
- * Date Modified	26/05/2015 - Nicholas
+/**
+ * Android Accelerometer Adaptor
+ *
+ * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
- * @author          Nicholas Alards [7178301@student.swin.edu.au] */
+ * @since 09/04/2015
+ * <p/>
+ * Date Modified	26/05/2015 - Nicholas
+ */
+
 public class AndroidAccelerometer extends AdaptorAccelerometer implements SensorEventListener {
     private Context context = null;
     private float[] accelerometerData;
 
-    public AndroidAccelerometer(){
-        super("Android","Accelerometer","0.0.1");
+    public AndroidAccelerometer() {
+        super("Android", "Accelerometer", "0.0.1");
     }
 
-    public boolean connectToSensor(){
-        if (this.context==null)
+    public boolean connectToSensor() {
+        if (this.context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) !=null){
-            sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_FASTEST);
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
             return true;
-        }
+        } else
+            return false;
+    }
+
+    public boolean setAndroidContext(Object object) {
+        if (object instanceof Context) {
+            this.context = (Context) object;
+            return true;
+        } else
+            return false;
+    }
+
+    public boolean isConnectedToSensor() {
+        if (context == null)
+            return false;
+        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
+            return true;
         else
             return false;
     }
-    public boolean setAndroidContext(Object object){
-        if(object instanceof Context){
-            this.context = (Context)object;
-            return true;
-        }else
-            return false;
-    }
-    public boolean isConnectedToSensor(){
-        if (context==null)
-            return false;
-        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) !=null)
-            return true;
-        else
-            return false;
-    }
+
     @Override
     public float[] getData() {
         return accelerometerData;
     }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
-        if(sensor.getType()==Sensor.TYPE_ACCELEROMETER) {
+        if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             accelerometerData = new float[3];
             accelerometerData[0] = event.values[0];
             accelerometerData[1] = event.values[1];
