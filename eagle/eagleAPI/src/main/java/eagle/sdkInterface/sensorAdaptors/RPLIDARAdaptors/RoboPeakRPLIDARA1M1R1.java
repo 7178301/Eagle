@@ -32,4 +32,9 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     public float[] getData() {
         return RPLIDARData;
     }
+
+    //TODO Following Method Need Proper Implementation
+    public boolean isDataReady() {
+        return true;
+    }
 }

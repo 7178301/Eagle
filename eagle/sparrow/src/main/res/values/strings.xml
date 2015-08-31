@@ -25,7 +25,13 @@
     <string name="magnetic">Magnetic</string>
     <string name="lidar">LIDAR</string>
     <string name="rplidar">RPLIDAR</string>
+    <string name="gps">GPS</string>
     <string name="ultrasonic">Ultrasonic</string>
+    <string name="longatude">Longatude</string>
+    <string name="latitude">Latitude</string>
+    <string name="altitude">Altitude</string>
+    <string name="bearing">Bearing</string>
+    <string name="accuracy">Accuracy</string>
 
 
     <!-- DJI strings -->

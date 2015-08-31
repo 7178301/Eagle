@@ -17,7 +17,7 @@ public class Position {
     private double altitude;
     private double roll;
     private double pitch;
-    private Bearing yaw;
+    private Bearing yaw = null;
 
     public Position(double longitude, double latitude, double altitude, double roll, double pitch, Bearing yaw) {
         this.longitude = longitude;
@@ -29,49 +29,37 @@ public class Position {
     }
 
     public Position(Position position) {
-        this.longitude = position.longitude;
-        this.latitude = position.latitude;
-        this.altitude = position.altitude;
-        this.roll = position.roll;
-        this.pitch = position.pitch;
-        this.yaw = position.yaw;
+        this.longitude = position.getLongitude();
+        this.latitude = position.getLatitude();
+        this.altitude = position.getAltitude();
+        this.roll = position.getRoll();
+        this.pitch = position.getPitch();
+        this.yaw = position.getYaw();
     }
 
     public double getLongitude() {
         return this.longitude;
     }
 
-    ;
-
     public double getLatitude() {
         return this.latitude;
     }
-
-    ;
 
     public double getAltitude() {
         return this.altitude;
     }
 
-    ;
-
     public double getRoll() {
         return this.roll;
     }
-
-    ;
 
     public double getPitch() {
         return this.pitch;
     }
 
-    ;
-
     public Bearing getYaw() {
         return this.yaw;
     }
-
-    ;
 
     public void addRelative(Position position) {
         this.longitude += position.getLongitude();
@@ -104,11 +92,14 @@ public class Position {
     }
 
     public boolean isEqual(Position position) {
-        return (Math.abs(position.getAltitude() - altitude) < 0.00001 &&
-                Math.abs(position.getLatitude() - latitude) < 0.00001 &&
-                Math.abs(position.getLongitude() - longitude) < 0.00001 &&
-                Math.abs(position.getPitch() - pitch) < 0.00001 &&
-                Math.abs(position.getRoll() - roll) < 0.00001 &&
-                position.getYaw().isEqual(yaw));
+        if (position.getAltitude() == altitude &&
+                position.getLatitude() == latitude &&
+                position.getLongitude() == longitude &&
+                position.getPitch() == pitch &&
+                position.getRoll() == roll &&
+                position.getYaw().isEqual(yaw))
+            return true;
+        else
+            return false;
     }
 }

@@ -31,4 +31,9 @@ public class SeeedStudioSEN10737P extends AdaptorUltrasonic {
     public float getData() {
         return 0;
     }
+
+    //TODO Following Method Need Proper Implementation
+    public boolean isDataReady() {
+        return true;
+    }
 }

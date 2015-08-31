@@ -25,6 +25,8 @@ public abstract class SensorAdaptor {
 
     public abstract boolean isConnectedToSensor();
 
+    public abstract boolean isDataReady();
+
     public String getAdaptorVersion() {
         return adaptorVersion;
     }

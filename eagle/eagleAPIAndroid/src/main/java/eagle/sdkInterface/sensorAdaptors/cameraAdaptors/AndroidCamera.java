@@ -26,4 +26,10 @@ public class AndroidCamera extends AdaptorCamera {
     public boolean isConnectedToSensor() {
         return false;
     }
+
+    @Override
+
+    public boolean isDataReady() {
+        return false;
+    }
 }

@@ -27,6 +27,7 @@ public class F450Flamewheel extends SDKAdaptor {
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
         addSensorAdaptorAccelerometer(adaptorLoader.getSensorAdaptorAccelerometer("AndroidAccelerometer"));
         addSensorAdaptorCamera(adaptorLoader.getSensorAdaptorCamera("AndroidCamera"));
+        addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("AndroidGPS"));
         addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
         addSensorAdaptorMagnetic(adaptorLoader.getSensorAdaptorMagnetic("AndroidMagnetic"));
     }
