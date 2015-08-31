@@ -1,58 +1,40 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment"
-    android:background="#CCC">
+<!-- TODO: Update blank fragment layout -->
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <LinearLayout
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="#FFF">
+        style="@style/Fragment">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Sensor"
+            android:text="@string/sensor"
             android:id="@+id/editTextSensorName" />
 
-        <TableLayout
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent">
 
-            >
+            <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:text="@string/distance_m"
+                            android:id="@+id/textView" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:id="@+id/editTextSensorData"
+                            android:layout_weight="1"
+                            android:enabled="false" />
+        </TableRow>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_column="0">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Distance (m):"
-                        android:id="@+id/textView" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:ems="10"
-                        android:id="@+id/editTextSensorData"
-                        android:layout_weight="1"
-                        android:enabled="false" />
-                </TableRow>
-            </TableRow>
-
-        </TableLayout>
-    </LinearLayout>
-
-</FrameLayout>
+    </TableLayout>
