@@ -48,12 +48,16 @@ public class RPLIDARFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null && rplidar.isConnectedToSensor()) {
-
+        if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
-            sensorOutput1DataTextView.setText(String.valueOf(rplidar.getData()));
-            sensorOutput2DataTextView.setText(String.valueOf(rplidar.getData()));
+            if (rplidar.isConnectedToSensor()) {
+                sensorOutput1DataTextView.setText(String.valueOf(rplidar.getData()));
+                sensorOutput2DataTextView.setText(String.valueOf(rplidar.getData()));
+            } else {
+                sensorOutput1DataTextView.setText("");
+                sensorOutput2DataTextView.setText("");
+            }
         }
     }
 }

@@ -57,14 +57,19 @@ public class AccelerometerFragment extends SensorFragment {
     }
 
     public void updateData() {
-        if (view != null && accelerometer.isConnectedToSensor()) {
-
+        if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
             TextView sensorOutput3DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Data);
-            sensorOutput1DataTextView.setText(String.valueOf(accelerometer.getData()[0]));
-            sensorOutput2DataTextView.setText(String.valueOf(accelerometer.getData()[1]));
-            sensorOutput3DataTextView.setText(String.valueOf(accelerometer.getData()[2]));
+            if (accelerometer.isConnectedToSensor()) {
+                sensorOutput1DataTextView.setText(String.valueOf(accelerometer.getData()[0]));
+                sensorOutput2DataTextView.setText(String.valueOf(accelerometer.getData()[1]));
+                sensorOutput3DataTextView.setText(String.valueOf(accelerometer.getData()[2]));
+            } else {
+                sensorOutput1DataTextView.setText("");
+                sensorOutput2DataTextView.setText("");
+                sensorOutput3DataTextView.setText("");
+            }
         }
     }
 }

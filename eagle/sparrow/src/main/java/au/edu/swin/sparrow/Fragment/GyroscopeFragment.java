@@ -57,14 +57,19 @@ public class GyroscopeFragment extends SensorFragment {
     }
 
     public void updateData() {
-        if (view != null && gyroscope.isConnectedToSensor()) {
-
+        if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
             TextView sensorOutput3DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Data);
-            sensorOutput1DataTextView.setText(String.valueOf(gyroscope.getData()[0]));
-            sensorOutput2DataTextView.setText(String.valueOf(gyroscope.getData()[1]));
-            sensorOutput3DataTextView.setText(String.valueOf(gyroscope.getData()[2]));
+            if (gyroscope.isConnectedToSensor()) {
+                sensorOutput1DataTextView.setText(String.valueOf(gyroscope.getData()[0]));
+                sensorOutput2DataTextView.setText(String.valueOf(gyroscope.getData()[1]));
+                sensorOutput3DataTextView.setText(String.valueOf(gyroscope.getData()[2]));
+            } else {
+                sensorOutput1DataTextView.setText("");
+                sensorOutput2DataTextView.setText("");
+                sensorOutput3DataTextView.setText("");
+            }
         }
     }
 }

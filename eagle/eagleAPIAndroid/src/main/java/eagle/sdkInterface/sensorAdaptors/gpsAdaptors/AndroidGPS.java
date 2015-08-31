@@ -22,8 +22,8 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 
 public class AndroidGPS extends AdaptorGPS {
     private Context context = null;
-    private Position gpsData;
-    private float accuracy;
+    private Position gpsData = null;
+    private float accuracy = 999999;
 
     public AndroidGPS() {
         super("Android", "GPS", "0.0.1");
@@ -89,6 +89,9 @@ public class AndroidGPS extends AdaptorGPS {
                     gpsData = new Position(location.getLongitude(), location.getLatitude(), location.getAltitude(), 0, 0, new Bearing(0));
                     accuracy = location.getAccuracy();
                 }
+            }else {
+                gpsData = null;
+                accuracy = 999999;
             }
         }
 

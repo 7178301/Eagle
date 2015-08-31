@@ -46,10 +46,13 @@ public class LIDARFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null && lidar.isConnectedToSensor()) {
-
+        if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            sensorOutput1DataTextView.setText(String.valueOf(lidar.getData()));
+            if (lidar.isConnectedToSensor()) {
+                sensorOutput1DataTextView.setText(String.valueOf(lidar.getData()));
+            } else {
+                sensorOutput1DataTextView.setText("");
+            }
         }
     }
 }

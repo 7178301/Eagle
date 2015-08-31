@@ -61,18 +61,26 @@ public class GPSFragment extends SensorFragment {
     }
 
     public void updateData() {
-        if (view != null && gps.isConnectedToSensor() && gps.isDataReady()) {
-
+        if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
             TextView sensorOutput3DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Data);
             TextView sensorOutput4DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput4Data);
             TextView sensorOutput5DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput5Data);
-            sensorOutput1DataTextView.setText(String.valueOf(gps.getData().getLongitude()));
-            sensorOutput2DataTextView.setText(String.valueOf(gps.getData().getLatitude()));
-            sensorOutput3DataTextView.setText(String.valueOf(gps.getData().getAltitude()));
-            sensorOutput4DataTextView.setText(String.valueOf(gps.getData().getYaw().getDegrees()));
-            sensorOutput5DataTextView.setText(String.valueOf(gps.getGPSAccuracy()));
+
+            if (gps.isConnectedToSensor() && gps.isDataReady()) {
+                sensorOutput1DataTextView.setText(String.valueOf(gps.getData().getLongitude()));
+                sensorOutput2DataTextView.setText(String.valueOf(gps.getData().getLatitude()));
+                sensorOutput3DataTextView.setText(String.valueOf(gps.getData().getAltitude()));
+                sensorOutput4DataTextView.setText(String.valueOf(gps.getData().getYaw().getDegrees()));
+                sensorOutput5DataTextView.setText(String.valueOf(gps.getGPSAccuracy()));
+            } else {
+                sensorOutput1DataTextView.setText("");
+                sensorOutput2DataTextView.setText("");
+                sensorOutput3DataTextView.setText("");
+                sensorOutput4DataTextView.setText("");
+                sensorOutput5DataTextView.setText("");
+            }
         }
     }
 }
