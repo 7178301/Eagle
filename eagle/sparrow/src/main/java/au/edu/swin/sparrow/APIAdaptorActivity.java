@@ -16,12 +16,16 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
+import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
 import au.edu.swin.sparrow.Fragment.LIDARFragment;
+import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 import eagle.Drone;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 public class APIAdaptorActivity extends AppCompatActivity implements AccelerometerFragment.OnFragmentInteractionListener {
@@ -93,6 +97,24 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
             lidar.setAndroidContext(this);
             lidar.connectToSensor();
             fragment.setLIDARAdaptor(lidar);
+            sensorFragments.add(fragment);
+            fragTransaction.add(R.id.scrollViewSensors, fragment);
+        }
+        ArrayList<AdaptorGyroscope> gyroscopeAdaptors = drone.getSDKAdaptor().getGyroscopes();
+        for (AdaptorGyroscope gyroscope : gyroscopeAdaptors) {
+            GyroscopeFragment fragment = GyroscopeFragment.newInstance();
+            gyroscope.setAndroidContext(this);
+            gyroscope.connectToSensor();
+            fragment.setGyroscopeAdaptor(gyroscope);
+            sensorFragments.add(fragment);
+            fragTransaction.add(R.id.scrollViewSensors, fragment);
+        }
+        ArrayList<AdaptorMagnetic> magneticAdaptors = drone.getSDKAdaptor().getMagnetics();
+        for (AdaptorMagnetic magnetic : magneticAdaptors) {
+            MagneticFragment fragment = MagneticFragment.newInstance();
+            magnetic.setAndroidContext(this);
+            magnetic.connectToSensor();
+            fragment.setMagneticAdaptor(magnetic);
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }

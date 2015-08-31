@@ -31,9 +31,13 @@ public class UltrasonicFragment extends SensorFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        view = inflater.inflate(R.layout.fragment_basicsensor, container, false);
-        TextView title = (TextView) view.findViewById(R.id.editTextSensorName);
-        title.setText("Ultrasonic");
+        view = inflater.inflate(R.layout.fragment_sensor_1_output, container, false);
+
+        TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
+        TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+        sensorOutputTitleTextView.setText(getResources().getString(R.string.ultrasonic));
+        sensorOutput1TitleTextView.setText(getResources().getString(R.string.distance_cm_));
+
         return view;
     }
 
@@ -44,8 +48,9 @@ public class UltrasonicFragment extends SensorFragment {
     @Override
     public void updateData() {
         if (view != null && ultrasonic.isConnectedToSensor()) {
-            TextView UltrasonicTextViewX = (TextView) view.findViewById(R.id.editTextSensorData);
-            UltrasonicTextViewX.setText(String.valueOf(ultrasonic.getData()));
+
+            TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
+            sensorOutput1DataTextView.setText(String.valueOf(ultrasonic.getData()));
         }
     }
 }
