@@ -10,9 +10,13 @@
     <string name="connect">Connect</string>
     <string name="connected">Connected</string>
     <string name="not_connected">Not Connected</string>
-    <string name="accelerometer_x">Accelerometer X</string>
-    <string name="accelerometer_y">Accelerometer Y</string>
-    <string name="accelerometer_z">Accelerometer Z</string>
+    <string name="sensor_data">Sensor Data</string>
+    <string name="accelerometer">Accelerometer</string>
+    <string name="x_axis">X-Axis</string>
+    <string name="y_axis">Y-Axis</string>
+    <string name="z_axis">Z-Axis</string>
+    <string name="sensor">Sensor</string>
+    <string name="distance_m">Distance (m)</string>
 
 
 

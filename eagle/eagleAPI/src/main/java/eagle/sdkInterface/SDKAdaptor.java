@@ -15,12 +15,12 @@ import java.util.HashMap;
  * @author          Nicholas Alards [7178301@student.swin.edu.au] */
 public abstract class SDKAdaptor {
 
-    private ArrayList<AdaptorAccelerometer> accelerometers = null;
-    private ArrayList<AdaptorCamera> cameras = null;
-    private ArrayList<AdaptorGyroscope> gyroscopes = null;
-    private ArrayList<AdaptorLIDAR> lidars = null;
-    private ArrayList<AdaptorRPLIDAR> rplidars = null;
-    private ArrayList<AdaptorUltrasonic> ultrasonics = null;
+    private ArrayList<AdaptorAccelerometer> accelerometers = new ArrayList<>();
+    private ArrayList<AdaptorCamera> cameras = new ArrayList<>();
+    private ArrayList<AdaptorGyroscope> gyroscopes = new ArrayList<>();
+    private ArrayList<AdaptorLIDAR> lidars = new ArrayList<>();
+    private ArrayList<AdaptorRPLIDAR> rplidars = new ArrayList<>();
+    private ArrayList<AdaptorUltrasonic> ultrasonics = new ArrayList<>();
 
     private String adaptorName = null;
     private String adaptorManufacturer = null;
@@ -153,33 +153,21 @@ public abstract class SDKAdaptor {
     }
 
     public void addSensorAdaptorAccelerometer(AdaptorAccelerometer adaptorAccelerometer){
-        if (this.accelerometers==null)
-            this.accelerometers=new ArrayList<AdaptorAccelerometer>();
         this.accelerometers.add(adaptorAccelerometer);
     }
     public void addSensorAdaptorCamera(AdaptorCamera adaptorCamera){
-        if (this.cameras==null)
-            this.cameras=new ArrayList<AdaptorCamera>();
         this.cameras.add(adaptorCamera);
     }
     public void addSensorAdaptorGyroscope(AdaptorGyroscope gyroscopes){
-        if (this.gyroscopes==null)
-            this.gyroscopes=new ArrayList<AdaptorGyroscope>();
         this.gyroscopes.add(gyroscopes);
     }
     public void addSensorAdaptorLIDAR(AdaptorLIDAR lidar){
-        if (this.lidars==null)
-            this.lidars=new ArrayList<AdaptorLIDAR>();
         this.lidars.add(lidar);
     }
     public void addSensorAdaptorRPLIDAR(AdaptorRPLIDAR adaptorRPLIDAR){
-        if (this.rplidars==null)
-            this.rplidars=new ArrayList<AdaptorRPLIDAR>();
         this.rplidars.add(adaptorRPLIDAR);
     }
     public void addSensorAdaptorUltrasonic(AdaptorUltrasonic adaptorUltrasonic){
-        if (this.ultrasonics==null)
-            this.ultrasonics=new ArrayList<AdaptorUltrasonic>();
         this.ultrasonics.add(adaptorUltrasonic);
     }
 
@@ -189,6 +177,29 @@ public abstract class SDKAdaptor {
         return accelerometers;
     }
 
-    //TODO Add Remove Adaptor Functions
+    public ArrayList<AdaptorCamera> getCameras() {
+        return cameras;
+    }
+
+    public ArrayList<AdaptorGyroscope> getGyroscopes() {
+        return gyroscopes;
+    }
+
+    public ArrayList<AdaptorLIDAR> getLidars() {
+        return lidars;
+    }
+
+    public ArrayList<AdaptorRPLIDAR> getRplidars() {
+        return rplidars;
+    }
+
+    public ArrayList<AdaptorUltrasonic> getUltrasonics() {
+        return ultrasonics;
+    }
+
+    public Position getCurrentPositionAssigned() {
+        return currentPositionAssigned;
+    }
+//TODO Add Remove Adaptor Functions
 
 }
