@@ -10,10 +10,10 @@
     tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment">
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textViewSensorOutputTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/accelerometer"
+        android:text="@string/sensor_output_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TableRow
@@ -21,14 +21,14 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewSensorOutput1Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/x_axis_"
+            android:text="@string/sensor_output_1"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/editTextAccelerometerDataX"
+            android:id="@+id/textViewSensorOutput1Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -39,14 +39,14 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textViewSensorOutput2Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/y_axis_"
+            android:text="@string/sensor_output_2"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/editTextAccelerometerDataY"
+            android:id="@+id/textViewSensorOutput2Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -58,14 +58,14 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/textViewSensorOutput3Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/z_axis_"
+            android:text="@string/sensor_output_3"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/editTextAccelerometerDataZ"
+            android:id="@+id/textViewSensorOutput3Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium" />

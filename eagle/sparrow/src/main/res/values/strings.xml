@@ -2,22 +2,30 @@
     <string name="app_name">Sparrow</string>
 
     <string name="api_version">API Version</string>
-    <string name="drone_adaptors">Drone Adaptors</string>
     <string name="adaptor_name">Adaptor Name</string>
+    <string name="connect">Connect</string>
+    <string name="connected">Connected</string>
+    <string name="distance_cm_">Distance (cm)</string>
+    <string name="angle_degrees_">Angle (°)</string>
+    <string name="drone_adaptors">Drone Adaptors</string>
     <string name="sdk_version">SDK Version</string>
     <string name="adaptor_version">Adaptor Version</string>
     <string name="select_adaptor">Select Adaptor</string>
-    <string name="connect">Connect</string>
-    <string name="connected">Connected</string>
     <string name="not_connected">Not Connected</string>
     <string name="sensor_data">Sensor Data</string>
-    <string name="accelerometer">Accelerometer</string>
     <string name="x_axis_">X-Axis: </string>
     <string name="y_axis_">Y-Axis: </string>
     <string name="z_axis_">Z-Axis: </string>
-    <string name="sensor">Sensor</string>
-    <string name="distance_m_">Distance (m): </string>
-
+    <string name="sensor_output_title">Sensor Output Title</string>
+    <string name="sensor_output_1">Sensor Output 1</string>
+    <string name="sensor_output_2">Sensor Output 2</string>
+    <string name="sensor_output_3">Sensor Output 3</string>
+    <string name="accelerometer">Accelerometer</string>
+    <string name="gyroscope">Gyroscope</string>
+    <string name="magnetic">Magnetic</string>
+    <string name="lidar">LIDAR</string>
+    <string name="rplidar">RPLIDAR</string>
+    <string name="ultrasonic">Ultrasonic</string>
 
 
     <!-- DJI strings -->

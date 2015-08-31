@@ -10,10 +10,10 @@
     tools:context="au.edu.swin.sparrow.Fragment.AccelerometerFragment">
 
     <TextView
-        android:id="@+id/editTextSensorName"
+        android:id="@+id/textViewSensorOutputTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sensor"
+        android:text="@string/sensor_output_title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TableRow
@@ -21,19 +21,17 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewSensorOutput1Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/distance_m_"
+            android:text="@string/sensor_output_1"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:id="@+id/editTextSensorData"
+            android:id="@+id/textViewSensorOutput1Data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:enabled="false" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
 </TableLayout>
