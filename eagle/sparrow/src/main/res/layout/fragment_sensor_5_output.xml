@@ -24,9 +24,10 @@
             android:id="@+id/textViewSensorOutput1Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/sensor_output_1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginRight="10dp" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textViewSensorOutput1Data"
@@ -43,9 +44,10 @@
             android:id="@+id/textViewSensorOutput2Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/sensor_output_2"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginRight="10dp" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textViewSensorOutput2Data"
@@ -63,9 +65,10 @@
             android:id="@+id/textViewSensorOutput3Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/sensor_output_3"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginRight="10dp" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textViewSensorOutput3Data"
@@ -83,9 +86,10 @@
             android:id="@+id/textViewSensorOutput4Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/sensor_output_3"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginRight="10dp" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textViewSensorOutput4Data"
@@ -103,9 +107,10 @@
             android:id="@+id/textViewSensorOutput5Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
             android:text="@string/sensor_output_3"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_marginRight="10dp" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textViewSensorOutput5Data"

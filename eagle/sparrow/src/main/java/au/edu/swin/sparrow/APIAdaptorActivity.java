@@ -2,6 +2,7 @@ package au.edu.swin.sparrow;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -69,6 +70,14 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
                 } else {
                     adaptorNameTextView.setText(getResources().getString(R.string.not_connected));
                 }
+            }
+        });
+
+        final Button ioioButton = (Button) findViewById(R.id.buttonIOIO);
+        ioioButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intentIOIO = new Intent(APIAdaptorActivity.this, IOIOActivity.class);
+                APIAdaptorActivity.this.startActivity(intentIOIO);
             }
         });
 

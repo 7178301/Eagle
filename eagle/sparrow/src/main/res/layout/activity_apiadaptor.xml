@@ -23,6 +23,15 @@
         android:layout_below="@+id/adaptorNameTextView"
         android:text="@string/connect" />
 
+    <Button
+        android:id="@+id/buttonIOIO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ioio"
+        android:layout_below="@+id/buttonConnect"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <TextView
         android:id="@+id/textViewConnectedStatus"
         android:layout_width="wrap_content"
@@ -36,11 +45,11 @@
         android:id="@+id/textViewSensorData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewConnectedStatus"
         android:text="@string/sensor_data"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/buttonIOIO"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ScrollView
         android:id="@+id/scrollview"
@@ -56,6 +65,6 @@
         android:id="@+id/scrollViewSensors"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical"/>
     </ScrollView>
 </RelativeLayout>
