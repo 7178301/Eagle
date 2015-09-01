@@ -19,12 +19,13 @@ import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Drone {
     static Map<String, String> commands = new HashMap<String, String>() {
@@ -56,6 +57,7 @@ public class Drone {
             put("SETHOMEPOSITION", "SETHOMEPOSITION _longitude_ _latitude_ _altitude_ _bearing_ | Set the home position");
             put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
             put("HELP", "HELP _[command]_ | Prints a list of commands");
+            put("LOG", "LOG _message_ | Write a message to the log");
         }
     };
 
@@ -442,7 +444,7 @@ public class Drone {
 
                 case "HELP":
                     if (array.length == 1) {
-                        return commands.keySet().toString();
+                        return join(commands.keySet());
                     } else if (array.length == 2) {
                         if (commands.containsKey(array[1])) {
                             return commands.get(array[1]);
@@ -452,9 +454,20 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
+                case "LOG":
+                    if (array.length >= 1) {
+                        StringBuilder sb = new StringBuilder();
+                        for (int i = 1; i < array.length; i++) {
+                            sb.append(array[i]);
+                            sb.append(" ");
+                        }
+                        Log.log(sb.toString());
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
 
                 default:
-                    return "UNKNOWN COMMAND";
+                    throw new InvalidInstructionException(instruction);
             }
         } catch (NumberFormatException e) {
             throw new InvalidInstructionException(instruction);
@@ -473,6 +486,15 @@ public class Drone {
         } catch (IOException | InvalidInstructionException e) {
             e.printStackTrace();
         }
+    }
+
+    private String join(Set<String> strings) {
+        StringBuilder sb = new StringBuilder();
+        for (String str : strings) {
+            sb.append(str);
+            sb.append(" ");
+        }
+        return sb.toString();
     }
 
     public class InvalidInstructionException extends Exception {
