@@ -126,7 +126,9 @@ public abstract class SDKAdaptor {
     }
 
     public void goHome(double speed) {
-        flyToGPS(homePosition, speed);
+        Position newPos = new Position(homePosition);
+        newPos.minus(currentPositionAssigned);
+        flyToGPS(newPos, speed);
     }
     public void goHome() {
         flyToGPS(homePosition);

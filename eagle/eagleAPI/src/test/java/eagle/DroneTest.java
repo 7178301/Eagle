@@ -28,7 +28,7 @@ public class DroneTest {
         drone.setSDKAdaptor("Simulator.Simulator");
     }
 
-    @Test
+    @Test(timeout=5000)
     public void testExecuteInstructionInvalid() {
         try {
             drone.executeInstruction("ASDF");
@@ -37,7 +37,7 @@ public class DroneTest {
         }
     }
 
-    @Test
+    @Test(timeout=5000)
     public void testExecuteInstructionConnectToDrone() {
         try {
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CONNECTTODRONE"));
@@ -46,7 +46,7 @@ public class DroneTest {
             fail("Invalid instruction");
         }
     }
-    @Test
+    @Test(timeout=5000)
     public void testExecuteInstructionDisconnectToDrone() {
         try {
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("DISCONNECTFROMDRONE"));
@@ -60,7 +60,7 @@ public class DroneTest {
     public void testExecuteInstructionFLYTORELATIVE() {
         try {
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("FLYTORELATIVE 1 2 3 4"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(1, 2, 3, 0, 0, new Bearing(4)).toString());
+            assertEquals("moved to wrong position", new Position(1, 2, 3, 0, 0, new Bearing(4)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
         }
         catch (Drone.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -71,9 +71,9 @@ public class DroneTest {
     public void testExecuteInstructionCHANGELONGITUDERELATIVE() {
         try {
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELONGITUDERELATIVE 1"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(1, 0, 0, 0, 0, new Bearing(0)).toString());
+            assertEquals("moved to wrong position", new Position(1, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELONGITUDERELATIVE 2 1"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(3, 0, 0, 0, 0, new Bearing(0)).toString());
+            assertEquals("moved to wrong position", new Position(3, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
         }
         catch (Drone.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -84,25 +84,75 @@ public class DroneTest {
     public void testExecuteInstructionCHANGELATITUDERELATIVE() {
         try {
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELATITUDERELATIVE 1"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(0, 1, 0, 0, 0, new Bearing(0)).toString());
+            assertEquals("moved to wrong position", new Position(0, 1, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELATITUDERELATIVE 2 1"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(0, 3, 0, 0, 0, new Bearing(0)).toString());
+            assertEquals("moved to wrong position", new Position(0, 3, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
         }
         catch (Drone.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
     }
 
-    @Test
+    @Test(timeout=5000)
     public void testExecuteInstructionCHANGEALTITUDERELATIVE() {
         try {
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGEALTITUDERELATIVE 1"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(0, 0, 1, 0, 0, new Bearing(0)).toString());
+            assertEquals("moved to wrong position", new Position(0, 0, 1, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
             assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGEALTITUDERELATIVE 2 1"));
-            assertEquals("moved to wrong position", drone.getSDKAdaptor().getPositionAssigned().toString(), new Position(0, 0, 3, 0, 0, new Bearing(0)).toString());
+            assertEquals("moved to wrong position", new Position(0, 0, 3, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
         }
         catch (Drone.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
     }
+
+//    @Test(timeout=5000)
+//    public void testExecuteInstructionFLYTOGPS() {
+//        try {
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("FLYTOGPS 1 2 3 4"));
+//            assertEquals("moved to wrong position", new Position(1, 2, 3, 0, 0, new Bearing(4)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//        }
+//        catch (Drone.InvalidInstructionException e) {
+//            fail("Invalid instruction");
+//        }
+//    }
+//
+//    @Test(timeout=5000)
+//    public void testExecuteInstructionCHANGELONGITUDEGPS() {
+//        try {
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELONGITUDEGPS 1"));
+//            assertEquals("moved to wrong position", new Position(1, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELONGITUDEGPS 2 1"));
+//            assertEquals("moved to wrong position", new Position(3, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//        }
+//        catch (Drone.InvalidInstructionException e) {
+//            fail("Invalid instruction");
+//        }
+//    }
+//
+//    @Test(timeout=5000)
+//    public void testExecuteInstructionCHANGELATITUDEGPS() {
+//        try {
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELATITUDEGPS 1"));
+//            assertEquals("moved to wrong position", new Position(0, 1, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGELATITUDEGPS 2 1"));
+//            assertEquals("moved to wrong position", new Position(0, 3, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//        }
+//        catch (Drone.InvalidInstructionException e) {
+//            fail("Invalid instruction");
+//        }
+//    }
+//
+//    @Test(timeout=5000)
+//    public void testExecuteInstructionCHANGEALTITUDEGPS() {
+//        try {
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGEALTITUDEGPS 1"));
+//            assertEquals("moved to wrong position", new Position(0, 0, 1, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("return wrong value", "SUCCESS", drone.executeInstruction("CHANGEALTITUDEGPS 2 1"));
+//            assertEquals("moved to wrong position", new Position(0, 0, 3, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//        }
+//        catch (Drone.InvalidInstructionException e) {
+//            fail("Invalid instruction");
+//        }
+//    }
 }

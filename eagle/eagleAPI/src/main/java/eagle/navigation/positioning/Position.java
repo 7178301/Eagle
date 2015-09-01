@@ -39,18 +39,22 @@ public class Position{
     public double getPitch(){return this.pitch;};
     public Bearing getYaw(){return this.yaw;};
 
-    public void addRelative(Position position){
+    public void add(Position position){
         this.longitude+=position.getLongitude();
         this.latitude+=position.getLatitude();
         this.altitude+=position.getAltitude();
-        this.yaw.addRelative(position.getYaw());
+        this.yaw.add(position.getYaw());
     }
-    public  void addAbsolute(Position position){
-        this.longitude=this.longitude-(this.longitude-position.getLongitude());
-        this.latitude=this.latitude-(this.latitude-position.getLatitude());
-        this.altitude=this.altitude-(this.altitude-position.getAltitude());
-        this.yaw.addAbsolute(position.getYaw());
+
+    public void minus(Position position){
+        this.longitude-=position.getLongitude();
+        this.latitude-=position.getLatitude();
+        this.altitude-=position.getAltitude();
+        this.yaw.minus(position.getYaw());
     }
+
+
+
 
     public boolean equals(Position position) {
         if(longitude==position.getLongitude()&&

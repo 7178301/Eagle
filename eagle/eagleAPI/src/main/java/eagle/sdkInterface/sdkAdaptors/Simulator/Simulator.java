@@ -70,9 +70,14 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public boolean flyToRelative(Position position, double speed) {
-        double verticalDist = getPositionAssigned().getAltitude()-position.getAltitude();
-        double longDist = getPositionAssigned().getLongitude()-position.getLongitude();
-        double latDist = getPositionAssigned().getLatitude()-position.getLatitude();
+        Position endPos = new Position(getPositionAssigned());
+        endPos.add(position);
+
+
+
+        double verticalDist = position.getAltitude();
+        double longDist = position.getLongitude();
+        double latDist = position.getLatitude();
 
         double maxDist;
 
@@ -88,10 +93,7 @@ public class Simulator extends SDKAdaptor {
         longDist /= maxDist;
         latDist /= maxDist;
 
-
-
-
-        while (!position.isEqual(getPositionAssigned())) {
+        while (!endPos.isEqual(getPositionAssigned())) {
             double altitude = getPositionAssigned().getAltitude();
             double longitude = getPositionAssigned().getLongitude();
             double latitude = getPositionAssigned().getLatitude();
@@ -99,17 +101,17 @@ public class Simulator extends SDKAdaptor {
             if (altitude - position.getAltitude() > verticalDist) {
                 altitude += verticalDist*speed;
             } else {
-                altitude = position.getAltitude();
+                altitude = endPos.getAltitude();
             }
             if (longitude - position.getLongitude() > longDist) {
                 longitude += longDist*speed;
             } else {
-                longitude = position.getLongitude();
+                longitude = endPos.getLongitude();
             }
             if (latitude - position.getLatitude() > latDist) {
                 latitude += latDist*speed;
             } else {
-                latitude = position.getLatitude();
+                latitude = endPos.getLatitude();
             }
 
             Position newPos = new Position(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
@@ -123,7 +125,7 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public boolean flyToRelative(Position position) {
-        return flyToGPS(position, maxSpeed);
+        return flyToRelative(position, maxSpeed);
     }
 
     @Override
