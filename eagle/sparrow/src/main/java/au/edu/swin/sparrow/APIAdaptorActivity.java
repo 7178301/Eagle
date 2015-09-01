@@ -6,9 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import au.edu.swin.sparrow.R;
 import eagle.Drone;
 import eagle.Log;
+import eagle.sdkInterface.TelnetServer;
 
 public class APIAdaptorActivity extends ActionBarActivity{
 
