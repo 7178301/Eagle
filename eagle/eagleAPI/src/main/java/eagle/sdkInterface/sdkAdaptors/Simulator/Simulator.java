@@ -5,9 +5,12 @@ import eagle.navigation.positioning.Position;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
-/**
- * Created by cameron on 8/13/15.
- */
+/** Simulator Class
+ * @since     09/04/2015
+ * <p>
+ * Date Modified	01/08/2015 - Cameron Cross
+ * @version 0.0.1
+ * @author          Cameron Cross [7193432@student.swin.edu.au] */
 public class Simulator extends SDKAdaptor {
     private boolean connected = false;
     private int maxSpeed = 0;
@@ -66,8 +69,7 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToAbsolute(Position position, double speed) {
-
+    public boolean flyToRelative(Position position, double speed) {
         double verticalDist = getPositionAssigned().getAltitude()-position.getAltitude();
         double longDist = getPositionAssigned().getLongitude()-position.getLongitude();
         double latDist = getPositionAssigned().getLatitude()-position.getLatitude();
@@ -112,12 +114,7 @@ public class Simulator extends SDKAdaptor {
 
             Position newPos = new Position(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
             setPositionAssigned(newPos);
-            try {
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e) {
-
-            }
+            delay(1000);
 
             Log.log("Current Position: "+ newPos.toString());
         }
@@ -125,8 +122,18 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToAbsolute(Position position) {
-        return flyToAbsolute(position, maxSpeed);
+    public boolean flyToRelative(Position position) {
+        return flyToGPS(position, maxSpeed);
+    }
+
+    @Override
+    public boolean flyToGPS(Position position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyToGPS(Position position) {
+        return flyToGPS(position, maxSpeed);
     }
 
     @Override

@@ -36,8 +36,18 @@ public class F450Flamewheel extends SDKAdaptor {
     public boolean resumeDrone(){return false;}
     public boolean shutdownDrone(){return false;}
 
-    public boolean flyToAbsolute(Position position, double speed){return false;}
-    public boolean flyToAbsolute(Position position){return false;}
+    @Override
+    public boolean flyToRelative(Position position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyToRelative(Position position) {
+        return false;
+    }
+
+    public boolean flyToGPS(Position position, double speed){return false;}
+    public boolean flyToGPS(Position position){return false;}
 
     public Position getPositionInFlight(){
         //TODO CREATE BELOW IMPLEMENTATION
@@ -52,7 +62,7 @@ public class F450Flamewheel extends SDKAdaptor {
             e.printStackTrace();
         }
     }
-    public void updateCurrentPosition(){};
+    public void updateCurrentPosition(){}
 
 
 }

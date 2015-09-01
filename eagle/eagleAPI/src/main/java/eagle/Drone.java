@@ -40,15 +40,15 @@ public class Drone {
             put("GETADAPTORMANUFACTURER", "GETADAPTORMANUFACTURER | Get the adaptor manufacturer");
             put("GETADAPTORMODEL", "GETADAPTORMODEL | Get the adaptor model");
             put("FLYTORELATIVE", "FLYTORELATIVE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given relative position");
-            put("FLYTOABSOLUTE", "FLYTOABSOLUTE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given gps position");
+            put("FLYTOGPS", "FLYTOGPS _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given GPS position");
             put("CHANGELONGITUDERELATIVE", "CHANGELONGITUDERELATIVE _longitude_ _[speed]_ | Change the longitude relative");
             put("CHANGELATITUDERELATIVE", "CHANGELATITUDERELATIVE _latitude_ _[speed]_ | Change the latitude relative");
             put("CHANGEALTITUDERELATIVE", "CHANGEALTITUDERELATIVE _altitude_ _[speed]_ | Change the altitude relative");
             put("CHANGEYAWRELATIVE", "CHANGEYAWRELATIVE _yaw_ _[speed]_ | Change the yaw relative");
-            put("CHANGELONGITUDEABSOLUTE", "CHANGELONGITUDEABSOLUTE _longitude_ _[speed]_ | Change the longitude absolute");
-            put("CHANGELATITUDEABSOLUTE", "CHANGELATITUDEABSOLUTE _latitude_ _[speed]_ | Change the latitude absolute");
-            put("CHANGEALTITUDEABSOLUTE", "CHANGEALTITUDEABSOLUTE _altitude_ _[speed]_ | Change the altitude absolute");
-            put("CHANGEYAWABSOLUTE", "CHANGEYAWABSOLUTE _yaw_ _[speed]_ | Change the yaw absolute");
+            put("CHANGELONGITUDEGPS", "CHANGELONGITUDEGPS _longitude_ _[speed]_ | Change the longitude GPS");
+            put("CHANGELATITUDEGPS", "CHANGELATITUDEGPS _latitude_ _[speed]_ | Change the latitude GPS");
+            put("CHANGEALTITUDEGPS", "CHANGEALTITUDEGPS _altitude_ _[speed]_ | Change the altitude GPS");
+            put("CHANGEYAWGPS", "CHANGEYAWGPS _yaw_ _[speed]_ | Change the yaw GPS");
             put("GOHOME", "GOHOME | Flys the drone to its home position");
             put("GETPOSITIONASSIGNED", "GETPOSITIONASSIGNED | prints out the drones current position");
             put("GETHOMEPOSITION", "GETHOMEPOSITION | prints the home position of the drone");
@@ -218,14 +218,14 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "FLYTOABSOLUTE":
+                case "FLYTOGPS":
                     if (array.length == 5) {
                         double lon = Double.parseDouble(array[1]);
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
                         double bea = Double.parseDouble(array[4]);
                         Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
-                        if (adaptor.flyToAbsolute(newPos)) {
+                        if (adaptor.flyToGPS(newPos)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -237,7 +237,7 @@ public class Drone {
                         double bea = Double.parseDouble(array[4]);
                         double spe = Double.parseDouble(array[5]);
                         Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
-                        if (adaptor.flyToAbsolute(newPos, spe)) {
+                        if (adaptor.flyToGPS(newPos, spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -321,10 +321,10 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGELONGITUDEABSOLUTE":
+                case "CHANGELONGITUDEGPS":
                     if (array.length == 2) {
                         double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeLongitudeAbsolute(val)) {
+                        if (adaptor.changeLongitudeGPS(val)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -332,7 +332,7 @@ public class Drone {
                     } else if (array.length == 3) {
                         double val = Double.parseDouble(array[1]);
                         double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeLongitudeAbsolute(val, spe)) {
+                        if (adaptor.changeLongitudeGPS(val, spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -340,10 +340,10 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGELATITUDEABSOLUTE":
+                case "CHANGELATITUDEGPS":
                     if (array.length == 2) {
                         double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeLatitudeAbsolute(val)) {
+                        if (adaptor.changeLatitudeGPS(val)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -351,7 +351,7 @@ public class Drone {
                     } else if (array.length == 3) {
                         double val = Double.parseDouble(array[1]);
                         double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeLatitudeAbsolute(val, spe)) {
+                        if (adaptor.changeLatitudeGPS(val, spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -359,10 +359,10 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGEALTITUDEABSOLUTE":
+                case "CHANGEALTITUDEGPS":
                     if (array.length == 2) {
                         double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeAltitudeAbsolute(val)) {
+                        if (adaptor.changeAltitudeGPS(val)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -370,7 +370,7 @@ public class Drone {
                     } else if (array.length == 3) {
                         double val = Double.parseDouble(array[1]);
                         double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeAltitudeAbsolute(val, spe)) {
+                        if (adaptor.changeAltitudeGPS(val, spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -378,10 +378,10 @@ public class Drone {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGEYAWABSOLUTE":
+                case "CHANGEYAWGPS":
                     if (array.length == 2) {
                         double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeYawAbsolute(new Bearing(val))) {
+                        if (adaptor.changeYawGPS(new Bearing(val))) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -389,7 +389,7 @@ public class Drone {
                     } else if (array.length == 3) {
                         double val = Double.parseDouble(array[1]);
                         double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeYawAbsolute(new Bearing(val), spe)) {
+                        if (adaptor.changeYawGPS(new Bearing(val), spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";

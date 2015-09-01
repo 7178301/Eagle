@@ -4,9 +4,6 @@ import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Bearing;
 import eagle.sdkInterface.sensorAdaptors.*;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 
 /** Abstract SDKAdaptor Class
@@ -58,7 +55,7 @@ public abstract class SDKAdaptor {
 
     public String getAdaptorVersion(){
         return adaptorVersion;
-    };
+    }
     public String getSdkVersion(){
         return sdkVersion;
     }
@@ -72,17 +69,11 @@ public abstract class SDKAdaptor {
         return adaptorModel;
     }
 
-    public boolean flyToRelative(Position position, double speed){
-        return flyToAbsolute(new Position(getPositionInFlight().getLongitude()+position.getLongitude(),getPositionInFlight().getLatitude()+position.getLatitude(),
-                getPositionInFlight().getAltitude()+position.getAltitude(),0,0,new Bearing(getPositionInFlight().getYaw().getDegrees()+position.getYaw().getDegrees())),speed);
-    }
-    public boolean flyToRelative(Position position){
-        return flyToAbsolute(new Position(getPositionInFlight().getLongitude()+position.getLongitude(),getPositionInFlight().getLatitude()+position.getLatitude(),
-                getPositionInFlight().getAltitude()+position.getAltitude(),0,0,new Bearing(getPositionInFlight().getYaw().getDegrees()+position.getYaw().getDegrees())));
-    }
+    public abstract boolean flyToRelative(Position position, double speed);
+    public abstract boolean flyToRelative(Position position);
 
-    public abstract boolean flyToAbsolute(Position position, double speed);
-    public abstract boolean flyToAbsolute(Position position);
+    public abstract boolean flyToGPS(Position position, double speed);
+    public abstract boolean flyToGPS(Position position);
 
     public boolean changeLongitudeRelative(double longitude,double speed){
         return flyToRelative(new Position(longitude, 0, 0, 0, 0, new Bearing(0)), speed);
@@ -109,36 +100,36 @@ public abstract class SDKAdaptor {
         return flyToRelative(new Position(0, 0, 0, 0, 0, yaw));
     }
 
-    public boolean changeLongitudeAbsolute(double longitude,double speed){
-        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()), speed);
+    public boolean changeLongitudeGPS(double longitude, double speed){
+        return flyToGPS(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()), speed);
     }
-    public boolean changeLongitudeAbsolute(double longitude){
-        return flyToAbsolute(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()));
+    public boolean changeLongitudeGPS(double longitude){
+        return flyToGPS(new Position(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()));
     }
-    public boolean changeLatitudeAbsolute(double latitude,double speed){
-        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(),latitude, getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()),speed);
+    public boolean changeLatitudeGPS(double latitude, double speed){
+        return flyToGPS(new Position(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()), speed);
     }
-    public boolean changeLatitudeAbsolute(double latitude){
-        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(),latitude, getPositionAssigned().getAltitude(),0,0, getPositionAssigned().getYaw()));
+    public boolean changeLatitudeGPS(double latitude){
+        return flyToGPS(new Position(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), 0, 0, getPositionAssigned().getYaw()));
     }
-    public boolean changeAltitudeAbsolute(double altitude,double speed){
-        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(),altitude,0,0, getPositionAssigned().getYaw()),speed);
+    public boolean changeAltitudeGPS(double altitude, double speed){
+        return flyToGPS(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, 0, 0, getPositionAssigned().getYaw()), speed);
     }
-    public boolean changeAltitudeAbsolute(double altitude){
-        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(),altitude,0,0, getPositionAssigned().getYaw()));
+    public boolean changeAltitudeGPS(double altitude){
+        return flyToGPS(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, 0, 0, getPositionAssigned().getYaw()));
     }
-    public boolean changeYawAbsolute(Bearing yaw,double speed){
-        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0,yaw),speed);
+    public boolean changeYawGPS(Bearing yaw, double speed){
+        return flyToGPS(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, yaw), speed);
     }
-    public boolean changeYawAbsolute(Bearing yaw){
-        return flyToAbsolute(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(),0,0,yaw));
+    public boolean changeYawGPS(Bearing yaw){
+        return flyToGPS(new Position(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), 0, 0, yaw));
     }
 
     public void goHome(double speed) {
-        flyToAbsolute(homePosition, speed);
+        flyToGPS(homePosition, speed);
     }
     public void goHome() {
-        flyToAbsolute(homePosition);
+        flyToGPS(homePosition);
     }
 
     public Position getPositionAssigned(){
