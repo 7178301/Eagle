@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sensorAdaptors.ultrasonicAdaptors;
+package eagle.sdkInterface.sensorAdaptors.UltrasonicAdaptors;
 
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 

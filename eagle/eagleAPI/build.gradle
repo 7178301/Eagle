@@ -3,4 +3,9 @@ apply plugin: 'java'
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile 'com.github.ytai.ioio:IOIOLibAndroid:5.05'
+    compile 'com.github.ytai.ioio:IOIOLibAndroidBluetooth:5.05'
+    compile 'com.github.ytai.ioio:IOIOLibAndroidAccessory:5.05'
+    compile 'com.github.ytai.ioio:IOIOLibAndroidDevice:5.05'
 }
+
