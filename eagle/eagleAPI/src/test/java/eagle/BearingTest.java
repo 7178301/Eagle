@@ -5,6 +5,15 @@ import eagle.navigation.positioning.Bearing;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Position Class Tester
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 27/08/2015
+ * <p/>
+ * Date Modified	27/08/2015 - Cameron
+ */
 public class BearingTest
 {
 	@Test
