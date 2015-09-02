@@ -36,7 +36,7 @@ public class TelnetServer implements Runnable, Log.LogCallback {
                     out.println(drone.executeInstruction(inputLine));
                 }
                 catch (Drone.InvalidInstructionException e) {
-                    out.println(e.getMessage());
+                    out.println("Invalid Command: "+e.getMessage());
                 }
             }
 
