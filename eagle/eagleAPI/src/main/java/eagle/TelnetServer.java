@@ -1,6 +1,4 @@
-package eagle.sdkInterface;
-
-import android.os.AsyncTask;
+package eagle;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,13 +7,10 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import eagle.Drone;
-import eagle.Log;
-
 /**
- * Created by cameron on 8/27/15.
+ * Created by cameron on 9/2/15.
  */
-public class TelnetServer extends AsyncTask implements Log.LogCallback {
+public class TelnetServer implements Runnable, Log.LogCallback {
 
     Drone drone;
     PrintWriter out;
@@ -25,14 +20,7 @@ public class TelnetServer extends AsyncTask implements Log.LogCallback {
     }
 
     @Override
-    public void handleMessage(String s) {
-        if (out != null) {
-            out.println(s);
-        }
-    }
-
-    @Override
-    protected Object doInBackground(Object[] objects) {
+    public void run() {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(2424);
@@ -55,7 +43,12 @@ public class TelnetServer extends AsyncTask implements Log.LogCallback {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
-        return null;
+    @Override
+    public void handleMessage(String message) {
+        if (out != null) {
+            out.println(message);
+        }
     }
 }
