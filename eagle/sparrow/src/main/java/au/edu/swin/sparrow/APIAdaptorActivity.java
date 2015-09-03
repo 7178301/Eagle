@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 import eagle.Drone;
+import eagle.sdkInterface.sdkAdaptors.Flyver.F450Flamewheel;
+import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
@@ -31,11 +34,14 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
-public class APIAdaptorActivity extends AppCompatActivity implements AccelerometerFragment.OnFragmentInteractionListener {
+public class APIAdaptorActivity extends F450FlamewheelActivity implements AccelerometerFragment.OnFragmentInteractionListener {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
     Drone drone = new Drone();
+
+
+    private SeekBar sb;
 
     @Override
     protected void onStart() {
@@ -43,6 +49,8 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
         setContentView(R.layout.activity_apiadaptor);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
+        drone.getSDKAdaptor().setAndroidContext(this);
+        drone.getSDKAdaptor().setController(getIOIO());
         initializeUI();
         updateUI();
         MyTimerTask myTask = new MyTimerTask();
@@ -73,13 +81,29 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
             }
         });
 
-        final Button ioioButton = (Button) findViewById(R.id.buttonIOIO);
-        ioioButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intentIOIO = new Intent(APIAdaptorActivity.this, IOIOActivity.class);
-                APIAdaptorActivity.this.startActivity(intentIOIO);
-            }
-        });
+        sb = (SeekBar) findViewById(R.id.seekBarValue);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                          @Override
+                                          public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                                              TextView tv = (TextView) findViewById(R.id.textViewValue);
+                                              tv.setText(String.valueOf(progress));
+                                              try {
+                                                  int value=1000 + (progress * 10);
+                                                  setPulseWidth(value,value,value,value);
+                                              } catch (Exception e) {
+                                              }
+                                          }
+
+                                          @Override
+                                          public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                          }
+
+                                          @Override
+                                          public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                          }
+                                      });
 
         FragmentManager fragMan = getFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();

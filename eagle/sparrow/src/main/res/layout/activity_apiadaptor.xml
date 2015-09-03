@@ -23,15 +23,6 @@
         android:layout_below="@+id/adaptorNameTextView"
         android:text="@string/connect" />
 
-    <Button
-        android:id="@+id/buttonIOIO"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ioio"
-        android:layout_below="@+id/buttonConnect"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:id="@+id/textViewConnectedStatus"
         android:layout_width="wrap_content"
@@ -47,7 +38,7 @@
         android:layout_height="wrap_content"
         android:text="@string/sensor_data"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/buttonIOIO"
+        android:layout_below="@+id/textViewValue"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -67,4 +58,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"/>
     </ScrollView>
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBarValue"
+        android:progress="1"
+        android:max="102"
+        android:layout_below="@+id/buttonConnect"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewValue"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/seekBarValue"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

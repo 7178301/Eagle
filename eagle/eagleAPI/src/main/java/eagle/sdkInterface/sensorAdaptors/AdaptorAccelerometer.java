@@ -33,10 +33,6 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
         }
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public float[] getCalibrationOffset() {
         return calibrationOffset;
     }
@@ -47,5 +43,9 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
             return true;
         } else
             return false;
+    }
+
+    public boolean setAndroidContext(Object object) {
+        return false;
     }
 }

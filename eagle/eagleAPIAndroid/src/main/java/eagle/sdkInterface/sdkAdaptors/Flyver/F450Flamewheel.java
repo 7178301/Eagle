@@ -1,9 +1,15 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
+import android.content.Context;
+import android.content.Intent;
+
 import eagle.navigation.positioning.Bearing;
 import eagle.navigation.positioning.Position;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
+import ioio.lib.api.IOIO;
+import ioio.lib.api.exception.ConnectionLostException;
 
 /**
  * F450Flamewheel SDKAdaptor
@@ -16,7 +22,10 @@ import eagle.sdkInterface.SDKAdaptor;
  * Date Modified	26/05/2015 - Nicholas
  */
 public class F450Flamewheel extends SDKAdaptor {
+
     public static String adapterVersion;
+    private Context context;
+    private IOIO controller;
 
     //TODO Create method implementations
 
@@ -33,7 +42,10 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
-        return false;
+        if (controller!=null&&controller.getState()!=null)
+            return true;
+        else
+            return false;
     }
 
     public boolean disconnectFromDrone() {
@@ -81,7 +93,21 @@ public class F450Flamewheel extends SDKAdaptor {
     public void updateCurrentPosition() {
     }
 
-    ;
+    @Override
+    public boolean setAndroidContext(Object object) {
+        if (object instanceof Context) {
+            this.context = (Context) object;
+            return true;
+        } else
+            return false;
+    }
 
-
+    @Override
+    public boolean setController(Object object) {
+        if (object instanceof IOIO) {
+            this.controller = (IOIO) object;
+            return true;
+        } else
+            return false;
+    }
 }

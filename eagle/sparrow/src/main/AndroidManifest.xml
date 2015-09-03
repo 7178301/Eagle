@@ -17,7 +17,6 @@
             </intent-filter>
         </activity>
         <activity android:name="au.edu.swin.sparrow.APIAdaptorActivity" />
-        <activity android:name="au.edu.swin.sparrow.IOIOActivity" />
     </application>
 
 </manifest>

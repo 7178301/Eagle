@@ -1,10 +1,11 @@
-package eagle.sdkInterface.controllerAdaptors.IOIO;
+package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import android.os.Bundle;
 import android.widget.Toast;
 
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.IOIO;
+import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
 import ioio.lib.util.IOIOLooper;
@@ -20,7 +21,14 @@ import ioio.lib.util.android.IOIOActivity;
  * Date Modified	01/09/2015 - Nicholas
  */
 
-public class IOIOEagleActivity extends IOIOActivity {
+public class F450FlamewheelActivity extends IOIOActivity {
+
+    private IOIO ioio;
+
+    private PwmOutput motorFC;
+    private PwmOutput motorFCC;
+    private PwmOutput motorRC;
+    private PwmOutput motorRCC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,11 @@ public class IOIOEagleActivity extends IOIOActivity {
         protected void setup() throws ConnectionLostException {
             showVersions(ioio_, "IOIO connected!");
             led_ = ioio_.openDigitalOutput(0, true);
+            motorFC = ioio_.openPwmOutput(34, 200);
+            motorFCC = ioio_.openPwmOutput(35, 200);
+            motorRC = ioio_.openPwmOutput(36, 200);
+            motorRCC = ioio_.openPwmOutput(37, 200);
+            ioio=ioio_;
         }
 
         @Override
@@ -77,5 +90,22 @@ public class IOIOEagleActivity extends IOIOActivity {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void setPulseWidth(int fcRange, int fccRange, int rcRange, int rccRange) throws ConnectionLostException {
+        if (fcRange >= 1000 && fcRange <= 2023 &&
+                fccRange >= 1000 && fccRange <=2023 &&
+                rcRange >= 1000 && rcRange <=2023 &&
+                rccRange >= 1000 && rccRange <=2023) {
+            motorFC.setPulseWidth(fcRange);
+            motorFCC.setPulseWidth(fccRange);
+            motorRC.setPulseWidth(rcRange);
+            motorRCC.setPulseWidth(rccRange);
+        }else
+            throw new IllegalArgumentException();
+    }
+
+    public IOIO getIOIO(){
+        return ioio;
     }
 }

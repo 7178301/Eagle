@@ -26,6 +26,7 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
         super("Android", "Accelerometer", "0.0.1");
     }
 
+    @Override
     public boolean connectToSensor() {
         if (this.context == null)
             return false;
@@ -37,6 +38,7 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
             return false;
     }
 
+    @Override
     public boolean setAndroidContext(Object object) {
         if (object instanceof Context) {
             this.context = (Context) object;
@@ -45,6 +47,7 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
             return false;
     }
 
+    @Override
     public boolean isConnectedToSensor() {
         if (context == null)
             return false;

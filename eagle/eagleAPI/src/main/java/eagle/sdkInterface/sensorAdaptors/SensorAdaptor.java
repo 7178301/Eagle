@@ -42,4 +42,12 @@ public abstract class SensorAdaptor {
     public String getAdaptorModel() {
         return adaptorModel;
     }
+
+    public boolean setSensorPins(int[] pins){
+        return false;
+    }
+
+    public String[] getSensorPinsDescription(){
+        return new String[0];
+    }
 }
