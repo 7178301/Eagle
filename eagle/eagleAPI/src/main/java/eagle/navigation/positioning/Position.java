@@ -68,8 +68,13 @@ public class Position{
             return false;
     }
 
+    @Override
     public String toString(){
-        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw();
+        return getLongitude()+" "+getLatitude()+" "+getAltitude()+" "+getRoll()+" "+getPitch()+" "+getYaw();
+    }
+
+    public String toPrettyString(){
+        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toPrettyString();
     }
 
     public boolean isEqual(Position position) {

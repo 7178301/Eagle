@@ -59,7 +59,7 @@ public class Bearing
 	 * @return string containing degrees minutes seconds
 	 */
 	//TODO Incorrectly Coded. Seconds should exist when minute is 0
-	public String toString(){
+	public String toPrettyString(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(new Double(degrees).intValue());
 		sb.append("\u00B0");
@@ -74,6 +74,11 @@ public class Bearing
 			}
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public String toString(){
+		return Double.toString(degrees);
 	}
 
 	public boolean isEqual(Bearing bearing) {
