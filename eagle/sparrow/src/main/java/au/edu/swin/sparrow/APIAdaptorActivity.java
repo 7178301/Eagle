@@ -8,12 +8,12 @@ import android.widget.TextView;
 
 import eagle.Drone;
 import eagle.Log;
-import eagle.sdkInterface.AndroidTelnetServer;
+import eagle.TelnetServer;
 
 public class APIAdaptorActivity extends ActionBarActivity{
 
     Drone drone = new Drone();
-    AndroidTelnetServer telnet = new AndroidTelnetServer(drone);
+    TelnetServer telnet = new TelnetServer(drone);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class APIAdaptorActivity extends ActionBarActivity{
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         initializeUI();
         Log.addCallback(telnet);
-        telnet.execute();
+        new Thread(telnet).start();
     }
 
     @Override
