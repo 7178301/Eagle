@@ -5,7 +5,7 @@ import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.sensorAdaptors.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Abstract SDKAdaptor Class
@@ -18,14 +18,14 @@ import java.util.HashMap;
  */
 public abstract class SDKAdaptor {
 
-    private HashMap<String, Accelerometer> accelerometer = null;
-    private HashMap<String, Altimeter> altimeter = null;
-    private HashMap<String, Camera> camera = null;
-    private HashMap<String, Compass> compass = null;
-    private HashMap<String, Gyroscope> gyroscopes = null;
-    private HashMap<String, LIDAR> lidar = null;
-    private HashMap<String, RPLIDAR> rplidar = null;
-    private HashMap<String, Ultrasonic> ultrasonic = null;
+    private ArrayList<AdaptorAccelerometer> accelerometers = new ArrayList<>();
+    private ArrayList<AdaptorCamera> cameras = new ArrayList<>();
+    private ArrayList<AdaptorGPS> gps = new ArrayList<>();
+    private ArrayList<AdaptorGyroscope> gyroscopes = new ArrayList<>();
+    private ArrayList<AdaptorLIDAR> lidars = new ArrayList<>();
+    private ArrayList<AdaptorMagnetic> magnetics = new ArrayList<>();
+    private ArrayList<AdaptorRPLIDAR> rplidars = new ArrayList<>();
+    private ArrayList<AdaptorUltrasonic> ultrasonics = new ArrayList<>();
 
     private String adaptorName = null;
     private String adaptorManufacturer = null;
@@ -92,10 +92,10 @@ public abstract class SDKAdaptor {
 
     public boolean changeLongitudeRelative(double longitude, double speed) {
         PositionMetric prePosition = new PositionMetric(getPositionAssigned());
-        if(flyToRelative(new PositionMetric(longitude, 0, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
-        return true;
+        if (flyToRelative(new PositionMetric(longitude, 0, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
+            return true;
         else
-        return false;
+            return false;
     }
 
     public boolean changeLongitudeRelative(double longitude) {
@@ -155,67 +155,65 @@ public abstract class SDKAdaptor {
     }
 
     public boolean changeLongitudeGPS(double longitude, double speed) {
-        this.currentPositionAssigned=new PositionGPS(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0),new Angle(0), getPositionAssigned().getYaw());
-        return flyToGPS((PositionGPS)this.currentPositionAssigned, speed);
+        this.currentPositionAssigned = new PositionGPS(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        return flyToGPS((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeLongitudeGPS(double longitude) {
-        this.currentPositionAssigned=new PositionGPS(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0),new Angle(0), getPositionAssigned().getYaw());
-        return flyToGPS((PositionGPS)this.currentPositionAssigned);
+        this.currentPositionAssigned = new PositionGPS(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        return flyToGPS((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean changeLatitudeGPS(double latitude, double speed) {
-        this.currentPositionAssigned=new PositionGPS(getPositionAssigned().getLongitude(),latitude, getPositionAssigned().getAltitude(), new Angle(0),new Angle(0), getPositionAssigned().getYaw());
-        return flyToGPS((PositionGPS)this.currentPositionAssigned, speed);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        return flyToGPS((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeLatitudeGPS(double latitude) {
-        this.currentPositionAssigned=new PositionGPS(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), new Angle(0),new Angle(0), getPositionAssigned().getYaw());
-        return flyToGPS((PositionGPS)this.currentPositionAssigned);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        return flyToGPS((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean changeAltitudeGPS(double altitude, double speed) {
-        this.currentPositionAssigned=new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, new Angle(0),new Angle(0), getPositionAssigned().getYaw());
-        return flyToGPS((PositionGPS)this.currentPositionAssigned, speed);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        return flyToGPS((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeAltitudeGPS(double altitude) {
-        this.currentPositionAssigned=new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, new Angle(0),new Angle(0), getPositionAssigned().getYaw());
-        return flyToGPS((PositionGPS)this.currentPositionAssigned);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        return flyToGPS((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean changeYawGPS(Angle yaw, double speed) {
-        this.currentPositionAssigned=new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0),new Angle(0), yaw);
-        return flyToGPS((PositionGPS)this.currentPositionAssigned, speed);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
+        return flyToGPS((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeYawGPS(Angle yaw) {
-        this.currentPositionAssigned=new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0),new Angle(0), yaw);
-        return flyToGPS((PositionGPS)this.currentPositionAssigned);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
+        return flyToGPS((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean goHome(double speed) {
-        if(homePosition instanceof PositionMetric)
+        if (homePosition instanceof PositionMetric)
             return flyToRelative(currentPositionAssigned.compare(homePosition), speed);
-        else if(homePosition instanceof PositionGPS && currentPositionAssigned instanceof PositionGPS)
-            return flyToGPS((PositionGPS)currentPositionAssigned.compare(homePosition), speed);
+        else if (homePosition instanceof PositionGPS && currentPositionAssigned instanceof PositionGPS)
+            return flyToGPS((PositionGPS) currentPositionAssigned.compare(homePosition), speed);
         else
             return false;
     }
 
     public boolean goHome() {
-        if(homePosition instanceof PositionMetric){
+        if (homePosition instanceof PositionMetric) {
             PositionMetric prePosition = new PositionMetric(getPositionAssigned());
             if (flyToRelative(currentPositionAssigned.compare(homePosition)) && !getPositionAssigned().equals(prePosition))
                 return true;
             else
                 return false;
-        }
-        else if(homePosition instanceof PositionGPS && currentPositionAssigned instanceof PositionGPS) {
-            this.currentPositionAssigned=new PositionGPS((PositionGPS)homePosition);
-            return flyToGPS(((PositionGPS) currentPositionAssigned).compare((PositionGPS)homePosition));
-        }
-        else
+        } else if (homePosition instanceof PositionGPS && currentPositionAssigned instanceof PositionGPS) {
+            this.currentPositionAssigned = new PositionGPS((PositionGPS) homePosition);
+            return flyToGPS(((PositionGPS) currentPositionAssigned).compare((PositionGPS) homePosition));
+        } else
             return false;
     }
 
@@ -237,56 +235,72 @@ public abstract class SDKAdaptor {
         return homePosition;
     }
 
-    public void addSensorAdaptorAccelerometer(Accelerometer accelerometer) {
-        if (this.accelerometer == null)
-            this.accelerometer = new HashMap<>();
-        this.accelerometer.put(accelerometer.getAdaptorName(), accelerometer);
+    public void addSensorAdaptorAccelerometer(AdaptorAccelerometer adaptorAccelerometer) {
+        this.accelerometers.add(adaptorAccelerometer);
     }
 
-    public void addSensorAdaptorAltimeter(Altimeter altimeter) {
-        if (this.altimeter == null)
-            this.altimeter = new HashMap<>();
-        this.altimeter.put(altimeter.getAdaptorName(), altimeter);
+    public void addSensorAdaptorCamera(AdaptorCamera adaptorCamera) {
+        this.cameras.add(adaptorCamera);
     }
 
-    public void addSensorAdaptorCamera(Camera camera) {
-        if (this.camera == null)
-            this.camera = new HashMap<>();
-        this.camera.put(camera.getAdaptorName(), camera);
+    public void addSensorAdaptorGPS(AdaptorGPS adaptorGPS) {
+        this.gps.add(adaptorGPS);
     }
 
-    public void addSensorAdaptorCompass(Compass compass) {
-        if (this.compass == null)
-            this.compass = new HashMap<>();
-        this.compass.put(compass.getAdaptorName(), compass);
+    public void addSensorAdaptorGyroscope(AdaptorGyroscope adaptorGyroscope) {
+        this.gyroscopes.add(adaptorGyroscope);
     }
 
-    public void addSensorAdaptorGyroscope(Gyroscope gyroscopes) {
-        if (this.gyroscopes == null)
-            this.gyroscopes = new HashMap<>();
-        this.gyroscopes.put(gyroscopes.getAdaptorName(), gyroscopes);
+    public void addSensorAdaptorLIDAR(AdaptorLIDAR lidar) {
+        this.lidars.add(lidar);
     }
 
-    public void addSensorAdaptorLIDAR(LIDAR lidar) {
-        if (this.lidar == null)
-            this.lidar = new HashMap<>();
-        this.lidar.put(lidar.getAdaptorName(), lidar);
+    public void addSensorAdaptorMagnetic(AdaptorMagnetic magnetic) {
+        this.magnetics.add(magnetic);
     }
 
-    public void addSensorAdaptorRPLIDAR(RPLIDAR rplidar) {
-        if (this.rplidar == null)
-            this.rplidar = new HashMap<>();
-        this.rplidar.put(rplidar.getAdaptorName(), rplidar);
+    public void addSensorAdaptorRPLIDAR(AdaptorRPLIDAR adaptorRPLIDAR) {
+        this.rplidars.add(adaptorRPLIDAR);
     }
 
-    public void addSensorAdaptorUltrasonic(Ultrasonic ultrasonic) {
-        if (this.ultrasonic == null)
-            this.ultrasonic = new HashMap<>();
-        this.ultrasonic.put(ultrasonic.getAdaptorName(), ultrasonic);
+    public void addSensorAdaptorUltrasonic(AdaptorUltrasonic adaptorUltrasonic) {
+        this.ultrasonics.add(adaptorUltrasonic);
     }
 
     public abstract void delay(int milliseconds);
 
-    //TODO Add Remove Adaptor Functions
+    public ArrayList<AdaptorAccelerometer> getAccelerometers() {
+        return accelerometers;
+    }
+
+    public ArrayList<AdaptorCamera> getCameras() {
+        return cameras;
+    }
+
+    public ArrayList<AdaptorGPS> getGPSs() {
+        return gps;
+    }
+
+    public ArrayList<AdaptorGyroscope> getGyroscopes() {
+        return gyroscopes;
+    }
+
+    public ArrayList<AdaptorLIDAR> getLidars() {
+        return lidars;
+    }
+
+    public ArrayList<AdaptorMagnetic> getMagnetics() {
+        return magnetics;
+    }
+
+    public ArrayList<AdaptorRPLIDAR> getRplidars() {
+        return rplidars;
+    }
+
+    public ArrayList<AdaptorUltrasonic> getUltrasonics() {
+        return ultrasonics;
+    }
+
+//TODO Add Remove Adaptor Functions
 
 }

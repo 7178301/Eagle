@@ -43,6 +43,8 @@ public class PositionMetric {
         this.longitude+=position.getLongitude();
         this.latitude+=position.getLatitude();
         this.altitude+=position.getAltitude();
+        this.roll.add(position.getRoll());
+        this.pitch.add(position.getPitch());
         this.yaw.add(position.getYaw());
     }
 
@@ -50,6 +52,8 @@ public class PositionMetric {
         this.longitude-=position.getLongitude();
         this.latitude-=position.getLatitude();
         this.altitude-=position.getAltitude();
+        this.roll.minus(position.getRoll());
+        this.pitch.minus(position.getPitch());
         this.yaw.minus(position.getYaw());
     }
 

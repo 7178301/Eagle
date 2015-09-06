@@ -112,7 +112,7 @@ public class ScriptingEngineTest {
 //    public void testExecuteInstructionFLYTOGPS() {
 //        try {
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("FLYTOGPS 1 2 3 4"));
-//            assertEquals("moved to wrong position", new Position(1, 2, 3, 0, 0, new Bearing(4)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(1, 2, 3, 0, 0, new Bearing(4)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //        }
 //        catch (Drone.InvalidInstructionException e) {
 //            fail("Invalid instruction");
@@ -123,9 +123,9 @@ public class ScriptingEngineTest {
 //    public void testExecuteInstructionCHANGELONGITUDEGPS() {
 //        try {
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDEGPS 1"));
-//            assertEquals("moved to wrong position", new Position(1, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(1, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDEGPS 2 1"));
-//            assertEquals("moved to wrong position", new Position(3, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(3, 0, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //        }
 //        catch (Drone.InvalidInstructionException e) {
 //            fail("Invalid instruction");
@@ -136,9 +136,9 @@ public class ScriptingEngineTest {
 //    public void testExecuteInstructionCHANGELATITUDEGPS() {
 //        try {
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDEGPS 1"));
-//            assertEquals("moved to wrong position", new Position(0, 1, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(0, 1, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDEGPS 2 1"));
-//            assertEquals("moved to wrong position", new Position(0, 3, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(0, 3, 0, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //        }
 //        catch (Drone.InvalidInstructionException e) {
 //            fail("Invalid instruction");
@@ -149,9 +149,9 @@ public class ScriptingEngineTest {
 //    public void testExecuteInstructionCHANGEALTITUDEGPS() {
 //        try {
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGEALTITUDEGPS 1"));
-//            assertEquals("moved to wrong position", new Position(0, 0, 1, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(0, 0, 1, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //            assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGEALTITUDEGPS 2 1"));
-//            assertEquals("moved to wrong position", new Position(0, 0, 3, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getPositionAssigned().toString());
+//            assertEquals("moved to wrong position", new Position(0, 0, 3, 0, 0, new Bearing(0)).toString(), drone.getSDKAdaptor().getCurrentPositionAssigned().toString());
 //        }
 //        catch (Drone.InvalidInstructionException e) {
 //            fail("Invalid instruction");

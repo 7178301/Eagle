@@ -1,8 +1,10 @@
 package eagle.navigation.positioning;
-/** Bearing
- * @since     09/04/2015
- * <p>
- * Date Modified	26/05/2015 - Nicholas
+
+/**
+ * Angle Class
+ *
+ * @author Nicholas Alards [7178301@student.swin.edu.au]
+ * @author Cameron Cross
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross */
@@ -11,7 +13,7 @@ public class Angle
 	private double degrees;
 	
 	/**
-	 * Constructor for bearing class
+	 * Constructor for angle class
 	 * @param angle input angle
 	 */
 	public Angle(double angle){
@@ -22,14 +24,16 @@ public class Angle
 		this.degrees=angle.getDegrees();
 	}
 
-	public void add(Angle val) {
+	public Angle add(Angle val) {
 		this.degrees+=val.getDegrees();
 		normalise();
+		return this;
 	}
 
-	public void minus(Angle angle){
+	public Angle minus(Angle angle){
 		this.degrees-=angle.getDegrees();
 		normalise();
+		return this;
 	}
 
 	private void normalise() {
@@ -41,9 +45,9 @@ public class Angle
 		}
 	}
 
-	public double getDegrees() {
-		return degrees;
-	}
+    public double getDegrees() {
+        return degrees;
+    }
 
 	public boolean equals(Angle bearing){
 		if(Double.compare(degrees,bearing.getDegrees())==0)

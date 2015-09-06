@@ -3,8 +3,6 @@ package au.edu.swin.sparrow;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,10 +16,9 @@ import eagle.Drone;
 import eagle.sdkInterface.LogAndroid;
 import eagle.sdkInterface.SDKAdaptor;
 
-
 public class MainActivity extends ListActivity {
-
     Drone drone;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,38 +29,39 @@ public class MainActivity extends ListActivity {
 
     private static final String TAG = "Sparrow Debug";
 
-    private void initializeUI(){
+    private void initializeUI() {
         drone = new Drone();
-        TextView tv = (TextView)findViewById(R.id.textviewVersion);
+        TextView tv = (TextView) findViewById(R.id.textviewVersion);
         tv.setText(getResources().getString(R.string.api_version) + ": " + drone.getAPIVersion());
-        HashMap<String,SDKAdaptor> sdkAdaptors = drone.getSDKAdaptorMap();
+
+        @SuppressWarnings("unchecked")
+        HashMap<String, SDKAdaptor> sdkAdaptors = drone.getSDKAdaptorMap();
 
 
         Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
         Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.keySet().toString());
 
-        ArrayAdapter<String> ad = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
+        ArrayAdapter<String> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
         setListAdapter(ad);
 
         final Button selectAdaptorButton = (Button) findViewById(R.id.buttonSelectAdaptor);
-        selectAdaptorButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Intent intentApiAdaptor = new Intent(MainActivity.this, APIAdaptorActivity.class).putExtra("drone",getIntent().getStringExtra("drone"));
+        selectAdaptorButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Intent intentApiAdaptor = new Intent(MainActivity.this, APIAdaptorActivity.class).putExtra("drone", getIntent().getStringExtra("drone"));
                 MainActivity.this.startActivity(intentApiAdaptor);
             }
         });
     }
 
-    public void onListItemClick(ListView l, View v, int position, long id)
-    {
+    public void onListItemClick(ListView l, View v, int position, long id) {
         String selectedItem = (String) getListView().getItemAtPosition(position);
         drone.setSDKAdaptor(selectedItem);
 
         Button selectAdaptorButton = (Button) findViewById(R.id.buttonSelectAdaptor);
 
-        this.getIntent().putExtra("drone",selectedItem);
+        this.getIntent().putExtra("drone", selectedItem);
 
-        if(selectAdaptorButton.getVisibility()==View.INVISIBLE)
+        if (selectAdaptorButton.getVisibility() == View.INVISIBLE)
             makeSettingsVisible();
 
         TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewAdaptorName);
@@ -77,7 +75,7 @@ public class MainActivity extends ListActivity {
         Log.e(TAG, "Selected Adaptor " + selectedItem);
     }
 
-    private void makeSettingsVisible(){
+    private void makeSettingsVisible() {
 
         TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewAdaptorName);
         TextView sdkVersionTextView = (TextView) findViewById(R.id.textViewSDKVersion);

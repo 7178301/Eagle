@@ -18,14 +18,14 @@ public class Simulator extends SDKAdaptor {
     private int maxRotateSpeed = 0;
 
     public Simulator() {
-        super("Simulator","Siumulator","alpha","0.0.1");
+        super("Simulator", "Siumulator", "alpha", "0.0.1");
         maxSpeed = 1;
         maxRotateSpeed = 30;
     }
 
 
     public Simulator(int speed, int rotateSpeed) {
-        super("Simulator","Siumulator","alpha","0.0.1");
+        super("Simulator", "Siumulator", "alpha", "0.0.1");
         maxSpeed = speed;
         maxRotateSpeed = rotateSpeed;
     }
@@ -98,17 +98,17 @@ public class Simulator extends SDKAdaptor {
             double latitude = getPositionAssigned().getLatitude();
 
             if (altitude - position.getAltitude() > verticalDist) {
-                altitude += verticalDist*speed;
+                altitude += verticalDist * speed;
             } else {
                 altitude = endPos.getAltitude();
             }
             if (longitude - position.getLongitude() > longDist) {
-                longitude += longDist*speed;
+                longitude += longDist * speed;
             } else {
                 longitude = endPos.getLongitude();
             }
             if (latitude - position.getLatitude() > latDist) {
-                latitude += latDist*speed;
+                latitude += latDist * speed;
             } else {
                 latitude = endPos.getLatitude();
             }
@@ -117,7 +117,7 @@ public class Simulator extends SDKAdaptor {
             setPositionAssigned(newPos);
             delay(1000);
 
-            Log.log("Current Position: "+ newPos.toString());
+            Log.log("Current Position: " + newPos.toString());
         }
         return true;
     }

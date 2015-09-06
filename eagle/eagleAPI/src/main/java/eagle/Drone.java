@@ -66,5 +66,4 @@ public class Drone {
     }
 }
 
-
 //What if a drone needs to constantly update its position?
