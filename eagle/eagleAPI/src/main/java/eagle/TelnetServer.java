@@ -8,8 +8,15 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
 
+
 /**
- * Created by cameron on 9/2/15.
+ * Telnet Server Class
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 04/09/2015
+ * <p/>
+ * Date Modified	04/09/2015 - Cameron
  */
 public class TelnetServer implements Runnable, Log.LogCallback {
 
