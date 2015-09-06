@@ -1,6 +1,6 @@
 package eagle.sdkInterface.sensorAdaptors;
 
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionGPS;
 
 /**
  * Accelerometer Adaptor Interface
@@ -12,7 +12,7 @@ import eagle.navigation.positioning.Position;
  * Date Modified	26/05/2015 - Nicholas
  */
 public abstract class AdaptorGPS extends SensorAdaptor {
-    private Position calibrationOffset = null;
+    private PositionGPS calibrationOffset = null;
 
     public AdaptorGPS(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
@@ -20,18 +20,20 @@ public abstract class AdaptorGPS extends SensorAdaptor {
 
     public abstract boolean connectToSensor();
 
-    public abstract Position getData();
+    public abstract PositionGPS getData();
 
-    public Position getCalibratedData() {
-        Position value = getData();
-        if (value == null | getCalibrationOffset() == null)
+    public PositionGPS getCalibratedData() {
+        PositionGPS value = getData();
+        if (value == null | calibrationOffset == null)
             return null;
         else {
-            Position calibratedData = new Position(
-                    value.getLongitude() - getCalibrationOffset().getLongitude(),
-                    value.getLatitude() - getCalibrationOffset().getLatitude(),
-                    value.getAltitude() - getCalibrationOffset().getAltitude(), 0, 0,
-                    value.getYaw().minus(getCalibrationOffset().getYaw())
+            PositionGPS calibratedData = new PositionGPS(
+                    value.getLongitude() - calibrationOffset.getLongitude(),
+                    value.getLatitude() - calibrationOffset.getLatitude(),
+                    value.getAltitude() - calibrationOffset.getAltitude(),
+                    value.getRoll().minus(calibrationOffset.getRoll()),
+                    value.getPitch().minus(calibrationOffset.getPitch()),
+                    value.getYaw().minus(calibrationOffset.getYaw())
             );
             return calibratedData;
         }
@@ -45,11 +47,11 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         return false;
     }
 
-    public Position getCalibrationOffset() {
+    public PositionGPS getCalibrationOffset() {
         return calibrationOffset;
     }
 
-    public boolean setCalibrationOffset(Position calibrationOffset) {
+    public boolean setCalibrationOffset(PositionGPS calibrationOffset) {
         if (calibrationOffset != null) {
             this.calibrationOffset = calibrationOffset;
             return true;

@@ -6,8 +6,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-import eagle.navigation.positioning.Bearing;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 
 /**
@@ -22,7 +22,7 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 
 public class AndroidGPS extends AdaptorGPS {
     private Context context = null;
-    private Position gpsData = null;
+    private PositionGPS gpsData = null;
     private float accuracy = 999999;
 
     public AndroidGPS() {
@@ -58,7 +58,7 @@ public class AndroidGPS extends AdaptorGPS {
             return false;
     }
 
-    public Position getData() {
+    public PositionGPS getData() {
         return gpsData;
     }
 
@@ -80,13 +80,13 @@ public class AndroidGPS extends AdaptorGPS {
         public void onLocationChanged(Location location) {
             if (location.hasAccuracy()) {
                 if (location.hasBearing()) {
-                    gpsData = new Position(location.getLongitude(), location.getLatitude(), location.getAltitude(), 0, 0, new Bearing(location.getBearing()));
+                    gpsData = new PositionGPS(location.getLongitude(), location.getLatitude(), location.getAltitude(), new Angle(0), new Angle(0), new Angle(location.getBearing()));
                     accuracy = location.getAccuracy();
                 } else if (gpsData != null) {
-                    gpsData = new Position(location.getLongitude(), location.getLatitude(), location.getAltitude(), 0, 0, gpsData.getYaw());
+                    gpsData = new PositionGPS(location.getLongitude(), location.getLatitude(), location.getAltitude(), new Angle(0), new Angle(0), gpsData.getYaw());
                     accuracy = location.getAccuracy();
                 } else {
-                    gpsData = new Position(location.getLongitude(), location.getLatitude(), location.getAltitude(), 0, 0, new Bearing(0));
+                    gpsData = new PositionGPS(location.getLongitude(), location.getLatitude(), location.getAltitude(), new Angle(0), new Angle(0), new Angle(0));
                     accuracy = location.getAccuracy();
                 }
             }else {

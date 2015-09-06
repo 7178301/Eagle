@@ -15,6 +15,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import eagle.Drone;
+import eagle.Log;
+import eagle.TelnetServer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
 import au.edu.swin.sparrow.Fragment.GPSFragment;
 import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
@@ -22,19 +31,13 @@ import au.edu.swin.sparrow.Fragment.LIDARFragment;
 import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
-import eagle.Drone;
-import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
-import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
-import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
-import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
-import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
-import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 public class APIAdaptorActivity extends AppCompatActivity implements AccelerometerFragment.OnFragmentInteractionListener {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
     Drone drone = new Drone();
+    TelnetServer telnet = new TelnetServer(drone);
 
     @Override
     protected void onStart() {
@@ -43,6 +46,18 @@ public class APIAdaptorActivity extends AppCompatActivity implements Acceleromet
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         initializeUI();
+        Log.addCallback(telnet);
+        new Thread(telnet).start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.removeCallback(telnet);
+        super.onDestroy();
+    }
+
+
+    private void initializeSocket() {
         updateUI();
         MyTimerTask myTask = new MyTimerTask();
         Timer myTimer = new Timer();
