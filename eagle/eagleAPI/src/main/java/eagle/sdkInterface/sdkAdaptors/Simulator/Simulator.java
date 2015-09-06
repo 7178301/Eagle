@@ -73,20 +73,18 @@ public class Simulator extends SDKAdaptor {
         Position endPos = new Position(getPositionAssigned());
         endPos.add(position);
 
-
-
         double verticalDist = position.getAltitude();
         double longDist = position.getLongitude();
         double latDist = position.getLatitude();
 
         double maxDist;
 
-        if (verticalDist > longDist && verticalDist > latDist) {
-            maxDist = verticalDist;
-        } else if (longDist > verticalDist && longDist > latDist) {
-            maxDist = longDist;
+        if (Math.abs(verticalDist) > Math.abs(longDist) && Math.abs(verticalDist) > Math.abs(latDist)) {
+            maxDist = Math.abs(verticalDist);
+        } else if (Math.abs(longDist) > Math.abs(verticalDist) && Math.abs(longDist) > Math.abs(latDist)) {
+            maxDist = Math.abs(longDist);
         } else {
-            maxDist = latDist;
+            maxDist = Math.abs(latDist);
         }
 
         verticalDist /= maxDist;
