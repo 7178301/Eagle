@@ -2,10 +2,8 @@ package au.edu.swin.sparrow;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,6 +15,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import eagle.Drone;
+import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
+import eagle.Log;
+import eagle.TelnetServer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
 import au.edu.swin.sparrow.Fragment.GPSFragment;
 import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
@@ -24,21 +32,13 @@ import au.edu.swin.sparrow.Fragment.LIDARFragment;
 import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
-import eagle.Drone;
-import eagle.sdkInterface.sdkAdaptors.Flyver.F450Flamewheel;
-import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
-import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
-import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
-import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
-import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
-import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
-import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 public class APIAdaptorActivity extends F450FlamewheelActivity implements AccelerometerFragment.OnFragmentInteractionListener {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
     Drone drone = new Drone();
+    TelnetServer telnet = new TelnetServer(drone);
 
 
     private SeekBar sb;
@@ -52,12 +52,19 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
         drone.getSDKAdaptor().setAndroidContext(this);
         drone.getSDKAdaptor().setController(getIOIO());
         initializeUI();
-        updateUI();
+        Log.addCallback(telnet);
+        new Thread(telnet).start();
+
         MyTimerTask myTask = new MyTimerTask();
         Timer myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 50);
     }
 
+    @Override
+    protected void onDestroy() {
+        Log.removeCallback(telnet);
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,24 +90,24 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
 
         sb = (SeekBar) findViewById(R.id.seekBarValue);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                                          @Override
-                                          public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                                              TextView tv = (TextView) findViewById(R.id.textViewValue);
-                                              tv.setText(String.valueOf(progress));
-                                              try {
-                                                  int value=1000 + (progress * 10);
-                                                  setPulseWidth(value,value,value,value);
-                                              } catch (Exception e) {
-                                              }
-                                          }
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                TextView tv = (TextView) findViewById(R.id.textViewValue);
+                tv.setText(String.valueOf(progress));
+                try {
+                    int value = 1000 + (progress * 10);
+                    setPulseWidth(value, value, value, value);
+                } catch (Exception e) {
+                }
+            }
 
-                                          @Override
-                                          public void onStartTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
 
-                                          }
+            }
 
-                                          @Override
-                                          public void onStopTrackingTouch(SeekBar seekBar) {
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
                                           }
                                       });

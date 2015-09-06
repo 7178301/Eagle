@@ -1,7 +1,7 @@
 package eagle.navigation;
 
 import eagle.Drone;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionMetric;
 
 /**
  * API Navigation
@@ -17,7 +17,7 @@ import eagle.navigation.positioning.Position;
 public class Navigation extends CollisionDetection {
 
     private Drone drone;
-    private Position home;
+    private PositionMetric home;
 
     /**
      * Create the navigation logic for a drone.

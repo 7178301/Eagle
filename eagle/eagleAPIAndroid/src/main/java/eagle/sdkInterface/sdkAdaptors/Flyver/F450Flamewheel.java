@@ -3,8 +3,10 @@ package eagle.sdkInterface.sdkAdaptors.Flyver;
 import android.content.Context;
 import android.content.Intent;
 
-import eagle.navigation.positioning.Bearing;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.PositionGPS;
+
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
@@ -30,7 +32,7 @@ public class F450Flamewheel extends SDKAdaptor {
     //TODO Create method implementations
 
     public F450Flamewheel() {
-        super("FLyver", "F450 Flamewheel", "alpha", "0.0.1");
+        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1");
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
@@ -56,6 +58,24 @@ public class F450Flamewheel extends SDKAdaptor {
         return false;
     }
 
+    @Override
+    public boolean flyToRelative(PositionMetric position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyToRelative(PositionMetric position) {
+        return false;
+    }
+
+    public boolean flyToGPS(PositionGPS positionGPS, double speed){return false;}
+    public boolean flyToGPS(PositionGPS positionGPS){return false;}
+
+    public PositionMetric getPositionInFlight() {
+        //TODO CREATE BELOW IMPLEMENTATION
+        return new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0));
+    }
+
     public boolean standbyDrone() {
         return false;
     }
@@ -66,19 +86,6 @@ public class F450Flamewheel extends SDKAdaptor {
 
     public boolean shutdownDrone() {
         return false;
-    }
-
-    public boolean flyToAbsolute(Position position, double speed) {
-        return false;
-    }
-
-    public boolean flyToAbsolute(Position position) {
-        return false;
-    }
-
-    public Position getPositionInFlight() {
-        //TODO CREATE BELOW IMPLEMENTATION
-        return new Position(0, 0, 0, 0, 0, new Bearing(0));
     }
 
     @Override

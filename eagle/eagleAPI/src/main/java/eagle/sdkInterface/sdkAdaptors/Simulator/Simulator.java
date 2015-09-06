@@ -1,19 +1,17 @@
 package eagle.sdkInterface.sdkAdaptors.Simulator;
 
 import eagle.Log;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
-/**
- * Adaptor Loader
- *
- * @author Cameron Cross [7178301@student.swin.edu.au]
+/** Simulator Class
+ * @since     09/04/2015
+ * <p>
+ * Date Modified	01/08/2015 - Cameron Cross
  * @version 0.0.1
- * @since 8/13/15
- * <p/>
- * Date Modified	8/13/15 - Nicholas
- */
+ * @author          Cameron Cross [7193432@student.swin.edu.au] */
 public class Simulator extends SDKAdaptor {
     private boolean connected = false;
     private int maxSpeed = 0;
@@ -72,28 +70,29 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToAbsolute(Position position, double speed) {
+    public boolean flyToRelative(PositionMetric position, double speed) {
+        PositionMetric endPos = new PositionMetric(getPositionAssigned());
+        endPos.add(position);
 
-        double verticalDist = getPositionAssigned().getAltitude() - position.getAltitude();
-        double longDist = getPositionAssigned().getLongitude() - position.getLongitude();
-        double latDist = getPositionAssigned().getLatitude() - position.getLatitude();
+        double verticalDist = position.getAltitude();
+        double longDist = position.getLongitude();
+        double latDist = position.getLatitude();
 
         double maxDist;
 
-        if (verticalDist > longDist && verticalDist > latDist) {
-            maxDist = verticalDist;
-        } else if (longDist > verticalDist && longDist > latDist) {
-            maxDist = longDist;
+        if (Math.abs(verticalDist) > Math.abs(longDist) && Math.abs(verticalDist) > Math.abs(latDist)) {
+            maxDist = Math.abs(verticalDist);
+        } else if (Math.abs(longDist) > Math.abs(verticalDist) && Math.abs(longDist) > Math.abs(latDist)) {
+            maxDist = Math.abs(longDist);
         } else {
-            maxDist = latDist;
+            maxDist = Math.abs(latDist);
         }
 
         verticalDist /= maxDist;
         longDist /= maxDist;
         latDist /= maxDist;
 
-
-        while (!position.isEqual(getPositionAssigned())) {
+        while (!endPos.equals(getPositionAssigned())) {
             double altitude = getPositionAssigned().getAltitude();
             double longitude = getPositionAssigned().getLongitude();
             double latitude = getPositionAssigned().getLatitude();
@@ -101,26 +100,22 @@ public class Simulator extends SDKAdaptor {
             if (altitude - position.getAltitude() > verticalDist) {
                 altitude += verticalDist * speed;
             } else {
-                altitude = position.getAltitude();
+                altitude = endPos.getAltitude();
             }
             if (longitude - position.getLongitude() > longDist) {
                 longitude += longDist * speed;
             } else {
-                longitude = position.getLongitude();
+                longitude = endPos.getLongitude();
             }
             if (latitude - position.getLatitude() > latDist) {
                 latitude += latDist * speed;
             } else {
-                latitude = position.getLatitude();
+                latitude = endPos.getLatitude();
             }
 
-            Position newPos = new Position(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
+            PositionMetric newPos = new PositionMetric(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
             setPositionAssigned(newPos);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-
-            }
+            delay(1000);
 
             Log.log("Current Position: " + newPos.toString());
         }
@@ -128,12 +123,22 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToAbsolute(Position position) {
-        return flyToAbsolute(position, maxSpeed);
+    public boolean flyToRelative(PositionMetric position) {
+        return flyToRelative(position, maxSpeed);
     }
 
     @Override
-    public Position getPositionInFlight() {
+    public boolean flyToGPS(PositionGPS positionGPS, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyToGPS(PositionGPS positionGPS) {
+        return flyToGPS(positionGPS, maxSpeed);
+    }
+
+    @Override
+    public PositionMetric getPositionInFlight() {
         return getPositionAssigned();
     }
 
