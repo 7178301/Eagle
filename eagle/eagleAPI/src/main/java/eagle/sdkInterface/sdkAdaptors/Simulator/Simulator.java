@@ -1,7 +1,8 @@
 package eagle.sdkInterface.sdkAdaptors.Simulator;
 
 import eagle.Log;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -69,8 +70,8 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(Position position, double speed) {
-        Position endPos = new Position(getPositionAssigned());
+    public boolean flyToRelative(PositionMetric position, double speed) {
+        PositionMetric endPos = new PositionMetric(getPositionAssigned());
         endPos.add(position);
 
         double verticalDist = position.getAltitude();
@@ -91,7 +92,7 @@ public class Simulator extends SDKAdaptor {
         longDist /= maxDist;
         latDist /= maxDist;
 
-        while (!endPos.isEqual(getPositionAssigned())) {
+        while (!endPos.equals(getPositionAssigned())) {
             double altitude = getPositionAssigned().getAltitude();
             double longitude = getPositionAssigned().getLongitude();
             double latitude = getPositionAssigned().getLatitude();
@@ -112,7 +113,7 @@ public class Simulator extends SDKAdaptor {
                 latitude = endPos.getLatitude();
             }
 
-            Position newPos = new Position(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
+            PositionMetric newPos = new PositionMetric(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
             setPositionAssigned(newPos);
             delay(1000);
 
@@ -122,22 +123,22 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(Position position) {
+    public boolean flyToRelative(PositionMetric position) {
         return flyToRelative(position, maxSpeed);
     }
 
     @Override
-    public boolean flyToGPS(Position position, double speed) {
+    public boolean flyToGPS(PositionGPS positionGPS, double speed) {
         return false;
     }
 
     @Override
-    public boolean flyToGPS(Position position) {
-        return flyToGPS(position, maxSpeed);
+    public boolean flyToGPS(PositionGPS positionGPS) {
+        return flyToGPS(positionGPS, maxSpeed);
     }
 
     @Override
-    public Position getPositionInFlight() {
+    public PositionMetric getPositionInFlight() {
         return getPositionAssigned();
     }
 

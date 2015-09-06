@@ -7,12 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import eagle.navigation.positioning.Bearing;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.SDKAdaptor;
 
 /**
- * Created by Cameron on 4/09/2015.
+ * ScriptingEngine Class
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 04/09/2015
+ * <p/>
+ * Date Modified	04/09/2015 - Cameron
  */
 public class ScriptingEngine {
     SDKAdaptor adaptor;
@@ -157,7 +164,7 @@ public class ScriptingEngine {
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
                         double bea = Double.parseDouble(array[4]);
-                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
+                        PositionMetric newPos = new PositionMetric(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
                         if (adaptor.flyToRelative(newPos)) {
                             return "SUCCESS";
                         } else {
@@ -169,7 +176,7 @@ public class ScriptingEngine {
                         double alt = Double.parseDouble(array[3]);
                         double bea = Double.parseDouble(array[4]);
                         double spe = Double.parseDouble(array[5]);
-                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
+                        PositionMetric newPos = new PositionMetric(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
                         if (adaptor.flyToRelative(newPos, spe)) {
                             return "SUCCESS";
                         } else {
@@ -184,7 +191,7 @@ public class ScriptingEngine {
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
                         double bea = Double.parseDouble(array[4]);
-                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
+                        PositionGPS newPos = new PositionGPS(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
                         if (adaptor.flyToGPS(newPos)) {
                             return "SUCCESS";
                         } else {
@@ -196,7 +203,7 @@ public class ScriptingEngine {
                         double alt = Double.parseDouble(array[3]);
                         double bea = Double.parseDouble(array[4]);
                         double spe = Double.parseDouble(array[5]);
-                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
+                        PositionGPS newPos = new PositionGPS(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
                         if (adaptor.flyToGPS(newPos, spe)) {
                             return "SUCCESS";
                         } else {
@@ -265,7 +272,7 @@ public class ScriptingEngine {
                 case "CHANGEYAWRELATIVE":
                     if (array.length == 2) {
                         double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeYawRelative(new Bearing(val))) {
+                        if (adaptor.changeYawRelative(new Angle(val))) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -273,7 +280,7 @@ public class ScriptingEngine {
                     } else if (array.length == 3) {
                         double val = Double.parseDouble(array[1]);
                         double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeYawRelative(new Bearing(val), spe)) {
+                        if (adaptor.changeYawRelative(new Angle(val), spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -341,7 +348,7 @@ public class ScriptingEngine {
                 case "CHANGEYAWGPS":
                     if (array.length == 2) {
                         double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeYawGPS(new Bearing(val))) {
+                        if (adaptor.changeYawGPS(new Angle(val))) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -349,7 +356,7 @@ public class ScriptingEngine {
                     } else if (array.length == 3) {
                         double val = Double.parseDouble(array[1]);
                         double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeYawGPS(new Bearing(val), spe)) {
+                        if (adaptor.changeYawGPS(new Angle(val), spe)) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -384,7 +391,7 @@ public class ScriptingEngine {
                         double lat = Double.parseDouble(array[2]);
                         double alt = Double.parseDouble(array[3]);
                         double bea = Double.parseDouble(array[4]);
-                        Position newPos = new Position(lon, lat, alt, 0, 0, new Bearing(bea));
+                        PositionMetric newPos = new PositionMetric(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
                         adaptor.setHomePosition(newPos);
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);

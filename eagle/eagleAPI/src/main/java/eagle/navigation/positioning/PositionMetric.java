@@ -7,15 +7,15 @@ package eagle.navigation.positioning;
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross [7193432@student.swin.edu.au]*/
 
-public class Position{
+public class PositionMetric {
 	private double longitude;
 	private double latitude;
 	private double altitude;
-    private double roll;
-	private double pitch;
-	private Bearing yaw;
+    private Angle roll;
+	private Angle pitch;
+	private Angle yaw;
 
-    public Position(double longitude, double latitude, double altitude,double roll, double pitch, Bearing yaw){
+    public PositionMetric(double longitude, double latitude, double altitude, Angle roll, Angle pitch, Angle yaw){
         this.longitude=longitude;
         this.latitude=latitude;
         this.altitude=altitude;
@@ -23,7 +23,7 @@ public class Position{
         this.pitch=pitch;
         this.yaw=yaw;
     }
-    public Position(Position position){
+    public PositionMetric(PositionMetric position){
         this.longitude=position.longitude;
         this.latitude=position.latitude;
         this.altitude=position.altitude;
@@ -35,34 +35,31 @@ public class Position{
     public double getLongitude(){return this.longitude;};
     public double getLatitude(){return this.latitude;};
     public double getAltitude(){return this.altitude;};
-    public double getRoll(){return this.roll;};
-    public double getPitch(){return this.pitch;};
-    public Bearing getYaw(){return this.yaw;};
+    public Angle getRoll(){return this.roll;};
+    public Angle getPitch(){return this.pitch;};
+    public Angle getYaw(){return this.yaw;};
 
-    public void add(Position position){
+    public void add(PositionMetric position){
         this.longitude+=position.getLongitude();
         this.latitude+=position.getLatitude();
         this.altitude+=position.getAltitude();
         this.yaw.add(position.getYaw());
     }
 
-    public void minus(Position position){
+    public void minus(PositionMetric position){
         this.longitude-=position.getLongitude();
         this.latitude-=position.getLatitude();
         this.altitude-=position.getAltitude();
         this.yaw.minus(position.getYaw());
     }
 
-
-
-
-    public boolean equals(Position position) {
-        if(longitude==position.getLongitude()&&
-                latitude==position.getLatitude()&&
-                altitude==position.getAltitude()&&
-                roll==position.getRoll()&&
-                pitch==position.pitch&&
-                yaw.getDegrees()==position.getYaw().getDegrees())
+    public boolean equals(PositionMetric position) {
+        if(Double.compare(longitude,position.getLongitude())==0&&
+                Double.compare(latitude,position.getLatitude())==0&&
+                Double.compare(altitude,position.getAltitude())==0&&
+                roll.equals(position.getRoll())&&
+                pitch.equals(position.getPitch())&&
+                yaw.equals(position.getYaw()))
             return true;
         else
             return false;
@@ -73,16 +70,16 @@ public class Position{
         return getLongitude()+" "+getLatitude()+" "+getAltitude()+" "+getRoll()+" "+getPitch()+" "+getYaw();
     }
 
-    public String toPrettyString(){
-        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toPrettyString();
+    public String toStringLong(){
+        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toStringLong();
     }
 
-    public boolean isEqual(Position position) {
-        return (Math.abs(position.getAltitude() - altitude) < 0.00001 &&
-                Math.abs(position.getLatitude() - latitude) < 0.00001 &&
-                Math.abs(position.getLongitude() - longitude) < 0.00001 &&
-                Math.abs(position.getPitch() - pitch) < 0.00001 &&
-                Math.abs(position.getRoll() - roll) < 0.00001 &&
-                position.getYaw().isEqual(yaw));
+    public PositionMetric compare(PositionMetric position) {
+        return new PositionMetric(-Double.compare(longitude,position.getLongitude()),
+                -Double.compare(latitude,position.getLatitude()),
+                -Double.compare(altitude,position.getAltitude()),
+                roll.compare(position.getRoll()),
+                pitch.compare(position.getPitch()),
+                yaw.compare(position.getYaw()));
     }
 }

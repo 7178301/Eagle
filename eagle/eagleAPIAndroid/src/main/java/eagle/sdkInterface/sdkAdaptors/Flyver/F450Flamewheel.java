@@ -1,7 +1,8 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
-import eagle.navigation.positioning.Bearing;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -37,21 +38,21 @@ public class F450Flamewheel extends SDKAdaptor {
     public boolean shutdownDrone(){return false;}
 
     @Override
-    public boolean flyToRelative(Position position, double speed) {
+    public boolean flyToRelative(PositionMetric position, double speed) {
         return false;
     }
 
     @Override
-    public boolean flyToRelative(Position position) {
+    public boolean flyToRelative(PositionMetric position) {
         return false;
     }
 
-    public boolean flyToGPS(Position position, double speed){return false;}
-    public boolean flyToGPS(Position position){return false;}
+    public boolean flyToGPS(PositionGPS positionGPS, double speed){return false;}
+    public boolean flyToGPS(PositionGPS positionGPS){return false;}
 
-    public Position getPositionInFlight(){
+    public PositionMetric getPositionInFlight(){
         //TODO CREATE BELOW IMPLEMENTATION
-        return new Position(0,0,0,0,0,new Bearing(0));
+        return new PositionMetric(0,0,0,new Angle(0),new Angle(0),new Angle(0));
     }
 
     @Override

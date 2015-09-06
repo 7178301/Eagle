@@ -13,17 +13,10 @@ package eagle;
  */
 
 import eagle.navigation.Navigation;
-import eagle.navigation.positioning.Bearing;
-import eagle.navigation.positioning.Position;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 public class Drone {
 
@@ -52,8 +45,10 @@ public class Drone {
     public HashMap getSDKAdaptorMap() {
         if (this.adaptorLoader != null)
             return this.adaptorLoader.getSDKAdaptorMap();
-        else
-            return new AdaptorLoader().getSDKAdaptorMap();
+        else{
+            this.adaptorLoader = new AdaptorLoader();
+            return adaptorLoader.getSDKAdaptorMap();
+        }
     }
 
     public SDKAdaptor getSDKAdaptor() {
@@ -67,7 +62,7 @@ public class Drone {
     }
 
     public ScriptingEngine getScriptingEngine() {
-        return scriptingEngine;
+        return this.scriptingEngine;
     }
 }
 

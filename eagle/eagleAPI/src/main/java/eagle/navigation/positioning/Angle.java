@@ -6,7 +6,7 @@ package eagle.navigation.positioning;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross */
-public class Bearing 
+public class Angle
 {
 	private double degrees;
 	
@@ -14,21 +14,21 @@ public class Bearing
 	 * Constructor for bearing class
 	 * @param angle input angle
 	 */
-	public Bearing(double angle){
-		degrees = angle % 360;
+	public Angle(double angle){
+		degrees = angle;
 		normalise();
 	}
-	public Bearing(Bearing bearing){
-		this.degrees=bearing.getDegrees();
+	public Angle(Angle angle){
+		this.degrees=angle.getDegrees();
 	}
 
-	public void add(Bearing val) {
+	public void add(Angle val) {
 		this.degrees+=val.getDegrees();
 		normalise();
 	}
-	public void minus(Bearing bearing){
-		//TODO 360 Degree Boundry Calculation
-		this.degrees=this.degrees-(this.degrees-bearing.getDegrees());
+
+	public void minus(Angle angle){
+		this.degrees-=angle.getDegrees();
 		normalise();
 	}
 
@@ -45,12 +45,11 @@ public class Bearing
 		return degrees;
 	}
 
-	public boolean equals(Bearing bearing){
-		if(degrees!=bearing.getDegrees())
-			return false;
-		else
+	public boolean equals(Angle bearing){
+		if(Double.compare(degrees,bearing.getDegrees())==0)
 			return true;
-		//return Math.abs(degrees - bearing.degrees) < 0.01;
+		else
+			return false;
 	}
 
 	/**
@@ -59,7 +58,7 @@ public class Bearing
 	 * @return string containing degrees minutes seconds
 	 */
 	//TODO Incorrectly Coded. Seconds should exist when minute is 0
-	public String toPrettyString(){
+	public String toStringLong(){
 		StringBuilder sb = new StringBuilder();
 		sb.append(new Double(degrees).intValue());
 		sb.append("\u00B0");
@@ -76,12 +75,12 @@ public class Bearing
 		return sb.toString();
 	}
 
+	public Angle compare(Angle bearing){
+		return new Angle(-Double.compare(degrees,bearing.getDegrees()));
+	}
+
 	@Override
 	public String toString(){
 		return Double.toString(degrees);
-	}
-
-	public boolean isEqual(Bearing bearing) {
-		return Math.abs(degrees - bearing.degrees) < 0.01;
 	}
 }
