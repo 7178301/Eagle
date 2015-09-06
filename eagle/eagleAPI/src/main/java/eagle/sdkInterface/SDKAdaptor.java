@@ -303,4 +303,11 @@ public abstract class SDKAdaptor {
 
 //TODO Add Remove Adaptor Functions
 
+    public boolean setAndroidContext(Object object) {
+            return false;
+    }
+
+    public boolean setController(Object object){
+        return false;
+    }
 }

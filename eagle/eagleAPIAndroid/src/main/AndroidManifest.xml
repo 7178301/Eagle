@@ -1,20 +1,43 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="au.edu.swin.eagleAPIAndroid">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
 
-    <application android:allowBackup="true" android:label="@string/app_name">
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name">
         <uses-library
             android:name="com.android.future.usb.accessory"
             android:required="false" />
         <meta-data
             android:name="com.dji.sdk.API_KEY"
-            android:value="c1dbf0d7fa45d8d2697dd76b"/>
+            android:value="c1dbf0d7fa45d8d2697dd76b" />
+        <activity
+            android:name="eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
+                android:resource="@xml/accessory_filter" />
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/device_filter" />
+        </activity>
     </application>
 
 </manifest>
