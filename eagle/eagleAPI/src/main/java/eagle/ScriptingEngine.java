@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
+import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
 
 /**
@@ -386,13 +387,8 @@ public class ScriptingEngine {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "SETHOMEPOSITION":
-                    if (array.length == 5) {
-                        double lon = Double.parseDouble(array[1]);
-                        double lat = Double.parseDouble(array[2]);
-                        double alt = Double.parseDouble(array[3]);
-                        double bea = Double.parseDouble(array[4]);
-                        PositionMetric newPos = new PositionMetric(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
-                        adaptor.setHomePosition(newPos);
+                    if (array.length == 1) {
+                        adaptor.setHomePosition();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }

@@ -1,8 +1,9 @@
 package eagle.sdkInterface.sdkAdaptors.DJI;
 
-import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
+import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -44,22 +45,21 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position, double speed) {
+    public boolean flyToRelative(PositionMetric positionMetric, double speed) {
         return false;
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position) {
+    public boolean flyToRelative(PositionMetric positionMetric) {
         return false;
     }
 
     public boolean flyToGPS(PositionGPS positionGPS, double speed){return false;}
     public boolean flyToGPS(PositionGPS positionGPS){return false;}
 
-
-    public PositionMetric getPositionInFlight() {
-        //TODO CREATE BELOW IMPLEMENTATION
-        return new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0));
+    //TODO CREATE BELOW IMPLEMENTATION
+    public Position getPositionInFlight() {
+        return null;
     }
 
     public boolean resumeDrone() {

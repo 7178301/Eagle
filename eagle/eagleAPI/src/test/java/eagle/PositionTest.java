@@ -3,6 +3,7 @@ package eagle;
 import org.junit.Test;
 
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionMetric;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +21,7 @@ public class PositionTest {
 
 	@Test
 	public void testToString(){
-		PositionMetric rp = new PositionMetric(1.23, 2.34, 3.45,new Angle(0),new Angle(0),new Angle(0));
+		Position rp = new PositionMetric(1.23, 2.34, 3.45,new Angle(0),new Angle(0),new Angle(0));
 		assertEquals("Longitude: 1.23, Latitude: 2.34, Altitude: 3.45, Roll: 0.0, Pitch: 0.0, Yaw: 0"+"\u00B0", rp.toStringLong());
 	}
 

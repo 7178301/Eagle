@@ -80,7 +80,7 @@ public class Angle
 	}
 
 	public Angle compare(Angle bearing){
-		return new Angle(-Double.compare(degrees,bearing.getDegrees()));
+		return new Angle(bearing.getDegrees()-degrees);
 	}
 
 	@Override

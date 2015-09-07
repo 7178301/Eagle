@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import eagle.Drone;
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -29,7 +30,6 @@ public class SimulatorTest {
         drone = new Drone();
         drone.setSDKAdaptor("Simulator.Simulator");
         sdkAdaptor = drone.getSDKAdaptor();
-        sdkAdaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
     }
 
     @Test

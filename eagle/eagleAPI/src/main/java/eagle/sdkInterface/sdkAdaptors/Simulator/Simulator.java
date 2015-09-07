@@ -1,8 +1,10 @@
 package eagle.sdkInterface.sdkAdaptors.Simulator;
 
 import eagle.Log;
-import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
+import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -21,6 +23,8 @@ public class Simulator extends SDKAdaptor {
         super("Simulator", "Siumulator", "alpha", "0.0.1");
         maxSpeed = 1;
         maxRotateSpeed = 30;
+        setPositionAssigned(new PositionMetric(0,0,0,new Angle(0),new Angle(0),new Angle(0)));
+        setHomePosition();
     }
 
 
@@ -70,13 +74,13 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position, double speed) {
+    public boolean flyToRelative(PositionMetric positionMetric, double speed) {
         PositionMetric endPos = new PositionMetric(getPositionAssigned());
-        endPos.add(position);
+        endPos.add(positionMetric);
 
-        double verticalDist = position.getAltitude();
-        double longDist = position.getLongitude();
-        double latDist = position.getLatitude();
+        double verticalDist = positionMetric.getAltitude();
+        double longDist = positionMetric.getLongitude();
+        double latDist = positionMetric.getLatitude();
 
         double maxDist;
 
@@ -97,23 +101,23 @@ public class Simulator extends SDKAdaptor {
             double longitude = getPositionAssigned().getLongitude();
             double latitude = getPositionAssigned().getLatitude();
 
-            if (altitude - position.getAltitude() > verticalDist) {
+            if (altitude - positionMetric.getAltitude() > verticalDist) {
                 altitude += verticalDist * speed;
             } else {
                 altitude = endPos.getAltitude();
             }
-            if (longitude - position.getLongitude() > longDist) {
+            if (longitude - positionMetric.getLongitude() > longDist) {
                 longitude += longDist * speed;
             } else {
                 longitude = endPos.getLongitude();
             }
-            if (latitude - position.getLatitude() > latDist) {
+            if (latitude - positionMetric.getLatitude() > latDist) {
                 latitude += latDist * speed;
             } else {
                 latitude = endPos.getLatitude();
             }
 
-            PositionMetric newPos = new PositionMetric(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
+            PositionMetric newPos = new PositionMetric(longitude, latitude, altitude, positionMetric.getRoll(), positionMetric.getPitch(), positionMetric.getYaw());
             setPositionAssigned(newPos);
             delay(1000);
 
@@ -123,8 +127,8 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position) {
-        return flyToRelative(position, maxSpeed);
+    public boolean flyToRelative(PositionMetric positionMetric) {
+        return flyToRelative(positionMetric, maxSpeed);
     }
 
     @Override
@@ -138,7 +142,7 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public PositionMetric getPositionInFlight() {
+    public Position getPositionInFlight() {
         return getPositionAssigned();
     }
 

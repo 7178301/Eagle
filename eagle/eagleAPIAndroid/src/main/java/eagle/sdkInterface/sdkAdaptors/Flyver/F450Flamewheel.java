@@ -1,17 +1,15 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import android.content.Context;
-import android.content.Intent;
 
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
 
+import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
-import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
 import ioio.lib.api.IOIO;
-import ioio.lib.api.exception.ConnectionLostException;
 
 /**
  * F450Flamewheel SDKAdaptor
@@ -59,21 +57,21 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position, double speed) {
+    public boolean flyToRelative(PositionMetric positionMetric, double speed) {
         return false;
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position) {
+    public boolean flyToRelative(PositionMetric positionMetric) {
         return false;
     }
 
     public boolean flyToGPS(PositionGPS positionGPS, double speed){return false;}
     public boolean flyToGPS(PositionGPS positionGPS){return false;}
 
-    public PositionMetric getPositionInFlight() {
-        //TODO CREATE BELOW IMPLEMENTATION
-        return new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0));
+    //TODO CREATE BELOW IMPLEMENTATION
+    public Position getPositionInFlight() {
+        return null;
     }
 
     public boolean standbyDrone() {
