@@ -16,11 +16,18 @@ public class PositionGPSTest {
 
     @Test
     public void testAdd() throws Exception {
-        fail("Havent added test yet, cbf");
+        PositionGPS pos = new PositionGPS(144.9631, 37.7046192, 0, new Angle(0), new Angle(0), new Angle(0));
+        Position output = pos.add(new PositionDisplacement(5, 5, 0, new Angle(0), new Angle(0), new Angle(0)));
+        assertEquals("Wrong position", new PositionGPS(144.9631, 37.7046192, 0, new Angle(0), new Angle(0), new Angle(0)), output);
     }
 
     @Test
     public void testCompare() throws Exception {
-        fail("Havent added test yet, cbf");
+        PositionGPS posGreensborough = new PositionGPS(145.1030275, 37.7046192, 0, new Angle(0), new Angle(0), new Angle(0));
+        PositionGPS posEltham = new PositionGPS(145.1489162, 37.7133771, 0, new Angle(0), new Angle(0), new Angle(0));
+        PositionDisplacement posDisp = posGreensborough.compare(posEltham);
+
+
+        assertEquals("Wrong displacement", new PositionDisplacement(144.9631, 37.7046192, 0, new Angle(0), new Angle(0), new Angle(0)), posDisp);
     }
 }
