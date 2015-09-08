@@ -10,6 +10,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  */
 public class PositionGPS extends Position {
+    private static double r_earth = 6378 * 1000; //Work in meters for everything
+
     public PositionGPS(double longitude, double latitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
         super(longitude, latitude, altitude, roll, pitch, yaw);
     }
@@ -24,25 +26,33 @@ public class PositionGPS extends Position {
 
     @Override
     public Position add(PositionDisplacement position) {
-        //TODO: Haversine GPS calculations;
-//        return new PositionDisplacement(longitude+position.getLongitude(),
-//                latitude+position.getLatitude(),
-//                altitude+position.getAltitude(),
-//                roll.add(position.getRoll()),
-//                pitch.add(position.getPitch()),
-//                yaw.add(position.getYaw()));
-        return null;
+        //code copied from: http://stackoverflow.com/a/15604480/5295129
+
+        double dy = position.getLatitude();
+        double dx = position.getLongitude();
+
+        double new_latitude  = latitude  + (dy / r_earth) * (180 / Math.PI);
+        double new_longitude = longitude + (dx / r_earth) * (180 / Math.PI) / Math.cos(latitude * 180/Math.PI);
+
+        return new PositionDisplacement(new_longitude,
+                new_latitude,
+                altitude+position.getAltitude(),
+                roll.add(position.getRoll()),
+                pitch.add(position.getPitch()),
+                yaw.add(position.getYaw()));
     }
 
     public PositionDisplacement compare(PositionGPS positionGPS) {
         //TODO: Haversine GPS calculations
-//        return new PositionGPS(getLongitude()-positionGPS.getLongitude(),
-//                getLatitude()-positionGPS.getLatitude(),
-//                getAltitude()-positionGPS.getAltitude(),
-//                getRoll().compare(positionGPS.getRoll()),
-//                getPitch().compare(positionGPS.getPitch()),
-//                getYaw().compare(positionGPS.getYaw()));
-        return null;
+        double latdist = (positionGPS.getLatitude()-latitude)*Math.PI*r_earth/180;
+        double longdist = (positionGPS.getLongitude()-longitude)*Math.PI*r_earth/180*Math.cos(latitude * 180/Math.PI);
+
+        return new PositionDisplacement(longdist,
+                latdist,
+                getAltitude()-positionGPS.getAltitude(),
+                getRoll().compare(positionGPS.getRoll()),
+                getPitch().compare(positionGPS.getPitch()),
+                getYaw().compare(positionGPS.getYaw()));
     }
 
     @Override
