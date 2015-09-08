@@ -209,6 +209,7 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
                     linearLayoutSensors.setVisibility(View.GONE);
                     sensorsCollapsed = true;
                 }
+                break;
             case R.id.buttonExpandLog:
                 if (logCollapsed) {
                     buttonExpandLog.setText(R.string.collapseLog);
@@ -219,6 +220,7 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
                     webViewLog.setVisibility(View.GONE);
                     logCollapsed = true;
                 }
+                break;
 
 
         }
