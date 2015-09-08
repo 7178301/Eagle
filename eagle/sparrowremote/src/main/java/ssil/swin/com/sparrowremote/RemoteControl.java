@@ -108,23 +108,23 @@ public class RemoteControl extends ActionBarActivity implements View.OnClickList
                     commandConnection.sendMessage("CHANGEYAWRELATIVE 1");
                     break;
                 case R.id.buttonLeft:
-                    double longitude = -1*Math.sin(bearingAngle);
-                    double latitude = -1*Math.cos(bearingAngle);
+                    double longitude = -1*Math.cos(bearingAngle * Math.PI / 180);
+                    double latitude = -1*Math.sin(bearingAngle * Math.PI / 180);
                     commandConnection.sendMessage("FLYTORELATIVE "+longitude+" "+latitude+" 0 0");
                     break;
                 case R.id.buttonRight:
-                    longitude = 1*Math.sin(bearingAngle);
-                    latitude = 1*Math.cos(bearingAngle);
+                    longitude = 1*Math.cos(bearingAngle*Math.PI/180);
+                    latitude = 1*Math.sin(bearingAngle*Math.PI/180);
                     commandConnection.sendMessage("FLYTORELATIVE "+longitude+" "+latitude+" 0 0");
                     break;
                 case R.id.buttonForward:
-                    longitude = 1*Math.cos(bearingAngle);
-                    latitude = 1*Math.sin(bearingAngle);
+                    longitude = 1*Math.sin(bearingAngle*Math.PI/180);
+                    latitude = 1*Math.cos(bearingAngle*Math.PI/180);
                     commandConnection.sendMessage("FLYTORELATIVE "+longitude+" "+latitude+" 0 0");
                     break;
                 case R.id.buttonBackward:
-                    longitude = -1*Math.cos(bearingAngle);
-                    latitude = -1*Math.sin(bearingAngle);
+                    longitude = -1*Math.sin(bearingAngle*Math.PI/180);
+                    latitude = -1*Math.cos(bearingAngle*Math.PI/180);
                     commandConnection.sendMessage("FLYTORELATIVE "+longitude+" "+latitude+" 0 0");
                     break;
                 case R.id.buttonGoHome:
@@ -136,8 +136,6 @@ public class RemoteControl extends ActionBarActivity implements View.OnClickList
             Toast toast = Toast.makeText(this, "Accidentally disconnected from drone", Toast.LENGTH_LONG);
             toast.show();
             finish();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
 
