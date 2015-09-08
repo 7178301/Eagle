@@ -76,18 +76,15 @@ public class RemoteControl extends ActionBarActivity implements View.OnClickList
         try {
             statusConnection.connectToServer();
             commandConnection.connectToServer();
+
+            MyTimerTask myTask = new MyTimerTask();
+            Timer myTimer = new Timer();
+            myTimer.schedule(myTask, 1000, 100);
         } catch (ConnectTelnet.NotConnectedException e) {
             Toast toast = Toast.makeText(this, "Failed to connect to drone", Toast.LENGTH_LONG);
             toast.show();
             finish();
         }
-        MyTimerTask myTask = new MyTimerTask();
-        Timer myTimer = new Timer();
-        myTimer.schedule(myTask, 1000, 100);
-
-
-
-
     }
 
 
