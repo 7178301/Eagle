@@ -2,6 +2,7 @@ package eagle.sdkInterface.sdkAdaptors.DJI;
 
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
@@ -44,19 +45,6 @@ public class Phantom2Vision extends SDKAdaptor {
         return false;
     }
 
-    @Override
-    public boolean flyToRelative(PositionMetric positionMetric, double speed) {
-        return false;
-    }
-
-    @Override
-    public boolean flyToRelative(PositionMetric positionMetric) {
-        return false;
-    }
-
-    public boolean flyToGPS(PositionGPS positionGPS, double speed){return false;}
-    public boolean flyToGPS(PositionGPS positionGPS){return false;}
-
     //TODO CREATE BELOW IMPLEMENTATION
     public Position getPositionInFlight() {
         return null;
@@ -67,6 +55,36 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     public boolean shutdownDrone() {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionMetric positionMetric, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionMetric positionMetric) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionGPS position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionGPS position) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionDisplacement position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionDisplacement position) {
         return false;
     }
 

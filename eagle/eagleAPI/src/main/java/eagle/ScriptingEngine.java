@@ -8,19 +8,13 @@ import java.util.Map;
 import java.util.Set;
 
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
 
 /**
- * ScriptingEngine Class
- *
- * @author Cameron Cross
- * @version 0.0.1
- * @since 04/09/2015
- * <p/>
- * Date Modified	04/09/2015 - Cameron
+ * Created by Cameron on 4/09/2015.
  */
 public class ScriptingEngine {
     SDKAdaptor adaptor;
@@ -38,20 +32,15 @@ public class ScriptingEngine {
             put("GETADAPTORNAME", "GETADAPTORNAME | Get the adaptor name");
             put("GETADAPTORMANUFACTURER", "GETADAPTORMANUFACTURER | Get the adaptor manufacturer");
             put("GETADAPTORMODEL", "GETADAPTORMODEL | Get the adaptor model");
-            put("FLYTORELATIVE", "FLYTORELATIVE _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given relative position");
-            put("FLYTOGPS", "FLYTOGPS _longitude_ _latitude_ _altitude_ _bearing_ _[speed]_ | Fly the drone to a given GPS position");
-            put("CHANGELONGITUDERELATIVE", "CHANGELONGITUDERELATIVE _longitude_ _[speed]_ | Change the longitude relative");
-            put("CHANGELATITUDERELATIVE", "CHANGELATITUDERELATIVE _latitude_ _[speed]_ | Change the latitude relative");
-            put("CHANGEALTITUDERELATIVE", "CHANGEALTITUDERELATIVE _altitude_ _[speed]_ | Change the altitude relative");
-            put("CHANGEYAWRELATIVE", "CHANGEYAWRELATIVE _yaw_ _[speed]_ | Change the yaw relative");
-            put("CHANGELONGITUDEGPS", "CHANGELONGITUDEGPS _longitude_ _[speed]_ | Change the longitude GPS");
-            put("CHANGELATITUDEGPS", "CHANGELATITUDEGPS _latitude_ _[speed]_ | Change the latitude GPS");
-            put("CHANGEALTITUDEGPS", "CHANGEALTITUDEGPS _altitude_ _[speed]_ | Change the altitude GPS");
-            put("CHANGEYAWGPS", "CHANGEYAWGPS _yaw_ _[speed]_ | Change the yaw GPS");
+            put("FLYTO", "FLYTO _PositionType_ _longitude_ _latitude_ _altitude_ _Angle_ _[speed]_ | Fly the drone to a given position with type _PositionType_ (GPS, METRIC, DISPLACEMENT)");
+            put("CHANGELONGITUDE", "CHANGELONGITUDE _PositionType_ _longitude_ _[speed]_ | Change the longitude");
+            put("CHANGELATITUDE", "CHANGELATITUDE _PositionType_ _latitude_ _[speed]_ | Change the latitude");
+            put("CHANGEALTITUDE", "CHANGEALTITUDE _PositionType_ _altitude_ _[speed]_ | Change the altitude");
+            put("CHANGEYAW", "CHANGEYAW _PositionType_ _yaw_ _[speed]_ | Change the yaw");
             put("GOHOME", "GOHOME | Flys the drone to its home position");
             put("GETPOSITIONASSIGNED", "GETPOSITIONASSIGNED | prints out the drones current position");
             put("GETHOMEPOSITION", "GETHOMEPOSITION | prints the home position of the drone");
-            put("SETHOMEPOSITION", "SETHOMEPOSITION _longitude_ _latitude_ _altitude_ _bearing_ | Set the home position");
+            put("SETHOMEPOSITION", "SETHOMEPOSITION _PositionType_ _longitude_ _latitude_ _altitude_ _Angle_ | Set the home position");
             put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
             put("HELP", "HELP _[command]_ | Prints a list of commands");
             put("LOG", "LOG _message_ | Write a message to the log");
@@ -159,72 +148,67 @@ public class ScriptingEngine {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "FLYTORELATIVE":
-                    if (array.length == 5) {
-                        double lon = Double.parseDouble(array[1]);
-                        double lat = Double.parseDouble(array[2]);
-                        double alt = Double.parseDouble(array[3]);
-                        double bea = Double.parseDouble(array[4]);
-                        PositionMetric newPos = new PositionMetric(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
-                        if (adaptor.flyToRelative(newPos)) {
+                case "FLYTO":
+                    if (array.length == 6) {
+
+                        double lon = Double.parseDouble(array[2]);
+                        double lat = Double.parseDouble(array[3]);
+                        double alt = Double.parseDouble(array[4]);
+                        double bea = Double.parseDouble(array[5]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.flyTo(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.flyTo(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.flyTo(new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval == true) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 6) {
-                        double lon = Double.parseDouble(array[1]);
-                        double lat = Double.parseDouble(array[2]);
-                        double alt = Double.parseDouble(array[3]);
-                        double bea = Double.parseDouble(array[4]);
-                        double spe = Double.parseDouble(array[5]);
-                        PositionMetric newPos = new PositionMetric(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
-                        if (adaptor.flyToRelative(newPos, spe)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
+                    } else if (array.length == 7) {
+                        double lon = Double.parseDouble(array[2]);
+                        double lat = Double.parseDouble(array[3]);
+                        double alt = Double.parseDouble(array[4]);
+                        double bea = Double.parseDouble(array[5]);
+                        double spe = Double.parseDouble(array[6]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.flyTo(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.flyTo(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.flyTo(new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                    } else {
-                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
-                case "FLYTOGPS":
-                    if (array.length == 5) {
-                        double lon = Double.parseDouble(array[1]);
-                        double lat = Double.parseDouble(array[2]);
-                        double alt = Double.parseDouble(array[3]);
-                        double bea = Double.parseDouble(array[4]);
-                        PositionGPS newPos = new PositionGPS(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
-                        if (adaptor.flyToGPS(newPos)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else if (array.length == 6) {
-                        double lon = Double.parseDouble(array[1]);
-                        double lat = Double.parseDouble(array[2]);
-                        double alt = Double.parseDouble(array[3]);
-                        double bea = Double.parseDouble(array[4]);
-                        double spe = Double.parseDouble(array[5]);
-                        PositionGPS newPos = new PositionGPS(lon, lat, alt, new Angle(0),new Angle(0), new Angle(bea));
-                        if (adaptor.flyToGPS(newPos, spe)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else {
-                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
-                case "CHANGELONGITUDERELATIVE":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeLongitudeRelative(val)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeLongitudeRelative(val, spe)) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -232,75 +216,60 @@ public class ScriptingEngine {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGELATITUDERELATIVE":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeLatitudeRelative(val)) {
+                case "CHANGELONGITUDE":
+                    if (array.length == 3) {
+                        double val = Double.parseDouble(array[2]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeLongitudeGPS(val);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeLongitudeMetric(val);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeLongitudeDisplacement(val);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeLatitudeRelative(val, spe)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
+                    } else if (array.length == 4) {
+                        double val = Double.parseDouble(array[2]);
+                        double spe = Double.parseDouble(array[3]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeLongitudeGPS(val, spe);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeLongitudeMetric(val, spe);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeLongitudeDisplacement(val, spe);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                    } else {
-                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
-                case "CHANGEALTITUDERELATIVE":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeAltitudeRelative(val)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeAltitudeRelative(val, spe)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else {
-                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
-                case "CHANGEYAWRELATIVE":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeYawRelative(new Angle(val))) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeYawRelative(new Angle(val), spe)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else {
-                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
-                case "CHANGELONGITUDEGPS":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeLongitudeGPS(val)) {
-                            return "SUCCESS";
-                        } else {
-                            return "FAIL";
-                        }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeLongitudeGPS(val, spe)) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -308,18 +277,60 @@ public class ScriptingEngine {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGELATITUDEGPS":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeLatitudeGPS(val)) {
+                case "CHANGELATITUDE":
+                    if (array.length == 3) {
+                        double val = Double.parseDouble(array[2]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeLatitudeGPS(val);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeLatitudeMetric(val);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeLatitudeDisplacement(val);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeLatitudeGPS(val, spe)) {
+                    } else if (array.length == 4) {
+                        double val = Double.parseDouble(array[2]);
+                        double spe = Double.parseDouble(array[3]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeLatitudeGPS(val, spe);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeLatitudeMetric(val, spe);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeLatitudeDisplacement(val, spe);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -327,18 +338,60 @@ public class ScriptingEngine {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGEALTITUDEGPS":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeAltitudeGPS(val)) {
+                case "CHANGEALTITUDE":
+                    if (array.length == 3) {
+                        double val = Double.parseDouble(array[2]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeAltitudeGPS(val);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeAltitudeMetric(val);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeAltitudeDisplacement(val);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval == true) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeAltitudeGPS(val, spe)) {
+                    } else if (array.length == 4) {
+                        double val = Double.parseDouble(array[2]);
+                        double spe = Double.parseDouble(array[3]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeAltitudeGPS(val, spe);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeAltitudeMetric(val, spe);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeAltitudeDisplacement(val, spe);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval == true) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -346,18 +399,60 @@ public class ScriptingEngine {
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                case "CHANGEYAWGPS":
-                    if (array.length == 2) {
-                        double val = Double.parseDouble(array[1]);
-                        if (adaptor.changeYawGPS(new Angle(val))) {
+                case "CHANGEYAW":
+                    if (array.length == 3) {
+                        double val = Double.parseDouble(array[2]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeYawGPS(new Angle(val));
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeYawMetric(new Angle(val));
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeYawDisplacement(new Angle(val));
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval == true) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
                         }
-                    } else if (array.length == 3) {
-                        double val = Double.parseDouble(array[1]);
-                        double spe = Double.parseDouble(array[2]);
-                        if (adaptor.changeYawGPS(new Angle(val), spe)) {
+                    } else if (array.length == 4) {
+                        double val = Double.parseDouble(array[2]);
+                        double spe = Double.parseDouble(array[3]);
+                        boolean returnval;
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                returnval = adaptor.changeYawGPS(new Angle(val), spe);
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                returnval = adaptor.changeYawMetric(new Angle(val), spe);
+                                break;
+                            case "DISPLACEMENT":
+                            case "DISP":
+                            case "D":
+                            case "-D":
+                                returnval = adaptor.changeYawDisplacement(new Angle(val), spe);
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        if (returnval == true) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -387,8 +482,29 @@ public class ScriptingEngine {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "SETHOMEPOSITION":
-                    if (array.length == 1) {
-                        adaptor.setHomePosition();
+                    if (array.length == 6) {
+                        double lon = Double.parseDouble(array[2]);
+                        double lat = Double.parseDouble(array[3]);
+                        double alt = Double.parseDouble(array[4]);
+                        double bea = Double.parseDouble(array[5]);
+                        try {
+                        switch (array[1]) {
+                            case "GPS":
+                            case "G":
+                            case "-G":
+                                adaptor.setHomePosition(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                break;
+                            case "METRIC":
+                            case "M":
+                            case "-M":
+                                adaptor.setHomePosition(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                break;
+                            default:
+                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                        }
+                        } catch (SDKAdaptor.InvalidPositionException e) {
+                            throw new InvalidInstructionException("Invalid Position given: "+instruction);
+                        }
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }

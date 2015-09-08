@@ -39,6 +39,8 @@ public abstract class Position {
     public Angle getPitch(){return this.pitch;}
     public Angle getYaw(){return this.yaw;}
 
+    public abstract Position add(PositionDisplacement position);
+
     public boolean equals(Position position) {
         if(Double.compare(longitude,position.getLongitude())==0&&
                 Double.compare(latitude,position.getLatitude())==0&&
@@ -59,4 +61,6 @@ public abstract class Position {
     public String toStringLong(){
         return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toStringLong();
     }
+
+    public abstract Position copy();
 }

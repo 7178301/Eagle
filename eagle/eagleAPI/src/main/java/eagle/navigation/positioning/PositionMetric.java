@@ -1,4 +1,7 @@
 package eagle.navigation.positioning;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /** Position
  * @since     09/04/2015
  * <p>
@@ -21,25 +24,24 @@ public class PositionMetric extends Position{
         super(position.getLongitude(), position.getLatitude(), position.getAltitude(), position.getRoll(), position.getPitch(), position.getYaw());
     }
 
-    public void add(PositionMetric positionMetric){
-        this.longitude+=positionMetric.getLongitude();
-        this.latitude+=positionMetric.getLatitude();
-        this.altitude+=positionMetric.getAltitude();
-        this.roll.add(positionMetric.getRoll());
-        this.pitch.add(positionMetric.getPitch());
-        this.yaw.add(positionMetric.getYaw());
+    @Override
+    public Position add(PositionDisplacement position) {
+        return new PositionMetric(longitude+position.getLongitude(),
+                latitude+position.getLatitude(),
+                altitude+position.getAltitude(),
+                roll.add(position.getRoll()),
+                pitch.add(position.getPitch()),
+                yaw.add(position.getYaw()));
     }
 
-    public void minus(PositionMetric position){
-        this.longitude-=position.getLongitude();
-        this.latitude-=position.getLatitude();
-        this.altitude-=position.getAltitude();
-        this.roll.minus(position.getRoll());
-        this.pitch.minus(position.getPitch());
-        this.yaw.minus(position.getYaw());
-    }
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof PositionMetric))
+            return false;
+        if (obj == this)
+            return true;
 
-    public boolean equals(PositionMetric position) {
+        PositionMetric position = (PositionMetric)obj;
         if(Double.compare(longitude,position.getLongitude())==0&&
                 Double.compare(latitude,position.getLatitude())==0&&
                 Double.compare(altitude,position.getAltitude())==0&&
@@ -52,6 +54,19 @@ public class PositionMetric extends Position{
     }
 
     @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+                // if deriving: appendSuper(super.hashCode()).
+                append(longitude).
+                append(latitude).
+                append(altitude).
+                append(roll).
+                append(pitch).
+                append(yaw).
+                toHashCode();
+    }
+
+    @Override
     public String toString(){
         return getLongitude()+" "+getLatitude()+" "+getAltitude()+" "+getRoll()+" "+getPitch()+" "+getYaw();
     }
@@ -60,12 +75,17 @@ public class PositionMetric extends Position{
         return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toStringLong();
     }
 
-    public PositionMetric compare(PositionMetric positionMetric) {
-        return new PositionMetric(positionMetric.getLongitude()-getLongitude(),
+    public PositionDisplacement compare(PositionMetric positionMetric) {
+        return new PositionDisplacement(positionMetric.getLongitude()-getLongitude(),
                 positionMetric.getLatitude()-getLatitude(),
                 positionMetric.getAltitude()-getAltitude(),
                 getRoll().compare(positionMetric.getRoll()),
                 getPitch().compare(positionMetric.getPitch()),
                 getYaw().compare(positionMetric.getYaw()));
+    }
+
+    @Override
+    public Position copy() {
+        return new PositionMetric(longitude, latitude, altitude, roll.copy(), pitch.copy(), yaw.copy());
     }
 }
