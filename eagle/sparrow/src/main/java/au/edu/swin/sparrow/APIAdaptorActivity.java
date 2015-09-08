@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -33,7 +34,7 @@ import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 
-public class APIAdaptorActivity extends F450FlamewheelActivity implements AccelerometerFragment.OnFragmentInteractionListener {
+public class APIAdaptorActivity extends F450FlamewheelActivity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
@@ -42,6 +43,9 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
 
 
     private SeekBar sb;
+    private Button buttonExpandSensors;
+    private LinearLayout linearLayoutSensors;
+    private boolean sensorsCollapsed = false;
 
     @Override
     protected void onStart() {
@@ -88,6 +92,11 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
             }
         });
 
+        buttonExpandSensors = (Button)findViewById(R.id.buttonExpandSensors);
+        buttonExpandSensors.setOnClickListener(this);
+
+        linearLayoutSensors = (LinearLayout)findViewById(R.id.scrollViewSensors);
+
         sb = (SeekBar) findViewById(R.id.seekBarValue);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -111,6 +120,8 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
 
                                           }
                                       });
+
+
 
         FragmentManager fragMan = getFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
@@ -181,6 +192,24 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonExpandSensors:
+                if (sensorsCollapsed) {
+                    buttonExpandSensors.setText(R.string.collapseSensors);
+                    linearLayoutSensors.setVisibility(View.VISIBLE);
+                    sensorsCollapsed = false;
+                } else {
+                    buttonExpandSensors.setText(R.string.expandSensors);
+                    linearLayoutSensors.setVisibility(View.GONE);
+                    sensorsCollapsed = true;
+                }
+
+
+        }
     }
 
     class MyTimerTask extends TimerTask {

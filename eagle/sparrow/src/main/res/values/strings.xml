@@ -33,6 +33,8 @@
     <string name="bearing">Bearing</string>
     <string name="accuracy">Accuracy</string>
     <string name="ioio">IOIO</string>
+    <string name="collapseSensors">Collapse Sensors</string>
+    <string name="expandSensors">Expand Sensors</string>
 
 
     <!-- DJI strings -->
