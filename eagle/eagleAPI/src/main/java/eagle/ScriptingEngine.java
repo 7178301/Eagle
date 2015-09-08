@@ -422,11 +422,13 @@ public class ScriptingEngine {
                 case "LOG":
                     if (array.length >= 1) {
                         StringBuilder sb = new StringBuilder();
-                        for (int i = 1; i < array.length; i++) {
-                            sb.append(array[i]);
+                        String parts[] = instruction.split(" ");
+                        for (int i = 1; i < parts.length; i++) {
+                            sb.append(parts[i]);
                             sb.append(" ");
                         }
                         Log.log(sb.toString());
+                        return "SUCCESS";
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
