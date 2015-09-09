@@ -80,6 +80,7 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public boolean flyTo(PositionMetric position, double speed) {
+        if (!connected) return false;
         try {
             setPositionAssigned(position);
         } catch (InvalidPositionException e) {
@@ -96,6 +97,7 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public boolean flyTo(PositionGPS position, double speed) {
+        if (!connected) return false;
         try {
             setPositionAssigned(position);
         } catch (InvalidPositionException e) {
@@ -112,6 +114,7 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public boolean flyTo(PositionDisplacement position, double speed) {
+        if (!connected) return false;
         try {
             setPositionAssigned(getPositionAssigned().add(position));
         } catch (InvalidPositionException e) {
