@@ -32,7 +32,7 @@ public class PositionGPS extends Position {
         double dx = position.getLongitude();
 
         double new_latitude  = latitude  + (dy / r_earth) * (180 / Math.PI);
-        double new_longitude = longitude + (dx / r_earth) * (180 / Math.PI) / Math.cos(latitude * 180/Math.PI);
+        double new_longitude = longitude + (dx / r_earth) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
 
         return new PositionDisplacement(new_latitude,
                 new_longitude,
@@ -45,7 +45,7 @@ public class PositionGPS extends Position {
     public PositionDisplacement compare(PositionGPS positionGPS) {
         //TODO: Haversine GPS calculations
         double latdist = (positionGPS.getLatitude()-latitude)*Math.PI*r_earth/180;
-        double longdist = (positionGPS.getLongitude()-longitude)*Math.PI*r_earth/180*Math.cos(latitude * 180/Math.PI);
+        double longdist = (positionGPS.getLongitude()-longitude)*Math.PI*r_earth/180*Math.cos(latitude * Math.PI/180);
 
         return new PositionDisplacement(latdist,
                 longdist,
