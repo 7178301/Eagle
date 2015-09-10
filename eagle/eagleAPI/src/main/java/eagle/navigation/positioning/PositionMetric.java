@@ -12,16 +12,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class PositionMetric extends Position{
 
-    public PositionMetric(double longitude, double latitude, double altitude, Angle roll, Angle pitch, Angle yaw){
-        super(longitude, latitude, altitude, roll, pitch, yaw);
+    public PositionMetric(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw){
+        super(latitude, longitude, altitude, roll, pitch, yaw);
     }
 
     public PositionMetric(PositionMetric positionMetric){
-        super(positionMetric.getLongitude(), positionMetric.getLatitude(), positionMetric.getAltitude(), positionMetric.getRoll(), positionMetric.getPitch(), positionMetric.getYaw());
+        super(positionMetric.getLatitude(), positionMetric.getLongitude(), positionMetric.getAltitude(), positionMetric.getRoll(), positionMetric.getPitch(), positionMetric.getYaw());
     }
 
     public PositionMetric(Position position){
-        super(position.getLongitude(), position.getLatitude(), position.getAltitude(), position.getRoll(), position.getPitch(), position.getYaw());
+        super(position.getLatitude(), position.getLongitude(), position.getAltitude(), position.getRoll(), position.getPitch(), position.getYaw());
     }
 
     @Override
@@ -66,18 +66,9 @@ public class PositionMetric extends Position{
                 toHashCode();
     }
 
-    @Override
-    public String toString(){
-        return getLongitude()+" "+getLatitude()+" "+getAltitude()+" "+getRoll()+" "+getPitch()+" "+getYaw();
-    }
-
-    public String toStringLong(){
-        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toStringLong();
-    }
-
     public PositionDisplacement compare(PositionMetric positionMetric) {
-        return new PositionDisplacement(positionMetric.getLongitude()-getLongitude(),
-                positionMetric.getLatitude()-getLatitude(),
+        return new PositionDisplacement(positionMetric.getLatitude()-getLatitude(),
+                positionMetric.getLongitude()-getLongitude(),
                 positionMetric.getAltitude()-getAltitude(),
                 getRoll().compare(positionMetric.getRoll()),
                 getPitch().compare(positionMetric.getPitch()),

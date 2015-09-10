@@ -12,16 +12,16 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class PositionGPS extends Position {
     private static double r_earth = 6378 * 1000; //Work in meters for everything
 
-    public PositionGPS(double longitude, double latitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
-        super(longitude, latitude, altitude, roll, pitch, yaw);
+    public PositionGPS(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
+        super(latitude, longitude, altitude, roll, pitch, yaw);
     }
 
 
     public PositionGPS(PositionGPS positionGPS){
-        super(positionGPS.getLongitude(), positionGPS.getLatitude(), positionGPS.getAltitude(), positionGPS.getRoll(), positionGPS.getPitch(), positionGPS.getYaw());
+        super(positionGPS.getLatitude(), positionGPS.getLongitude(), positionGPS.getAltitude(), positionGPS.getRoll(), positionGPS.getPitch(), positionGPS.getYaw());
     }
     public PositionGPS(Position position){
-        super(position.getLongitude(), position.getLatitude(), position.getAltitude(), position.getRoll(), position.getPitch(), position.getYaw());
+        super(position.getLatitude(), position.getLongitude(), position.getAltitude(), position.getRoll(), position.getPitch(), position.getYaw());
     }
 
     @Override
@@ -34,8 +34,8 @@ public class PositionGPS extends Position {
         double new_latitude  = latitude  + (dy / r_earth) * (180 / Math.PI);
         double new_longitude = longitude + (dx / r_earth) * (180 / Math.PI) / Math.cos(latitude * 180/Math.PI);
 
-        return new PositionDisplacement(new_longitude,
-                new_latitude,
+        return new PositionDisplacement(new_latitude,
+                new_longitude,
                 altitude+position.getAltitude(),
                 roll.add(position.getRoll()),
                 pitch.add(position.getPitch()),
@@ -47,8 +47,8 @@ public class PositionGPS extends Position {
         double latdist = (positionGPS.getLatitude()-latitude)*Math.PI*r_earth/180;
         double longdist = (positionGPS.getLongitude()-longitude)*Math.PI*r_earth/180*Math.cos(latitude * 180/Math.PI);
 
-        return new PositionDisplacement(longdist,
-                latdist,
+        return new PositionDisplacement(latdist,
+                longdist,
                 getAltitude()-positionGPS.getAltitude(),
                 getRoll().compare(positionGPS.getRoll()),
                 getPitch().compare(positionGPS.getPitch()),
@@ -57,7 +57,7 @@ public class PositionGPS extends Position {
 
     @Override
     public Position copy() {
-        return new PositionGPS(longitude, latitude, altitude, roll.copy(), pitch.copy(), yaw.copy());
+        return new PositionGPS(latitude, longitude, altitude, roll.copy(), pitch.copy(), yaw.copy());
     }
 
     @Override

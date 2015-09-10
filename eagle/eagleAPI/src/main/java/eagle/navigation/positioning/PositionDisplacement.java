@@ -11,14 +11,14 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * <p/>
  */
 public class PositionDisplacement extends Position {
-    public PositionDisplacement(double longitude, double latitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
-        super(longitude, latitude, altitude, roll, pitch, yaw);
+    public PositionDisplacement(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
+        super(latitude, longitude, altitude, roll, pitch, yaw);
     }
 
     @Override
     public Position add(PositionDisplacement position) {
-        return new PositionDisplacement(longitude+position.getLongitude(),
-                latitude+position.getLatitude(),
+        return new PositionDisplacement(latitude+position.getLatitude(),
+                longitude+position.getLongitude(),
                 altitude+position.getAltitude(),
                 roll.add(position.getRoll()),
                 pitch.add(position.getPitch()),
@@ -27,7 +27,7 @@ public class PositionDisplacement extends Position {
 
     @Override
     public Position copy() {
-        return new PositionDisplacement(longitude, latitude, altitude, roll.copy(), pitch.copy(), yaw.copy());
+        return new PositionDisplacement(latitude, longitude, altitude, roll.copy(), pitch.copy(), yaw.copy());
     }
 
     @Override

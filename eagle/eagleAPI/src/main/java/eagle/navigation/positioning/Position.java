@@ -15,7 +15,7 @@ public abstract class Position {
 	protected Angle pitch;
 	protected Angle yaw;
 
-    public Position(double longitude, double latitude, double altitude, Angle roll, Angle pitch, Angle yaw){
+    public Position(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw){
         this.longitude=longitude;
         this.latitude=latitude;
         this.altitude=altitude;
