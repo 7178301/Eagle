@@ -1,6 +1,10 @@
 package eagle.navigation.positioning;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.sis.core.LatLon;
+
+import static org.apache.sis.distance.DistanceUtils.getHaversineDistance;
+import static org.apache.sis.distance.DistanceUtils.getPointOnGreatCircle;
 
 /** Bearing
  * @since     06/09/2015
@@ -26,33 +30,30 @@ public class PositionGPS extends Position {
 
     @Override
     public Position add(PositionDisplacement position) {
-        //code copied from: http://stackoverflow.com/a/15604480/5295129
+        double bearing = Math.toDegrees(Math.atan(position.getLongitude() / position.getLatitude()));
+        double dist = Math.sqrt(position.getLongitude()*position.getLongitude() + position.getLatitude()*position.getLatitude())/1000;
 
-        double dy = position.getLatitude();
-        double dx = position.getLongitude();
 
-        double new_latitude  = latitude  + (dy / r_earth) * (180 / Math.PI);
-        double new_longitude = longitude + (dx / r_earth) * (180 / Math.PI) / Math.cos(latitude * Math.PI/180);
+        LatLon endPos = getPointOnGreatCircle(latitude, longitude, dist, bearing);
 
-        return new PositionDisplacement(new_latitude,
-                new_longitude,
+        return new PositionGPS(endPos.getLat(),
+                endPos.getLon(),
                 altitude+position.getAltitude(),
                 roll.add(position.getRoll()),
                 pitch.add(position.getPitch()),
                 yaw.add(position.getYaw()));
     }
 
-    public PositionDisplacement compare(PositionGPS positionGPS) {
-        //TODO: Haversine GPS calculations
-        double latdist = (positionGPS.getLatitude()-latitude)*Math.PI*r_earth/180;
-        double longdist = (positionGPS.getLongitude()-longitude)*Math.PI*r_earth/180*Math.cos(latitude * Math.PI/180);
+    public PositionDisplacement compare(PositionGPS position) {
+        double latdist = getHaversineDistance(getLatitude(), getLongitude(), position.getLatitude(), getLongitude());
+        double longdist = getHaversineDistance(getLatitude(), getLongitude(), getLatitude(), position.getLongitude());
 
         return new PositionDisplacement(latdist,
                 longdist,
-                getAltitude()-positionGPS.getAltitude(),
-                getRoll().compare(positionGPS.getRoll()),
-                getPitch().compare(positionGPS.getPitch()),
-                getYaw().compare(positionGPS.getYaw()));
+                getAltitude()-position.getAltitude(),
+                getRoll().compare(position.getRoll()),
+                getPitch().compare(position.getPitch()),
+                getYaw().compare(position.getYaw()));
     }
 
     @Override

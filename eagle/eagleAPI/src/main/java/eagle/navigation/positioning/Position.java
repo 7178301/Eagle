@@ -55,11 +55,11 @@ public abstract class Position {
 
     @Override
     public String toString(){
-        return getLongitude()+" "+getLatitude()+" "+getAltitude()+" "+getRoll()+" "+getPitch()+" "+getYaw();
+        return getLatitude()+" "+getLongitude()+" "+getAltitude()+" "+getRoll()+" "+getPitch()+" "+getYaw();
     }
 
     public String toStringLong(){
-        return "Longitude: "+getLongitude()+", Latitude: "+getLatitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toStringLong();
+        return "Latitude: "+getLatitude()+", Longitude: "+getLongitude()+", Altitude: "+getAltitude()+", Roll: "+getRoll()+", Pitch: "+getPitch()+", Yaw: "+getYaw().toStringLong();
     }
 
     public abstract Position copy();
