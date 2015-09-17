@@ -1,6 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.gpsAdaptors;
 
 import eagle.Log;
+import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import jssc.SerialPort;
@@ -19,6 +20,7 @@ public class JavaGPS extends AdaptorGPS {
     static SerialPort serialPort;
 
     double altitude, longitude, latitude;
+    boolean ready = false;
 
 
     public JavaGPS() {
@@ -26,7 +28,7 @@ public class JavaGPS extends AdaptorGPS {
         serialPort = new SerialPort("/dev/ttyUSB0");
         try {
             serialPort.openPort();
-            serialPort.setParams(9600, 8, 1, 0);
+            serialPort.setParams(4800, 8, 1, 0);
         } catch (SerialPortException e) {
             e.printStackTrace();
         }
@@ -39,7 +41,8 @@ public class JavaGPS extends AdaptorGPS {
 
     @Override
     public PositionGPS getData() {
-        return currentPos;
+        ready = false;
+        return new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(0));
     }
 
     @Override
@@ -49,7 +52,7 @@ public class JavaGPS extends AdaptorGPS {
 
     @Override
     public boolean isDataReady() {
-        return !(currentPos == null);
+        return ready;
     }
 
     class readThread implements Runnable {
@@ -66,6 +69,7 @@ public class JavaGPS extends AdaptorGPS {
                         latitude = parseLatitude(parts[2], parts[3]);
                         longitude = parseLongitude(parts[4], parts[5]);
                         altitude = parseAltitude(parts[9], parts[10]);
+                        ready = true;
                     }
 
                 } catch (SerialPortException e) {
