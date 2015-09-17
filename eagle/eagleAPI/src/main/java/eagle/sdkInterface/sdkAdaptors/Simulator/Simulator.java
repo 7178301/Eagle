@@ -19,20 +19,17 @@ public class Simulator extends SDKAdaptor {
 
     public Simulator() {
         super("Simulator", "Siumulator", "alpha", "0.0.1");
-        maxSpeed = 1;
-        maxRotateSpeed = 30;
     }
 
 
     public Simulator(int speed, int rotateSpeed) {
         super("Simulator", "Siumulator", "alpha", "0.0.1");
-        maxSpeed = speed;
-        maxRotateSpeed = rotateSpeed;
     }
 
     @Override
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
 
+        addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("JavaGPS"));
     }
 
     @Override

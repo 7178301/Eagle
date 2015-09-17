@@ -23,7 +23,7 @@ public class AdaptorLoader {
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
     private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));
     private HashSet<String> magneticAdaptorPaths = new HashSet<>(Arrays.asList("AndroidMagnetic"));
-    private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS"));
+    private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS", "JavaGPS"));
     private HashSet<String> gyroscopeAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGyroscope"));
     //private HashSet<String> LIDARAdaptorPaths = new HashSet<>(Arrays.asList());
     private HashSet<String> RPLIDARAdaptorPaths = new HashSet<>(Arrays.asList("RoboPeakRPLIDARA1M1R1"));
