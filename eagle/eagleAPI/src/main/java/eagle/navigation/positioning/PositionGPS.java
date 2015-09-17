@@ -16,6 +16,10 @@ import static org.apache.sis.distance.DistanceUtils.getPointOnGreatCircle;
 public class PositionGPS extends Position {
     private static double r_earth = 6378 * 1000; //Work in meters for everything
 
+    public PositionGPS(double latitude, double longitude, double altitude, Angle yaw) {
+        super(latitude, longitude, altitude, yaw);
+    }
+
     public PositionGPS(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
         super(latitude, longitude, altitude, roll, pitch, yaw);
     }

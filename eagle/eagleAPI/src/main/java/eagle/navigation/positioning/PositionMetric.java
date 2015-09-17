@@ -11,6 +11,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author          Cameron Cross [7193432@student.swin.edu.au]*/
 
 public class PositionMetric extends Position{
+    public PositionMetric(double latitude, double longitude, double altitude, Angle yaw) {
+        super(latitude, longitude, altitude, yaw);
+    }
 
     public PositionMetric(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw){
         super(latitude, longitude, altitude, roll, pitch, yaw);

@@ -11,6 +11,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * <p/>
  */
 public class PositionDisplacement extends Position {
+    public PositionDisplacement(double latitude, double longitude, double altitude, Angle yaw) {
+        super(latitude, longitude, altitude, yaw);
+    }
+
     public PositionDisplacement(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
         super(latitude, longitude, altitude, roll, pitch, yaw);
     }
