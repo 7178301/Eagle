@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/adaptorNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adaptor_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/buttonConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connect" />
+
+        <TextView
+            android:id="@+id/textViewConnectedStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignEnd="@+id/buttonConnect"
+            android:layout_alignRight="@+id/buttonConnect"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewSensorData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_data"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <Button
+                    android:id="@+id/buttonExpandSensors"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignEnd="@+id/textViewSensorData"
+                    android:layout_alignRight="@+id/textViewSensorData"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/collapseSensors" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/scrollViewSensors"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewLogData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/log_data"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <Button
+                    android:id="@+id/buttonExpandLog"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignEnd="@+id/textViewLogData"
+                    android:layout_alignRight="@+id/textViewLogData"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/collapseLog" />
+
+            </RelativeLayout>
+
+
+            <WebView
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/webViewLog" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

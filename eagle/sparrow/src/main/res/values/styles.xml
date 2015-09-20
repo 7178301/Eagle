@@ -1,0 +1,12 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="Fragment" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:background">#FFF</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+</resources>
