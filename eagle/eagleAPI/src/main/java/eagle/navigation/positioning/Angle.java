@@ -24,8 +24,8 @@ public class Angle
 		this.degrees=angle.getDegrees();
 	}
 
-	public Angle add(Angle val) {
-		this.degrees+=val.getDegrees();
+	public Angle add(Angle angle) {
+		this.degrees+=angle.getDegrees();
 		normalise();
 		return this;
 	}
@@ -34,6 +34,7 @@ public class Angle
 		this.degrees-=angle.getDegrees();
 		normalise();
 		return this;
+
 	}
 
 	private void normalise() {
@@ -49,8 +50,8 @@ public class Angle
         return degrees;
     }
 
-	public boolean equals(Angle bearing){
-		if(Double.compare(degrees,bearing.getDegrees())==0)
+	public boolean equals(Angle angle){
+		if(Double.compare(degrees,angle.getDegrees())==0)
 			return true;
 		else
 			return false;
@@ -80,11 +81,15 @@ public class Angle
 	}
 
 	public Angle compare(Angle bearing){
-		return new Angle(-Double.compare(degrees,bearing.getDegrees()));
+		return new Angle(bearing.getDegrees()-degrees);
 	}
 
 	@Override
 	public String toString(){
 		return Double.toString(degrees);
+	}
+
+	public Angle copy() {
+		return new Angle(degrees);
 	}
 }

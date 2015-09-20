@@ -1,17 +1,16 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import android.content.Context;
-import android.content.Intent;
 
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 
+import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
-import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
 import ioio.lib.api.IOIO;
-import ioio.lib.api.exception.ConnectionLostException;
 
 /**
  * F450Flamewheel SDKAdaptor
@@ -58,22 +57,9 @@ public class F450Flamewheel extends SDKAdaptor {
         return false;
     }
 
-    @Override
-    public boolean flyToRelative(PositionMetric position, double speed) {
-        return false;
-    }
-
-    @Override
-    public boolean flyToRelative(PositionMetric position) {
-        return false;
-    }
-
-    public boolean flyToGPS(PositionGPS positionGPS, double speed){return false;}
-    public boolean flyToGPS(PositionGPS positionGPS){return false;}
-
-    public PositionMetric getPositionInFlight() {
-        //TODO CREATE BELOW IMPLEMENTATION
-        return new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0));
+    //TODO CREATE BELOW IMPLEMENTATION
+    public Position getPositionInFlight() {
+        return null;
     }
 
     public boolean standbyDrone() {
@@ -85,6 +71,36 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public boolean shutdownDrone() {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionMetric positionMetric, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionMetric positionMetric) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionGPS position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionGPS position) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionDisplacement position, double speed) {
+        return false;
+    }
+
+    @Override
+    public boolean flyTo(PositionDisplacement position) {
         return false;
     }
 
