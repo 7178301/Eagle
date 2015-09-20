@@ -1,7 +1,5 @@
 package eagle.navigation.positioning;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * Angle Class
  *
@@ -26,12 +24,16 @@ public class Angle
 		this.degrees=angle.getDegrees();
 	}
 
-	public Angle add(Angle val) {
-		return new Angle(this.degrees+=val.getDegrees());
+	public Angle add(Angle angle) {
+		this.degrees+=angle.getDegrees();
+		normalise();
+		return this;
 	}
 
 	public Angle minus(Angle angle){
-		return new Angle(this.degrees-=angle.getDegrees());
+		this.degrees-=angle.getDegrees();
+		normalise();
+		return this;
 
 	}
 
@@ -48,25 +50,11 @@ public class Angle
         return degrees;
     }
 
-	public boolean equals(Object obj){
-		if (!(obj instanceof Angle))
-			return false;
-		if (obj == this)
-			return true;
-
-		Angle bearing = (Angle)obj;
-		if(Double.compare(degrees,bearing.getDegrees())==0)
+	public boolean equals(Angle angle){
+		if(Double.compare(degrees,angle.getDegrees())==0)
 			return true;
 		else
 			return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-				// if deriving: appendSuper(super.hashCode()).
-				append(degrees).
-				toHashCode();
 	}
 
 	/**

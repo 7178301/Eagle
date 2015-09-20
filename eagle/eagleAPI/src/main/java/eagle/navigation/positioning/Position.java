@@ -16,8 +16,8 @@ public abstract class Position {
 	protected Angle yaw;
 
     public Position(double latitude, double longitude, double altitude, Angle yaw) {
-        this.longitude=longitude;
         this.latitude=latitude;
+        this.longitude=longitude;
         this.altitude=altitude;
         this.roll=new Angle(0);
         this.pitch=new Angle(0);
@@ -25,24 +25,24 @@ public abstract class Position {
     }
 
     public Position(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw){
-        this.longitude=longitude;
         this.latitude=latitude;
+        this.longitude=longitude;
         this.altitude=altitude;
         this.roll=roll;
         this.pitch=pitch;
         this.yaw=yaw;
     }
     public Position(Position position){
-        this.longitude=position.longitude;
         this.latitude=position.latitude;
+        this.longitude=position.longitude;
         this.altitude=position.altitude;
         this.roll=position.roll;
         this.pitch=position.pitch;
         this.yaw=position.yaw;
     }
 
-    public double getLongitude(){return this.longitude;}
     public double getLatitude(){return this.latitude;}
+    public double getLongitude(){return this.longitude;}
     public double getAltitude(){return this.altitude;}
     public Angle getRoll(){return this.roll;}
     public Angle getPitch(){return this.pitch;}

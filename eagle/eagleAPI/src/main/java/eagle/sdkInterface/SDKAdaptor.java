@@ -96,7 +96,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLongitudeDisplacement(double longitude, double speed) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionDisplacement(longitude, 0, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionDisplacement(0, longitude, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -104,7 +104,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLongitudeDisplacement(double longitude) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionDisplacement(longitude, 0, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionDisplacement(0,longitude, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -112,7 +112,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLatitudeDisplacement(double latitude, double speed) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionDisplacement(0, latitude, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionDisplacement(latitude, 0, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -120,7 +120,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLatitudeDisplacement(double latitude) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionDisplacement(0, latitude, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionDisplacement(latitude, 0, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -160,7 +160,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLongitudeMetric(double longitude, double speed) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionMetric(longitude, 0, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionMetric(0, longitude, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -168,7 +168,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLongitudeMetric(double longitude) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionMetric(longitude, 0, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionMetric(0, longitude, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -176,7 +176,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLatitudeMetric(double latitude, double speed) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionMetric(0, latitude, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionMetric(latitude, 0, 0, new Angle(0), new Angle(0), new Angle(0)), speed) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -184,7 +184,7 @@ public abstract class SDKAdaptor {
 
     public boolean changeLatitudeMetric(double latitude) {
         Position prePosition = getPositionAssigned().copy();
-        if (flyTo(new PositionMetric(0, latitude, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
+        if (flyTo(new PositionMetric(latitude, 0, 0, new Angle(0), new Angle(0), new Angle(0))) && !getPositionAssigned().equals(prePosition))
             return true;
         else
             return false;
@@ -223,42 +223,42 @@ public abstract class SDKAdaptor {
     }
 
     public boolean changeLongitudeGPS(double longitude, double speed) {
-        this.currentPositionAssigned = new PositionGPS(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        this.currentPositionAssigned = new PositionGPS( getPositionAssigned().getLatitude(), longitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
         return flyTo((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeLongitudeGPS(double longitude) {
-        this.currentPositionAssigned = new PositionGPS(longitude, getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        this.currentPositionAssigned = new PositionGPS( getPositionAssigned().getLatitude(), longitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
         return flyTo((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean changeLatitudeGPS(double latitude, double speed) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        this.currentPositionAssigned = new PositionGPS(latitude,getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
         return flyTo((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeLatitudeGPS(double latitude) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), latitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        this.currentPositionAssigned = new PositionGPS(latitude,getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
         return flyTo((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean changeAltitudeGPS(double altitude, double speed) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
         return flyTo((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeAltitudeGPS(double altitude) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
         return flyTo((PositionGPS) this.currentPositionAssigned);
     }
 
     public boolean changeYawGPS(Angle yaw, double speed) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
         return flyTo((PositionGPS) this.currentPositionAssigned, speed);
     }
 
     public boolean changeYawGPS(Angle yaw) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLongitude(), getPositionAssigned().getLatitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
+        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
         return flyTo((PositionGPS) this.currentPositionAssigned);
     }
 

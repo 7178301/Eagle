@@ -1,7 +1,5 @@
 package eagle.navigation.positioning;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * eagle.navigation.positioning
  *
@@ -51,18 +49,5 @@ public class PositionDisplacement extends Position {
             return true;
         else
             return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-                // if deriving: appendSuper(super.hashCode()).
-                append(longitude).
-                append(latitude).
-                append(altitude).
-                append(roll).
-                append(pitch).
-                append(yaw).
-                toHashCode();
     }
 }

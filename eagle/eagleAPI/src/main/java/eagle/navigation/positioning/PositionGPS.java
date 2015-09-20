@@ -1,11 +1,5 @@
 package eagle.navigation.positioning;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.sis.core.LatLon;
-
-import static org.apache.sis.distance.DistanceUtils.getHaversineDistance;
-import static org.apache.sis.distance.DistanceUtils.getPointOnGreatCircle;
-
 /** Bearing
  * @since     06/09/2015
  * <p>
@@ -34,26 +28,42 @@ public class PositionGPS extends Position {
 
     @Override
     public Position add(PositionDisplacement position) {
-        double bearing = Math.toDegrees(Math.atan(position.getLongitude() / position.getLatitude()));
-        double dist = Math.sqrt(position.getLongitude()*position.getLongitude() + position.getLatitude()*position.getLatitude())/1000;
+        double bearing=0;
+        if(position.getLongitude()>0)
+            bearing = 90 - Math.toDegrees(Math.atan((position.getLatitude())/ (position.getLongitude())));
+        else if (position.getLongitude()<0)
+            bearing = 270 - Math.toDegrees(Math.atan((position.getLatitude())/ (position.getLongitude())));
+        else if (position.getLatitude()<0)
+            bearing = 180;
+        double dist = Math.sqrt(position.getLongitude() * position.getLongitude() + position.getLatitude() * position.getLatitude());
+        double latitudeRadians = Math.toRadians(latitude);
+        double longitudeRadians = Math.toRadians(longitude);
+        double angularDistance = dist/6371000;
+        double bearingRadians = Math.toRadians(bearing);
 
+        latitude=Math.toDegrees(Math.asin((Math.sin(latitudeRadians)*Math.cos(angularDistance))+
+                (Math.cos(latitudeRadians)*Math.sin(angularDistance)*Math.cos(bearingRadians))));
+        longitude=Math.toDegrees(longitudeRadians + Math.atan2(Math.sin(bearingRadians) * Math.sin(angularDistance) * Math.cos(latitudeRadians),
+                Math.cos(angularDistance) - Math.sin(latitudeRadians) * Math.sin(Math.toRadians(latitude))));
 
-        LatLon endPos = getPointOnGreatCircle(latitude, longitude, dist, bearing);
-
-        return new PositionGPS(endPos.getLat(),
-                endPos.getLon(),
-                altitude+position.getAltitude(),
-                roll.add(position.getRoll()),
-                pitch.add(position.getPitch()),
-                yaw.add(position.getYaw()));
+        altitude+=position.getAltitude();
+        roll.add(position.getRoll());
+        pitch.add(position.getPitch());
+        yaw.add(position.getYaw());
+        return this;
     }
 
     public PositionDisplacement compare(PositionGPS position) {
-        double latdist = getHaversineDistance(getLatitude(), getLongitude(), position.getLatitude(), getLongitude());
-        double longdist = getHaversineDistance(getLatitude(), getLongitude(), getLatitude(), position.getLongitude());
+        double latitudeRadians = Math.toRadians(latitude);
+        double longitudeRadians = Math.toRadians(longitude);
+        double latitude2Radians = Math.toRadians(position.getLatitude());
+        double longitude2Radians = Math.toRadians(position.getLongitude());
 
-        return new PositionDisplacement(latdist,
-                longdist,
+        double latitudeDisplacement = 6371000*Math.acos(Math.sin(latitudeRadians)*Math.sin(latitude2Radians)+Math.cos(latitudeRadians)*Math.cos(latitude2Radians)*Math.cos(longitudeRadians-longitudeRadians));
+        double longitudeDisplacement = 6371000*Math.acos(Math.sin(latitudeRadians)*Math.sin(latitudeRadians)+Math.cos(latitudeRadians)*Math.cos(latitudeRadians)*Math.cos(longitudeRadians-longitude2Radians));
+
+        return new PositionDisplacement(latitudeDisplacement,
+                longitudeDisplacement,
                 getAltitude()-position.getAltitude(),
                 getRoll().compare(position.getRoll()),
                 getPitch().compare(position.getPitch()),
@@ -82,18 +92,5 @@ public class PositionGPS extends Position {
             return true;
         else
             return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
-                // if deriving: appendSuper(super.hashCode()).
-                append(longitude).
-                append(latitude).
-                append(altitude).
-                append(roll).
-                append(pitch).
-                append(yaw).
-                toHashCode();
     }
 }

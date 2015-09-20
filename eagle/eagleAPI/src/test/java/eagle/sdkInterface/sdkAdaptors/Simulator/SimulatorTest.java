@@ -32,6 +32,7 @@ public class SimulatorTest {
         drone = new Drone();
         drone.setSDKAdaptor("Simulator.Simulator");
         sdkAdaptor = drone.getSDKAdaptor();
+        drone.getSDKAdaptor().connectToDrone();
     }
 
     @Test

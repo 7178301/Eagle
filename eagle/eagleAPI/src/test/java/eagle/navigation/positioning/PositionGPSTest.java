@@ -17,28 +17,29 @@ public class PositionGPSTest {
     @Test
     public void testAddAndCompare() throws Exception {
         //these results were checked by eye.
-        PositionGPS pos = new PositionGPS(37.7046192, 144.9631, 0, new Angle(0), new Angle(0), new Angle(0));
-        Position output = pos.add(new PositionDisplacement(0, 1000, 0, new Angle(0), new Angle(0), new Angle(0)));
-        assertEquals("Wrong position", new PositionGPS(37.7046186544102, 144.97446692233666, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        PositionDisplacement posDisp = pos.compare((PositionGPS)output);
-        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLongitude()-1000)>1);
+        PositionGPS pos = new PositionGPS(-37.82111100000000, 145.0383330000000, 0, new Angle(0), new Angle(0), new Angle(0));
+        PositionGPS home = (PositionGPS) pos.copy();
+        pos.add(new PositionDisplacement(0, 1000, 0, new Angle(0), new Angle(0), new Angle(0)));
+        assertEquals("Wrong position", new PositionGPS(-37.82111045211409, 145.0497178390728, 0, new Angle(0), new Angle(0), new Angle(0)), pos);
+        PositionDisplacement posDisp = pos.compare(home);
+        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLongitude() - 1000) < 1);
 
 
 
-        output = pos.add(new PositionDisplacement(0, -1000, 0, new Angle(0), new Angle(0), new Angle(0)));
-        assertEquals("Wrong position", new PositionGPS(37.7046186544102, 144.9517330776634, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        posDisp = pos.compare((PositionGPS)output);
-        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLongitude()-1000)>1);
+        pos.add(new PositionDisplacement(0, -1000, 0, new Angle(0), new Angle(0), new Angle(0)));
+        assertEquals("Wrong position", new PositionGPS(-37.8211099042282, 145.03833300008446, 0, new Angle(0), new Angle(0), new Angle(0)), pos);
+        posDisp = pos.compare(home);
+        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLongitude())<1);
 
-        output = pos.add(new PositionDisplacement(1000, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
-        assertEquals("Wrong position", new PositionGPS(37.71361241605919, 144.96310000000003, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        posDisp = pos.compare((PositionGPS)output);
-        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude()-1000)>1);
+        pos.add(new PositionDisplacement(1000, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
+        assertEquals("Wrong position", new PositionGPS(-37.81211668816901, 145.03833300008446, 0, new Angle(0), new Angle(0), new Angle(0)), pos);
+        posDisp = pos.compare(home);
+        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude()-1000)<1);
 
-        output = pos.add(new PositionDisplacement(-1000, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
-        assertEquals("Wrong position", new PositionGPS(37.71361241605919, 144.96310000000003, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        posDisp = pos.compare((PositionGPS)output);
-        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude()-1000)>1);
+        pos.add(new PositionDisplacement(-1000, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
+        assertEquals("Wrong position", new PositionGPS(-37.821109904228194, 145.03833300008446, 0, new Angle(0), new Angle(0), new Angle(0)), pos);
+        posDisp = pos.compare(home);
+        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude())<1);
     }
 
     @Test

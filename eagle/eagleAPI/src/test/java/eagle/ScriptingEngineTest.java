@@ -32,6 +32,7 @@ public class ScriptingEngineTest {
         drone = new Drone();
         drone.setSDKAdaptor("Simulator.Simulator");
         se = drone.getScriptingEngine();
+        drone.getSDKAdaptor().connectToDrone();
     }
 
     @Test
@@ -82,9 +83,9 @@ public class ScriptingEngineTest {
         try {
             se.adaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE DISPLACEMENT 1"));
-            assertEquals("moved to wrong position", new PositionMetric(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE DISPLACEMENT 2 1"));
-            assertEquals("moved to wrong position", new PositionMetric(3, 0, 0, new Angle(0), new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(0, 3, 0, new Angle(0), new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
         }
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -99,9 +100,9 @@ public class ScriptingEngineTest {
         try {
             se.adaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE DISPLACEMENT 1"));
-            assertEquals("moved to wrong position", new PositionMetric(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE DISPLACEMENT 2 1"));
-            assertEquals("moved to wrong position", new PositionMetric(0, 3, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(3, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
         }
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -143,9 +144,9 @@ public class ScriptingEngineTest {
     public void testExecuteInstructionCHANGELONGITUDEMETRIC() {
         try {
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE METRIC 1"));
-            assertEquals("moved to wrong position", new PositionMetric(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE METRIC 2 1"));
-            assertEquals("moved to wrong position", new PositionMetric(2, 0, 0, new Angle(0), new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(0, 2, 0, new Angle(0), new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
         }
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -156,9 +157,9 @@ public class ScriptingEngineTest {
     public void testExecuteInstructionCHANGELATITUDEMETRIC() {
         try {
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE METRIC 1"));
-            assertEquals("moved to wrong position", new PositionMetric(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE METRIC 2 1"));
-            assertEquals("moved to wrong position", new PositionMetric(0, 2, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionMetric(2, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
         }
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -194,9 +195,9 @@ public class ScriptingEngineTest {
     public void testExecuteInstructionCHANGELONGITUDEGPS() {
         try {
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE GPS 1"));
-            assertEquals("moved to wrong position", new PositionGPS(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionGPS(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE GPS 2 1"));
-            assertEquals("moved to wrong position", new PositionGPS(2, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionGPS(0, 2, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
         }
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
@@ -207,9 +208,9 @@ public class ScriptingEngineTest {
     public void testExecuteInstructionCHANGELATITUDEGPS() {
         try {
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE GPS 1"));
-            assertEquals("moved to wrong position", new PositionGPS(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionGPS(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE GPS 2 1"));
-            assertEquals("moved to wrong position", new PositionGPS(0, 2, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
+            assertEquals("moved to wrong position", new PositionGPS(2, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
         }
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
