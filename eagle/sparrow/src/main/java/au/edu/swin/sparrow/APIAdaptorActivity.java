@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
@@ -35,7 +36,7 @@ import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 
-public class APIAdaptorActivity extends F450FlamewheelActivity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, Log.LogCallback {
+public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, Log.LogCallback {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
@@ -59,7 +60,6 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
-        drone.getSDKAdaptor().setController(getIOIO());
         initializeUI();
         Log.addCallback(telnet);
         new Thread(telnet).start();
