@@ -16,7 +16,7 @@ public class ConnectToDrone extends Activity {
 
     public void connectToDrone(View view) {
         String serveraddr = ((EditText)findViewById(R.id.editTextServerAddress)).getText().toString();
-        Intent intent = new Intent(getBaseContext(), RemoteControl.class);
+        Intent intent = new Intent(getBaseContext(), ControllerActivity.class);
         intent.putExtra("serveraddr", serveraddr);
         startActivity(intent);
     }

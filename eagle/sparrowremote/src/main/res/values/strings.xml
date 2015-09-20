@@ -9,9 +9,9 @@
     <string name="connect">Connect</string>
     <string name="title_activity_main">MainActivity</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Remote Control</string>
+    <string name="title_section2">Command</string>
+    <string name="title_section3">Log</string>
     <string name="title_activity_remote_control">RemoteControl</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
@@ -26,4 +26,8 @@
     <string name="rotate_left">Rotate Left</string>
     <string name="rotate_right">Rotate Right</string>
     <string name="gohome">GOHOME</string>
+    <string name="title_activity_controller">ControllerActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

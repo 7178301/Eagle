@@ -16,9 +16,10 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import eagle.Drone;
+import eagle.network.NetworkServer;
 import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
 import eagle.Log;
-import eagle.TelnetServer;
+import eagle.network.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
@@ -39,6 +40,7 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
 
     Drone drone = new Drone();
     TelnetServer telnet = new TelnetServer(drone);
+    NetworkServer netserve = new NetworkServer(drone);
 
 
     private SeekBar sb;
@@ -53,6 +55,7 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
         drone.getSDKAdaptor().setController(getIOIO());
         initializeUI();
         Log.addCallback(telnet);
+        Log.addCallback(netserve);
         new Thread(telnet).start();
 
         MyTimerTask myTask = new MyTimerTask();
