@@ -1,4 +1,7 @@
 package eagle.navigation.positioning;
+
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /** Position
  * @since     09/04/2015
  * <p>
@@ -8,12 +11,12 @@ package eagle.navigation.positioning;
  * @author          Cameron Cross [7193432@student.swin.edu.au]*/
 
 public abstract class Position {
-	protected double longitude;
-	protected double latitude;
-	protected double altitude;
-    protected Angle roll;
-	protected Angle pitch;
-	protected Angle yaw;
+	protected final double longitude;
+	protected final double latitude;
+	protected final double altitude;
+    protected final Angle roll;
+	protected final Angle pitch;
+	protected final Angle yaw;
 
     public Position(double latitude, double longitude, double altitude, Angle yaw) {
         this.latitude=latitude;
@@ -50,7 +53,14 @@ public abstract class Position {
 
     public abstract Position add(PositionDisplacement position);
 
-    public boolean equals(Position position) {
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Position))
+            return false;
+        if (obj == this)
+            return true;
+
+        Position position = (Position)obj;
         if(Double.compare(longitude,position.getLongitude())==0&&
                 Double.compare(latitude,position.getLatitude())==0&&
                 Double.compare(altitude,position.getAltitude())==0&&
@@ -60,6 +70,18 @@ public abstract class Position {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31) // two randomly chosen prime numbers
+                .append(longitude)
+                .append(latitude)
+                .append(altitude)
+                .append(roll)
+                .append(pitch)
+                .append(yaw)
+                .toHashCode();
     }
 
     @Override

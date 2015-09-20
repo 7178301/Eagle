@@ -1,5 +1,7 @@
 package eagle.navigation.positioning;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /** Bearing
  * @since     06/09/2015
  * <p>
@@ -28,6 +30,7 @@ public class PositionGPS extends Position {
 
     @Override
     public Position add(PositionDisplacement position) {
+        //code taken from org.apache.sis:sis-core:0.2-incubating: https://github.com/apache/sis/blob/trunk/core/sis-referencing/src/main/java/org/apache/sis/distance/DistanceUtils.java
         double bearing=0;
         if(position.getLongitude()>0)
             bearing = 90 - Math.toDegrees(Math.atan((position.getLatitude())/ (position.getLongitude())));
@@ -41,19 +44,21 @@ public class PositionGPS extends Position {
         double angularDistance = dist/6371000;
         double bearingRadians = Math.toRadians(bearing);
 
-        latitude=Math.toDegrees(Math.asin((Math.sin(latitudeRadians)*Math.cos(angularDistance))+
-                (Math.cos(latitudeRadians)*Math.sin(angularDistance)*Math.cos(bearingRadians))));
-        longitude=Math.toDegrees(longitudeRadians + Math.atan2(Math.sin(bearingRadians) * Math.sin(angularDistance) * Math.cos(latitudeRadians),
-                Math.cos(angularDistance) - Math.sin(latitudeRadians) * Math.sin(Math.toRadians(latitude))));
+        return new PositionGPS(
+            Math.toDegrees(Math.asin((Math.sin(latitudeRadians)*Math.cos(angularDistance))+
+                (Math.cos(latitudeRadians)*Math.sin(angularDistance)*Math.cos(bearingRadians)))),
+            Math.toDegrees(longitudeRadians + Math.atan2(Math.sin(bearingRadians) * Math.sin(angularDistance) * Math.cos(latitudeRadians),
+                    Math.cos(angularDistance) - Math.sin(latitudeRadians) * Math.sin(Math.toRadians(latitude)))),
 
-        altitude+=position.getAltitude();
-        roll.add(position.getRoll());
-        pitch.add(position.getPitch());
-        yaw.add(position.getYaw());
-        return this;
+            altitude+position.getAltitude(),
+            roll.add(position.getRoll()),
+            pitch.add(position.getPitch()),
+            yaw.add(position.getYaw())
+        );
     }
 
     public PositionDisplacement compare(PositionGPS position) {
+        //code taken from org.apache.sis:sis-core:0.2-incubating: https://github.com/apache/sis/blob/trunk/core/sis-referencing/src/main/java/org/apache/sis/distance/DistanceUtils.java
         double latitudeRadians = Math.toRadians(latitude);
         double longitudeRadians = Math.toRadians(longitude);
         double latitude2Radians = Math.toRadians(position.getLatitude());
@@ -61,6 +66,13 @@ public class PositionGPS extends Position {
 
         double latitudeDisplacement = 6371000*Math.acos(Math.sin(latitudeRadians)*Math.sin(latitude2Radians)+Math.cos(latitudeRadians)*Math.cos(latitude2Radians)*Math.cos(longitudeRadians-longitudeRadians));
         double longitudeDisplacement = 6371000*Math.acos(Math.sin(latitudeRadians)*Math.sin(latitudeRadians)+Math.cos(latitudeRadians)*Math.cos(latitudeRadians)*Math.cos(longitudeRadians-longitude2Radians));
+
+        if (latitude < position.getLatitude()) {
+            latitudeDisplacement = -latitudeDisplacement;
+        }
+        if (longitude < position.getLongitude() && Math.abs(longitude - position.getLongitude()) < 180) {
+            longitudeDisplacement = -longitudeDisplacement;
+        }
 
         return new PositionDisplacement(latitudeDisplacement,
                 longitudeDisplacement,
@@ -92,5 +104,18 @@ public class PositionGPS extends Position {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31) // two randomly chosen prime numbers
+                .appendSuper(super.hashCode())
+                .append(longitude)
+                .append(latitude)
+                .append(altitude)
+                .append(roll)
+                .append(pitch)
+                .append(yaw)
+                .toHashCode();
     }
 }

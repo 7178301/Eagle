@@ -1,5 +1,7 @@
 package eagle.navigation.positioning;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 /** Position
  * @since     09/04/2015
  * <p>
@@ -27,13 +29,14 @@ public class PositionMetric extends Position{
 
     @Override
     public Position add(PositionDisplacement position) {
-        latitude+=position.getLatitude();
-        longitude+=position.getLongitude();
-        altitude+=position.getAltitude();
-        roll.add(position.getRoll());
-        pitch.add(position.getPitch());
-        yaw.add(position.getYaw());
-        return this;
+        return new PositionMetric(
+            latitude+position.getLatitude(),
+            longitude+position.getLongitude(),
+            altitude+position.getAltitude(),
+            roll.add(position.getRoll()),
+            pitch.add(position.getPitch()),
+            yaw.add(position.getYaw())
+        );
     }
 
     @Override
@@ -44,8 +47,8 @@ public class PositionMetric extends Position{
             return true;
 
         PositionMetric position = (PositionMetric)obj;
-        if(Double.compare(latitude,position.getLatitude())==0&&
-                Double.compare(longitude,position.getLongitude())==0&&
+        if(Double.compare(longitude,position.getLongitude())==0&&
+                Double.compare(latitude,position.getLatitude())==0&&
                 Double.compare(altitude,position.getAltitude())==0&&
                 roll.equals(position.getRoll())&&
                 pitch.equals(position.getPitch())&&
@@ -55,10 +58,28 @@ public class PositionMetric extends Position{
             return false;
     }
 
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31) // two randomly chosen prime numbers
+                .appendSuper(super.hashCode())
+                .append(longitude)
+                .append(latitude)
+                .append(altitude)
+                .append(roll)
+                .append(pitch)
+                .append(yaw)
+                .toHashCode();
+    }
+
+    /**
+     * Compare two metric positions
+     * @param positionMetric
+     * @return PositionDisplacement needed to move from this position to positionMetric
+     */
     public PositionDisplacement compare(PositionMetric positionMetric) {
-        return new PositionDisplacement(positionMetric.getLatitude()-getLatitude(),
-                positionMetric.getLongitude()-getLongitude(),
-                positionMetric.getAltitude()-getAltitude(),
+        return new PositionDisplacement(getLatitude()-positionMetric.getLatitude(),
+                getLongitude()-positionMetric.getLongitude(),
+                getAltitude()-positionMetric.getAltitude(),
                 getRoll().compare(positionMetric.getRoll()),
                 getPitch().compare(positionMetric.getPitch()),
                 getYaw().compare(positionMetric.getYaw()));
