@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,74 +8,92 @@
         android:id="@+id/adaptorNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:text="@string/adaptor_name"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/buttonConnect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/adaptorNameTextView"
-        android:text="@string/connect" />
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/buttonConnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/connect" />
 
-    <TextView
-        android:id="@+id/textViewConnectedStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonConnect"
-        android:layout_toEndOf="@+id/buttonConnect"
-        android:layout_toRightOf="@+id/buttonConnect"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:id="@+id/textViewConnectedStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignEnd="@+id/buttonConnect"
+            android:layout_alignRight="@+id/buttonConnect"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textViewSensorData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sensor_data"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_below="@+id/textViewValue"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textViewSensorData">
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewSensorData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sensor_data"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <Button
+                    android:id="@+id/buttonExpandSensors"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignEnd="@+id/textViewSensorData"
+                    android:layout_alignRight="@+id/textViewSensorData"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/collapseSensors" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/scrollViewSensors"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewLogData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/log_data"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <Button
+                    android:id="@+id/buttonExpandLog"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignEnd="@+id/textViewLogData"
+                    android:layout_alignRight="@+id/textViewLogData"
+                    android:layout_alignParentEnd="true"
+                    android:text="@string/collapseLog" />
+
+            </RelativeLayout>
 
 
+            <WebView
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/webViewLog" />
 
-    <LinearLayout
-        android:id="@+id/scrollViewSensors"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        </LinearLayout>
     </ScrollView>
-
-    <SeekBar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/seekBarValue"
-        android:progress="1"
-        android:max="102"
-        android:layout_below="@+id/buttonConnect"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textViewValue"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/seekBarValue"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+</LinearLayout>

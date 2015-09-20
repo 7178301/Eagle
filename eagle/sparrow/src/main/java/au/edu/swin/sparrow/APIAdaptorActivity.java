@@ -1,12 +1,15 @@
 package au.edu.swin.sparrow;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -33,16 +36,23 @@ import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 
-public class APIAdaptorActivity extends F450FlamewheelActivity implements AccelerometerFragment.OnFragmentInteractionListener {
+public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, Log.LogCallback {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
     Drone drone = new Drone();
     TelnetServer telnet = new TelnetServer(drone);
 
+    private Button buttonExpandSensors;
+    private LinearLayout linearLayoutSensors;
+    private boolean sensorsCollapsed = false;
 
-    private SeekBar sb;
+    private Button buttonExpandLog;
+    private WebView webViewLog;
+    private boolean logCollapsed = false;
 
+    private Vector<String> logMessages = new Vector<String>();
+    boolean newLog = true;
     @Override
     protected void onStart() {
         super.onStart();
@@ -50,7 +60,6 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
-        drone.getSDKAdaptor().setController(getIOIO());
         initializeUI();
         Log.addCallback(telnet);
         new Thread(telnet).start();
@@ -88,29 +97,17 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
             }
         });
 
-        sb = (SeekBar) findViewById(R.id.seekBarValue);
-        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                TextView tv = (TextView) findViewById(R.id.textViewValue);
-                tv.setText(String.valueOf(progress));
-                try {
-                    int value = 1000 + (progress * 10);
-                    setPulseWidth(value, value, value, value);
-                } catch (Exception e) {
-                }
-            }
+        buttonExpandSensors = (Button)findViewById(R.id.buttonExpandSensors);
+        buttonExpandSensors.setOnClickListener(this);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+        linearLayoutSensors = (LinearLayout)findViewById(R.id.scrollViewSensors);
 
-            }
+        buttonExpandLog = (Button)findViewById(R.id.buttonExpandLog);
+        buttonExpandLog.setOnClickListener(this);
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+        webViewLog = (WebView)findViewById(R.id.webViewLog);
+        Log.addCallback(this);
 
-                                          }
-                                      });
 
         FragmentManager fragMan = getFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
@@ -176,11 +173,63 @@ public class APIAdaptorActivity extends F450FlamewheelActivity implements Accele
         for (SensorFragment sensor : sensorFragments) {
             sensor.updateData();
         }
+
+        if (newLog && webViewLog != null) {
+            newLog = false;
+            StringBuilder html = new StringBuilder();
+            html.append("<html>");
+            html.append("<head>");
+
+            html.append("</head>");
+            html.append("<body>");
+            for (String mess : logMessages) {
+                html.append("<p>" + mess + "</p>");
+            }
+            html.append("</body></html>");
+
+            webViewLog.loadDataWithBaseURL("file:///android_asset/", html.toString(), "text/html", "UTF-8", "");
+        }
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonExpandSensors:
+                if (sensorsCollapsed) {
+                    buttonExpandSensors.setText(R.string.collapseSensors);
+                    linearLayoutSensors.setVisibility(View.VISIBLE);
+                    sensorsCollapsed = false;
+                } else {
+                    buttonExpandSensors.setText(R.string.expandSensors);
+                    linearLayoutSensors.setVisibility(View.GONE);
+                    sensorsCollapsed = true;
+                }
+                break;
+            case R.id.buttonExpandLog:
+                if (logCollapsed) {
+                    buttonExpandLog.setText(R.string.collapseLog);
+                    webViewLog.setVisibility(View.VISIBLE);
+                    logCollapsed = false;
+                } else {
+                    buttonExpandLog.setText(R.string.expandLog);
+                    webViewLog.setVisibility(View.GONE);
+                    logCollapsed = true;
+                }
+                break;
+
+
+        }
+    }
+
+    @Override
+    public void handleMessage(String message) {
+        logMessages.add(message);
+        newLog = true;
     }
 
     class MyTimerTask extends TimerTask {
