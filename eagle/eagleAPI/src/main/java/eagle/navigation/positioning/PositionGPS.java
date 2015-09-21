@@ -56,6 +56,7 @@ public final class PositionGPS extends Position {
     }
 
     public PositionDisplacement compare(PositionGPS position) {
+        //code taken from org.apache.sis:sis-core:0.2-incubating: https://github.com/apache/sis/blob/trunk/core/sis-referencing/src/main/java/org/apache/sis/distance/DistanceUtils.java
         double latitudeRadians = Math.toRadians(latitude);
         double longitudeRadians = Math.toRadians(longitude);
         double latitude2Radians = Math.toRadians(position.getLatitude());
