@@ -1,4 +1,4 @@
-package eagle;
+package eagle.navigation.positioning;
 
 import org.junit.Test;
 
@@ -8,6 +8,7 @@ import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionMetric;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Position Class Tester
@@ -21,16 +22,8 @@ import static org.junit.Assert.assertEquals;
 public class PositionTest {
 
 	@Test
-	public void testToString(){
+	public void testToString() {
 		Position rp = new PositionMetric(1.23, 2.34, 3.45,new Angle(0),new Angle(0),new Angle(0));
 		assertEquals("Latitude: 1.23, Longitude: 2.34, Altitude: 3.45, Roll: 0.0, Pitch: 0.0, Yaw: 0"+"\u00B0", rp.toStringLong());
 	}
-
-    @Test
-    public void testAdd(){
-        PositionMetric rp = new PositionMetric(1.23, 2.34, 3.45,new Angle(0),new Angle(0),new Angle(0));
-        PositionDisplacement dp = new PositionDisplacement(1.23, 2.34, 3.45,new Angle(0),new Angle(0),new Angle(0));
-        rp.add(dp);
-        assertEquals("Latitude: 2.46, Longitude: 4.68, Altitude: 6.9, Roll: 0.0, Pitch: 0.0, Yaw: 0"+"\u00B0", rp.toStringLong());
-    }
 }

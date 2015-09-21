@@ -1,4 +1,5 @@
 package eagle.navigation.positioning;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Angle Class
@@ -8,53 +9,63 @@ package eagle.navigation.positioning;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross */
-public class Angle
+public final class Angle
 {
-	private double degrees;
+	private final double degrees;
 	
 	/**
 	 * Constructor for angle class
 	 * @param angle input angle
 	 */
 	public Angle(double angle){
-		degrees = angle;
-		normalise();
+		degrees = normalise(angle);
 	}
 	public Angle(Angle angle){
 		this.degrees=angle.getDegrees();
 	}
 
 	public Angle add(Angle angle) {
-		this.degrees+=angle.getDegrees();
-		normalise();
-		return this;
+		return new Angle(this.degrees+angle.getDegrees());
 	}
 
 	public Angle minus(Angle angle){
-		this.degrees-=angle.getDegrees();
-		normalise();
-		return this;
+		return new Angle(this.degrees-angle.getDegrees());
 
 	}
 
-	private void normalise() {
-		while(degrees < 0) {
-			degrees += 360;
+	private double normalise(double angle) {
+		while(angle < 0) {
+			angle += 360;
 		}
-		while(degrees > 360) {
-			degrees -= 360;
+		while(angle > 360) {
+			angle -= 360;
 		}
+		return angle;
 	}
 
     public double getDegrees() {
         return degrees;
     }
 
-	public boolean equals(Angle angle){
-		if(Double.compare(degrees,angle.getDegrees())==0)
+	public boolean equals(Object obj){
+		if (!(obj instanceof Angle))
+				return false;
+		if (obj == this)
+				return true;
+
+				Angle bearing = (Angle)obj;
+		if(Double.compare(degrees,bearing.getDegrees())==0)
 			return true;
 		else
 			return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31) // two randomly chosen prime numbers
+			// if deriving: appendSuper(super.hashCode()).
+			.append(degrees)
+			.toHashCode();
 	}
 
 	/**
@@ -80,6 +91,11 @@ public class Angle
 		return sb.toString();
 	}
 
+	/**
+	 * Compares two angles
+	 * @param bearing
+	 * @return Angle between this angle and bearing
+	 */
 	public Angle compare(Angle bearing){
 		return new Angle(bearing.getDegrees()-degrees);
 	}
