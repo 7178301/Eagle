@@ -23,25 +23,24 @@ public class PositionGPSTest {
             fail("Wrong type");
         }
         assertEquals("Wrong position", new PositionGPS(-37.82111045211409, 145.04971783915732, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        PositionDisplacement posDisp = ((PositionGPS)output).compare(pos);
+        PositionDisplacement posDisp = ((PositionGPS) output).compare(pos);
         assertEquals("Wrong displacement", true, Math.abs(posDisp.getLongitude() - 1000) < 1);
-
 
 
         output = pos.add(new PositionDisplacement(0, -1000, 0, new Angle(0), new Angle(0), new Angle(0)));
         assertEquals("Wrong position", new PositionGPS(-37.82111045211409, 145.02694816084264, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        posDisp = ((PositionGPS)output).compare(pos);
+        posDisp = ((PositionGPS) output).compare(pos);
         assertEquals("Wrong displacement", true, Math.abs(posDisp.getLongitude() + 1000) < 1);
 
         output = pos.add(new PositionDisplacement(1000, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
         assertEquals("Wrong position", new PositionGPS(-37.81211778394082, 145.038333, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        posDisp = ((PositionGPS)output).compare(pos);
-        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude() - 1000)<1);
+        posDisp = ((PositionGPS) output).compare(pos);
+        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude() - 1000) < 1);
 
         output = pos.add(new PositionDisplacement(-1000, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
         assertEquals("Wrong position", new PositionGPS(-37.83010421605919, 145.038333, 0, new Angle(0), new Angle(0), new Angle(0)), output);
-        posDisp = ((PositionGPS)output).compare(pos);
-        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude() + 1000)<1);
+        posDisp = ((PositionGPS) output).compare(pos);
+        assertEquals("Wrong displacement", true, Math.abs(posDisp.getLatitude() + 1000) < 1);
     }
 
     @Test

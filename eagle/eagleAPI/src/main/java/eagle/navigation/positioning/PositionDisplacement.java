@@ -1,7 +1,5 @@
 package eagle.navigation.positioning;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 /**
  * eagle.navigation.positioning
  *
@@ -21,9 +19,9 @@ public final class PositionDisplacement extends Position {
 
     @Override
     public PositionDisplacement add(PositionDisplacement position) {
-        return new PositionDisplacement(latitude+position.getLatitude(),
-                longitude+position.getLongitude(),
-                altitude+position.getAltitude(),
+        return new PositionDisplacement(latitude + position.getLatitude(),
+                longitude + position.getLongitude(),
+                altitude + position.getAltitude(),
                 roll.add(position.getRoll()),
                 pitch.add(position.getPitch()),
                 yaw.add(position.getYaw()));
@@ -41,25 +39,24 @@ public final class PositionDisplacement extends Position {
         if (obj == this)
             return true;
 
-        PositionDisplacement position = (PositionDisplacement)obj;
-        return (Double.compare(latitude,position.getLatitude())==0&&
-                Double.compare(longitude,position.getLongitude())==0&&
-                Double.compare(altitude,position.getAltitude())==0&&
-                roll.equals(position.getRoll())&&
-                pitch.equals(position.getPitch())&&
+        PositionDisplacement position = (PositionDisplacement) obj;
+        return (Double.compare(latitude, position.getLatitude()) == 0 &&
+                Double.compare(longitude, position.getLongitude()) == 0 &&
+                Double.compare(altitude, position.getAltitude()) == 0 &&
+                roll.equals(position.getRoll()) &&
+                pitch.equals(position.getPitch()) &&
                 yaw.equals(position.getYaw()));
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 31) // two randomly chosen prime numbers
-            .appendSuper(super.hashCode())
-            .append(longitude)
-            .append(latitude)
-            .append(altitude)
-            .append(roll)
-            .append(pitch)
-            .append(yaw)
-            .toHashCode();
+        int output = 5, prime2 = 89;
+        output = prime2 * output + Double.valueOf(latitude).hashCode();
+        output = prime2 * output + Double.valueOf(longitude).hashCode();
+        output = prime2 * output + Double.valueOf(altitude).hashCode();
+        output = prime2 * output + roll.hashCode();
+        output = prime2 * output + pitch.hashCode();
+        output = prime2 * output + yaw.hashCode();
+        return output;
     }
 }
