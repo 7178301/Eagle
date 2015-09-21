@@ -5,8 +5,6 @@ package eagle.navigation.positioning;
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @author Cameron Cross
- * @author Nicholas Alards [7178301@student.swin.edu.au]
- * @author Cameron Cross
  * @version 0.0.1
  */
 public final class Angle {
@@ -55,10 +53,7 @@ public final class Angle {
             return true;
 
         Angle bearing = (Angle) obj;
-        if (Double.compare(degrees, bearing.getDegrees()) == 0)
-            return true;
-        else
-            return false;
+        return (Double.compare(degrees, bearing.getDegrees()) == 0);
     }
 
     @Override

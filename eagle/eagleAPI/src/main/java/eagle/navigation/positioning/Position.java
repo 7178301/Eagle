@@ -58,7 +58,7 @@ public abstract class Position {
         return this.altitude;
     }
 
-    public Angle getRoll() {
+    public final Angle getRoll() {
         return this.roll;
     }
 
