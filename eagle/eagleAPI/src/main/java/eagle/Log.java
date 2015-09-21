@@ -2,9 +2,9 @@ package eagle;
 
 import java.util.Vector;
 
-
 /**
  * Java Logger
+ *
  * @author Cameron Cross [7178301@student.swin.edu.au]
  * @version 0.0.1
  * @since 8/13/15

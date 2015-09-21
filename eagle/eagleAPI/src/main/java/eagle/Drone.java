@@ -45,7 +45,7 @@ public class Drone {
     public HashMap getSDKAdaptorMap() {
         if (this.adaptorLoader != null)
             return this.adaptorLoader.getSDKAdaptorMap();
-        else{
+        else {
             this.adaptorLoader = new AdaptorLoader();
             return adaptorLoader.getSDKAdaptorMap();
         }
