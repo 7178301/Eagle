@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross [7193432@student.swin.edu.au]*/
 
-public class PositionMetric extends Position{
+public final class PositionMetric extends Position{
     public PositionMetric(double latitude, double longitude, double altitude, Angle yaw) {
         super(latitude, longitude, altitude, yaw);
     }
@@ -28,7 +28,7 @@ public class PositionMetric extends Position{
     }
 
     @Override
-    public Position add(PositionDisplacement position) {
+    public PositionMetric add(PositionDisplacement position) {
         return new PositionMetric(
             latitude+position.getLatitude(),
             longitude+position.getLongitude(),
@@ -47,15 +47,12 @@ public class PositionMetric extends Position{
             return true;
 
         PositionMetric position = (PositionMetric)obj;
-        if(Double.compare(longitude,position.getLongitude())==0&&
-                Double.compare(latitude,position.getLatitude())==0&&
+        return (Double.compare(latitude,position.getLatitude())==0&&
+                Double.compare(longitude,position.getLongitude())==0&&
                 Double.compare(altitude,position.getAltitude())==0&&
                 roll.equals(position.getRoll())&&
                 pitch.equals(position.getPitch())&&
-                yaw.equals(position.getYaw()))
-            return true;
-        else
-            return false;
+                yaw.equals(position.getYaw()));
     }
 
     @Override

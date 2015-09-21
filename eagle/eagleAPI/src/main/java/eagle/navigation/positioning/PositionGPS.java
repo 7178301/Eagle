@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  */
-public class PositionGPS extends Position {
+public final class PositionGPS extends Position {
     private static double r_earth = 6378 * 1000; //Work in meters for everything
 
     public PositionGPS(double latitude, double longitude, double altitude, Angle yaw) {
@@ -27,10 +27,8 @@ public class PositionGPS extends Position {
     public PositionGPS(Position position){
         super(position.getLatitude(), position.getLongitude(), position.getAltitude(), position.getRoll(), position.getPitch(), position.getYaw());
     }
-
     @Override
-    public Position add(PositionDisplacement position) {
-        //code taken from org.apache.sis:sis-core:0.2-incubating: https://github.com/apache/sis/blob/trunk/core/sis-referencing/src/main/java/org/apache/sis/distance/DistanceUtils.java
+    public PositionGPS add(PositionDisplacement position) {
         double bearing=0;
         if(position.getLongitude()>0)
             bearing = 90 - Math.toDegrees(Math.atan((position.getLatitude())/ (position.getLongitude())));
@@ -58,7 +56,6 @@ public class PositionGPS extends Position {
     }
 
     public PositionDisplacement compare(PositionGPS position) {
-        //code taken from org.apache.sis:sis-core:0.2-incubating: https://github.com/apache/sis/blob/trunk/core/sis-referencing/src/main/java/org/apache/sis/distance/DistanceUtils.java
         double latitudeRadians = Math.toRadians(latitude);
         double longitudeRadians = Math.toRadians(longitude);
         double latitude2Radians = Math.toRadians(position.getLatitude());
@@ -95,15 +92,12 @@ public class PositionGPS extends Position {
             return true;
 
         PositionGPS position = (PositionGPS)obj;
-        if(Double.compare(longitude,position.getLongitude())==0&&
-                Double.compare(latitude,position.getLatitude())==0&&
+        return (Double.compare(latitude,position.getLatitude())==0&&
+                Double.compare(longitude,position.getLongitude())==0&&
                 Double.compare(altitude,position.getAltitude())==0&&
                 roll.equals(position.getRoll())&&
                 pitch.equals(position.getPitch())&&
-                yaw.equals(position.getYaw()))
-            return true;
-        else
-            return false;
+                yaw.equals(position.getYaw()));
     }
 
     @Override

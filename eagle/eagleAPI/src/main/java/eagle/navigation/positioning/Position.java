@@ -61,15 +61,12 @@ public abstract class Position {
             return true;
 
         Position position = (Position)obj;
-        if(Double.compare(longitude,position.getLongitude())==0&&
-                Double.compare(latitude,position.getLatitude())==0&&
+        return (Double.compare(latitude,position.getLatitude())==0&&
+                Double.compare(longitude,position.getLongitude())==0&&
                 Double.compare(altitude,position.getAltitude())==0&&
                 roll.equals(position.getRoll())&&
                 pitch.equals(position.getPitch())&&
-                yaw.equals(position.getYaw()))
-            return true;
-        else
-            return false;
+                yaw.equals(position.getYaw()));
     }
 
     @Override

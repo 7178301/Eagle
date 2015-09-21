@@ -9,38 +9,38 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * @version 0.0.1
  * @author          Nicholas Alards [7178301@student.swin.edu.au]
  * @author          Cameron Cross */
-public class Angle
+public final class Angle
 {
-	private double degrees;
+	private final double degrees;
 	
 	/**
 	 * Constructor for angle class
 	 * @param angle input angle
 	 */
 	public Angle(double angle){
-		degrees = angle;
-		normalise();
+		degrees = normalise(angle);
 	}
 	public Angle(Angle angle){
 		this.degrees=angle.getDegrees();
 	}
 
 	public Angle add(Angle angle) {
-		return new Angle(this.degrees+=angle.getDegrees());
+		return new Angle(this.degrees+angle.getDegrees());
 	}
 
 	public Angle minus(Angle angle){
-		return new Angle(this.degrees-=angle.getDegrees());
+		return new Angle(this.degrees-angle.getDegrees());
 
 	}
 
-	private void normalise() {
-		while(degrees < 0) {
-			degrees += 360;
+	private double normalise(double angle) {
+		while(angle < 0) {
+			angle += 360;
 		}
-		while(degrees > 360) {
-			degrees -= 360;
+		while(angle > 360) {
+			angle -= 360;
 		}
+		return angle;
 	}
 
     public double getDegrees() {
