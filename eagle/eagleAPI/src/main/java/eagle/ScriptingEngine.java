@@ -12,6 +12,14 @@ import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
+import eagle.sdkInterface.sensorAdaptors.SensorAdaptor;
 
 /**
  * Created by Cameron on 4/09/2015.
@@ -44,6 +52,14 @@ public class ScriptingEngine {
             put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
             put("HELP", "HELP _[command]_ | Prints a list of commands");
             put("LOG", "LOG _message_ | Write a message to the log");
+            put("GETACCELDATA", "GETACCELDATA _id_ | Get the values of the accelerometer given by _id_");
+            put("GETGPSDATA", "GETGPSDATA _id_ | Get the values of the gps given by _id_");
+            put("GETGYRODATA", "GETGYRODATA _id_ | Get the values of the gyroscope given by _id_");
+            put("GETLIDARDATA", "GETLIDARDATA _id_ | Get the values of the LIDAR given by _id_");
+            put("GETMAGNETICDATA", "GETMAGNETICDATA _id_ | Get the values of the magnetic sensor given by _id_");
+            put("GETRPLIDARDATA", "GETRPLIDARDATA _id_ | Get the values of the RPLIDAR given by _id_");
+            put("GETULTRASONICDATA", "GETULTRASONICDATA _id_ | Get the values of the ultrasonic sensor given by _id_");
+
         }
     };
 
@@ -541,6 +557,83 @@ public class ScriptingEngine {
                         }
                         Log.log(sb.toString());
                         return "SUCCESS";
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETACCELDATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getAccelerometers().size()) {
+                            return adaptor.getAccelerometers().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETGYRODATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getGyroscopes().size()) {
+                            return adaptor.getGyroscopes().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETGPSDATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getGPSs().size()) {
+                            return adaptor.getGPSs().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETLIDARDATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getLidars().size()) {
+                            return adaptor.getLidars().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETMAGNETICDATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getMagnetics().size()) {
+                            return adaptor.getMagnetics().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETRPLIDARDATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getRplidars().size()) {
+                            return adaptor.getRplidars().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                case "GETULTRASONICDATA":
+                    if (array.length == 2) {
+                        int id = Integer.parseInt(array[1]);
+                        if (id >= 0 && id < adaptor.getUltrasonics().size()) {
+                            return adaptor.getUltrasonics().get(id).toString();
+                        } else {
+                            return "NO SENSOR WITH THAT ID";
+                        }
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
