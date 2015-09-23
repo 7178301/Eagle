@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.net.Uri;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -14,13 +15,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import eagle.Log;
@@ -46,6 +45,26 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     private ConnectProtoBuf commandConnection;
     private RemoteControlFragment remoteControlFragment;
     private LoggingFragment logFragment;
+    private ControllerActivity ca = this;
+
+    private ConnectProtoBuf.ResponseCallBack rcb = new ConnectProtoBuf.ResponseCallBack() {
+        @Override
+        public void handleResponse(final String response) {
+
+            if (response.compareTo("SUCCESS") != 0) {
+                ca.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.log("Command failed (" + response + "). Perhaps you need to connect first?");
+                        Toast toast = Toast.makeText(ca, "Command failed (" + response + "). Perhaps you need to connect first?", Toast.LENGTH_LONG);
+                        toast.show();
+
+                    }
+                });
+            }
+
+        }
+    };
 
     private double bearingAngle = 0;
 
@@ -157,48 +176,54 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     @Override
     public void onFragmentInteraction(Uri uri) {
         switch (uri.getPath()) {
+            case "/buttonConnect":
+                commandConnection.sendMessage("CONNECTTODRONE", rcb);
+                break;
+            case "/buttonDisconnect":
+                commandConnection.sendMessage("DISCONNECTFROMDRONE", rcb);
+                break;
             case "/buttonUp":
-                commandConnection.sendMessage("CHANGEALTITUDE -D 1");
+                commandConnection.sendMessage("CHANGEALTITUDE -D 1", rcb);
                 break;
             case "/buttonDown":
-                commandConnection.sendMessage("CHANGEALTITUDE -D -1");
+                commandConnection.sendMessage("CHANGEALTITUDE -D -1", rcb);
                 break;
             case "/buttonRotateLeft":
-                commandConnection.sendMessage("CHANGEYAW -D -1");
+                commandConnection.sendMessage("CHANGEYAW -D -1", rcb);
                 break;
             case "/buttonRotateRight":
-                commandConnection.sendMessage("CHANGEYAW -D 1");
+                commandConnection.sendMessage("CHANGEYAW -D 1", rcb);
                 break;
             case "/buttonLeft":
                 double longitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
                 double latitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
                 break;
             case "/buttonRight":
                 longitude = 1 * Math.cos(bearingAngle * Math.PI / 180);
                 latitude = 1 * Math.sin(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
                 break;
             case "/buttonForward":
                 longitude = 1 * Math.sin(bearingAngle * Math.PI / 180);
                 latitude = 1 * Math.cos(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
                 break;
             case "/buttonBackward":
                 longitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
                 latitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
                 break;
             case "/buttonGoHome":
-                commandConnection.sendMessage("GOHOME");
+                commandConnection.sendMessage("GOHOME", rcb);
                 break;
             case "/finish":
                 finish();
                 break;
             default:
-
         }
     }
+
 
     @Override
     public void handleMessage(String message) {

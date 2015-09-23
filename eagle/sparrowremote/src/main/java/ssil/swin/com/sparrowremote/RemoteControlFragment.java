@@ -31,6 +31,8 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
 
     private View view;
 
+    private Button buttonConnect;
+    private Button buttonDisconnect;
     private Button buttonUp;
     private Button buttonDown;
     private Button buttonForward;
@@ -67,6 +69,8 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_remote_control, container, false);
+        buttonConnect = (Button) view.findViewById(R.id.buttonConnect);
+        buttonDisconnect = (Button) view.findViewById(R.id.buttonDisconnect);
         buttonUp = (Button) view.findViewById(R.id.buttonUp);
         buttonDown = (Button) view.findViewById(R.id.buttonDown);
         buttonForward = (Button) view.findViewById(R.id.buttonForward);
@@ -77,6 +81,8 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
         buttonRotateRight = (Button) view.findViewById(R.id.buttonRotateRight);
         buttonGoHome = (Button) view.findViewById(R.id.buttonGoHome);
 
+        buttonConnect.setOnClickListener(this);
+        buttonDisconnect.setOnClickListener(this);
         buttonUp.setOnClickListener(this);
         buttonDown.setOnClickListener(this);
         buttonForward.setOnClickListener(this);
@@ -122,6 +128,12 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         Uri uri = null;
         switch (v.getId()) {
+            case R.id.buttonConnect:
+                uri = new Uri.Builder().appendPath("buttonConnect").build();
+                break;
+            case R.id.buttonDisconnect:
+                uri = new Uri.Builder().appendPath("buttonDisconnect").build();
+                break;
             case R.id.buttonUp:
                 uri = new Uri.Builder().appendPath("buttonUp").build();
                 break;
