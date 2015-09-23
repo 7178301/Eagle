@@ -1,8 +1,11 @@
 package ssil.swin.com.sparrowremote;
 
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.net.Uri;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,8 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener {
+import eagle.Log;
+import eagle.network.ConnectProtoBuf;
+
+public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener, Log.LogCallback {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -36,6 +43,12 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
      */
     ViewPager mViewPager;
     private String serveraddr;
+    private ConnectProtoBuf commandConnection;
+    private RemoteControlFragment remoteControlFragment;
+    private LoggingFragment logFragment;
+
+    private double bearingAngle = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +88,32 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+
         serveraddr = getIntent().getStringExtra("serveraddr");
+        commandConnection = new ConnectProtoBuf(serveraddr);
+
+        remoteControlFragment = RemoteControlFragment.newInstance();
+        logFragment = LoggingFragment.newInstance();
+
+        commandConnection.connectToServer();
+        if (!commandConnection.isConnected()) {
+            Toast toast = Toast.makeText(this, "Failed to connect to drone", Toast.LENGTH_LONG);
+            toast.show();
+            finish();
+        }
+
+        MyTimerTask myTask = new MyTimerTask();
+        Timer myTimer = new Timer();
+        myTimer.schedule(myTask, 1000, 100);
+
+        Log.addCallback(this);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.removeCallback(this);
+        super.onDestroy();
     }
 
 
@@ -118,13 +156,53 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        switch  (uri.getPath()) {
-            case "finish":
+        switch (uri.getPath()) {
+            case "/buttonUp":
+                commandConnection.sendMessage("CHANGEALTITUDE -D 1");
+                break;
+            case "/buttonDown":
+                commandConnection.sendMessage("CHANGEALTITUDE -D -1");
+                break;
+            case "/buttonRotateLeft":
+                commandConnection.sendMessage("CHANGEYAW -D -1");
+                break;
+            case "/buttonRotateRight":
+                commandConnection.sendMessage("CHANGEYAW -D 1");
+                break;
+            case "/buttonLeft":
+                double longitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
+                double latitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                break;
+            case "/buttonRight":
+                longitude = 1 * Math.cos(bearingAngle * Math.PI / 180);
+                latitude = 1 * Math.sin(bearingAngle * Math.PI / 180);
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                break;
+            case "/buttonForward":
+                longitude = 1 * Math.sin(bearingAngle * Math.PI / 180);
+                latitude = 1 * Math.cos(bearingAngle * Math.PI / 180);
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                break;
+            case "/buttonBackward":
+                longitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
+                latitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
+                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0");
+                break;
+            case "/buttonGoHome":
+                commandConnection.sendMessage("GOHOME");
+                break;
+            case "/finish":
                 finish();
                 break;
             default:
 
         }
+    }
+
+    @Override
+    public void handleMessage(String message) {
+        logFragment.appendLog(message);
     }
 
     /**
@@ -141,7 +219,9 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return RemoteControlFragment.newInstance(serveraddr);
+                    return remoteControlFragment;
+                case 2:
+                    return logFragment;
                 default:
                     return PlaceholderFragment.newInstance(position + 1);
 
@@ -170,6 +250,23 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
             }
             return null;
         }
+    }
+
+    void updatePositionFragment() {
+        commandConnection.sendMessage("GETPOSITIONASSIGNED", new ConnectProtoBuf.ResponseCallBack() {
+            @Override
+            public void handleResponse(String position) {
+                if (position != null) {
+                    String parts[] = position.split(" ");
+                    if (parts.length != 6) {
+                        return;
+                    }
+                    remoteControlFragment.setPosition(parts[0], parts[1], parts[2], parts[5]);
+
+                    bearingAngle = Double.parseDouble(parts[5]);
+                }
+            }
+        });
     }
 
     /**
@@ -205,4 +302,14 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         }
     }
 
+    class MyTimerTask extends TimerTask {
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updatePositionFragment();
+                }
+            });
+        }
+    }
 }

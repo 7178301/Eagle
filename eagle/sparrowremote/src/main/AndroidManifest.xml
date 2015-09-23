@@ -21,8 +21,7 @@
         <activity
             android:name=".ControllerActivity"
             android:label="@string/title_activity_controller"
-            android:parentActivityName=".ConnectToDrone"
-            android:screenOrientation="landscape">
+            android:parentActivityName=".ConnectToDrone">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ssil.swin.com.sparrowremote.ConnectToDrone" />

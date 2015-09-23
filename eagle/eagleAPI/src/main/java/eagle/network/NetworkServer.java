@@ -86,7 +86,7 @@ public class NetworkServer implements Runnable, Log.LogCallback {
 
 
                 while (true) {
-                    EagleProtoBuf.Request request = EagleProtoBuf.Request.parseFrom(in);
+                    EagleProtoBuf.Request request = EagleProtoBuf.Request.parseDelimitedFrom(in);
                     try {
                         if (scriptingEngine != null && request.getRequestStringsCount() > 0) {
                             EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
@@ -94,14 +94,14 @@ public class NetworkServer implements Runnable, Log.LogCallback {
                                     .setType(EagleProtoBuf.Response.ResponseType.COMMAND)
                                     .addResponseStrings(scriptingEngine.executeInstruction(request.getRequestStrings(0)))
                                     .build();
-                            response.writeTo(out);
+                            response.writeDelimitedTo(out);
                         } else {
                             EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
                                     .setId(request.getId())
                                     .setType(EagleProtoBuf.Response.ResponseType.OTHER)
                                     .addResponseStrings("Could not execute command")
                                     .build();
-                            response.writeTo(out);
+                            response.writeDelimitedTo(out);
                         }
                     }
                     catch (ScriptingEngine.InvalidInstructionException e) {
@@ -110,7 +110,7 @@ public class NetworkServer implements Runnable, Log.LogCallback {
                                 .setType(EagleProtoBuf.Response.ResponseType.OTHER)
                                 .addResponseStrings("Invalid Command: " + e.getMessage())
                                 .build();
-                        response.writeTo(out);
+                        response.writeDelimitedTo(out);
                     }
                 }
             } catch (IOException e) {
@@ -126,7 +126,7 @@ public class NetworkServer implements Runnable, Log.LogCallback {
                         .addResponseStrings(message)
                         .build();
                 try {
-                    response.writeTo(out);
+                    response.writeDelimitedTo(out);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

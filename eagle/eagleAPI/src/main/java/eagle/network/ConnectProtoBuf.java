@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import eagle.Log;
+
 /**
  * Created by cameron on 9/2/15.
  */
@@ -17,53 +19,124 @@ public class ConnectProtoBuf {
     private InputStream in = null;
     private String serverName;
     private int id = 0;
-    private Map<Integer, String> responseMap = new HashMap<>();
+    private Map<Integer, ResponseCallBack> responseMap = new HashMap<>();
+    private Thread read;
+    private boolean connected = false;
 
     public ConnectProtoBuf(String servername) {
         this.serverName = servername;
     }
 
-    public void connectToServer() throws NotConnectedException {
-        if (out == null || in == null || pingSocket == null || pingSocket.isClosed()) {
+    public void connectToServer() {
+        Thread connect = new Thread(new connectThread());
+        connect.start();
+        try {
+            connect.join(3000);
+            if (read != null && read.isAlive()) {
+                read.interrupt();
+            }
+            read = new Thread(new readThread());
+            read.start();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-            try {
-                pingSocket = new Socket(serverName, 2424);
-                out = pingSocket.getOutputStream();
-                in = pingSocket.getInputStream();
-            } catch (IOException e) {
-                throw new NotConnectedException();
+    }
+
+    public synchronized void sendMessage(String message) {
+        sendMessage(message, null);
+    }
+
+    public synchronized void sendMessage(String message, ResponseCallBack rcb) {
+            id++;
+            if (rcb != null) {
+                responseMap.put(id, rcb);
+            }
+            new Thread(new writeThread(message)).start();
+    }
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public interface ResponseCallBack {
+        void handleResponse(String response);
+    }
+
+    private class connectThread implements Runnable {
+
+        @Override
+        public void run() {
+            connected = false;
+            if (out == null || in == null || pingSocket == null || pingSocket.isClosed()) {
+                try {
+                    pingSocket = new Socket(serverName, 2425);
+                    out = pingSocket.getOutputStream();
+                    in = pingSocket.getInputStream();
+                    connected = true;
+                } catch (IOException e) {
+                }
             }
         }
     }
 
-    public synchronized String sendMessage(String message) throws NotConnectedException {
-        try {
-            id++;
+    private class readThread implements Runnable {
+
+        @Override
+        public void run() {
+            if (out == null || in == null || pingSocket == null || pingSocket.isClosed()) {
+
+                try {
+                    pingSocket = new Socket(serverName, 2425);
+                    out = pingSocket.getOutputStream();
+                    in = pingSocket.getInputStream();
+                } catch (IOException e) {
+                    return;
+                }
+            }
+            while (true) {
+                EagleProtoBuf.Response response = null;
+                try {
+                    response = EagleProtoBuf.Response.parseDelimitedFrom(in);
+                    if (responseMap.containsKey(response.getId())) {
+                        ResponseCallBack rcb = responseMap.get(response.getId());
+                        rcb.handleResponse(response.getResponseStrings(0));
+                        responseMap.remove(response.getId());
+                    }
+                    else if (response.getType() == EagleProtoBuf.Response.ResponseType.LOG) {
+                        Log.log(response.getResponseStrings(0));
+                    }
+                    else {
+                        Log.log(response.toString());
+                    }
+                } catch (IOException e) {
+                    return;
+                }
+
+            }
+        }
+    }
+
+    private class writeThread implements Runnable {
+
+        String message;
+
+        writeThread(String mess) {
+            message = mess;
+        }
+
+        @Override
+        public void run() {
             EagleProtoBuf.Request request = EagleProtoBuf.Request.newBuilder()
                     .setId(id)
                     .addRequestStrings(message)
                     .build();
 
-            request.writeTo(out);
-            while (true) {
-                if (responseMap.containsKey(id)) {
-                    String responseString = responseMap.get(id);
-                    responseMap.remove(id);
-                    return responseString;
-                }
-                EagleProtoBuf.Response response = EagleProtoBuf.Response.parseFrom(in);
-                if (response.getId() == id) {
-                    return response.getResponseStrings(0);
-                } else {
-                    responseMap.put(response.getId(), response.getResponseStrings(0));
-                }
+            try {
+                request.writeDelimitedTo(out);
+            } catch (IOException e) {
+
             }
-        } catch (IOException e) {
-            throw new NotConnectedException();
         }
-    }
-
-    public class NotConnectedException extends Exception {
-
     }
 }
