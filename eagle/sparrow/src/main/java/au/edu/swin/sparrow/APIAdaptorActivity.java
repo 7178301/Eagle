@@ -51,6 +51,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private WebView webViewLog;
     private boolean logCollapsed = false;
 
+    private Timer myTimer;
+
     private Vector<String> logMessages = new Vector<String>();
     boolean newLog = true;
     @Override
@@ -67,13 +69,14 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         Log.addCallback(netserve);
 
         MyTimerTask myTask = new MyTimerTask();
-        Timer myTimer = new Timer();
+        myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 50);
     }
 
     @Override
     protected void onDestroy() {
         Log.removeCallback(telnet);
+        myTimer.cancel();
         super.onDestroy();
     }
 
