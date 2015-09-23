@@ -278,7 +278,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     }
 
     void updatePositionFragment() {
-        commandConnection.sendMessage("GETPOSITIONASSIGNED", new ConnectProtoBuf.ResponseCallBack() {
+        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ConnectProtoBuf.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
                 if (position != null) {
@@ -292,6 +292,16 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 }
             }
         });
+        if (!connected) {
+            ca.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast toast = Toast.makeText(ca, "Lost connection to drone", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            });
+            finish();
+        }
     }
 
     /**

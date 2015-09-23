@@ -43,16 +43,20 @@ public class ConnectProtoBuf {
 
     }
 
-    public synchronized void sendMessage(String message) {
-        sendMessage(message, null);
+    public synchronized boolean sendMessage(String message) {
+        return sendMessage(message, null);
     }
 
-    public synchronized void sendMessage(String message, ResponseCallBack rcb) {
-            id++;
-            if (rcb != null) {
-                responseMap.put(id, rcb);
-            }
-            new Thread(new writeThread(message)).start();
+    public synchronized boolean sendMessage(String message, ResponseCallBack rcb) {
+        if (connected == false) {
+            return false;
+        }
+        id++;
+        if (rcb != null) {
+            responseMap.put(id, rcb);
+        }
+        new Thread(new writeThread(message)).start();
+        return true;
     }
 
     public boolean isConnected() {
@@ -68,14 +72,19 @@ public class ConnectProtoBuf {
         @Override
         public void run() {
             connected = false;
-            if (out == null || in == null || pingSocket == null || pingSocket.isClosed()) {
+            if (pingSocket != null) {
                 try {
-                    pingSocket = new Socket(serverName, 2425);
-                    out = pingSocket.getOutputStream();
-                    in = pingSocket.getInputStream();
-                    connected = true;
+                    pingSocket.close();
                 } catch (IOException e) {
                 }
+            }
+            try {
+                pingSocket = new Socket(serverName, 2425);
+                out = pingSocket.getOutputStream();
+                in = pingSocket.getInputStream();
+                connected = true;
+            } catch (IOException e) {
+                connected = false;
             }
         }
     }
@@ -91,6 +100,7 @@ public class ConnectProtoBuf {
                     out = pingSocket.getOutputStream();
                     in = pingSocket.getInputStream();
                 } catch (IOException e) {
+                    connected = false;
                     return;
                 }
             }
@@ -102,14 +112,13 @@ public class ConnectProtoBuf {
                         ResponseCallBack rcb = responseMap.get(response.getId());
                         rcb.handleResponse(response.getResponseStrings(0));
                         responseMap.remove(response.getId());
-                    }
-                    else if (response.getType() == EagleProtoBuf.Response.ResponseType.LOG) {
+                    } else if (response.getType() == EagleProtoBuf.Response.ResponseType.LOG) {
                         Log.log(response.getResponseStrings(0));
-                    }
-                    else {
+                    } else {
                         Log.log(response.toString());
                     }
                 } catch (IOException e) {
+                    connected = false;
                     return;
                 }
 
@@ -135,7 +144,7 @@ public class ConnectProtoBuf {
             try {
                 request.writeDelimitedTo(out);
             } catch (IOException e) {
-
+                connected = false;
             }
         }
     }
