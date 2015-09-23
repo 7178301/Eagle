@@ -13,7 +13,7 @@ import eagle.Log;
 /**
  * Created by cameron on 9/2/15.
  */
-public class ConnectProtoBuf {
+public class ConnectDroneServer {
     private Socket pingSocket = null;
     private OutputStream out = null;
     private InputStream in = null;
@@ -23,7 +23,7 @@ public class ConnectProtoBuf {
     private Thread read;
     private boolean connected = false;
 
-    public ConnectProtoBuf(String servername) {
+    public ConnectDroneServer(String servername) {
         this.serverName = servername;
     }
 

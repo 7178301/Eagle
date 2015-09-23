@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,8 +18,7 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import eagle.Drone;
-import eagle.network.NetworkServer;
-import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
+import eagle.network.DroneServer;
 import eagle.Log;
 import eagle.network.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
@@ -43,7 +41,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     Drone drone = new Drone();
     TelnetServer telnet = new TelnetServer(drone);
-    NetworkServer netserve = new NetworkServer(drone);
+    DroneServer netserve = new DroneServer(drone);
 
     private Button buttonExpandSensors;
     private LinearLayout linearLayoutSensors;

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import eagle.Drone;
 import eagle.Log;
-import eagle.network.NetworkServer;
+import eagle.network.DroneServer;
 import eagle.network.TelnetServer;
 import eagle.sdkInterface.AdaptorLoader;
 
@@ -20,7 +20,7 @@ public class Pidgin implements Log.LogCallback {
         TelnetServer ts = new TelnetServer(drone);
         Thread trd = new Thread(ts);
         trd.start();
-        NetworkServer ns = new NetworkServer(drone);
+        DroneServer ns = new DroneServer(drone);
         Thread trd2 = new Thread(ns);
         trd2.start();
         Log.addCallback(this);

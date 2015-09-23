@@ -21,14 +21,14 @@ import eagle.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class NetworkServer implements Runnable, Log.LogCallback {
+public class DroneServer implements Runnable, Log.LogCallback {
 
     Drone drone;
 
     Vector<NetworkConnectionHandler> networkSessions = new Vector<NetworkConnectionHandler>();
 
 
-    public NetworkServer(Drone drone) {
+    public DroneServer(Drone drone) {
         this.drone = drone;
     }
 

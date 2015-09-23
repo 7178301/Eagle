@@ -5,8 +5,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.net.Uri;
-import android.os.Looper;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -23,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import eagle.Log;
-import eagle.network.ConnectProtoBuf;
+import eagle.network.ConnectDroneServer;
 
 public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener, Log.LogCallback {
 
@@ -42,12 +40,12 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
      */
     ViewPager mViewPager;
     private String serveraddr;
-    private ConnectProtoBuf commandConnection;
+    private ConnectDroneServer commandConnection;
     private RemoteControlFragment remoteControlFragment;
     private LoggingFragment logFragment;
     private ControllerActivity ca = this;
 
-    private ConnectProtoBuf.ResponseCallBack rcb = new ConnectProtoBuf.ResponseCallBack() {
+    private ConnectDroneServer.ResponseCallBack rcb = new ConnectDroneServer.ResponseCallBack() {
         @Override
         public void handleResponse(final String response) {
 
@@ -109,7 +107,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         }
 
         serveraddr = getIntent().getStringExtra("serveraddr");
-        commandConnection = new ConnectProtoBuf(serveraddr);
+        commandConnection = new ConnectDroneServer(serveraddr);
 
         remoteControlFragment = RemoteControlFragment.newInstance();
         logFragment = LoggingFragment.newInstance();
@@ -278,7 +276,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     }
 
     void updatePositionFragment() {
-        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ConnectProtoBuf.ResponseCallBack() {
+        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ConnectDroneServer.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
                 if (position != null) {
