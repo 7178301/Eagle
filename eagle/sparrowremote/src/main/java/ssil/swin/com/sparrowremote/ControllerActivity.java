@@ -44,6 +44,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     private RemoteControlFragment remoteControlFragment;
     private LoggingFragment logFragment;
     private ControllerActivity ca = this;
+    private Timer myTimer;
 
     private ConnectDroneServer.ResponseCallBack rcb = new ConnectDroneServer.ResponseCallBack() {
         @Override
@@ -120,7 +121,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         }
 
         MyTimerTask myTask = new MyTimerTask();
-        Timer myTimer = new Timer();
+        myTimer = new Timer();
         myTimer.schedule(myTask, 1000, 100);
 
         Log.addCallback(this);
@@ -130,6 +131,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     @Override
     protected void onDestroy() {
         Log.removeCallback(this);
+        myTimer.cancel();
         super.onDestroy();
     }
 
@@ -291,13 +293,8 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
             }
         });
         if (!connected) {
-            ca.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast toast = Toast.makeText(ca, "Lost connection to drone", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            });
+            Toast toast = Toast.makeText(this, "Lost connection to drone", Toast.LENGTH_LONG);
+            toast.show();
             finish();
         }
     }
