@@ -28,7 +28,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_alignEnd="@+id/buttonConnect"
             android:layout_alignRight="@+id/buttonConnect"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
 
@@ -57,6 +58,7 @@
                     android:layout_alignEnd="@+id/textViewSensorData"
                     android:layout_alignRight="@+id/textViewSensorData"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:text="@string/collapseSensors" />
 
             </RelativeLayout>
@@ -70,7 +72,7 @@
             <RelativeLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="fill_parent">
                 <TextView
                     android:id="@+id/textViewLogData"
                     android:layout_width="wrap_content"
@@ -84,16 +86,14 @@
                     android:layout_alignEnd="@+id/textViewLogData"
                     android:layout_alignRight="@+id/textViewLogData"
                     android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:text="@string/collapseLog" />
-
+                <WebView
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/webViewLog"
+                    android:layout_below="@+id/buttonExpandLog" />
             </RelativeLayout>
-
-
-            <WebView
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/webViewLog" />
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

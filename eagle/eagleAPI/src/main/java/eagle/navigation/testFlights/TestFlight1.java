@@ -26,9 +26,9 @@ public class TestFlight1 extends TestFlight {
 
 
         //try {
-        getDrone().getSDKAdaptor().changeAltitudeRelative(1);
+        getDrone().getSDKAdaptor().changeAltitudeDisplacement(1);
         getDrone().getSDKAdaptor().delay(1000);
-        getDrone().getSDKAdaptor().changeAltitudeRelative(-1);
+        getDrone().getSDKAdaptor().changeAltitudeDisplacement(-1);
         getDrone().getSDKAdaptor().delay(1000);
         //    }
         //catch (InterruptedException e) {
