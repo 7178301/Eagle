@@ -3,6 +3,7 @@ package au.edu.swin.pidgin;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ public class Pidgin implements Log.LogCallback {
 
     Pidgin(String adaptor) throws InterruptedException {
         drone.setSDKAdaptor(adaptor);
+        String[] confs = {"COM3"};
+        drone.getSDKAdaptor().getGPSs().get(0).setSensorConfigurables(confs);
         TelnetServer ts = new TelnetServer(drone);
         Thread trd = new Thread(ts);
         trd.start();
@@ -25,11 +28,6 @@ public class Pidgin implements Log.LogCallback {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-
-        JavaGPS javaGPS = new JavaGPS();
-        javaGPS.connectToSensor();
-        Log.log(javaGPS.getData().toStringLong());
-
         AdaptorLoader adaptorLoader = new AdaptorLoader();
         HashMap sdkAdaptorMap = adaptorLoader.getSDKAdaptorMap();
         Set<String> set = sdkAdaptorMap.keySet();

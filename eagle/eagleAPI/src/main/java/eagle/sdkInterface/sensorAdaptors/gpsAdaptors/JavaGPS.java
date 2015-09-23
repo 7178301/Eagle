@@ -17,7 +17,9 @@ import jssc.SerialPortException;
  */
 public class JavaGPS extends AdaptorGPS {
     PositionGPS currentPos = null;
-    static SerialPort serialPort;
+    SerialPort serialPort;
+    String port = null;
+    Thread thread = null;
 
     double altitude, longitude, latitude;
     boolean ready = false;
@@ -25,13 +27,6 @@ public class JavaGPS extends AdaptorGPS {
 
     public JavaGPS() {
         super("JavaGPS", "NMEA_GPS", "0.0.1");
-        serialPort = new SerialPort("/dev/ttyUSB0");
-        try {
-            serialPort.openPort();
-            serialPort.setParams(4800, 8, 1, 0);
-        } catch (SerialPortException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -55,17 +50,44 @@ public class JavaGPS extends AdaptorGPS {
         return ready;
     }
 
-    class readThread implements Runnable {
+    @Override
+    public boolean setSensorConfigurables(String[] confs) {
+        if (thread != null) {
+            thread.interrupt();
+        }
+        if (confs.length != 1) {
+            return false;
+        }
+        port = confs[0];
+        serialPort = new SerialPort(port);
+        try {
+            serialPort.openPort();
+            serialPort.setParams(4800, 8, 1, 0);
+            thread = new Thread(new ReadThread());
+            thread.start();
+        } catch (SerialPortException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String[] getSensorConfigurables() {
+        return new String[0];
+    }
+
+    class ReadThread implements Runnable {
 //protocol info from here: http://www.gpsinformation.org/dale/nmea.htm
         @Override
         public void run() {
             while (true)
             {
                 try {
-                    String gpsString = serialPort.readString();
-                    Log.log(gpsString);
+                    String gpsString = readString(serialPort);
+                    //Log.log(gpsString);
                     String parts[] = gpsString.split(",");
-                    if (parts[0] == "$GPGGA") {
+                    if (parts[0].compareTo("$GPGGA") == 0) {
                         latitude = parseLatitude(parts[2], parts[3]);
                         longitude = parseLongitude(parts[4], parts[5]);
                         altitude = parseAltitude(parts[9], parts[10]);
@@ -78,20 +100,55 @@ public class JavaGPS extends AdaptorGPS {
             }
         }
 
+        private String readString(SerialPort serialPort) throws SerialPortException {
+            StringBuilder sb = new StringBuilder();
+            while (true) {
+                byte[] val = serialPort.readBytes(1);
+                if ((char)val[0] == '\n') {
+                    return sb.toString();
+                } else {
+                    sb.append((char)val[0]);
+                }
+            }
+        }
+
         private double parseAltitude(String part, String part1) {
-            return Double.parseDouble(part);
+            try {
+                return Double.parseDouble(part);
+            }
+            catch (NumberFormatException e) {
+                return 0;
+            }
         }
 
         private double parseLongitude(String part, String part1) {
-            double degree = Double.parseDouble(part.substring(0,2));
-            double minutes = Double.parseDouble(part.substring(2));
+            double degree = 0, minutes = 0;
+            try {
+                degree = Double.parseDouble(part.substring(0, 2));
+                minutes = Double.parseDouble(part.substring(2));
+            }
+            catch (NumberFormatException e) {
+
+            }
+            catch (IndexOutOfBoundsException f) {
+
+            }
             //01131.000,E
             return degree+minutes/60;
         }
 
         private double parseLatitude(String part, String part1) {
-            double degree = Double.parseDouble(part.substring(0,2));
-            double minutes = Double.parseDouble(part.substring(2));
+            double degree = 0, minutes = 0;
+            try {
+                degree = Double.parseDouble(part.substring(0, 2));
+                minutes = Double.parseDouble(part.substring(2));
+            }
+            catch (NumberFormatException e) {
+
+            }
+            catch (IndexOutOfBoundsException f) {
+
+            }
             //4807.038,N
             return degree+minutes/60;
         }
