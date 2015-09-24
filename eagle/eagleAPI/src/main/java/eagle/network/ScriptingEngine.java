@@ -9,6 +9,7 @@ import java.util.Set;
 
 import eagle.Log;
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
@@ -472,13 +473,21 @@ public class ScriptingEngine {
                     break;
                 case "GETPOSITIONASSIGNED":
                     if (array.length == 1) {
-                        return adaptor.getPositionAssigned().toString();
+                        Position pos = adaptor.getPositionAssigned();
+                        if (pos == null) {
+                            return "ASSIGNED POSITION NOT SET";
+                        }
+                        return pos.toString();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "GETHOMEPOSITION":
                     if (array.length == 1) {
-                        return adaptor.getHomePosition().toString();
+                        Position pos = adaptor.getHomePosition();
+                        if (pos == null) {
+                            return "HOME POSITION NOT SET";
+                        }
+                        return pos.toString();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
