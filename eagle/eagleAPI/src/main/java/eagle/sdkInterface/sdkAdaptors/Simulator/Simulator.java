@@ -1,8 +1,11 @@
 package eagle.sdkInterface.sdkAdaptors.Simulator;
 
 import eagle.Log;
-import eagle.navigation.positioning.PositionMetric;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
+import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -19,6 +22,14 @@ public class Simulator extends SDKAdaptor {
 
     public Simulator() {
         super("Simulator", "Siumulator", "alpha", "0.0.1");
+        maxSpeed = 1;
+        maxRotateSpeed = 30;
+        try {
+            setPositionAssigned(new PositionMetric(0,0,0,new Angle(0),new Angle(0),new Angle(0)));
+            setHomePosition(getPositionAssigned());
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -67,75 +78,58 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position, double speed) {
-        PositionMetric endPos = new PositionMetric(getPositionAssigned());
-        endPos.add(position);
-
-        double verticalDist = position.getAltitude();
-        double longDist = position.getLongitude();
-        double latDist = position.getLatitude();
-
-        double maxDist;
-
-        if (Math.abs(verticalDist) > Math.abs(longDist) && Math.abs(verticalDist) > Math.abs(latDist)) {
-            maxDist = Math.abs(verticalDist);
-        } else if (Math.abs(longDist) > Math.abs(verticalDist) && Math.abs(longDist) > Math.abs(latDist)) {
-            maxDist = Math.abs(longDist);
-        } else {
-            maxDist = Math.abs(latDist);
-        }
-
-        verticalDist /= maxDist;
-        longDist /= maxDist;
-        latDist /= maxDist;
-
-        while (!endPos.equals(getPositionAssigned())) {
-            double altitude = getPositionAssigned().getAltitude();
-            double longitude = getPositionAssigned().getLongitude();
-            double latitude = getPositionAssigned().getLatitude();
-
-            if (altitude - position.getAltitude() > verticalDist) {
-                altitude += verticalDist * speed;
-            } else {
-                altitude = endPos.getAltitude();
-            }
-            if (longitude - position.getLongitude() > longDist) {
-                longitude += longDist * speed;
-            } else {
-                longitude = endPos.getLongitude();
-            }
-            if (latitude - position.getLatitude() > latDist) {
-                latitude += latDist * speed;
-            } else {
-                latitude = endPos.getLatitude();
-            }
-
-            PositionMetric newPos = new PositionMetric(longitude, latitude, altitude, position.getRoll(), position.getPitch(), position.getYaw());
-            setPositionAssigned(newPos);
-            delay(1000);
-
-            Log.log("Current Position: " + newPos.toString());
+    public boolean flyTo(PositionMetric position, double speed) {
+        if (!connected) return false;
+        try {
+            setPositionAssigned(position);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+            return false;
         }
         return true;
     }
 
     @Override
-    public boolean flyToRelative(PositionMetric position) {
-        return flyToRelative(position, maxSpeed);
+    public boolean flyTo(PositionMetric position) {
+        return flyTo(position, maxSpeed);
     }
 
     @Override
-    public boolean flyToGPS(PositionGPS positionGPS, double speed) {
-        return false;
+    public boolean flyTo(PositionGPS position, double speed) {
+        if (!connected) return false;
+        try {
+            setPositionAssigned(position);
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     @Override
-    public boolean flyToGPS(PositionGPS positionGPS) {
-        return flyToGPS(positionGPS, maxSpeed);
+    public boolean flyTo(PositionGPS position) {
+        return flyTo(position, maxSpeed);
     }
 
     @Override
-    public PositionMetric getPositionInFlight() {
+    public boolean flyTo(PositionDisplacement position, double speed) {
+        if (!connected) return false;
+        try {
+            setPositionAssigned(getPositionAssigned().add(position));
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean flyTo(PositionDisplacement position) {
+        return flyTo(position, maxSpeed);
+    }
+
+    @Override
+    public Position getPositionInFlight() {
         return getPositionAssigned();
     }
 

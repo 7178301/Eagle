@@ -90,9 +90,8 @@ public class TelnetServer implements Runnable, Log.LogCallback {
                         if (scriptingEngine != null) {
                             out.println(scriptingEngine.executeInstruction(inputLine));
                         }
-                    }
-                    catch (ScriptingEngine.InvalidInstructionException e) {
-                        out.println("Invalid Command: "+e.getMessage());
+                    } catch (ScriptingEngine.InvalidInstructionException e) {
+                        out.println("Invalid Command: " + e.getMessage());
                     }
                 }
             } catch (IOException e) {

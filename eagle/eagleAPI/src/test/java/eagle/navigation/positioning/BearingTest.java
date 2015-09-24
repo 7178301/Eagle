@@ -1,4 +1,4 @@
-package eagle;
+package eagle.navigation.positioning;
 
 import eagle.navigation.positioning.Angle;
 
