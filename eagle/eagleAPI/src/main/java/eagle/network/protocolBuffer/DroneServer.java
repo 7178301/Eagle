@@ -1,4 +1,4 @@
-package eagle.network;
+package eagle.network.protocolBuffer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +9,8 @@ import java.util.Vector;
 
 import eagle.Drone;
 import eagle.Log;
-import eagle.ScriptingEngine;
+import eagle.network.ScriptingEngine;
+import eagle.network.protocolBuffer.EagleProtoBuf;
 
 
 /**

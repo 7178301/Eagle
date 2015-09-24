@@ -1,4 +1,4 @@
-package eagle.network;
+package eagle.network.telnet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.Vector;
 
 import eagle.Drone;
 import eagle.Log;
-import eagle.ScriptingEngine;
+import eagle.network.ScriptingEngine;
 
 
 /**

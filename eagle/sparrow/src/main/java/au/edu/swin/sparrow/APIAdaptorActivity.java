@@ -18,9 +18,9 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import eagle.Drone;
-import eagle.network.DroneServer;
+import eagle.network.protocolBuffer.DroneServer;
 import eagle.Log;
-import eagle.network.TelnetServer;
+import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;

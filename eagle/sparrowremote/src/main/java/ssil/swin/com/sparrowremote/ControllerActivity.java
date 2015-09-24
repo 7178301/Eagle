@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import eagle.Log;
-import eagle.network.ConnectDroneServer;
+import eagle.network.protocolBuffer.ConnectDroneServer;
 
 public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener, Log.LogCallback {
 

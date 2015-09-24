@@ -1,4 +1,4 @@
-package eagle.network;
+package eagle.network.protocolBuffer;
 
 
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eagle.Log;
+import eagle.network.protocolBuffer.EagleProtoBuf;
 
 /**
  * Created by cameron on 9/2/15.
