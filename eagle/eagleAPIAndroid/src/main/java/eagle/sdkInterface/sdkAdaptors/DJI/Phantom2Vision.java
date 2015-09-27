@@ -1,5 +1,23 @@
 package eagle.sdkInterface.sdkAdaptors.DJI;
 
+import android.content.Context;
+
+import au.edu.swin.eagleAPIAndroid.R;
+import dji.sdk.api.DJIDrone;
+import dji.sdk.api.DJIDroneTypeDef;
+import dji.sdk.api.GroundStation.DJIGroundStationFlyingInfo;
+import dji.sdk.api.GroundStation.DJIGroundStationTask;
+import dji.sdk.api.GroundStation.DJIGroundStationTypeDef;
+import dji.sdk.api.GroundStation.DJIGroundStationWaypoint;
+import dji.sdk.api.MainController.DJIMainControllerSystemState;
+import dji.sdk.interfaces.DJIGerneralListener;
+import dji.sdk.interfaces.DJIGroundStationExecutCallBack;
+import dji.sdk.interfaces.DJIGroundStationFlyingInfoCallBack;
+import dji.sdk.interfaces.DJIGroundStationTakeOffCallBack;
+import dji.sdk.interfaces.DJIMcuUpdateStateCallBack;
+import dji.sdk.interfaces.DJIReceivedVideoDataCallBack;
+import dji.sdk.widget.DjiGLSurfaceView;
+import eagle.Log;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionDisplacement;
@@ -18,11 +36,17 @@ import eagle.sdkInterface.SDKAdaptor;
  * Date Modified	26/05/2015 - Nicholas
  */
 public class Phantom2Vision extends SDKAdaptor {
+    private Context context = null;
+
+    boolean permission = false;
+    DJIGroundStationTypeDef.GroundStationResult groundStation = DJIGroundStationTypeDef.GroundStationResult.GS_Result_Unknown;
+    private PositionGPS initPos;
+
 
     //TODO Create method implementations
 
     public Phantom2Vision() {
-        super("DJI", "Phantom 2 Vision", "1.0.6", "0.0.1");
+        super("DJI", "Phantom 2 Vision", "alpha", "0.0.1");
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
@@ -30,9 +54,42 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
-        return false;
+        if (context == null) {
+            return false;
+        }
+        //must be run threaded (Networking Code)
+        Thread authThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    //Your code goes here
+                    DJIDrone.checkPermission(context, new DJIGerneralListener() {
+                        @Override
+                        public void onGetPermissionResult(int result) {
+                            //Log.log(, "checkPermission = " + result);
+                            if (result == 0)
+                                permission = true;
+                            //else exit
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        authThread.start();
+        try {
+            authThread.join(10000);
+        } catch (InterruptedException e) {
+            return false;
+        }
+        if (!permission) {
+            return false;
+        }
+        return onInitSDK();
     }
 
+    //TODO: workout what to do for these functions
     public boolean disconnectFromDrone() {
         return false;
     }
@@ -45,11 +102,13 @@ public class Phantom2Vision extends SDKAdaptor {
         return false;
     }
 
-    //TODO CREATE BELOW IMPLEMENTATION
     public Position getPositionInFlight() {
-        return null;
+        DJIGroundStationFlyingInfo fi = PhantomTracker.INSTANCE.getFlyingInfo();
+        PositionGPS pos = new PositionGPS(fi.phantomLocationLatitude, fi.phantomLocationLongitude, fi.altitude, new Angle(fi.roll), new Angle(fi.pitch), new Angle(fi.yaw));
+        return pos;
     }
 
+    //TODO: workout what to do for these functions
     public boolean resumeDrone() {
         return false;
     }
@@ -60,32 +119,83 @@ public class Phantom2Vision extends SDKAdaptor {
 
     @Override
     public boolean flyTo(PositionMetric positionMetric, double speed) {
-        return false;
+        //casting metric position to displacement doesnt work, but creating a displacement does.
+        PositionDisplacement disp = new PositionDisplacement(positionMetric);
+        PositionGPS newPos = initPos.add(disp);
+        return flyTo(newPos, speed);
     }
 
     @Override
     public boolean flyTo(PositionMetric positionMetric) {
-        return false;
+        //casting metric position to displacement doesnt work, but creating a displacement does.
+        PositionDisplacement disp = new PositionDisplacement(positionMetric);
+        PositionGPS newPos = initPos.add(disp);
+        return flyTo(newPos);
     }
 
     @Override
     public boolean flyTo(PositionGPS position, double speed) {
-        return false;
+        return flyTo(position);
     }
 
     @Override
     public boolean flyTo(PositionGPS position) {
-        return false;
+        DJIGroundStationTask task1 = new DJIGroundStationTask();
+        DJIGroundStationWaypoint way1 = new DJIGroundStationWaypoint(position.getLatitude(), position.getLongitude());
+        way1.altitude = new Float(position.getAltitude());
+        task1.addWaypoint(way1);
+
+
+        final DJIGroundStationTypeDef.GroundStationResult[] stationResult = {null};
+        final DJIGroundStationTypeDef.GroundStationTakeOffResult[] takeOffResult = {null};
+
+        DJIDrone.getDjiGroundStation().uploadGroundStationTask(task1, new DJIGroundStationExecutCallBack() {
+
+            @Override
+            public void onResult(final DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
+                Log.log("uploadGroundStationTask = " + groundStationResult);
+                stationResult[0] = groundStationResult;
+                if (groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Successed) {
+                    DJIDrone.getDjiGroundStation().startGroundStationTask(new DJIGroundStationTakeOffCallBack() {
+                        @Override
+                        public void onResult(DJIGroundStationTypeDef.GroundStationTakeOffResult groundStationTakeOffResult) {
+                            //Log.log(, "Uselessly hanging out here.......");
+                            Log.log("startGroundStationTask = " + groundStationTakeOffResult);
+                            takeOffResult[0] = groundStationTakeOffResult;
+
+                        }
+                    });
+                }
+            }
+        });
+        try {
+            while (true) {
+                if (stationResult[0] != null && stationResult[0] == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Successed
+                        && takeOffResult[0] != null && takeOffResult[0] == DJIGroundStationTypeDef.GroundStationTakeOffResult.GS_Takeoff_Successed) {
+                    return true;
+                }
+                Thread.sleep(10);
+            }
+        } catch (InterruptedException e) {
+            return false;
+        }
+
+
     }
+
 
     @Override
     public boolean flyTo(PositionDisplacement position, double speed) {
-        return false;
+        PositionGPS current = (PositionGPS) getPositionInFlight();
+        PositionGPS newPos = current.add(position);
+        return flyTo(newPos, speed);
     }
 
     @Override
     public boolean flyTo(PositionDisplacement position) {
-        return false;
+        PositionGPS current = (PositionGPS) getPositionInFlight();
+        PositionGPS newPos = current.add(position);
+        return flyTo(newPos);
     }
 
     @Override
@@ -95,6 +205,83 @@ public class Phantom2Vision extends SDKAdaptor {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean setAndroidContext(Object object) {
+        if (object instanceof Context) {
+            context = (Context) object;
+            return true;
+        }
+        return false;
+    }
+
+
+    private boolean onInitSDK() {
+        //Log.log(, "init with type = " + DJIDrone.initWithType(getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision));
+        boolean result = DJIDrone.initWithType(context, DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
+        if (!result) {
+            return false;
+        }
+        //Log.log(, "GetLevel = " + DJIDrone.getLevel());
+        //Log.log(, "connectToDrone = " + DJIDrone.connectToDrone());
+        result = DJIDrone.connectToDrone();
+        if (!result) {
+            return false;
+        }
+        result = GroundStationGo();
+        if (!result) {
+            return false;
+        }
+        result = MControllerGo();
+        return result;
+
+    }
+
+    private boolean MControllerGo() {
+        //DJIDrone.getDjiMC().
+        //Log.log(, "DJIDrone.getDjiMC.getClass = " + DJIDrone.getDjiMC().getClass()); //class dji.sdk.api.MainController.DJIPhantomMainController
+
+        boolean result = DJIDrone.getDjiMC().startUpdateTimer(1000);
+        if (!result) {
+            return false;
+        }
+        DJIDrone.getDjiMC().setMcuUpdateStateCallBack(new DJIMcuUpdateStateCallBack() {
+            public void onResult(DJIMainControllerSystemState state) {
+                //Log.log(, "DJIMainControllerSystemState altitude = " + state.altitude);
+            }
+        });
+        return true;
+        //if (drone.getDjiMC().getClass().equals(DJIPhantomMainController.class)) Log.log(, "DJIPhantomMainController");
+
+
+    }
+
+    private boolean GroundStationGo() {
+        PhantomTracker.INSTANCE.start();
+        initPos = (PositionGPS) getPositionInFlight();
+
+        boolean result = DJIDrone.getDjiGroundStation().startUpdateTimer(1000);
+        DJIDrone.getDjiGroundStation().setGroundStationFlyingInfoCallBack(new DJIGroundStationFlyingInfoCallBack() {
+            @Override
+            public void onResult(DJIGroundStationFlyingInfo djiGroundStationFlyingInfo) {
+                //Log.log(, "altitude = " + djiGroundStationFlyingInfo.altitude); //the results are rubbish
+            }
+        });
+        DJIDrone.getDjiGroundStation().openGroundStation(new DJIGroundStationExecutCallBack() {
+            @Override
+            public void onResult(DJIGroundStationTypeDef.GroundStationResult result) {
+                groundStation = result;
+            }
+        });
+        while (groundStation != DJIGroundStationTypeDef.GroundStationResult.GS_Result_Successed) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                return false;
+            }
+        }
+        return true;
     }
 }
 

@@ -17,6 +17,10 @@ public final class PositionDisplacement extends Position {
         super(latitude, longitude, altitude, roll, pitch, yaw);
     }
 
+    public PositionDisplacement(PositionMetric positionMetric) {
+        super(positionMetric);
+    }
+
     @Override
     public PositionDisplacement add(PositionDisplacement position) {
         return new PositionDisplacement(latitude + position.getLatitude(),
