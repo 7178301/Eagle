@@ -1,4 +1,4 @@
-package eagle;
+package eagle.network;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import eagle.Log;
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
@@ -17,9 +19,9 @@ import eagle.sdkInterface.SDKAdaptor;
  * Created by Cameron on 4/09/2015.
  */
 public class ScriptingEngine {
-    SDKAdaptor adaptor;
+    private SDKAdaptor adaptor;
 
-    static Map<String, String> commands = new HashMap<String, String>() {
+    static final Map<String, String> commands = new HashMap<String, String>() {
         {
             put("CONNECTTODRONE", "CONNECTTODRONE | Connect to the drone");
             put("DISCONNECTFROMDRONE", "DISCONNECTFROMDRONE | Disconnect from the drone");
@@ -47,7 +49,7 @@ public class ScriptingEngine {
         }
     };
 
-    ScriptingEngine(SDKAdaptor sdkAdaptor) {
+    public ScriptingEngine(SDKAdaptor sdkAdaptor) {
         this.adaptor = sdkAdaptor;
     }
 
@@ -471,13 +473,21 @@ public class ScriptingEngine {
                     break;
                 case "GETPOSITIONASSIGNED":
                     if (array.length == 1) {
-                        return adaptor.getPositionAssigned().toString();
+                        Position pos = adaptor.getPositionAssigned();
+                        if (pos == null) {
+                            return "ASSIGNED POSITION NOT SET";
+                        }
+                        return pos.toString();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
                 case "GETHOMEPOSITION":
                     if (array.length == 1) {
-                        return adaptor.getHomePosition().toString();
+                        Position pos = adaptor.getHomePosition();
+                        if (pos == null) {
+                            return "HOME POSITION NOT SET";
+                        }
+                        return pos.toString();
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }

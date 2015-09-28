@@ -3,6 +3,7 @@ apply plugin: 'java'
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile 'com.google.protobuf:protobuf-java:3.0.0-alpha-2'
     compile 'org.scream3r:jssc:2.8.0'
 }
 

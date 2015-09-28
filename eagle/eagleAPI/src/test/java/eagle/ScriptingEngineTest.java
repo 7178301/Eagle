@@ -4,10 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
-import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionMetric;
+import eagle.network.ScriptingEngine;
 import eagle.sdkInterface.SDKAdaptor;
 
 import static org.junit.Assert.assertEquals;
@@ -66,7 +65,7 @@ public class ScriptingEngineTest {
     @Test
     public void testExecuteInstructionFLYTODISPLACEMENT() {
         try {
-            se.adaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
+            drone.getSDKAdaptor().setHomePosition(new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("FLYTO DISPLACEMENT 1 2 3 4"));
             assertEquals("moved to wrong position", new PositionMetric(1, 2, 3, new Angle(0),new Angle(0), new Angle(4)), drone.getSDKAdaptor().getPositionAssigned());
         }
@@ -81,7 +80,7 @@ public class ScriptingEngineTest {
     @Test
     public void testExecuteInstructionCHANGELONGITUDEDISPLACEMENT() {
         try {
-            se.adaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
+            drone.getSDKAdaptor().setHomePosition(new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE DISPLACEMENT 1"));
             assertEquals("moved to wrong position", new PositionMetric(0, 1, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELONGITUDE DISPLACEMENT 2 1"));
@@ -98,7 +97,7 @@ public class ScriptingEngineTest {
     @Test
     public void testExecuteInstructionCHANGELATITUDEDISPLACEMENT() {
         try {
-            se.adaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
+            drone.getSDKAdaptor().setHomePosition(new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE DISPLACEMENT 1"));
             assertEquals("moved to wrong position", new PositionMetric(1, 0, 0, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGELATITUDE DISPLACEMENT 2 1"));
@@ -115,7 +114,7 @@ public class ScriptingEngineTest {
     @Test
     public void testExecuteInstructionCHANGEALTITUDEDISPLACEMENT() {
         try {
-            se.adaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
+            drone.getSDKAdaptor().setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGEALTITUDE DISPLACEMENT 1"));
             assertEquals("moved to wrong position", new PositionMetric(0, 0, 1, new Angle(0),new Angle(0), new Angle(0)), drone.getSDKAdaptor().getPositionAssigned());
             assertEquals("return wrong value", "SUCCESS", se.executeInstruction("CHANGEALTITUDE DISPLACEMENT 2 1"));

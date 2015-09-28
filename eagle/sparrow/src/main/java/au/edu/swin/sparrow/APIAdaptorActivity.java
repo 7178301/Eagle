@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,9 +18,9 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import eagle.Drone;
-import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
+import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.Log;
-import eagle.TelnetServer;
+import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
@@ -42,6 +41,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     Drone drone = new Drone();
     TelnetServer telnet = new TelnetServer(drone);
+    ProtocolBufferServer protocolBufferServer = new ProtocolBufferServer(drone);
 
     private Button buttonExpandSensors;
     private LinearLayout linearLayoutSensors;
@@ -50,6 +50,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private Button buttonExpandLog;
     private WebView webViewLog;
     private boolean logCollapsed = false;
+
+    private Timer myTimer;
 
     private Vector<String> logMessages = new Vector<String>();
     boolean newLog = true;
@@ -61,17 +63,20 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
         initializeUI();
-        Log.addCallback(telnet);
         new Thread(telnet).start();
+        new Thread(protocolBufferServer).start();
+        Log.addCallback(telnet);
+        Log.addCallback(protocolBufferServer);
 
         MyTimerTask myTask = new MyTimerTask();
-        Timer myTimer = new Timer();
+        myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 50);
     }
 
     @Override
     protected void onDestroy() {
         Log.removeCallback(telnet);
+        myTimer.cancel();
         super.onDestroy();
     }
 

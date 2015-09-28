@@ -13,6 +13,7 @@ package eagle;
  */
 
 import eagle.navigation.Navigation;
+import eagle.network.ScriptingEngine;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 

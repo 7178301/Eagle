@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">SparrowRemote</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="connect_to_drone">Connect To Drone</string>
+    <string name="connect_description">This relys on the application on the drone implementing the TelnetServer interface.</string>
+    <string name="drone_address">Drone Address</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="title_section1">Remote Control</string>
+    <string name="title_section2">Command</string>
+    <string name="title_section3">Log</string>
+    <string name="title_activity_remote_control">RemoteControl</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="altitude">Altitude</string>
+    <string name="bearing">Bearing</string>
+    <string name="left">Left</string>
+    <string name="forward">Forward</string>
+    <string name="backward">Backward</string>
+    <string name="right">Right</string>
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+    <string name="rotate_left">Rotate Left</string>
+    <string name="rotate_right">Rotate Right</string>
+    <string name="gohome">GOHOME</string>
+    <string name="title_activity_controller">ControllerActivity</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
