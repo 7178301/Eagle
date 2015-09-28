@@ -50,4 +50,12 @@ public abstract class SensorAdaptor {
     public String[] getSensorPinsDescription(){
         return new String[0];
     }
+
+    public boolean setSensorConfigurables(String[] confs) {
+        return false;
+    }
+
+    public String[] getSensorConfigurables() {
+        return new String[0];
+    }
 }
