@@ -18,7 +18,7 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import eagle.Drone;
-import eagle.network.protocolBuffer.DroneServer;
+import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.Log;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
@@ -41,7 +41,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     Drone drone = new Drone();
     TelnetServer telnet = new TelnetServer(drone);
-    DroneServer netserve = new DroneServer(drone);
+    ProtocolBufferServer protocolBufferServer = new ProtocolBufferServer(drone);
 
     private Button buttonExpandSensors;
     private LinearLayout linearLayoutSensors;
@@ -64,9 +64,9 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         drone.getSDKAdaptor().setAndroidContext(this);
         initializeUI();
         new Thread(telnet).start();
-        new Thread(netserve).start();
+        new Thread(protocolBufferServer).start();
         Log.addCallback(telnet);
-        Log.addCallback(netserve);
+        Log.addCallback(protocolBufferServer);
 
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();

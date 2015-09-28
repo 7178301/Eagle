@@ -1,6 +1,5 @@
-package ssil.swin.com.sparrowremote;
+package ssil.swin.com.sparrowremote.Fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import java.util.Vector;
+
+import ssil.swin.com.sparrowremote.R;
 
 
 /**
@@ -51,7 +52,7 @@ public class LoggingFragment extends Fragment {
         return view;
     }
 
-    void appendLog(String message) {
+    public void appendLog(String message) {
         logMessages.add(message);
         updateLog();
     }

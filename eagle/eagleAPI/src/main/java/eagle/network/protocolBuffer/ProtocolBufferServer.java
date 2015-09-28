@@ -10,7 +10,6 @@ import java.util.Vector;
 import eagle.Drone;
 import eagle.Log;
 import eagle.network.ScriptingEngine;
-import eagle.network.protocolBuffer.EagleProtoBuf;
 
 
 /**
@@ -22,14 +21,14 @@ import eagle.network.protocolBuffer.EagleProtoBuf;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class DroneServer implements Runnable, Log.LogCallback {
+public class ProtocolBufferServer implements Runnable, Log.LogCallback {
 
     Drone drone;
 
     Vector<NetworkConnectionHandler> networkSessions = new Vector<NetworkConnectionHandler>();
 
 
-    public DroneServer(Drone drone) {
+    public ProtocolBufferServer(Drone drone) {
         this.drone = drone;
     }
 
@@ -58,11 +57,11 @@ public class DroneServer implements Runnable, Log.LogCallback {
 
     @Override
     public void handleMessage(String message) {
-        for (NetworkConnectionHandler nch : networkSessions) {
-            if (nch.isConnected()) {
-                nch.handleMessage(message);
+        for (NetworkConnectionHandler networkConnectionHandler : networkSessions) {
+            if (networkConnectionHandler.isConnected()) {
+                networkConnectionHandler.handleMessage(message);
             } else {
-                networkSessions.remove(nch);
+                networkSessions.remove(networkConnectionHandler);
             }
         }
     }
@@ -70,7 +69,7 @@ public class DroneServer implements Runnable, Log.LogCallback {
     class NetworkConnectionHandler extends Thread {
         ScriptingEngine scriptingEngine;
         Socket socket;
-        OutputStream out;
+        OutputStream outputStream;
         boolean connected;
 
         NetworkConnectionHandler(Socket socket, Drone drone) {
@@ -82,7 +81,7 @@ public class DroneServer implements Runnable, Log.LogCallback {
         @Override
         public void run() {
             try {
-                out = socket.getOutputStream();
+                outputStream = socket.getOutputStream();
                 InputStream in = socket.getInputStream();
 
 
@@ -95,14 +94,14 @@ public class DroneServer implements Runnable, Log.LogCallback {
                                     .setType(EagleProtoBuf.Response.ResponseType.COMMAND)
                                     .addResponseStrings(scriptingEngine.executeInstruction(request.getRequestStrings(0)))
                                     .build();
-                            response.writeDelimitedTo(out);
+                            response.writeDelimitedTo(outputStream);
                         } else {
                             EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
                                     .setId(request.getId())
                                     .setType(EagleProtoBuf.Response.ResponseType.OTHER)
                                     .addResponseStrings("Could not execute command")
                                     .build();
-                            response.writeDelimitedTo(out);
+                            response.writeDelimitedTo(outputStream);
                         }
                     }
                     catch (ScriptingEngine.InvalidInstructionException e) {
@@ -111,7 +110,7 @@ public class DroneServer implements Runnable, Log.LogCallback {
                                 .setType(EagleProtoBuf.Response.ResponseType.OTHER)
                                 .addResponseStrings("Invalid Command: " + e.getMessage())
                                 .build();
-                        response.writeDelimitedTo(out);
+                        response.writeDelimitedTo(outputStream);
                     }
                 }
             } catch (IOException e) {
@@ -120,14 +119,14 @@ public class DroneServer implements Runnable, Log.LogCallback {
         }
 
         public void handleMessage(String message) {
-            if (out != null) {
+            if (outputStream != null) {
                 EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
                         .setId(0)
                         .setType(EagleProtoBuf.Response.ResponseType.LOG)
                         .addResponseStrings(message)
                         .build();
                 try {
-                    response.writeDelimitedTo(out);
+                    response.writeDelimitedTo(outputStream);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

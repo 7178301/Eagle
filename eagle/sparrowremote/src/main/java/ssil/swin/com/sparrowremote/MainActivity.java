@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-public class ConnectToDrone extends Activity {
+public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,9 +15,9 @@ public class ConnectToDrone extends Activity {
     }
 
     public void connectToDrone(View view) {
-        String serveraddr = ((EditText)findViewById(R.id.editTextServerAddress)).getText().toString();
+        String serverAddress = ((EditText)findViewById(R.id.editTextServerAddress)).getText().toString();
         Intent intent = new Intent(getBaseContext(), ControllerActivity.class);
-        intent.putExtra("serveraddr", serveraddr);
+        intent.putExtra("serverAddress", serverAddress);
         startActivity(intent);
     }
 }

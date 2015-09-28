@@ -72,6 +72,7 @@ public class TelnetServer implements Runnable, Log.LogCallback {
         Socket socket;
         PrintWriter out;
         boolean connected;
+        private Vector<String> logMessages = new Vector<String>();
 
         TelnetConnectionHandler(Socket socket, Drone drone) {
             this.socket = socket;
@@ -83,8 +84,7 @@ public class TelnetServer implements Runnable, Log.LogCallback {
         public void run() {
             try {
                 out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 String inputLine;
 
@@ -104,9 +104,7 @@ public class TelnetServer implements Runnable, Log.LogCallback {
         }
 
         public void handleMessage(String message) {
-            if (out != null) {
-                out.println(message);
-            }
+            logMessages.add(message);
         }
 
         public boolean isConnected() {

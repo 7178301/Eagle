@@ -21,7 +21,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import eagle.Log;
-import eagle.network.protocolBuffer.ConnectDroneServer;
+import eagle.network.protocolBuffer.ProtocolBufferClient;
+import ssil.swin.com.sparrowremote.Fragment.LoggingFragment;
+import ssil.swin.com.sparrowremote.Fragment.OnFragmentInteractionListener;
+import ssil.swin.com.sparrowremote.Fragment.RemoteControlFragment;
 
 public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener, Log.LogCallback {
 
@@ -39,14 +42,14 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    private String serveraddr;
-    private ConnectDroneServer commandConnection;
+    private String serverAddress;
+    private ProtocolBufferClient commandConnection;
     private RemoteControlFragment remoteControlFragment;
     private LoggingFragment logFragment;
     private ControllerActivity ca = this;
     private Timer myTimer;
 
-    private ConnectDroneServer.ResponseCallBack rcb = new ConnectDroneServer.ResponseCallBack() {
+    private ProtocolBufferClient.ResponseCallBack rcb = new ProtocolBufferClient.ResponseCallBack() {
         @Override
         public void handleResponse(final String response) {
 
@@ -107,8 +110,8 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                             .setTabListener(this));
         }
 
-        serveraddr = getIntent().getStringExtra("serveraddr");
-        commandConnection = new ConnectDroneServer(serveraddr);
+        serverAddress = getIntent().getStringExtra("serverAddress");
+        commandConnection = new ProtocolBufferClient(serverAddress);
 
         remoteControlFragment = RemoteControlFragment.newInstance();
         logFragment = LoggingFragment.newInstance();
@@ -278,7 +281,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     }
 
     void updatePositionFragment() {
-        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ConnectDroneServer.ResponseCallBack() {
+        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ProtocolBufferClient.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
                 if (position != null) {
