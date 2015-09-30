@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
 
 /**
  * Created by cameron on 8/29/15.
@@ -47,6 +48,12 @@ public class MagneticFragment extends SensorFragment {
 
     public void setMagneticAdaptor(AdaptorMagnetic magnetic) {
         this.magnetic = magnetic;
+        magnetic.setSensorAdaptorCallback(new SensorAdaptorCallback() {
+            @Override
+            public void onSensorChanged() {
+                updateData();
+            }
+        });
     }
 
     @Override

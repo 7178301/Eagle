@@ -1,7 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors;
 
 /**
- * Abstract SensorAdaptor Class
+ * Abstract Sensor Adaptor Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
@@ -15,12 +15,19 @@ public abstract class SensorAdaptor {
     private String adaptorVersion = null;
     private String adaptorManufacturer = null;
     private String adaptorModel = null;
+    protected SensorAdaptorCallback sensorAdaptorCallback;
 
     public SensorAdaptor(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         this.adaptorName = adaptorManufacturer + " " + adaptorModel;
         this.adaptorManufacturer = adaptorManufacturer;
         this.adaptorModel = adaptorModel;
         this.adaptorVersion = adaptorVersion;
+        sensorAdaptorCallback = new SensorAdaptorCallback() {
+            @Override
+            public void onSensorChanged() {
+
+            }
+        };
     }
 
     public abstract boolean isConnectedToSensor();
@@ -57,5 +64,9 @@ public abstract class SensorAdaptor {
 
     public String[] getSensorConfigurables() {
         return new String[0];
+    }
+
+    public void setSensorAdaptorCallback(final SensorAdaptorCallback sensorAdaptorCallback){
+        this.sensorAdaptorCallback=sensorAdaptorCallback;
     }
 }

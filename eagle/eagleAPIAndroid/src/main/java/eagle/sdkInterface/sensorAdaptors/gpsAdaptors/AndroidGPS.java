@@ -93,6 +93,7 @@ public class AndroidGPS extends AdaptorGPS {
                 gpsData = null;
                 accuracy = 999999;
             }
+            sensorAdaptorCallback.onSensorChanged();
         }
 
         @Override

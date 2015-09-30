@@ -70,7 +70,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();
-        myTimer.schedule(myTask, 3000, 50);
+        myTimer.schedule(myTask, 3000, 1000);
     }
 
     @Override
