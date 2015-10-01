@@ -10,6 +10,7 @@ import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.SDKAdaptorCallback;
 import ioio.lib.api.IOIO;
 
 /**
@@ -31,7 +32,7 @@ public class F450Flamewheel extends SDKAdaptor {
     //TODO Create method implementations
 
     public F450Flamewheel() {
-        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1");
+        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1",0,0);
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
@@ -43,7 +44,7 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
-        if (controller!=null&&controller.getState()!=null)
+        if (controller != null && controller.getState() != null)
             return true;
         else
             return false;
@@ -75,32 +76,38 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyTo(PositionMetric positionMetric, double speed) {
+    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric positionMetric, double speed) {
+        sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
         return false;
     }
 
     @Override
-    public boolean flyTo(PositionMetric positionMetric) {
+    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric positionMetric) {
+        sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
         return false;
     }
 
     @Override
-    public boolean flyTo(PositionGPS position, double speed) {
+    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position, double speed) {
+        sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
         return false;
     }
 
     @Override
-    public boolean flyTo(PositionGPS position) {
+    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position) {
+        sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
         return false;
     }
 
     @Override
-    public boolean flyTo(PositionDisplacement position, double speed) {
+    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
+        sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
         return false;
     }
 
     @Override
-    public boolean flyTo(PositionDisplacement position) {
+    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
+        sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
         return false;
     }
 

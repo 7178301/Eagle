@@ -14,6 +14,7 @@ import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.SDKAdaptorCallback;
 
 /**
  * Created by Cameron on 4/09/2015.
@@ -62,94 +63,87 @@ public class ScriptingEngine {
             switch (array[0]) {
                 case "CONNECTTODRONE":
                     if (array.length == 1) {
-                        if (adaptor.connectToDrone()) {
+                        if (adaptor.connectToDrone())
                             return "SUCCESS";
-                        } else {
+                        else
                             return "FAIL";
-                        }
-                    } else {
+                    } else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "DISCONNECTFROMDRONE":
                     if (array.length == 1) {
-                        if (adaptor.disconnectFromDrone()) {
+                        if (adaptor.disconnectFromDrone())
                             return "SUCCESS";
-                        } else {
+                        else
                             return "FAIL";
-                        }
-                    } else {
+                    } else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "ISCONNECTEDTODRONE":
                     if (array.length == 1) {
-                        if (adaptor.isConnectedToDrone()) {
+                        if (adaptor.isConnectedToDrone())
                             return "TRUE";
-                        } else {
+                        else
                             return "FALSE";
-                        }
-                    } else {
+                    } else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "STANDBYDRONE":
                     if (array.length == 1) {
-                        if (adaptor.standbyDrone()) {
+                        if (adaptor.standbyDrone())
                             return "SUCCESS";
-                        } else {
+                        else
                             return "FAIL";
-                        }
-                    } else {
+                    } else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "RESUMEDRONE":
                     if (array.length == 1) {
-                        if (adaptor.resumeDrone()) {
+                        if (adaptor.resumeDrone())
                             return "SUCCESS";
-                        } else {
+                        else
                             return "FAIL";
-                        }
-                    } else {
+                    } else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "SHUTDOWNDRONE":
                     if (array.length == 1) {
-                        if (adaptor.shutdownDrone()) {
+                        if (adaptor.shutdownDrone())
                             return "SUCCESS";
-                        } else {
+                        else
                             return "FAIL";
-                        }
-                    } else {
+                    } else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "GETADAPTORVERSION":
-                    if (array.length == 1) {
+                    if (array.length == 1)
                         return adaptor.getAdaptorVersion();
-                    } else {
+                    else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "GETSDKVERSION":
-                    if (array.length == 1) {
+                    if (array.length == 1)
                         return adaptor.getSdkVersion();
-                    } else {
+                    else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
                 case "GETADAPTORNAME":
-                    if (array.length == 1) {
+                    if (array.length == 1)
                         return adaptor.getAdaptorName();
-                    } else {
+                    else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "GETADAPTORMANUFACTURER":
-                    if (array.length == 1) {
+                    if (array.length == 1)
                         return adaptor.getAdaptorManufacturer();
-                    } else {
+                    else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "GETADAPTORMODEL":
-                    if (array.length == 1) {
+                    if (array.length == 1)
                         return adaptor.getAdaptorModel();
-                    } else {
+                    else
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
-                    }
+
                 case "FLYTO":
                     if (array.length == 6) {
 
@@ -162,23 +156,35 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.flyTo(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                returnval = adaptor.flyTo(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.flyTo(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                returnval = adaptor.flyTo(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.flyTo(new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                returnval = adaptor.flyTo(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                        if (returnval == true) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -194,18 +200,30 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.flyTo(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                returnval = adaptor.flyTo(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.flyTo(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                returnval = adaptor.flyTo(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.flyTo(new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                returnval = adaptor.flyTo(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
@@ -226,18 +244,30 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeLongitudeGPS(val);
+                                returnval = adaptor.changeLongitudeGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeLongitudeMetric(val);
+                                returnval = adaptor.changeLongitudeMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeLongitudeDisplacement(val);
+                                returnval = adaptor.changeLongitudeDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
@@ -255,18 +285,30 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeLongitudeGPS(val, spe);
+                                returnval = adaptor.changeLongitudeGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeLongitudeMetric(val, spe);
+                                returnval = adaptor.changeLongitudeMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeLongitudeDisplacement(val, spe);
+                                returnval = adaptor.changeLongitudeDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
@@ -287,18 +329,30 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeLatitudeGPS(val);
+                                returnval = adaptor.changeLatitudeGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeLatitudeMetric(val);
+                                returnval = adaptor.changeLatitudeMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeLatitudeDisplacement(val);
+                                returnval = adaptor.changeLatitudeDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
@@ -316,18 +370,30 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeLatitudeGPS(val, spe);
+                                returnval = adaptor.changeLatitudeGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeLatitudeMetric(val, spe);
+                                returnval = adaptor.changeLatitudeMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeLatitudeDisplacement(val, spe);
+                                returnval = adaptor.changeLatitudeDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
@@ -348,23 +414,35 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeAltitudeGPS(val);
+                                returnval = adaptor.changeAltitudeGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeAltitudeMetric(val);
+                                returnval = adaptor.changeAltitudeMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeAltitudeDisplacement(val);
+                                returnval = adaptor.changeAltitudeDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                        if (returnval == true) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -377,23 +455,35 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeAltitudeGPS(val, spe);
+                                returnval = adaptor.changeAltitudeGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeAltitudeMetric(val, spe);
+                                returnval = adaptor.changeAltitudeMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeAltitudeDisplacement(val, spe);
+                                returnval = adaptor.changeAltitudeDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, val, spe);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                        if (returnval == true) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -409,23 +499,35 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeYawGPS(new Angle(val));
+                                returnval = adaptor.changeYawGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new Angle(val));
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeYawMetric(new Angle(val));
+                                returnval = adaptor.changeYawMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new Angle(val));
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeYawDisplacement(new Angle(val));
+                                returnval = adaptor.changeYawDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new Angle(val));
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                        if (returnval == true) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -438,23 +540,35 @@ public class ScriptingEngine {
                             case "GPS":
                             case "G":
                             case "-G":
-                                returnval = adaptor.changeYawGPS(new Angle(val), spe);
+                                returnval = adaptor.changeYawGPS(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new Angle(val), spe);
                                 break;
                             case "METRIC":
                             case "M":
                             case "-M":
-                                returnval = adaptor.changeYawMetric(new Angle(val), spe);
+                                returnval = adaptor.changeYawMetric(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new Angle(val), spe);
                                 break;
                             case "DISPLACEMENT":
                             case "DISP":
                             case "D":
                             case "-D":
-                                returnval = adaptor.changeYawDisplacement(new Angle(val), spe);
+                                returnval = adaptor.changeYawDisplacement(new SDKAdaptorCallback() {
+                                    @Override
+                                    public void onResult(boolean booleanResult, String stringResult) {
+                                    }
+                                }, new Angle(val), spe);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                        if (returnval == true) {
+                        if (returnval) {
                             return "SUCCESS";
                         } else {
                             return "FAIL";
@@ -464,13 +578,26 @@ public class ScriptingEngine {
                     }
                 case "GOHOME":
                     if (array.length == 1) {
-                        adaptor.goHome();
+                        if (adaptor.goHome(new SDKAdaptorCallback() {
+                            @Override
+                            public void onResult(boolean booleanResult, String stringResult) {
+                            }
+                        }))
+                            return "SUCCESS";
+                        else
+                            return "FAIL";
                     } else if (array.length == 2) {
-                        adaptor.goHome(Double.parseDouble(array[1]));
+                        if (adaptor.goHome(new SDKAdaptorCallback() {
+                            @Override
+                            public void onResult(boolean booleanResult, String stringResult) {
+                            }
+                        }, Double.parseDouble(array[1])))
+                            return "SUCCESS";
+                        else
+                            return "FAIL";
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                    break;
                 case "GETPOSITIONASSIGNED":
                     if (array.length == 1) {
                         Position pos = adaptor.getPositionAssigned();
@@ -498,22 +625,22 @@ public class ScriptingEngine {
                         double alt = Double.parseDouble(array[4]);
                         double bea = Double.parseDouble(array[5]);
                         try {
-                        switch (array[1]) {
-                            case "GPS":
-                            case "G":
-                            case "-G":
-                                adaptor.setHomePosition(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
-                                break;
-                            case "METRIC":
-                            case "M":
-                            case "-M":
-                                adaptor.setHomePosition(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
-                                break;
-                            default:
-                                throw new InvalidInstructionException("Invalid Position Type: " + instruction);
-                        }
+                            switch (array[1]) {
+                                case "GPS":
+                                case "G":
+                                case "-G":
+                                    adaptor.setHomePosition(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                    break;
+                                case "METRIC":
+                                case "M":
+                                case "-M":
+                                    adaptor.setHomePosition(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                    break;
+                                default:
+                                    throw new InvalidInstructionException("Invalid Position Type: " + instruction);
+                            }
                         } catch (SDKAdaptor.InvalidPositionException e) {
-                            throw new InvalidInstructionException("Invalid Position given: "+instruction);
+                            throw new InvalidInstructionException("Invalid Position given: " + instruction);
                         }
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);

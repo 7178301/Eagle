@@ -2,6 +2,8 @@ package eagle.navigation.testFlights;
 
 import eagle.Drone;
 import eagle.navigation.TestFlight;
+import eagle.navigation.positioning.PositionDisplacement;
+import eagle.sdkInterface.SDKAdaptorCallback;
 
 /**
  * Sample Flight Simulation 1
@@ -15,6 +17,7 @@ import eagle.navigation.TestFlight;
 public class TestFlight1 extends TestFlight {
 
 
+
     public TestFlight1(Drone drone, double speed, double rotation) {
         super(drone, "Initialization Test", "Initializes the drone, starts up the drone props at low speed, stops the props then disconnects", speed, rotation);
     }
@@ -26,10 +29,17 @@ public class TestFlight1 extends TestFlight {
 
 
         //try {
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(1);
-        getDrone().getSDKAdaptor().delay(1000);
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(-1);
-        getDrone().getSDKAdaptor().delay(1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, 1, null, null, null), 1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, -1, null, null, null), 1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.run(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+
+            }
+        });
+        while (!getDrone().getSDKAdaptor().sdkAdaptorStack.empty()){
+
+        }
         //    }
         //catch (InterruptedException e) {
 
