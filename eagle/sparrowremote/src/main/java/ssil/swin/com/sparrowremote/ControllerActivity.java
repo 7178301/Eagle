@@ -128,7 +128,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         myTimer = new Timer();
         myTimer.schedule(myTask, 1000, 100);
 
-        Log.addCallback("ControllerActivity",this);
+        Log.addVerboseCallback(this);
 
     }
 

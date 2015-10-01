@@ -112,7 +112,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         buttonExpandLog.setOnClickListener(this);
 
         webViewLog = (WebView)findViewById(R.id.webViewLog);
-        Log.addCallback("APIAdaptorActivity",this);
 
 
         FragmentManager fragMan = getFragmentManager();

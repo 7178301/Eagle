@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import eagle.sdkInterface.LogAndroid;
+
 public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connect_to_drone);
+        new LogAndroid();
     }
 
     public void connectToDrone(View view) {
