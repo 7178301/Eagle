@@ -22,7 +22,7 @@ import eagle.network.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class TelnetServer implements Runnable, Log.LogCallback {
+public class TelnetServer implements Runnable{
 
     Drone drone;
 
@@ -56,23 +56,11 @@ public class TelnetServer implements Runnable, Log.LogCallback {
         }
     }
 
-    @Override
-    public void handleMessage(String message) {
-        for (TelnetConnectionHandler tch : telnetSessions) {
-            if (tch.isConnected()) {
-                tch.handleMessage(message);
-            } else {
-                telnetSessions.remove(tch);
-            }
-        }
-    }
-
     class TelnetConnectionHandler extends Thread {
         Drone drone;
         Socket socket;
         PrintWriter out;
         boolean connected;
-        private Vector<String> logMessages = new Vector<String>();
 
         TelnetConnectionHandler(Socket socket, Drone drone) {
             this.socket = socket;
@@ -92,19 +80,18 @@ public class TelnetServer implements Runnable, Log.LogCallback {
                     try {
                         ScriptingEngine scriptingEngine = drone.getScriptingEngine();
                         if (scriptingEngine != null) {
-                            out.println(scriptingEngine.executeInstruction(inputLine));
+                            String result = scriptingEngine.executeInstruction(inputLine);
+                            out.println(result);
+                            Log.log("TelnetServer",result);
                         }
                     } catch (ScriptingEngine.InvalidInstructionException e) {
                         out.println("Invalid Command: " + e.getMessage());
+                        Log.log("TelnetServer", "Invalid Command: " + e.getMessage());
                     }
                 }
             } catch (IOException e) {
                 connected = false;
             }
-        }
-
-        public void handleMessage(String message) {
-            logMessages.add(message);
         }
 
         public boolean isConnected() {

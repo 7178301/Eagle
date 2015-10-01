@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import eagle.Drone;
 import eagle.Log;
+import eagle.LogCallback;
 import eagle.network.ScriptingEngine;
 
 
@@ -21,7 +22,7 @@ import eagle.network.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class ProtocolBufferServer implements Runnable, Log.LogCallback {
+public class ProtocolBufferServer implements Runnable{
 
     Drone drone;
 
@@ -52,17 +53,6 @@ public class ProtocolBufferServer implements Runnable, Log.LogCallback {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void handleMessage(String message) {
-        for (NetworkConnectionHandler networkConnectionHandler : networkSessions) {
-            if (networkConnectionHandler.isConnected()) {
-                networkConnectionHandler.handleMessage(message);
-            } else {
-                networkSessions.remove(networkConnectionHandler);
-            }
         }
     }
 
@@ -102,6 +92,7 @@ public class ProtocolBufferServer implements Runnable, Log.LogCallback {
                                     .addResponseStrings("Could not execute command")
                                     .build();
                             response.writeDelimitedTo(outputStream);
+                            Log.log("ProtocolBufferServer", "Could not execute command");
                         }
                     }
                     catch (ScriptingEngine.InvalidInstructionException e) {
@@ -111,6 +102,7 @@ public class ProtocolBufferServer implements Runnable, Log.LogCallback {
                                 .addResponseStrings("Invalid Command: " + e.getMessage())
                                 .build();
                         response.writeDelimitedTo(outputStream);
+                        Log.log("ProtocolBufferServer", "Invalid Command: " + e.getMessage());
                     }
                 }
             } catch (IOException e) {
@@ -118,20 +110,6 @@ public class ProtocolBufferServer implements Runnable, Log.LogCallback {
             }
         }
 
-        public void handleMessage(String message) {
-            if (outputStream != null) {
-                EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
-                        .setId(0)
-                        .setType(EagleProtoBuf.Response.ResponseType.LOG)
-                        .addResponseStrings(message)
-                        .build();
-                try {
-                    response.writeDelimitedTo(outputStream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
 
         public boolean isConnected() {
             return connected;

@@ -45,14 +45,14 @@ public class Simulator extends SDKAdaptor {
     @Override
     public boolean connectToDrone() {
         connected = true;
-        Log.log("Connected to Drone");
+        Log.log("Simulator","Connected to Drone");
         return connected;
     }
 
     @Override
     public boolean disconnectFromDrone() {
         connected = false;
-        Log.log("Disconnected to Drone");
+        Log.log("Simulator","Disconnected to Drone");
         return true;
     }
 

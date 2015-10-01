@@ -21,12 +21,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import eagle.Log;
+import eagle.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferClient;
 import ssil.swin.com.sparrowremote.Fragment.LoggingFragment;
 import ssil.swin.com.sparrowremote.Fragment.OnFragmentInteractionListener;
 import ssil.swin.com.sparrowremote.Fragment.RemoteControlFragment;
 
-public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener, Log.LogCallback {
+public class ControllerActivity extends AppCompatActivity implements ActionBar.TabListener, OnFragmentInteractionListener, LogCallback {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -57,7 +58,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 ca.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.log("Command failed (" + response + "). Perhaps you need to connect first?");
+                        Log.log("ControllerActivity","Command failed (" + response + "). Perhaps you need to connect first?");
                         Toast toast = Toast.makeText(ca, "Command failed (" + response + "). Perhaps you need to connect first?", Toast.LENGTH_LONG);
                         toast.show();
 
@@ -127,13 +128,13 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         myTimer = new Timer();
         myTimer.schedule(myTask, 1000, 100);
 
-        Log.addCallback(this);
+        Log.addCallback("ControllerActivity",this);
 
     }
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback(this);
+        Log.removeCallback("ControllerActivity",this);
         myTimer.cancel();
         super.onDestroy();
     }
@@ -229,7 +230,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
 
     @Override
-    public void handleMessage(String message) {
+    public void onLogEntry(String tag, String message) {
         logFragment.appendLog(message);
     }
 

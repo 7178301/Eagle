@@ -18,6 +18,7 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 import eagle.Drone;
+import eagle.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.Log;
 import eagle.network.telnet.TelnetServer;
@@ -35,7 +36,9 @@ import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 
-public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, Log.LogCallback {
+public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, LogCallback {
+
+
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
@@ -54,7 +57,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private Timer myTimer;
 
     private Vector<String> logMessages = new Vector<String>();
-    boolean newLog = true;
     @Override
     protected void onStart() {
         super.onStart();
@@ -65,8 +67,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         initializeUI();
         new Thread(telnet).start();
         new Thread(protocolBufferServer).start();
-        Log.addCallback(telnet);
-        Log.addCallback(protocolBufferServer);
+        Log.addVerboseCallback(this);
 
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();
@@ -75,7 +76,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback(telnet);
+        Log.removeCallback("TelnetServer",this);
         myTimer.cancel();
         super.onDestroy();
     }
@@ -111,7 +112,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         buttonExpandLog.setOnClickListener(this);
 
         webViewLog = (WebView)findViewById(R.id.webViewLog);
-        Log.addCallback(this);
+        Log.addCallback("APIAdaptorActivity",this);
 
 
         FragmentManager fragMan = getFragmentManager();
@@ -179,8 +180,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             sensor.updateData();
         }
 
-        if (newLog && webViewLog != null) {
-            newLog = false;
+        if (webViewLog != null) {
             StringBuilder html = new StringBuilder();
             html.append("<html>");
             html.append("<head>");
@@ -232,9 +232,9 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     }
 
     @Override
-    public void handleMessage(String message) {
-        logMessages.add(message);
-        newLog = true;
+    public void onLogEntry(String tag, String message) {
+        logMessages.add(tag+": "+message);
+
     }
 
     class MyTimerTask extends TimerTask {

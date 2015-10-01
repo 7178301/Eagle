@@ -676,7 +676,7 @@ public class ScriptingEngine {
                             sb.append(parts[i]);
                             sb.append(" ");
                         }
-                        Log.log(sb.toString());
+                        Log.log("ScriptingEngine",sb.toString());
                         return "SUCCESS";
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);

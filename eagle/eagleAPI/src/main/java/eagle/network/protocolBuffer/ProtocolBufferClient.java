@@ -113,9 +113,9 @@ public class ProtocolBufferClient {
                         rcb.handleResponse(response.getResponseStrings(0));
                         responseCallBackMap.remove(response.getId());
                     } else if (response.getType() == EagleProtoBuf.Response.ResponseType.LOG) {
-                        Log.log(response.getResponseStrings(0));
+                        Log.log("ProtocolBufferClient",response.getResponseStrings(0));
                     } else {
-                        Log.log(response.toString());
+                        Log.log("ProtocolBufferClient",response.toString());
                     }
                 } catch (IOException e) {
                     connected = false;

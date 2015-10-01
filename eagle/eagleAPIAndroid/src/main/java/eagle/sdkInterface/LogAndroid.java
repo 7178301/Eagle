@@ -1,6 +1,6 @@
 package eagle.sdkInterface;
 
-import eagle.Log;
+import eagle.LogCallback;
 
 
 /**
@@ -12,18 +12,13 @@ import eagle.Log;
  * Date Modified	27/08/2015 - Cameron
  */
 
-public class LogAndroid implements Log.LogCallback {
-    private static LogAndroid ourInstance = new LogAndroid();
-
-    public static LogAndroid getInstance() {
-        return ourInstance;
-    }
+public class LogAndroid implements LogCallback {
 
     private LogAndroid() {
     }
 
     @Override
-    public void handleMessage(String message) {
+    public void onLogEntry(String tag, String message) {
         android.util.Log.i("Eagle", message);
     }
 }
