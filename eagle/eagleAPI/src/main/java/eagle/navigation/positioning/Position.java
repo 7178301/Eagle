@@ -1,7 +1,5 @@
 package eagle.navigation.positioning;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Position
  *

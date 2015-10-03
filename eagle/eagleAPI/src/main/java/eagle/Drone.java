@@ -28,11 +28,7 @@ public class Drone {
     private SDKAdaptor adaptor = null;
     private Navigation navigation = null;
     private AdaptorLoader adaptorLoader = null;
-
     private ScriptingEngine scriptingEngine = null;
-
-    double minSpeed = -0;
-    double maxSpeed = -0;
 
     public Drone() {
         this.adaptorLoader = new AdaptorLoader();
