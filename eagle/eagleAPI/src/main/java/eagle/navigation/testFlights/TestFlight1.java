@@ -31,14 +31,13 @@ public class TestFlight1 extends TestFlight {
         //try {
         getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, 1, null, null, null), 1000);
         getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, -1, null, null, null), 1000);
-        getDrone().getSDKAdaptor().sdkAdaptorStack.run(new SDKAdaptorCallback() {
-            @Override
-            public void onResult(boolean booleanResult, String stringResult) {
-
-            }
-        });
+        getDrone().getSDKAdaptor().sdkAdaptorStack.run(null);
         while (!getDrone().getSDKAdaptor().sdkAdaptorStack.empty()){
-
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         //    }
         //catch (InterruptedException e) {

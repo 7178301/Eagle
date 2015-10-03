@@ -1,5 +1,7 @@
 package eagle.navigation.positioning;
 
+import com.sun.istack.internal.NotNull;
+
 /**
  * Position
  *
@@ -20,6 +22,8 @@ public abstract class Position {
     protected final Angle yaw;
 
     public Position(double latitude, double longitude, double altitude, Angle yaw) {
+        if (yaw == null)
+            throw new IllegalArgumentException("Angle  Must Not Be Null");
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
@@ -29,6 +33,8 @@ public abstract class Position {
     }
 
     public Position(double latitude, double longitude, double altitude, Angle roll, Angle pitch, Angle yaw) {
+        if (roll == null || pitch == null || yaw == null)
+            throw new IllegalArgumentException("Angle  Must Not Be Null");
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;

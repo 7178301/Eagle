@@ -27,17 +27,9 @@ public class TestFlight2 extends TestFlight {
 
 
         //try {
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(new SDKAdaptorCallback() {
-            @Override
-            public void onResult(boolean booleanResult, String stringResult) {
-            }
-        },1);
+        getDrone().getSDKAdaptor().changeAltitudeDisplacement(null,1);
         getDrone().getSDKAdaptor().delay(1000);
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(new SDKAdaptorCallback() {
-            @Override
-            public void onResult(boolean booleanResult, String stringResult) {
-            }
-        },-1);
+        getDrone().getSDKAdaptor().changeAltitudeDisplacement(null,-1);
         getDrone().getSDKAdaptor().delay(1000);
         //    }
         //catch (InterruptedException e) {
