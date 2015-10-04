@@ -1,5 +1,8 @@
 package eagle.sdkInterface.sensorAdaptors;
 
+import java.util.HashSet;
+import java.util.List;
+
 /**
  * Abstract Sensor Adaptor Class
  *
@@ -15,19 +18,14 @@ public abstract class SensorAdaptor {
     private String adaptorVersion = null;
     private String adaptorManufacturer = null;
     private String adaptorModel = null;
-    protected SensorAdaptorCallback sensorAdaptorCallback;
+    protected HashSet<SensorAdaptorCallback> sensorAdaptorCallback;
 
     public SensorAdaptor(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         this.adaptorName = adaptorManufacturer + " " + adaptorModel;
         this.adaptorManufacturer = adaptorManufacturer;
         this.adaptorModel = adaptorModel;
         this.adaptorVersion = adaptorVersion;
-        sensorAdaptorCallback = new SensorAdaptorCallback() {
-            @Override
-            public void onSensorChanged() {
-
-            }
-        };
+        sensorAdaptorCallback = new HashSet<>();
     }
 
     public abstract boolean isConnectedToSensor();
@@ -66,7 +64,7 @@ public abstract class SensorAdaptor {
         return new String[0];
     }
 
-    public void setSensorAdaptorCallback(final SensorAdaptorCallback sensorAdaptorCallback){
-        this.sensorAdaptorCallback=sensorAdaptorCallback;
+    public void addSensorAdaptorCallback(final SensorAdaptorCallback sensorAdaptorCallback){
+        this.sensorAdaptorCallback.add(sensorAdaptorCallback);
     }
 }

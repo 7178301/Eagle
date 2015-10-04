@@ -9,6 +9,7 @@ import android.os.Bundle;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
 
 /**
  * Android GPS Adaptor
@@ -93,7 +94,8 @@ public class AndroidGPS extends AdaptorGPS {
                 gpsData = null;
                 accuracy = 999999;
             }
-            sensorAdaptorCallback.onSensorChanged();
+            for(SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+                currentSensorAdaptorCallback.onSensorChanged();
         }
 
         @Override

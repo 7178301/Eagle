@@ -55,7 +55,7 @@ public class AccelerometerFragment extends SensorFragment {
 
     public void setAccelerometerAdaptor(AdaptorAccelerometer accelerometer) {
         this.accelerometer = accelerometer;
-        accelerometer.setSensorAdaptorCallback(new SensorAdaptorCallback() {
+        accelerometer.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
                 updateData();

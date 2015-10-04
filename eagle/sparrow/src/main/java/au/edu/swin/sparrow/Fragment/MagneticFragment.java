@@ -48,7 +48,7 @@ public class MagneticFragment extends SensorFragment {
 
     public void setMagneticAdaptor(AdaptorMagnetic magnetic) {
         this.magnetic = magnetic;
-        magnetic.setSensorAdaptorCallback(new SensorAdaptorCallback() {
+        magnetic.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
                 updateData();

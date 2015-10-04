@@ -21,6 +21,7 @@ public class AdaptorLoader {
     private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision",
             "Flyver.F450Flamewheel", "Simulator.Simulator"));
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
+    private HashSet<String> bearingAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBearing"));
     private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));
     private HashSet<String> magneticAdaptorPaths = new HashSet<>(Arrays.asList("AndroidMagnetic"));
     private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS", "JavaGPS"));
@@ -48,6 +49,13 @@ public class AdaptorLoader {
         for (String path : cameraAdaptorPaths)
             cameraAdaptors.put(path, getSensorAdaptorCamera(path));
         return cameraAdaptors;
+    }
+
+    public HashMap getSensorAdaptorListBearing() {
+        HashMap<String, AdaptorBearing> bearingAdaptors = new HashMap<>();
+        for (String path : bearingAdaptorPaths)
+            bearingAdaptors.put(path, getSensorAdaptorBearing(path));
+        return bearingAdaptors;
     }
 
     public HashMap getSensorAdaptorListGPS() {
@@ -110,6 +118,19 @@ public class AdaptorLoader {
         if (accelerometerAdaptorPaths.contains(path)) {
             try {
                 result = (AdaptorAccelerometer) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors." + path).newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                System.out.println(e.toString());
+            }
+        }
+        return result;
+    }
+
+    public AdaptorBearing getSensorAdaptorBearing(String path) {
+        AdaptorBearing result = null;
+        ClassLoader classLoader = Drone.class.getClassLoader();
+        if (bearingAdaptorPaths.contains(path)) {
+            try {
+                result = (AdaptorBearing) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.bearingAdaptors." + path).newInstance();
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 System.out.println(e.toString());
             }

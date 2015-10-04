@@ -55,7 +55,7 @@ public class GyroscopeFragment extends SensorFragment {
 
     public void setGyroscopeAdaptor(AdaptorGyroscope gyroscope) {
         this.gyroscope = gyroscope;
-        gyroscope.setSensorAdaptorCallback(new SensorAdaptorCallback() {
+        gyroscope.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
                 updateData();

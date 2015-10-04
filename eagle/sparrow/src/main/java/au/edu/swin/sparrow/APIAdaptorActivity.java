@@ -17,12 +17,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import au.edu.swin.sparrow.Fragment.BearingFragment;
 import eagle.Drone;
 import eagle.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.Log;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
@@ -168,6 +170,15 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             gps.setAndroidContext(this);
             gps.connectToSensor();
             fragment.setGPSAdaptor(gps);
+            sensorFragments.add(fragment);
+            fragTransaction.add(R.id.scrollViewSensors, fragment);
+        }
+        ArrayList<AdaptorBearing> bearingAdaptors = drone.getSDKAdaptor().getBearings();
+        for (AdaptorBearing adaptorBearing : bearingAdaptors) {
+            BearingFragment fragment = BearingFragment.newInstance();
+            adaptorBearing.setAndroidContext(this);
+            adaptorBearing.connectToSensor();
+            fragment.setMagneticAccelerometerAdaptors(adaptorBearing);
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }

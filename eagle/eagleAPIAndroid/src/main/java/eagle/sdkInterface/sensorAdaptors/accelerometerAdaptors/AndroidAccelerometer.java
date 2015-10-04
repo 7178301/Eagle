@@ -1,6 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors;
 
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -85,6 +86,7 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
             accelerometerData[1] = event.values[1];
             accelerometerData[2] = event.values[2];
         }
-        sensorAdaptorCallback.onSensorChanged();
+        for(SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+            currentSensorAdaptorCallback.onSensorChanged();
     }
 }

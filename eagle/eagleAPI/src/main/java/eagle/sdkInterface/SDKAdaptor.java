@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public abstract class SDKAdaptor {
 
     private ArrayList<AdaptorAccelerometer> accelerometers = new ArrayList<>();
+    private ArrayList<AdaptorBearing> bearings = new ArrayList<>();
     private ArrayList<AdaptorCamera> cameras = new ArrayList<>();
     private ArrayList<AdaptorGPS> gps = new ArrayList<>();
     private ArrayList<AdaptorGyroscope> gyroscopes = new ArrayList<>();
@@ -364,6 +365,10 @@ public abstract class SDKAdaptor {
         this.accelerometers.add(adaptorAccelerometer);
     }
 
+    public void addSensorAdaptorBearing(AdaptorBearing adaptorBearing) {
+        this.bearings.add(adaptorBearing);
+    }
+
     public void addSensorAdaptorCamera(AdaptorCamera adaptorCamera) {
         this.cameras.add(adaptorCamera);
     }
@@ -394,6 +399,10 @@ public abstract class SDKAdaptor {
 
     public ArrayList<AdaptorAccelerometer> getAccelerometers() {
         return accelerometers;
+    }
+
+    public ArrayList<AdaptorBearing> getBearings() {
+        return bearings;
     }
 
     public ArrayList<AdaptorCamera> getCameras() {

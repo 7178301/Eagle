@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
 
 /**
  * Android Gyroscope Adaptor
@@ -81,6 +82,7 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
             gyroscopeData[1] = event.values[1];
             gyroscopeData[2] = event.values[2];
         }
-        sensorAdaptorCallback.onSensorChanged();
+        for(SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+            currentSensorAdaptorCallback.onSensorChanged();
     }
 }

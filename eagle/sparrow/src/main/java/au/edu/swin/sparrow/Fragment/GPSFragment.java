@@ -59,7 +59,7 @@ public class GPSFragment extends SensorFragment {
 
     public void setGPSAdaptor(AdaptorGPS gps) {
         this.gps = gps;
-        gps.setSensorAdaptorCallback(new SensorAdaptorCallback() {
+        gps.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
                 updateData();
