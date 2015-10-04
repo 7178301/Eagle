@@ -72,7 +72,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
@@ -89,7 +89,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
@@ -106,7 +106,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
@@ -123,7 +123,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }

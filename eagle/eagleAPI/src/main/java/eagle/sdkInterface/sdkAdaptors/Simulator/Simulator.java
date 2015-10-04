@@ -26,7 +26,7 @@ public class Simulator extends SDKAdaptor {
         try {
             setPositionAssigned(new PositionMetric(0,0,0,new Angle(0),new Angle(0),new Angle(0)));
             setHomePosition(getPositionAssigned());
-        } catch (InvalidPositionException e) {
+        } catch (InvalidPositionTypeException e) {
             e.printStackTrace();
         }
     }
@@ -38,7 +38,6 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
-
         addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("JavaGPS"));
     }
 
@@ -77,75 +76,87 @@ public class Simulator extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position, double speed) {
-        if (!connected) {
-            sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
-            return false;
-        }
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position, double speed) {
+        if (sdkAdaptorCallback == null||position==null)
+            throw new IllegalArgumentException("Arguments must not be null");
         else {
-            try {
-                setPositionAssigned(position);
-                sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
-                return true;
-            } catch (InvalidPositionException e) {
-                e.printStackTrace();
-                sdkAdaptorCallback.onResult(false,"flyTo "+position.toString()+" FAIL");
-                return false;
+            if (!connected) {
+                sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
+            } else {
+                try {
+                    setPositionAssigned(position);
+                    Log.log("Simulator", "flyToMetric " + position.toString() + " SUCCESS");
+                    sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
+                } catch (InvalidPositionTypeException e) {
+                    Log.log("Simulator", "flyToMetric " + position.toString() + " FAIL " + e.getMessage());
+                    sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
+                }
             }
         }
     }
 
     @Override
-    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position) {
-        return flyTo(sdkAdaptorCallback, position, maxSpeed);
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position) {
+        if (sdkAdaptorCallback == null||position==null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            flyTo(sdkAdaptorCallback, position, maxSpeed);
     }
 
     @Override
-    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position, double speed) {
-        if (!connected) {
-            sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
-            return false;
-        }
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position, double speed) {
+        if (sdkAdaptorCallback == null||position==null)
+            throw new IllegalArgumentException("Arguments must not be null");
         else {
-            try {
-                setPositionAssigned(position);
-                sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
-                return true;
-            } catch (InvalidPositionException e) {
-                e.printStackTrace();
-                sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
-                return false;
+            if (!connected) {
+                sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
+            } else {
+                try {
+                    setPositionAssigned(position);
+                    Log.log("Simulator", "flyToGPS " + position.toString() + " SUCCESS");
+                    sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
+                } catch (InvalidPositionTypeException e) {
+                    Log.log("Simulator", "flyToGPS " + position.toString() + " FAIL " + e.getMessage());
+                    sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
+                }
             }
         }
     }
 
     @Override
-    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position) {
-        return flyTo(sdkAdaptorCallback, position, maxSpeed);
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position) {
+        if (sdkAdaptorCallback == null||position==null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            flyTo(sdkAdaptorCallback, position, maxSpeed);
     }
 
     @Override
-    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
-        if (!connected) {
-            sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
-            return false;
-        }
-        else {
-            try {
-                setPositionAssigned(getPositionAssigned().add(position));
-                sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
-                return true;
-            } catch (InvalidPositionException e) {
-                e.printStackTrace();
-                sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
-                return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
+            if (sdkAdaptorCallback == null||position==null)
+                throw new IllegalArgumentException("Arguments must not be null");
+            else {
+                if (!connected) {
+                    sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
+                } else {
+                    try {
+                        setPositionAssigned(getPositionAssigned().add(position));
+                        Log.log("Simulator", "flyToDisplacement " + position.toString() + " SUCCESS");
+                        sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
+                    } catch (InvalidPositionTypeException e) {
+                        Log.log("Simulator", "flyToDisplacement " + position.toString() + " FAIL " + e.getMessage());
+                        sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
+                    }
+                }
             }
-        }
     }
 
     @Override
-    public boolean flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
-        return flyTo(sdkAdaptorCallback, position, maxSpeed);
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
+        if (sdkAdaptorCallback == null||position==null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            flyTo(sdkAdaptorCallback, position, maxSpeed);
     }
 
     @Override

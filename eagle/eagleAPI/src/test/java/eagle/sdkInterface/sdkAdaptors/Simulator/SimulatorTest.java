@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import eagle.Drone;
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
@@ -40,7 +39,7 @@ public class SimulatorTest {
     public void testFlyToMetric() throws Exception {
         try {
             sdkAdaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
-        } catch (SDKAdaptor.InvalidPositionException e) {
+        } catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position correctly");
         }
 
@@ -121,7 +120,7 @@ public class SimulatorTest {
     public void testFlyToGPS() throws Exception {
         try {
             sdkAdaptor.setHomePosition(new PositionGPS(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
-        } catch (SDKAdaptor.InvalidPositionException e) {
+        } catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position correctly");
         }
 
