@@ -45,6 +45,10 @@ public class SDKAdaptorTaskStack {
         sdkAdaptorTasks = new Stack<SDKAdaptorTask>();
     }
 
+    public void push(SDKAdaptorTask sdkAdaptorTask){
+        sdkAdaptorTasks.push(sdkAdaptorTask);
+    }
+
     public void push(int delay) {
         sdkAdaptorTasks.push(new SDKAdaptorTask().Delay(delay));
     }
@@ -154,7 +158,7 @@ public class SDKAdaptorTaskStack {
         return sdkAdaptorTaskStackThread.isAlive();
     }
 
-    private class SDKAdaptorTask {
+    public class SDKAdaptorTask {
         Position position = null;
         double speed = 0;
         int delay = 0;
