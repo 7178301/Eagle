@@ -5,6 +5,7 @@ import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
+import eagle.network.ScriptingEngine;
 import eagle.sdkInterface.sensorAdaptors.*;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public abstract class SDKAdaptor {
     final public String adaptorVersion;
 
     private Position homePosition = null;
+
+    final public ScriptingEngine scriptingEngine = new ScriptingEngine(this);
 
     final public SDKAdaptorTaskStack sdkAdaptorStack;
 

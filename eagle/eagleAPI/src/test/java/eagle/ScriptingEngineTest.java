@@ -30,7 +30,7 @@ public class ScriptingEngineTest {
     public void beforeTest() {
         drone = new Drone();
         drone.setSDKAdaptor("Simulator.Simulator");
-        se = drone.getScriptingEngine();
+        se = drone.getSDKAdaptor().scriptingEngine;
         drone.getSDKAdaptor().connectToDrone();
     }
 

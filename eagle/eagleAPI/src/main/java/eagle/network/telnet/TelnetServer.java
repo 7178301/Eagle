@@ -11,6 +11,7 @@ import java.net.SocketException;
 import eagle.Drone;
 import eagle.Log;
 import eagle.network.ScriptingEngine;
+import eagle.sdkInterface.SDKAdaptor;
 
 
 /**
@@ -24,12 +25,12 @@ import eagle.network.ScriptingEngine;
  */
 public class TelnetServer {
 
-    private Drone drone;
+    private ScriptingEngine scriptingEngine;
     private Thread serverThread = null;
     private int incomingPort;
 
-    public TelnetServer(Drone drone, int incomingPort) {
-        this.drone = drone;
+    public TelnetServer(ScriptingEngine scriptingEngine, int incomingPort) {
+        this.scriptingEngine = scriptingEngine;
         this.incomingPort = incomingPort;
         serverThread = new Thread(new TelnetServerThread());
         serverThread.start();
@@ -48,7 +49,7 @@ public class TelnetServer {
                     Log.log("TelnetServer", "Server Started");
                     while (!serverSocket.isClosed()) {
 
-                        clientThread = new Thread(new TelnetServerCommunicationThread(serverSocket, drone));
+                        clientThread = new Thread(new TelnetServerCommunicationThread(serverSocket, scriptingEngine));
                         clientThread.start();
                         while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
                             Thread.sleep(10);
@@ -66,9 +67,9 @@ public class TelnetServer {
         ScriptingEngine scriptingEngine;
         ServerSocket serverSocket;
 
-        TelnetServerCommunicationThread(ServerSocket serverSocket, Drone drone) {
+        TelnetServerCommunicationThread(ServerSocket serverSocket, ScriptingEngine scriptingEngine) {
             this.serverSocket = serverSocket;
-            this.scriptingEngine = drone.getScriptingEngine();
+            this.scriptingEngine = scriptingEngine;
         }
 
         @Override
@@ -83,7 +84,6 @@ public class TelnetServer {
                 String inputLine;
                 while ((inputLine = incoming.readLine()) != null && !clientSocket.isClosed()) {
                     try {
-                        ScriptingEngine scriptingEngine = drone.getScriptingEngine();
                         if (scriptingEngine != null) {
                             String result = scriptingEngine.executeInstruction(inputLine);
                             outgoing.println(result);

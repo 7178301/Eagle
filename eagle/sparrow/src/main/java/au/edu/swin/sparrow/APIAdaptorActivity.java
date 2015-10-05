@@ -67,8 +67,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
         initializeUI();
-        telnet = new TelnetServer(drone,2323);
-        protocolBufferServer = new ProtocolBufferServer(drone,2324);
+        telnet = new TelnetServer(drone.getSDKAdaptor().scriptingEngine,2323);
+        protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine,2324);
         Log.addVerboseCallback(this);
 
         MyTimerTask myTask = new MyTimerTask();

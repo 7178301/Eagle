@@ -1,7 +1,5 @@
 package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
-import java.awt.Image;
-
 /**
  *  Sensor Adaptor Callback Class
  *
@@ -12,5 +10,5 @@ import java.awt.Image;
  * Date Modified	30/09/2015 - Nicholas
  */
 public interface AdaptorCameraEventCallback {
-    void onSensorEvent(Image getData);
+    void onSensorEvent(byte[] getData);
 }

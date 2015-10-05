@@ -1,7 +1,5 @@
 package eagle.sdkInterface.sensorAdaptors;
 
-import java.awt.Image;
-
 /**
  * Camera Adaptor Interface
  *
@@ -18,12 +16,12 @@ public abstract class AdaptorCamera extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract Image getData();
+    public abstract byte[] getData();
 
     public abstract boolean connectToSensor();
 
     //TODO Following Method Need Proper Implementation
-    //public abstract Object getData();
+    //public abstract Object saveImage();
     // Store the photo and send back location of storage
     // OR send back image data
 

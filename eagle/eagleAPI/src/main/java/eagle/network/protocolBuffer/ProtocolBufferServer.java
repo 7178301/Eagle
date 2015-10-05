@@ -6,9 +6,7 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Vector;
 
-import eagle.Drone;
 import eagle.Log;
 import eagle.network.ScriptingEngine;
 
@@ -24,12 +22,12 @@ import eagle.network.ScriptingEngine;
  */
 public class ProtocolBufferServer {
 
-    private Drone drone;
+    private ScriptingEngine scriptingEngine;
     private Thread serverThread = null;
     private int incomingPort;
 
-    public ProtocolBufferServer(Drone drone, int incomingPort) {
-        this.drone = drone;
+    public ProtocolBufferServer(ScriptingEngine scriptingEngine, int incomingPort) {
+        this.scriptingEngine = scriptingEngine;
         this.incomingPort = incomingPort;
         serverThread = new Thread(new ProtocolBufferServerThread());
         serverThread.start();
@@ -48,7 +46,7 @@ public class ProtocolBufferServer {
                     Log.log("ProtocolBufferServer", "Server Started");
                     while (!serverSocket.isClosed()) {
 
-                        clientThread = new Thread(new ProtocolBufferServerCommunicationsThread(serverSocket, drone));
+                        clientThread = new Thread(new ProtocolBufferServerCommunicationsThread(serverSocket, scriptingEngine));
                         clientThread.start();
                         while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
                             Thread.sleep(10);
@@ -66,9 +64,9 @@ public class ProtocolBufferServer {
         ScriptingEngine scriptingEngine;
         ServerSocket serverSocket;
 
-        ProtocolBufferServerCommunicationsThread(ServerSocket serverSocket, Drone drone) {
+        ProtocolBufferServerCommunicationsThread(ServerSocket serverSocket, ScriptingEngine scriptingEngine) {
             this.serverSocket = serverSocket;
-            this.scriptingEngine = drone.getScriptingEngine();
+            this.scriptingEngine = scriptingEngine;
             try {
                 serverSocket.setSoTimeout(100);
             } catch (SocketException e) {
