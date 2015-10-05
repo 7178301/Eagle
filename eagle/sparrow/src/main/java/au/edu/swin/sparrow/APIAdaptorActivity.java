@@ -45,8 +45,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
     Drone drone = new Drone();
-    TelnetServer telnet = new TelnetServer(drone);
-    ProtocolBufferServer protocolBufferServer = new ProtocolBufferServer(drone);
+    TelnetServer telnet = null;
+    ProtocolBufferServer protocolBufferServer = null;
 
     private Button buttonExpandSensors;
     private LinearLayout linearLayoutSensors;
@@ -67,8 +67,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
         initializeUI();
-        new Thread(telnet).start();
-        new Thread(protocolBufferServer).start();
+        telnet = new TelnetServer(drone,2323);
+        protocolBufferServer = new ProtocolBufferServer(drone,2324);
         Log.addVerboseCallback(this);
 
         MyTimerTask myTask = new MyTimerTask();
@@ -78,7 +78,9 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback("TelnetServer",this);
+        Log.removeCallback("TelnetServer", this);
+        protocolBufferServer.stop();
+        telnet.stop();
         myTimer.cancel();
         super.onDestroy();
     }
@@ -197,7 +199,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
             html.append("</head>");
             html.append("<body>");
-            for (String mess : logMessages) {
+            Vector<String> tempLog = new Vector<>(logMessages);
+            for (String mess : tempLog) {
                 html.append("<p>" + mess + "</p>");
             }
             html.append("</body></html>");

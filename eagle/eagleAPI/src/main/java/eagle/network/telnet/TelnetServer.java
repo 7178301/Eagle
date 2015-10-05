@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+import java.net.SocketException;
 
 import eagle.Drone;
 import eagle.Log;
@@ -22,80 +22,92 @@ import eagle.network.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class TelnetServer implements Runnable{
+public class TelnetServer {
 
-    Drone drone;
+    private Drone drone;
+    private Thread serverThread = null;
+    private int incomingPort;
 
-    Vector<TelnetConnectionHandler> telnetSessions = new Vector<TelnetConnectionHandler>();
-
-
-    public TelnetServer(Drone drone) {
+    public TelnetServer(Drone drone, int incomingPort) {
         this.drone = drone;
+        this.incomingPort=incomingPort;
+        serverThread = new Thread(new TelnetServerThread());
+        serverThread.start();
     }
 
-    @Override
-    public void run() {
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(2424);
-            while (true) {
-                Socket clientSocket = serverSocket.accept();
-                //start new thread for session
-                TelnetConnectionHandler tch = new TelnetConnectionHandler(clientSocket, drone);
-                new Thread(tch).start();
-                telnetSessions.add(tch);
-                //cleanup dead connnections.
-                for (TelnetConnectionHandler telnetConnectionHandler : telnetSessions) {
-                    if (!telnetConnectionHandler.isConnected()) {
-                        telnetSessions.remove(telnetConnectionHandler);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void stop() {
+        serverThread.interrupt();
     }
 
-    class TelnetConnectionHandler extends Thread {
-        Drone drone;
-        Socket socket;
-        PrintWriter out;
-        boolean connected;
+    public class TelnetServerThread implements Runnable {
 
-        TelnetConnectionHandler(Socket socket, Drone drone) {
-            this.socket = socket;
-            this.drone = drone;
-            connected = true;
-        }
+        public ServerSocket serverSocket = null;
+        Thread clientThread = null;
 
         @Override
         public void run() {
             try {
-                out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                serverSocket = new ServerSocket(incomingPort);
+                while (!serverSocket.isClosed()) {
 
-                String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
-                    try {
-                        ScriptingEngine scriptingEngine = drone.getScriptingEngine();
-                        if (scriptingEngine != null) {
-                            String result = scriptingEngine.executeInstruction(inputLine);
-                            out.println(result);
-                            Log.log("TelnetServer",result);
+                    clientThread = new Thread(new TelnetServerCommunicationThread(serverSocket, drone));
+                    clientThread.start();
+                    while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            serverSocket.close();
+                            clientThread.interrupt();
                         }
-                    } catch (ScriptingEngine.InvalidInstructionException e) {
-                        out.println("Invalid Command: " + e.getMessage());
-                        Log.log("TelnetServer", "Invalid Command: " + e.getMessage());
                     }
                 }
             } catch (IOException e) {
-                connected = false;
+            }
+        }
+    }
+
+    class TelnetServerCommunicationThread extends Thread {
+        ScriptingEngine scriptingEngine;
+        ServerSocket serverSocket;
+
+        TelnetServerCommunicationThread(ServerSocket serverSocket, Drone drone) {
+            this.serverSocket = serverSocket;
+            this.scriptingEngine = drone.getScriptingEngine();
+            try {
+                serverSocket.setSoTimeout(100);
+            } catch (SocketException e) {
+                e.printStackTrace();
             }
         }
 
-        public boolean isConnected() {
-            return connected;
+        @Override
+        public void run() {
+            while (!serverSocket.isClosed()) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
+                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+                    String inputLine;
+
+                    while ((inputLine = in.readLine()) != null) {
+                        try {
+                            ScriptingEngine scriptingEngine = drone.getScriptingEngine();
+                            if (scriptingEngine != null) {
+                                String result = scriptingEngine.executeInstruction(inputLine);
+                                out.println(result);
+                                Log.log("TelnetServer", result);
+                            }
+                        } catch (ScriptingEngine.InvalidInstructionException e) {
+                            out.println("Invalid Command: " + e.getMessage());
+                            Log.log("TelnetServer", "Invalid Command: " + e.getMessage());
+                        }
+                    }
+                    if (clientSocket != null && !clientSocket.isClosed())
+                        clientSocket.close();
+                } catch (IOException e) {
+                }
+            }
         }
     }
 }

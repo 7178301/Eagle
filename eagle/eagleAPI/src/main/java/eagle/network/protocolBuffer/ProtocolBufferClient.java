@@ -79,7 +79,7 @@ public class ProtocolBufferClient {
                 }
             }
             try {
-                socket = new Socket(serverAddress, 2425);
+                socket = new Socket(serverAddress, 2324);
                 outputStream = socket.getOutputStream();
                 inputStream = socket.getInputStream();
                 connected = true;
