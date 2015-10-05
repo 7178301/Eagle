@@ -2,6 +2,7 @@ package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import android.content.Context;
 
+import eagle.Log;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
@@ -46,10 +47,14 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
-        if (controller != null && controller.getState() != null)
+        if (controller != null && controller.getState() != null) {
+            Log.log("F450Flamewheel", "connectToDrone SUCCESS");
             return true;
-        else
+        }
+        else{
+            Log.log("F450Flamewheel", "flyToMetric FAIL");
             return false;
+        }
     }
 
     public boolean disconnectFromDrone() {
@@ -113,16 +118,20 @@ public class F450Flamewheel extends SDKAdaptor {
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
-        else
+        else{
+            Log.log("F450Flamewheel", "flyToDisplacement " + position.toString() + " FAIL");
             sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
+        }
     }
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
-        else
+        else {
+            Log.log("F450Flamewheel", "flyToDisplacement " + position.toString() + " FAIL");
             sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
+        }
     }
 
     @Override

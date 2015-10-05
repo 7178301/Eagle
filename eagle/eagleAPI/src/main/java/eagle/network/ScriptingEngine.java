@@ -751,7 +751,7 @@ public class ScriptingEngine {
 
     public class InvalidInstructionException extends Exception {
         public InvalidInstructionException(String s) {
-            super(s);
+            super("Invalid Instruction: "+s);
         }
     }
 }

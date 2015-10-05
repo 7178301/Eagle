@@ -22,7 +22,7 @@ import eagle.network.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class ProtocolBufferServer{
+public class ProtocolBufferServer {
 
     private Drone drone;
     private Thread serverThread = null;
@@ -30,37 +30,34 @@ public class ProtocolBufferServer{
 
     public ProtocolBufferServer(Drone drone, int incomingPort) {
         this.drone = drone;
-        this.incomingPort=incomingPort;
+        this.incomingPort = incomingPort;
         serverThread = new Thread(new ProtocolBufferServerThread());
         serverThread.start();
-    }
-
-    public void stop(){
-        serverThread.interrupt();
     }
 
     public class ProtocolBufferServerThread implements Runnable {
 
         public ServerSocket serverSocket = null;
-        Thread clientThread=null;
+        Thread clientThread = null;
+
         @Override
         public void run() {
-            try {
-                serverSocket = new ServerSocket(incomingPort);
-                while (!serverSocket.isClosed()) {
+            while(true) {
+                try {
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("ProtocolBufferServer", "Server Started");
+                    while (!serverSocket.isClosed()) {
 
-                    clientThread = new Thread(new ProtocolBufferServerCommunicationsThread(serverSocket, drone));
-                    clientThread.start();
-                    while (clientThread!=null&&clientThread.getState()!= Thread.State.TERMINATED){
-                        try {
+                        clientThread = new Thread(new ProtocolBufferServerCommunicationsThread(serverSocket, drone));
+                        clientThread.start();
+                        while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
                             Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            serverSocket.close();
-                            clientThread.interrupt();
                         }
                     }
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("ProtocolBufferServer", "Server Re-Started");
+                } catch (IOException | InterruptedException e) {
                 }
-            } catch (IOException e) {
             }
         }
     }
@@ -81,45 +78,43 @@ public class ProtocolBufferServer{
 
         @Override
         public void run() {
-            while(!serverSocket.isClosed()) {
-                try {
-                    Socket clientSocket = serverSocket.accept();
-                    OutputStream outputStream = clientSocket.getOutputStream();
-                    InputStream in = clientSocket.getInputStream();
+            try {
+                Socket clientSocket = serverSocket.accept();
+                Log.log("ProtocolBufferServer", "Client Connected: " + clientSocket.getRemoteSocketAddress().toString());
+                OutputStream outputStream = clientSocket.getOutputStream();
+                InputStream in = clientSocket.getInputStream();
 
-                    while (!serverSocket.isClosed()) {
-                        EagleProtoBuf.Request request = EagleProtoBuf.Request.parseDelimitedFrom(in);
-                        try {
-                            if (scriptingEngine != null && request.getRequestStringsCount() > 0) {
-                                EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
-                                        .setId(request.getId())
-                                        .setType(EagleProtoBuf.Response.ResponseType.COMMAND)
-                                        .addResponseStrings(scriptingEngine.executeInstruction(request.getRequestStrings(0)))
-                                        .build();
-                                response.writeDelimitedTo(outputStream);
-                            } else {
-                                EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
-                                        .setId(request.getId())
-                                        .setType(EagleProtoBuf.Response.ResponseType.OTHER)
-                                        .addResponseStrings("Could not execute command")
-                                        .build();
-                                response.writeDelimitedTo(outputStream);
-                                Log.log("ProtocolBufferServer", "Could not execute command");
-                            }
-                        } catch (ScriptingEngine.InvalidInstructionException e) {
+                while (clientSocket!=null&&!clientSocket.isClosed()) {
+                    EagleProtoBuf.Request request = EagleProtoBuf.Request.parseDelimitedFrom(in);
+                    try {
+                        if (scriptingEngine != null && request.getRequestStringsCount() > 0) {
                             EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
-                                    .setId(0)
-                                    .setType(EagleProtoBuf.Response.ResponseType.OTHER)
-                                    .addResponseStrings("Invalid Command: " + e.getMessage())
+                                    .setId(request.getId())
+                                    .setType(EagleProtoBuf.Response.ResponseType.COMMAND)
+                                    .addResponseStrings(scriptingEngine.executeInstruction(request.getRequestStrings(0)))
                                     .build();
                             response.writeDelimitedTo(outputStream);
-                            Log.log("ProtocolBufferServer", "Invalid Command: " + e.getMessage());
+                        } else {
+                            EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
+                                    .setId(request.getId())
+                                    .setType(EagleProtoBuf.Response.ResponseType.OTHER)
+                                    .addResponseStrings("Could not execute command")
+                                    .build();
+                            response.writeDelimitedTo(outputStream);
+                            Log.log("ProtocolBufferServer", "Could not execute command");
                         }
+                    } catch (ScriptingEngine.InvalidInstructionException e) {
+                        EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
+                                .setId(0)
+                                .setType(EagleProtoBuf.Response.ResponseType.OTHER)
+                                .addResponseStrings("Invalid Command: " + e.getMessage())
+                                .build();
+                        response.writeDelimitedTo(outputStream);
+                        Log.log("ProtocolBufferServer", "Invalid Command: " + e.getMessage());
                     }
-                    if(clientSocket!=null&&!clientSocket.isClosed())
-                        clientSocket.close();
-                } catch (IOException e) {
                 }
+                Log.log("ProtocolBufferServer", "Client Disconnected: " + clientSocket.getRemoteSocketAddress().toString());
+            } catch (IOException e) {
             }
         }
     }

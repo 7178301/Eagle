@@ -1,6 +1,7 @@
 package eagle.sdkInterface.sdkAdaptors.DJI;
 
 import dji.sdk.api.GroundStation.DJIGroundStationTask;
+import eagle.Log;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionDisplacement;
@@ -31,6 +32,7 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
+        Log.log("Phantom2Vision", "connectToDrone FAIL");
         return false;
     }
 
@@ -95,16 +97,20 @@ public class Phantom2Vision extends SDKAdaptor {
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
-        else
+        else{
+            Log.log("Phantom2Vision", "flyToDisplacement " + position.toString() + " FAIL");
             sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
+        }
     }
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
-        else
+        else {
+            Log.log("Phantom2Vision", "flyToDisplacement " + position.toString() + " FAIL");
             sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
+        }
     }
 
     @Override

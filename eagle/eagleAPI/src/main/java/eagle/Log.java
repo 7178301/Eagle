@@ -20,7 +20,7 @@ public class Log {
     private static Vector<LogCallback> verboseLogCallback = new Vector<>();
 
 
-    public static void log(String tag, String message) {
+    public synchronized static void log(String tag, String message) {
         if (log.containsKey(tag))
             log.get(tag).add(message);
         else{
@@ -35,14 +35,14 @@ public class Log {
                 logcallback.onLogEntry(tag, message);
         }
     }
-    public static String lastMessage(String tag){
+    public synchronized static String lastMessage(String tag){
         if (log.containsKey(tag))
             return log.get(tag).lastElement();
         else
             return "TAG DOES NOT EXIST";
     }
 
-    public static void addCallback(String tag, LogCallback callback) {
+    public synchronized static void addCallback(String tag, LogCallback callback) {
         if(log.containsKey(tag)&& logCallBack.containsKey(tag))
             logCallBack.get(tag).add(callback);
         else if(log.containsKey(tag)&&!logCallBack.containsKey(tag)){
@@ -59,11 +59,11 @@ public class Log {
         Log.log("LogCallback","NEW CALLBACK ADDED TO "+tag);
     }
 
-    public static void addVerboseCallback(LogCallback callback){
+    public synchronized static void addVerboseCallback(LogCallback callback){
         verboseLogCallback.add(callback);
     }
 
-    public static void removeCallback(String tag, LogCallback callback) {
+    public synchronized static void removeCallback(String tag, LogCallback callback) {
         if(logCallBack.containsValue(tag)){
             logCallBack.get(tag).remove(callback);
         Log.log("LogCallback","CALLBACK REMOVED FROM "+tag);

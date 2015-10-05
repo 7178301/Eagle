@@ -30,13 +30,9 @@ public class TelnetServer {
 
     public TelnetServer(Drone drone, int incomingPort) {
         this.drone = drone;
-        this.incomingPort=incomingPort;
+        this.incomingPort = incomingPort;
         serverThread = new Thread(new TelnetServerThread());
         serverThread.start();
-    }
-
-    public void stop() {
-        serverThread.interrupt();
     }
 
     public class TelnetServerThread implements Runnable {
@@ -46,22 +42,22 @@ public class TelnetServer {
 
         @Override
         public void run() {
-            try {
-                serverSocket = new ServerSocket(incomingPort);
-                while (!serverSocket.isClosed()) {
+            while (true) {
+                try {
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("TelnetServer", "Server Started");
+                    while (!serverSocket.isClosed()) {
 
-                    clientThread = new Thread(new TelnetServerCommunicationThread(serverSocket, drone));
-                    clientThread.start();
-                    while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
-                        try {
+                        clientThread = new Thread(new TelnetServerCommunicationThread(serverSocket, drone));
+                        clientThread.start();
+                        while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
                             Thread.sleep(10);
-                        } catch (InterruptedException e) {
-                            serverSocket.close();
-                            clientThread.interrupt();
                         }
                     }
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("TelnetServer", "Server Re-Started");
+                } catch (IOException | InterruptedException e) {
                 }
-            } catch (IOException e) {
             }
         }
     }
@@ -73,40 +69,34 @@ public class TelnetServer {
         TelnetServerCommunicationThread(ServerSocket serverSocket, Drone drone) {
             this.serverSocket = serverSocket;
             this.scriptingEngine = drone.getScriptingEngine();
-            try {
-                serverSocket.setSoTimeout(100);
-            } catch (SocketException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
         public void run() {
-            while (!serverSocket.isClosed()) {
-                try {
-                    Socket clientSocket = serverSocket.accept();
-                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            try {
+                Socket clientSocket = serverSocket.accept();
+                Log.log("TelnetServer", "Client Connected: " + clientSocket.getRemoteSocketAddress().toString());
+                PrintWriter outgoing = new PrintWriter(clientSocket.getOutputStream(), true);
+                outgoing.println("CONNECTED");
+                BufferedReader incoming = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                    String inputLine;
-
-                    while ((inputLine = in.readLine()) != null) {
-                        try {
-                            ScriptingEngine scriptingEngine = drone.getScriptingEngine();
-                            if (scriptingEngine != null) {
-                                String result = scriptingEngine.executeInstruction(inputLine);
-                                out.println(result);
-                                Log.log("TelnetServer", result);
-                            }
-                        } catch (ScriptingEngine.InvalidInstructionException e) {
-                            out.println("Invalid Command: " + e.getMessage());
-                            Log.log("TelnetServer", "Invalid Command: " + e.getMessage());
+                String inputLine;
+                while ((inputLine = incoming.readLine()) != null && !clientSocket.isClosed()) {
+                    try {
+                        ScriptingEngine scriptingEngine = drone.getScriptingEngine();
+                        if (scriptingEngine != null) {
+                            String result = scriptingEngine.executeInstruction(inputLine);
+                            outgoing.println(result);
+                            Log.log("TelnetServer", "REQUEST: "+inputLine + " RESULT: " + result);
                         }
+                    } catch (ScriptingEngine.InvalidInstructionException e) {
+                        outgoing.println("Invalid Command: " + e.getMessage());
+                        Log.log("TelnetServer", "REQUEST: " + inputLine + " RESULT: " + e.getMessage());
                     }
-                    if (clientSocket != null && !clientSocket.isClosed())
-                        clientSocket.close();
-                } catch (IOException e) {
                 }
+                Log.log("TelnetServer", "Client Disconnected: " + clientSocket.getRemoteSocketAddress().toString());
+
+            } catch (IOException e) {
             }
         }
     }

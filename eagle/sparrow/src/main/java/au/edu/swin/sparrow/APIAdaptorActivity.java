@@ -79,8 +79,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     @Override
     protected void onDestroy() {
         Log.removeCallback("TelnetServer", this);
-        protocolBufferServer.stop();
-        telnet.stop();
         myTimer.cancel();
         super.onDestroy();
     }
