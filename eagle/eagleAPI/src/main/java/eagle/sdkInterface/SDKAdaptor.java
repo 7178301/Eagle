@@ -38,7 +38,7 @@ public abstract class SDKAdaptor {
 
     private Position homePosition = null;
 
-    final public SDKAdaptorFlightStack sdkAdaptorStack;
+    final public SDKAdaptorTaskStack sdkAdaptorStack;
 
     private double maxSpeed = 0;
     private double maxRotationSpeed = 0;
@@ -54,7 +54,7 @@ public abstract class SDKAdaptor {
         this.adaptorVersion = adaptorVersion;
         this.maxSpeed = maxSpeed;
         this.maxRotationSpeed = maxRotateSpeed;
-        sdkAdaptorStack = new SDKAdaptorFlightStack(this);
+        sdkAdaptorStack = new SDKAdaptorTaskStack(this);
     }
 
     public abstract void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader);
@@ -305,7 +305,7 @@ public abstract class SDKAdaptor {
         }
     }
 
-    final public void goHome(final SDKAdaptorCallback sdkAdaptorCallback, double speed) {
+    public void goHome(final SDKAdaptorCallback sdkAdaptorCallback, double speed) {
         if (sdkAdaptorCallback == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else {
@@ -322,7 +322,7 @@ public abstract class SDKAdaptor {
         }
     }
 
-    final public void goHome(final SDKAdaptorCallback sdkAdaptorCallback) {
+    public void goHome(final SDKAdaptorCallback sdkAdaptorCallback) {
         if (sdkAdaptorCallback == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else {

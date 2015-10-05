@@ -7,7 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
-import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 /**
  * Android Magnetic Adaptor

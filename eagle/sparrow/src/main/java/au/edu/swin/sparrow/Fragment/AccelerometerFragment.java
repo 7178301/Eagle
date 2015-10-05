@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
-import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 
 /**

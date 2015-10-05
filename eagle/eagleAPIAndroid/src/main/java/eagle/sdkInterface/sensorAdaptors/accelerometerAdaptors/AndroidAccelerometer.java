@@ -1,7 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors;
 
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
-import eagle.sdkInterface.sensorAdaptors.SensorAdaptorCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 import android.content.Context;
 import android.hardware.Sensor;

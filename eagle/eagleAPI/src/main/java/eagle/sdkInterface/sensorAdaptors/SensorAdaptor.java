@@ -1,7 +1,6 @@
 package eagle.sdkInterface.sensorAdaptors;
 
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Abstract Sensor Adaptor Class
@@ -18,7 +17,7 @@ public abstract class SensorAdaptor {
     private String adaptorVersion = null;
     private String adaptorManufacturer = null;
     private String adaptorModel = null;
-    protected HashSet<SensorAdaptorCallback> sensorAdaptorCallback;
+    protected HashSet<eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback> sensorAdaptorCallback;
 
     public SensorAdaptor(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         this.adaptorName = adaptorManufacturer + " " + adaptorModel;
@@ -64,7 +63,7 @@ public abstract class SensorAdaptor {
         return new String[0];
     }
 
-    public void addSensorAdaptorCallback(final SensorAdaptorCallback sensorAdaptorCallback){
+    public void addSensorAdaptorCallback(final eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback sensorAdaptorCallback){
         this.sensorAdaptorCallback.add(sensorAdaptorCallback);
     }
 }

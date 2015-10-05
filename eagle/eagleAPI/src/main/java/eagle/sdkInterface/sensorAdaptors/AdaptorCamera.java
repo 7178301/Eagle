@@ -1,5 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors;
 
+import java.awt.Image;
+
 /**
  * Camera Adaptor Interface
  *
@@ -15,6 +17,8 @@ public abstract class AdaptorCamera extends SensorAdaptor {
     public AdaptorCamera(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
+
+    public abstract Image getData();
 
     public abstract boolean connectToSensor();
 

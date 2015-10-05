@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sensorAdaptors;
+package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
 /**
  *  Sensor Adaptor Callback Class
@@ -9,6 +9,6 @@ package eagle.sdkInterface.sensorAdaptors;
  * <p/>
  * Date Modified	30/09/2015 - Nicholas
  */
-public interface SensorAdaptorCallback {
-    void onSensorChanged();
+public interface AdaptorBearingEventCallback {
+    void onSensorEvent(double getCalibratedData);
 }
