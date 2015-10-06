@@ -6,9 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
 
-import eagle.Drone;
 import eagle.Log;
 import eagle.network.ScriptingEngine;
 
@@ -22,93 +20,81 @@ import eagle.network.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class TelnetServer implements Runnable, Log.LogCallback {
+public class TelnetServer {
 
-    Drone drone;
+    private ScriptingEngine scriptingEngine;
+    private Thread serverThread = null;
+    private int incomingPort;
 
-    Vector<TelnetConnectionHandler> telnetSessions = new Vector<TelnetConnectionHandler>();
-
-
-    public TelnetServer(Drone drone) {
-        this.drone = drone;
+    public TelnetServer(ScriptingEngine scriptingEngine, int incomingPort) {
+        this.scriptingEngine = scriptingEngine;
+        this.incomingPort = incomingPort;
+        serverThread = new Thread(new TelnetServerThread());
+        serverThread.start();
     }
 
-    @Override
-    public void run() {
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(2424);
+    public class TelnetServerThread implements Runnable {
+
+        public ServerSocket serverSocket = null;
+        Thread clientThread = null;
+
+        @Override
+        public void run() {
             while (true) {
-                Socket clientSocket = serverSocket.accept();
-                //start new thread for session
-                TelnetConnectionHandler tch = new TelnetConnectionHandler(clientSocket, drone);
-                new Thread(tch).start();
-                telnetSessions.add(tch);
-                //cleanup dead connnections.
-                for (TelnetConnectionHandler telnetConnectionHandler : telnetSessions) {
-                    if (!telnetConnectionHandler.isConnected()) {
-                        telnetSessions.remove(telnetConnectionHandler);
+                try {
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("TelnetServer", "Server Started");
+                    while (!serverSocket.isClosed()) {
+
+                        clientThread = new Thread(new TelnetServerCommunicationThread(serverSocket, scriptingEngine));
+                        clientThread.start();
+                        while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
+                            Thread.sleep(10);
+                        }
                     }
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("TelnetServer", "Server Re-Started");
+                } catch (IOException | InterruptedException e) {
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    @Override
-    public void handleMessage(String message) {
-        for (TelnetConnectionHandler tch : telnetSessions) {
-            if (tch.isConnected()) {
-                tch.handleMessage(message);
-            } else {
-                telnetSessions.remove(tch);
-            }
-        }
-    }
+    class TelnetServerCommunicationThread extends Thread {
+        ScriptingEngine scriptingEngine;
+        ServerSocket serverSocket;
 
-    class TelnetConnectionHandler extends Thread {
-        Drone drone;
-        Socket socket;
-        PrintWriter out;
-        boolean connected;
-        private Vector<String> logMessages = new Vector<String>();
-
-        TelnetConnectionHandler(Socket socket, Drone drone) {
-            this.socket = socket;
-            this.drone = drone;
-            connected = true;
+        TelnetServerCommunicationThread(ServerSocket serverSocket, ScriptingEngine scriptingEngine) {
+            this.serverSocket = serverSocket;
+            this.scriptingEngine = scriptingEngine;
         }
 
         @Override
         public void run() {
             try {
-                out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                Socket clientSocket = serverSocket.accept();
+                Log.log("TelnetServer", "Client Connected: " + clientSocket.getRemoteSocketAddress().toString());
+                PrintWriter outgoing = new PrintWriter(clientSocket.getOutputStream(), true);
+                outgoing.println("CONNECTED");
+                BufferedReader incoming = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 String inputLine;
-
-                while ((inputLine = in.readLine()) != null) {
+                while ((inputLine = incoming.readLine()) != null && !clientSocket.isClosed()) {
                     try {
-                        ScriptingEngine scriptingEngine = drone.getScriptingEngine();
                         if (scriptingEngine != null) {
-                            out.println(scriptingEngine.executeInstruction(inputLine));
+                            String result = scriptingEngine.executeInstruction(inputLine);
+                            outgoing.println(result);
+                            Log.log("TelnetServer", "REQUEST: " + inputLine + " RESULT: " + result);
                         }
                     } catch (ScriptingEngine.InvalidInstructionException e) {
-                        out.println("Invalid Command: " + e.getMessage());
+                        outgoing.println("Invalid Command: " + e.getMessage());
+                        Log.log("TelnetServer", "REQUEST: " + inputLine + " RESULT: " + e.getMessage());
                     }
                 }
+                Log.log("TelnetServer", "Client Disconnected: " + clientSocket.getRemoteSocketAddress().toString());
+
             } catch (IOException e) {
-                connected = false;
             }
-        }
-
-        public void handleMessage(String message) {
-            logMessages.add(message);
-        }
-
-        public boolean isConnected() {
-            return connected;
         }
     }
 }

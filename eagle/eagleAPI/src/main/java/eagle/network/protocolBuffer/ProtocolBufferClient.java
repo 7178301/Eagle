@@ -21,7 +21,6 @@ public class ProtocolBufferClient {
     private int id = 0;
     private Map<Integer, ResponseCallBack> responseCallBackMap = new HashMap<>();
     private Thread readThread;
-    private boolean connected = false;
 
     public ProtocolBufferClient(String serverAddress) {
         this.serverAddress = serverAddress;
@@ -48,7 +47,7 @@ public class ProtocolBufferClient {
     }
 
     public synchronized boolean sendMessage(String message, ResponseCallBack rcb) {
-        if (connected == false) {
+        if (!isConnected()) {
             return false;
         }
         id++;
@@ -60,7 +59,9 @@ public class ProtocolBufferClient {
     }
 
     public boolean isConnected() {
-        return connected;
+        if (socket != null && !socket.isClosed())
+            return true;
+        return false;
     }
 
     public interface ResponseCallBack {
@@ -71,7 +72,6 @@ public class ProtocolBufferClient {
 
         @Override
         public void run() {
-            connected = false;
             if (socket != null) {
                 try {
                     socket.close();
@@ -79,12 +79,10 @@ public class ProtocolBufferClient {
                 }
             }
             try {
-                socket = new Socket(serverAddress, 2425);
+                socket = new Socket(serverAddress, 2324);
                 outputStream = socket.getOutputStream();
                 inputStream = socket.getInputStream();
-                connected = true;
             } catch (IOException e) {
-                connected = false;
             }
         }
     }
@@ -100,7 +98,6 @@ public class ProtocolBufferClient {
                     outputStream = socket.getOutputStream();
                     inputStream = socket.getInputStream();
                 } catch (IOException e) {
-                    connected = false;
                     return;
                 }
             }
@@ -113,12 +110,11 @@ public class ProtocolBufferClient {
                         rcb.handleResponse(response.getResponseStrings(0));
                         responseCallBackMap.remove(response.getId());
                     } else if (response.getType() == EagleProtoBuf.Response.ResponseType.LOG) {
-                        Log.log(response.getResponseStrings(0));
+                        Log.log("ProtocolBufferClient", response.getResponseStrings(0));
                     } else {
-                        Log.log(response.toString());
+                        Log.log("ProtocolBufferClient", response.toString());
                     }
                 } catch (IOException e) {
-                    connected = false;
                     return;
                 }
 
@@ -144,7 +140,6 @@ public class ProtocolBufferClient {
             try {
                 request.writeDelimitedTo(outputStream);
             } catch (IOException e) {
-                connected = false;
             }
         }
     }

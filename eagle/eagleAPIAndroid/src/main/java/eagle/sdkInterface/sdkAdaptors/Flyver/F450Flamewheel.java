@@ -2,14 +2,14 @@ package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import android.content.Context;
 
-import eagle.navigation.positioning.Angle;
+import eagle.Log;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
-
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.SDKAdaptorCallback;
 import ioio.lib.api.IOIO;
 
 /**
@@ -31,7 +31,7 @@ public class F450Flamewheel extends SDKAdaptor {
     //TODO Create method implementations
 
     public F450Flamewheel() {
-        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1");
+        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1", 0, 0);
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
@@ -40,13 +40,18 @@ public class F450Flamewheel extends SDKAdaptor {
         addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("AndroidGPS"));
         addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
         addSensorAdaptorMagnetic(adaptorLoader.getSensorAdaptorMagnetic("AndroidMagnetic"));
+        addSensorAdaptorBearing(adaptorLoader.getSensorAdaptorBearing("AndroidBearing"));
     }
 
     public boolean connectToDrone() {
-        if (controller!=null&&controller.getState()!=null)
+        if (controller != null && controller.getState() != null) {
+            Log.log("F450Flamewheel", "connectToDrone SUCCESS");
             return true;
-        else
+        }
+        else{
+            Log.log("F450Flamewheel", "connectToDrone FAIL");
             return false;
+        }
     }
 
     public boolean disconnectFromDrone() {
@@ -75,33 +80,55 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     @Override
-    public boolean flyTo(PositionMetric positionMetric, double speed) {
-        return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position, double speed) {
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
     }
 
     @Override
-    public boolean flyTo(PositionMetric positionMetric) {
-        return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position) {
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
     }
 
     @Override
-    public boolean flyTo(PositionGPS position, double speed) {
-        return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position, double speed) {
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
     }
 
     @Override
-    public boolean flyTo(PositionGPS position) {
-        return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position) {
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else
+            sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
     }
 
     @Override
-    public boolean flyTo(PositionDisplacement position, double speed) {
-        return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else{
+            Log.log("F450Flamewheel", "flyToDisplacement " + position.toString() + " FAIL");
+            sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
+        }
     }
 
     @Override
-    public boolean flyTo(PositionDisplacement position) {
-        return false;
+    public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else {
+            Log.log("F450Flamewheel", "flyToDisplacement " + position.toString() + " FAIL");
+            sdkAdaptorCallback.onResult(false, "flyTo not yet implemented in adaptor");
+        }
     }
 
     @Override

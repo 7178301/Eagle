@@ -23,11 +23,11 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        eagle.Log.addCallback(LogAndroid.getInstance());
+        new LogAndroid();
         initializeUI();
     }
 
-    private static final String TAG = "Sparrow Debug";
+    private static final String TAG = "Sparrow";
 
     private void initializeUI() {
         drone = new Drone();
@@ -37,9 +37,8 @@ public class MainActivity extends ListActivity {
         @SuppressWarnings("unchecked")
         HashMap<String, SDKAdaptor> sdkAdaptors = drone.getSDKAdaptorMap();
 
-
-        Log.e(TAG, "EagleAPI Version: " + drone.getAPIVersion());
-        Log.e(TAG, "SDK Adaptors: " + sdkAdaptors.keySet().toString());
+        eagle.Log.log(TAG, "EagleAPI Version: " + drone.getAPIVersion());
+        eagle.Log.log(TAG, "SDK Adaptors: " + sdkAdaptors.keySet().toString());
 
         ArrayAdapter<String> ad = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, sdkAdaptors.keySet().toArray(new String[sdkAdaptors.size()]));
         setListAdapter(ad);
@@ -72,7 +71,7 @@ public class MainActivity extends ListActivity {
         sdkVersionTextView.setText(getResources().getString(R.string.sdk_version) + ": " + drone.getSDKAdaptor().getSdkVersion());
         adaptorVersionTextView.setText(getResources().getString(R.string.adaptor_version) + ": " + drone.getSDKAdaptor().getAdaptorVersion());
 
-        Log.e(TAG, "Selected Adaptor " + selectedItem);
+        eagle.Log.log(TAG, "Selected Adaptor " + selectedItem);
     }
 
     private void makeSettingsVisible() {

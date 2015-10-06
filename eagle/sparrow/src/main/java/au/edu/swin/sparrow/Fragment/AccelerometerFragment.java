@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 
 /**
@@ -54,6 +55,12 @@ public class AccelerometerFragment extends SensorFragment {
 
     public void setAccelerometerAdaptor(AdaptorAccelerometer accelerometer) {
         this.accelerometer = accelerometer;
+        accelerometer.addSensorAdaptorCallback(new SensorAdaptorCallback() {
+            @Override
+            public void onSensorChanged() {
+                updateData();
+            }
+        });
     }
 
     public void updateData() {

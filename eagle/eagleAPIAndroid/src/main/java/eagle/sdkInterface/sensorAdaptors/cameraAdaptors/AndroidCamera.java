@@ -22,6 +22,11 @@ public class AndroidCamera extends AdaptorCamera {
         return false;
     }
 
+    //TODO Following Method Need Proper Implementation
+    public byte[] getData() {
+        return null;
+    }
+
     //TODO Following Method Need Propper Implementation
     public boolean isConnectedToSensor() {
         return false;
@@ -29,6 +34,7 @@ public class AndroidCamera extends AdaptorCamera {
 
     @Override
 
+    //TODO Following Method Need Propper Implementation
     public boolean isDataReady() {
         return false;
     }

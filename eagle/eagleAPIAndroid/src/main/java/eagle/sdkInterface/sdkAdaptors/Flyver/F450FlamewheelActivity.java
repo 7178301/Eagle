@@ -46,7 +46,7 @@ public class F450FlamewheelActivity extends IOIOActivity {
             motorFCC = ioio_.openPwmOutput(35, 200);
             motorRC = ioio_.openPwmOutput(36, 200);
             motorRCC = ioio_.openPwmOutput(37, 200);
-            ioio=ioio_;
+            ioio = ioio_;
         }
 
         @Override
@@ -94,18 +94,18 @@ public class F450FlamewheelActivity extends IOIOActivity {
 
     public void setPulseWidth(int fcRange, int fccRange, int rcRange, int rccRange) throws ConnectionLostException {
         if (fcRange >= 1000 && fcRange <= 2023 &&
-                fccRange >= 1000 && fccRange <=2023 &&
-                rcRange >= 1000 && rcRange <=2023 &&
-                rccRange >= 1000 && rccRange <=2023) {
+                fccRange >= 1000 && fccRange <= 2023 &&
+                rcRange >= 1000 && rcRange <= 2023 &&
+                rccRange >= 1000 && rccRange <= 2023) {
             motorFC.setPulseWidth(fcRange);
             motorFCC.setPulseWidth(fccRange);
             motorRC.setPulseWidth(rcRange);
             motorRCC.setPulseWidth(rccRange);
-        }else
+        } else
             throw new IllegalArgumentException();
     }
 
-    public IOIO getIOIO(){
+    public IOIO getIOIO() {
         return ioio;
     }
 }

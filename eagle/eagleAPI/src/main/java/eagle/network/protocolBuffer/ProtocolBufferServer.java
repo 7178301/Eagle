@@ -5,9 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
+import java.net.SocketException;
 
-import eagle.Drone;
 import eagle.Log;
 import eagle.network.ScriptingEngine;
 
@@ -21,71 +20,69 @@ import eagle.network.ScriptingEngine;
  * <p/>
  * Date Modified	04/09/2015 - Cameron
  */
-public class ProtocolBufferServer implements Runnable, Log.LogCallback {
+public class ProtocolBufferServer {
 
-    Drone drone;
+    private ScriptingEngine scriptingEngine;
+    private Thread serverThread = null;
+    private int incomingPort;
 
-    Vector<NetworkConnectionHandler> networkSessions = new Vector<NetworkConnectionHandler>();
-
-
-    public ProtocolBufferServer(Drone drone) {
-        this.drone = drone;
+    public ProtocolBufferServer(ScriptingEngine scriptingEngine, int incomingPort) {
+        this.scriptingEngine = scriptingEngine;
+        this.incomingPort = incomingPort;
+        serverThread = new Thread(new ProtocolBufferServerThread());
+        serverThread.start();
     }
 
-    @Override
-    public void run() {
-        ServerSocket serverSocket = null;
-        try {
-            serverSocket = new ServerSocket(2425);
+    public class ProtocolBufferServerThread implements Runnable {
+
+        public ServerSocket serverSocket = null;
+        Thread clientThread = null;
+
+        @Override
+        public void run() {
             while (true) {
-                Socket clientSocket = serverSocket.accept();
-                //start new thread for session
-                NetworkConnectionHandler tch = new NetworkConnectionHandler(clientSocket, drone);
-                new Thread(tch).start();
-                networkSessions.add(tch);
-                //cleanup dead connnections.
-                for (NetworkConnectionHandler networkConnectionHandler : networkSessions) {
-                    if (!networkConnectionHandler.isConnected()) {
-                        networkSessions.remove(networkConnectionHandler);
+                try {
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("ProtocolBufferServer", "Server Started");
+                    while (!serverSocket.isClosed()) {
+
+                        clientThread = new Thread(new ProtocolBufferServerCommunicationsThread(serverSocket, scriptingEngine));
+                        clientThread.start();
+                        while (clientThread != null && clientThread.getState() != Thread.State.TERMINATED) {
+                            Thread.sleep(10);
+                        }
                     }
+                    serverSocket = new ServerSocket(incomingPort);
+                    Log.log("ProtocolBufferServer", "Server Re-Started");
+                } catch (IOException | InterruptedException e) {
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
-    @Override
-    public void handleMessage(String message) {
-        for (NetworkConnectionHandler networkConnectionHandler : networkSessions) {
-            if (networkConnectionHandler.isConnected()) {
-                networkConnectionHandler.handleMessage(message);
-            } else {
-                networkSessions.remove(networkConnectionHandler);
-            }
-        }
-    }
-
-    class NetworkConnectionHandler extends Thread {
+    class ProtocolBufferServerCommunicationsThread extends Thread {
         ScriptingEngine scriptingEngine;
-        Socket socket;
-        OutputStream outputStream;
-        boolean connected;
+        ServerSocket serverSocket;
 
-        NetworkConnectionHandler(Socket socket, Drone drone) {
-            this.socket = socket;
-            this.scriptingEngine = drone.getScriptingEngine();
-            connected = true;
+        ProtocolBufferServerCommunicationsThread(ServerSocket serverSocket, ScriptingEngine scriptingEngine) {
+            this.serverSocket = serverSocket;
+            this.scriptingEngine = scriptingEngine;
+            try {
+                serverSocket.setSoTimeout(100);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         public void run() {
             try {
-                outputStream = socket.getOutputStream();
-                InputStream in = socket.getInputStream();
+                Socket clientSocket = serverSocket.accept();
+                Log.log("ProtocolBufferServer", "Client Connected: " + clientSocket.getRemoteSocketAddress().toString());
+                OutputStream outputStream = clientSocket.getOutputStream();
+                InputStream in = clientSocket.getInputStream();
 
-
-                while (true) {
+                while (clientSocket != null && !clientSocket.isClosed()) {
                     EagleProtoBuf.Request request = EagleProtoBuf.Request.parseDelimitedFrom(in);
                     try {
                         if (scriptingEngine != null && request.getRequestStringsCount() > 0) {
@@ -102,39 +99,21 @@ public class ProtocolBufferServer implements Runnable, Log.LogCallback {
                                     .addResponseStrings("Could not execute command")
                                     .build();
                             response.writeDelimitedTo(outputStream);
+                            Log.log("ProtocolBufferServer", "Could not execute command");
                         }
-                    }
-                    catch (ScriptingEngine.InvalidInstructionException e) {
+                    } catch (ScriptingEngine.InvalidInstructionException e) {
                         EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
                                 .setId(0)
                                 .setType(EagleProtoBuf.Response.ResponseType.OTHER)
                                 .addResponseStrings("Invalid Command: " + e.getMessage())
                                 .build();
                         response.writeDelimitedTo(outputStream);
+                        Log.log("ProtocolBufferServer", "Invalid Command: " + e.getMessage());
                     }
                 }
+                Log.log("ProtocolBufferServer", "Client Disconnected: " + clientSocket.getRemoteSocketAddress().toString());
             } catch (IOException e) {
-                connected = false;
             }
-        }
-
-        public void handleMessage(String message) {
-            if (outputStream != null) {
-                EagleProtoBuf.Response response = EagleProtoBuf.Response.newBuilder()
-                        .setId(0)
-                        .setType(EagleProtoBuf.Response.ResponseType.LOG)
-                        .addResponseStrings(message)
-                        .build();
-                try {
-                    response.writeDelimitedTo(outputStream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        public boolean isConnected() {
-            return connected;
         }
     }
 }

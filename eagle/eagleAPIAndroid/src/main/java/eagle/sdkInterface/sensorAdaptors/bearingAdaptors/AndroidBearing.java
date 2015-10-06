@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sensorAdaptors.magneticAdaptors;
+package eagle.sdkInterface.sensorAdaptors.bearingAdaptors;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -6,7 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 /**
@@ -19,20 +19,24 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCal
  * Date Modified	27/08/2015 - Nicholas
  */
 
-public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListener {
+public class AndroidBearing extends AdaptorBearing implements SensorEventListener {
     private Context context = null;
-    private float[] magneticData;
+    private float bearingData = 999999;
 
-    public AndroidMagnetic() {
-        super("Android", "Magnetic", "0.0.1");
+    private float[] magneticData = null;
+    private float[] accelerometerData = null;
+
+    public AndroidBearing() {
+        super("Android", "Bearing", "0.0.1");
     }
 
     public boolean connectToSensor() {
         if (this.context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null && sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
             return true;
         } else
             return false;
@@ -50,20 +54,20 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
         if (context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null)
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null && sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
             return true;
         else
             return false;
     }
 
     @Override
-    public float[] getData() {
-        return magneticData;
+    public float getData() {
+        return bearingData;
     }
 
     @Override
     public boolean isDataReady() {
-        if (magneticData == null)
+        if (bearingData == 999999)
             return false;
         else
             return true;
@@ -82,8 +86,27 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
             magneticData[0] = event.values[0];
             magneticData[1] = event.values[1];
             magneticData[2] = event.values[2];
+        } else if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            accelerometerData = new float[3];
+            accelerometerData[0] = event.values[0];
+            accelerometerData[1] = event.values[1];
+            accelerometerData[2] = event.values[2];
         }
-        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
-            currentSensorAdaptorCallback.onSensorChanged();
+        if (magneticData != null && accelerometerData != null) {
+
+            float R[] = new float[9];
+            float I[] = new float[9];
+
+            if (SensorManager.getRotationMatrix(R, I, accelerometerData, magneticData)) {
+
+                float orientation[] = new float[3];
+                SensorManager.getOrientation(R, orientation);
+                bearingData = orientation[0] * 360 / (2 * (float) Math.PI);
+                if (bearingData < 0)
+                    bearingData = 180 + (180 - Math.abs(bearingData));
+            }
+            for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+                currentSensorAdaptorCallback.onSensorChanged();
+        }
     }
 }

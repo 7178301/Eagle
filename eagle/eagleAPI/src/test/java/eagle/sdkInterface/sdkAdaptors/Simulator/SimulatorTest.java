@@ -5,10 +5,10 @@ import org.junit.Test;
 
 import eagle.Drone;
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.SDKAdaptorCallback;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -39,39 +39,79 @@ public class SimulatorTest {
     public void testFlyToMetric() throws Exception {
         try {
             sdkAdaptor.setHomePosition(new PositionMetric(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
-        } catch (SDKAdaptor.InvalidPositionException e) {
+        } catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position correctly");
         }
 
         PositionMetric pos = new PositionMetric(1, 0, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
 
         pos = new PositionMetric(-1, 0, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
         pos = new PositionMetric(0, 1, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
         pos = new PositionMetric(0, -1, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
         pos = new PositionMetric(0, 0, 1, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
     }
@@ -80,39 +120,79 @@ public class SimulatorTest {
     public void testFlyToGPS() throws Exception {
         try {
             sdkAdaptor.setHomePosition(new PositionGPS(0, 0, 0, new Angle(0),new Angle(0), new Angle(0)));
-        } catch (SDKAdaptor.InvalidPositionException e) {
+        } catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position correctly");
         }
 
         PositionGPS pos = new PositionGPS(1, 0, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
 
         pos = new PositionGPS(-1, 0, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
         pos = new PositionGPS(0, 1, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
         pos = new PositionGPS(0, -1, 0, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
         pos = new PositionGPS(0, 0, 1, new Angle(0),new Angle(0), new Angle(0));
-        sdkAdaptor.flyTo(pos);
+        sdkAdaptor.flyTo(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        },pos);
         assertEquals("Failed to reach position: "+pos.toStringLong(), pos, sdkAdaptor.getPositionAssigned());
-        sdkAdaptor.goHome();
+        sdkAdaptor.goHome(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+            }
+        });
         assertEquals("Failed to return home position", sdkAdaptor.getHomePosition(), sdkAdaptor.getPositionAssigned());
 
     }

@@ -30,7 +30,7 @@ public class ScriptingEngineTest {
     public void beforeTest() {
         drone = new Drone();
         drone.setSDKAdaptor("Simulator.Simulator");
-        se = drone.getScriptingEngine();
+        se = drone.getSDKAdaptor().scriptingEngine;
         drone.getSDKAdaptor().connectToDrone();
     }
 
@@ -72,7 +72,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
@@ -89,7 +89,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
@@ -106,7 +106,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
@@ -123,7 +123,7 @@ public class ScriptingEngineTest {
         catch (ScriptingEngine.InvalidInstructionException e) {
             fail("Invalid instruction");
         }
-        catch (SDKAdaptor.InvalidPositionException e) {
+        catch (SDKAdaptor.InvalidPositionTypeException e) {
             fail("Failed to set home position");
         }
     }
