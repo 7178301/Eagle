@@ -29,7 +29,7 @@ public abstract class IOIOEagleActivity extends IOIOActivity {
     class Looper extends BaseIOIOLooper {
         @Override
         protected void setup() throws ConnectionLostException {
-            //showVersions(ioio_, "IOIO connected!");
+            showVersions(ioio_, "IOIO connected!");
             setIOIO(ioio_);
         }
 

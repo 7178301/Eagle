@@ -92,32 +92,33 @@ public class Controller {
 
     //declare pid controllers
 
-    Controller(IOIO ioio) {
-        if (ioio == null) {
-            Log.log("IOIOController", "IOIO is null");
-        }
+    Controller() {
+        Log.log("IOIOController", "Setting up IOIO Controller");
         roll_controller = new PIDController(ROLL_PID_KP, ROLL_PID_KI, ROLL_PID_KD);
         roll_controller.setSetpoint(pid_roll_setpoint);
         pitch_controller = new PIDController(PITCH_PID_KP, PITCH_PID_KI, PITCH_PID_KD);
         pitch_controller.setSetpoint(pid_pitch_setpoint);
         yaw_controller = new PIDController(YAW_PID_KP, YAW_PID_KI, YAW_PID_KD);
         yaw_controller.setSetpoint(pid_yaw_setpoint);
-
-        this.ioio = ioio;
-        try {
-            motorFC = ioio.openPwmOutput(34, 200);
-            motorFCC = ioio.openPwmOutput(35, 200);
-            motorRC = ioio.openPwmOutput(36, 200);
-            motorRCC = ioio.openPwmOutput(37, 200);
-            Log.log("IOIOController", "IOIO is initialised");
-        } catch (ConnectionLostException e) {
-            e.printStackTrace();
-        }
-
     }
 
-    void setIOIO() {
-
+    void setIOIO(IOIO ioio) {
+        if (this.ioio == null || this.ioio.equals(ioio)) {
+            this.ioio = ioio;
+            try {
+                motorFC = ioio.openPwmOutput(34, 200);
+                motorFCC = ioio.openPwmOutput(35, 200);
+                motorRC = ioio.openPwmOutput(36, 200);
+                motorRCC = ioio.openPwmOutput(37, 200);
+                Thread thread = new Thread(new ControllerThread());
+                thread.start();
+                Log.log("IOIOController", "IOIO is initialised");
+            } catch (ConnectionLostException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException f) {
+                Log.log("IOIOController", "IOIO was already inited");
+            }
+        }
     }
 
     void pid_initialize() {
@@ -141,10 +142,12 @@ public class Controller {
         roll_controller.setSetpoint(0); //desired roll
         pitch_controller.setSetpoint(0); //desired pitch
         yaw_controller.setSetpoint(0); //desired yaw
-        float[] data = accelerometer.getData();
-        roll_controller.getInput(data[0]);
-        pitch_controller.getInput(data[1]);
-        yaw_controller.getInput(data[2]);
+        if (accelerometer != null) {
+            float[] data = accelerometer.getData();
+            roll_controller.getInput(data[0]);
+            pitch_controller.getInput(data[1]);
+            yaw_controller.getInput(data[2]);
+        }
     }
 
     void pid_compute() {
@@ -219,16 +222,32 @@ public class Controller {
     }
 
     public void setPulseWidth(int fcRange, int fccRange, int rcRange, int rccRange) throws ConnectionLostException {
-        if (fcRange >= 1000 && fcRange <= 2023 &&
-                fccRange >= 1000 && fccRange <= 2023 &&
-                rcRange >= 1000 && rcRange <= 2023 &&
-                rccRange >= 1000 && rccRange <= 2023) {
-            motorFC.setPulseWidth(fcRange);
-            motorFCC.setPulseWidth(fccRange);
-            motorRC.setPulseWidth(rcRange);
-            motorRCC.setPulseWidth(rccRange);
-        } else
-            throw new IllegalArgumentException();
+        try {
+            if (fcRange >= 1000 && fcRange <= 2023 &&
+                    fccRange >= 1000 && fccRange <= 2023 &&
+                    rcRange >= 1000 && rcRange <= 2023 &&
+                    rccRange >= 1000 && rccRange <= 2023) {
+                motorFC.setPulseWidth(fcRange);
+                motorFCC.setPulseWidth(fccRange);
+                motorRC.setPulseWidth(rcRange);
+                motorRCC.setPulseWidth(rccRange);
+            } else
+                throw new IllegalArgumentException();
+        }
+        catch (NullPointerException e) {
+
+        }
     }
 
+    private class ControllerThread implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                pid_update();
+                setpoint_update();
+                pid_compute();
+                control_update();
+            }
+        }
+    }
 }

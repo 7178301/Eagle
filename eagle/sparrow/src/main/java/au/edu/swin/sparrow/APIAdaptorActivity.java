@@ -61,6 +61,8 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
     private Timer myTimer;
 
     private Vector<String> logMessages = new Vector<String>();
+    private IOIO ioio;
+    private boolean ioioChanged = false;
 
 
     @Override
@@ -73,8 +75,8 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
         initializeUI();
 
 
-        telnet = new TelnetServer(drone.getSDKAdaptor().scriptingEngine,2323);
-        protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine,2324);
+        telnet = new TelnetServer(drone.getSDKAdaptor().scriptingEngine, 2323);
+        protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine, 2324);
         Log.addVerboseCallback(this);
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();
@@ -96,8 +98,11 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
 
     @Override
     public void setIOIO(IOIO ioio) {
-        Log.log("APIAdaptorIOIO", "IOIO connected and passed on");
-        drone.getSDKAdaptor().setController(ioio);
+        if (this.ioio == null || !this.ioio.equals(ioio)) {
+            ioioChanged = true;
+            this.ioio = ioio;
+        }
+
     }
 
 
@@ -116,15 +121,15 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
             }
         });
 
-        buttonExpandSensors = (Button)findViewById(R.id.buttonExpandSensors);
+        buttonExpandSensors = (Button) findViewById(R.id.buttonExpandSensors);
         buttonExpandSensors.setOnClickListener(this);
 
-        linearLayoutSensors = (LinearLayout)findViewById(R.id.scrollViewSensors);
+        linearLayoutSensors = (LinearLayout) findViewById(R.id.scrollViewSensors);
 
-        buttonExpandLog = (Button)findViewById(R.id.buttonExpandLog);
+        buttonExpandLog = (Button) findViewById(R.id.buttonExpandLog);
         buttonExpandLog.setOnClickListener(this);
 
-        webViewLog = (WebView)findViewById(R.id.webViewLog);
+        webViewLog = (WebView) findViewById(R.id.webViewLog);
 
 
         FragmentManager fragMan = getFragmentManager();
@@ -201,6 +206,11 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
             sensor.updateData();
         }
 
+        if (ioioChanged && ioio != null && drone.getSDKAdaptor() != null) {
+            drone.getSDKAdaptor().setController(ioio);
+            ioioChanged = false;
+        }
+
         if (webViewLog != null) {
             StringBuilder html = new StringBuilder();
             html.append("<html>");
@@ -255,7 +265,7 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
 
     @Override
     public void onLogEntry(String tag, String message) {
-        logMessages.add(tag+": "+message);
+        logMessages.add(tag + ": " + message);
 
     }
 
