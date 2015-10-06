@@ -1,14 +1,22 @@
 package eagle.sdkInterface;
 
-import eagle.navigation.positioning.Position;
+import java.util.ArrayList;
+
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.network.ScriptingEngine;
-import eagle.sdkInterface.sensorAdaptors.*;
-
-import java.util.ArrayList;
+import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
+import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 /**
  * Abstract SDKAdaptor Class
@@ -448,7 +456,7 @@ public abstract class SDKAdaptor {
     public abstract void delay(int milliseconds);
 
     public class InvalidPositionTypeException extends Exception {
-        public InvalidPositionTypeException(String message){
+        public InvalidPositionTypeException(String message) {
             super(message);
         }
     }

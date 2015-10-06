@@ -2,7 +2,6 @@ package eagle.navigation.testFlights;
 
 import eagle.Drone;
 import eagle.navigation.TestFlight;
-import eagle.sdkInterface.SDKAdaptorCallback;
 
 /**
  * Sample Flight Simulation 2
@@ -27,9 +26,9 @@ public class TestFlight2 extends TestFlight {
 
 
         //try {
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(null,1);
+        getDrone().getSDKAdaptor().changeAltitudeDisplacement(null, 1);
         getDrone().getSDKAdaptor().delay(1000);
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(null,-1);
+        getDrone().getSDKAdaptor().changeAltitudeDisplacement(null, -1);
         getDrone().getSDKAdaptor().delay(1000);
         //    }
         //catch (InterruptedException e) {

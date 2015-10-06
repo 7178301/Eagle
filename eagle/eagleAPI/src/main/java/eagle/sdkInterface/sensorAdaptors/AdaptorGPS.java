@@ -39,7 +39,7 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         }
     }
 
-    public float getGPSAccuracy(){
+    public float getGPSAccuracy() {
         return 99999999;
     }
 

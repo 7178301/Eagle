@@ -10,21 +10,22 @@ import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
 
-/** Simulator Class
- * @since     09/04/2015
- * <p>
- * Date Modified	01/08/2015 - Cameron Cross
+/**
+ * Simulator Class
+ *
+ * @author Cameron Cross [7193432@student.swin.edu.au]
  * @version 0.0.1
- * @author          Cameron Cross [7193432@student.swin.edu.au] */
+ * @since 09/04/2015
+ * <p/>
+ * Date Modified	01/08/2015 - Cameron Cross
+ */
 public class Simulator extends SDKAdaptor {
     private boolean connected = false;
-    private int maxSpeed = 0;
-    private int maxRotateSpeed = 0;
 
     public Simulator() {
-        super("Simulator", "Siumulator", "alpha", "0.0.1",1,30);
+        super("Simulator", "Siumulator", "alpha", "0.0.1", 1, 30);
         try {
-            setPositionAssigned(new PositionMetric(0,0,0,new Angle(0),new Angle(0),new Angle(0)));
+            setPositionAssigned(new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
             setHomePosition(getPositionAssigned());
         } catch (InvalidPositionTypeException e) {
             e.printStackTrace();
@@ -33,7 +34,7 @@ public class Simulator extends SDKAdaptor {
 
 
     public Simulator(int speed, int rotateSpeed) {
-        super("Simulator", "Siumulator", "alpha", "0.0.1",speed,rotateSpeed);
+        super("Simulator", "Siumulator", "alpha", "0.0.1", speed, rotateSpeed);
     }
 
     @Override
@@ -44,14 +45,14 @@ public class Simulator extends SDKAdaptor {
     @Override
     public boolean connectToDrone() {
         connected = true;
-        Log.log("Simulator","Connected to Drone");
+        Log.log("Simulator", "Connected to Drone");
         return connected;
     }
 
     @Override
     public boolean disconnectFromDrone() {
         connected = false;
-        Log.log("Simulator","Disconnected to Drone");
+        Log.log("Simulator", "Disconnected to Drone");
         return true;
     }
 
@@ -77,7 +78,7 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position, double speed) {
-        if (sdkAdaptorCallback == null||position==null)
+        if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else {
             if (!connected) {
@@ -97,15 +98,15 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionMetric position) {
-        if (sdkAdaptorCallback == null||position==null)
+        if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else
-            flyTo(sdkAdaptorCallback, position, maxSpeed);
+            flyTo(sdkAdaptorCallback, position, getMaxSpeed());
     }
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position, double speed) {
-        if (sdkAdaptorCallback == null||position==null)
+        if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else {
             if (!connected) {
@@ -125,38 +126,38 @@ public class Simulator extends SDKAdaptor {
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position) {
-        if (sdkAdaptorCallback == null||position==null)
+        if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else
-            flyTo(sdkAdaptorCallback, position, maxSpeed);
+            flyTo(sdkAdaptorCallback, position, getMaxSpeed());
     }
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
-            if (sdkAdaptorCallback == null||position==null)
-                throw new IllegalArgumentException("Arguments must not be null");
-            else {
-                if (!connected) {
-                    sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
-                } else {
-                    try {
-                        setPositionAssigned(getPositionAssigned().add(position));
-                        Log.log("Simulator", "flyToDisplacement " + position.toString() + " SUCCESS");
-                        sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
-                    } catch (InvalidPositionTypeException e) {
-                        Log.log("Simulator", "flyToDisplacement " + position.toString() + " FAIL " + e.getMessage());
-                        sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
-                    }
+        if (sdkAdaptorCallback == null || position == null)
+            throw new IllegalArgumentException("Arguments must not be null");
+        else {
+            if (!connected) {
+                sdkAdaptorCallback.onResult(false, "Not Connected To The Drone");
+            } else {
+                try {
+                    setPositionAssigned(getPositionAssigned().add(position));
+                    Log.log("Simulator", "flyToDisplacement " + position.toString() + " SUCCESS");
+                    sdkAdaptorCallback.onResult(true, "flyTo " + position.toString() + " SUCCESS");
+                } catch (InvalidPositionTypeException e) {
+                    Log.log("Simulator", "flyToDisplacement " + position.toString() + " FAIL " + e.getMessage());
+                    sdkAdaptorCallback.onResult(false, "flyTo " + position.toString() + " FAIL");
                 }
             }
+        }
     }
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position) {
-        if (sdkAdaptorCallback == null||position==null)
+        if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else
-            flyTo(sdkAdaptorCallback, position, maxSpeed);
+            flyTo(sdkAdaptorCallback, position, getMaxSpeed());
     }
 
     @Override

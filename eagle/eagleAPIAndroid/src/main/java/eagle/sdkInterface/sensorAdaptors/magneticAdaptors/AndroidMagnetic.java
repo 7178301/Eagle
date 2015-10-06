@@ -60,9 +60,10 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
     public float[] getData() {
         return magneticData;
     }
+
     @Override
     public boolean isDataReady() {
-        if (magneticData==null)
+        if (magneticData == null)
             return false;
         else
             return true;
@@ -82,7 +83,7 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
             magneticData[1] = event.values[1];
             magneticData[2] = event.values[2];
         }
-        for(SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
             currentSensorAdaptorCallback.onSensorChanged();
     }
 }

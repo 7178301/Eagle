@@ -6,12 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
-import eagle.Drone;
 import eagle.Log;
 import eagle.network.ScriptingEngine;
-import eagle.sdkInterface.SDKAdaptor;
 
 
 /**
@@ -87,7 +84,7 @@ public class TelnetServer {
                         if (scriptingEngine != null) {
                             String result = scriptingEngine.executeInstruction(inputLine);
                             outgoing.println(result);
-                            Log.log("TelnetServer", "REQUEST: "+inputLine + " RESULT: " + result);
+                            Log.log("TelnetServer", "REQUEST: " + inputLine + " RESULT: " + result);
                         }
                     } catch (ScriptingEngine.InvalidInstructionException e) {
                         outgoing.println("Invalid Command: " + e.getMessage());

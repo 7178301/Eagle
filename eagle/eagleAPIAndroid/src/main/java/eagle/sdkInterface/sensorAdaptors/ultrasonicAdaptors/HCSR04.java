@@ -77,7 +77,7 @@ public class HCSR04 extends AdaptorUltrasonic {
             Thread.sleep(1);
             trigger.write(false);
             echoSeconds = (echo.getDuration() * 1000 * 1000);
-            echoDistanceMetres = (echoSeconds / 29 / 2)/100;
+            echoDistanceMetres = (echoSeconds / 29 / 2) / 100;
         } catch (ConnectionLostException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

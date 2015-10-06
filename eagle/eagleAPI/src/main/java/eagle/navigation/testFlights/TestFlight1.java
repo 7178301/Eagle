@@ -18,7 +18,6 @@ import eagle.sdkInterface.SDKAdaptorCallback;
 public class TestFlight1 extends TestFlight {
 
 
-
     public TestFlight1(Drone drone, double speed, double rotation) {
         super(drone, "Initialization Test", "Initializes the drone, starts up the drone props at low speed, stops the props then disconnects", speed, rotation);
     }
@@ -35,11 +34,11 @@ public class TestFlight1 extends TestFlight {
         getDrone().getSDKAdaptor().sdkAdaptorStack.run(new SDKAdaptorCallback() {
             @Override
             public void onResult(boolean booleanResult, String stringResult) {
-                if(booleanResult)
-                    result[0] =1;
+                if (booleanResult)
+                    result[0] = 1;
             }
         });
-        while (getDrone().getSDKAdaptor().sdkAdaptorStack.isAlive()){
+        while (getDrone().getSDKAdaptor().sdkAdaptorStack.isAlive()) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

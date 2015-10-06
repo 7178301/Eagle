@@ -8,34 +8,36 @@ import java.util.Vector;
  *
  * @author Cameron Cross
  * @author Nicholas Alards [7178301@student.swin.edu.au]
+ * @author Cameron Cross
  * @version 0.0.1
  * @since 8/13/15
  * <p/>
- * Date Modified	27/08/2015 - Cameron
+ * Date Modified	02/10/15 - Nicholas
  */
 public class Log {
 
-    private static HashMap<String,Vector<String>> log = new HashMap<>();
-    private static HashMap<String,Vector<LogCallback>> logCallBack = new HashMap<>();
+    private static HashMap<String, Vector<String>> log = new HashMap<>();
+    private static HashMap<String, Vector<LogCallback>> logCallBack = new HashMap<>();
     private static Vector<LogCallback> verboseLogCallback = new Vector<>();
 
 
     public synchronized static void log(String tag, String message) {
         if (log.containsKey(tag))
             log.get(tag).add(message);
-        else{
+        else {
             Vector<String> initial = new Vector<>();
             initial.add(message);
             log.put(tag, initial);
         }
         for (LogCallback vLogCallback : verboseLogCallback)
             vLogCallback.onLogEntry(tag, message);
-        if(logCallBack.containsKey(tag)) {
+        if (logCallBack.containsKey(tag)) {
             for (LogCallback logcallback : logCallBack.get(tag))
                 logcallback.onLogEntry(tag, message);
         }
     }
-    public synchronized static String lastMessage(String tag){
+
+    public synchronized static String lastMessage(String tag) {
         if (log.containsKey(tag))
             return log.get(tag).lastElement();
         else
@@ -43,30 +45,30 @@ public class Log {
     }
 
     public synchronized static void addCallback(String tag, LogCallback callback) {
-        if(log.containsKey(tag)&& logCallBack.containsKey(tag))
+        if (log.containsKey(tag) && logCallBack.containsKey(tag))
             logCallBack.get(tag).add(callback);
-        else if(log.containsKey(tag)&&!logCallBack.containsKey(tag)){
+        else if (log.containsKey(tag) && !logCallBack.containsKey(tag)) {
             Vector<LogCallback> initial = new Vector<>();
             initial.add(callback);
             logCallBack.put(tag, initial);
-        }else if(!log.containsKey(tag)&&!logCallBack.containsKey(tag)){
+        } else if (!log.containsKey(tag) && !logCallBack.containsKey(tag)) {
             Vector<String> initialTag = new Vector<>();
             log.put(tag, initialTag);
             Vector<LogCallback> initialLogCallback = new Vector<>();
             initialLogCallback.add(callback);
-            logCallBack.put(tag,initialLogCallback);
+            logCallBack.put(tag, initialLogCallback);
         }
-        Log.log("LogCallback","NEW CALLBACK ADDED TO "+tag);
+        Log.log("LogCallback", "NEW CALLBACK ADDED TO " + tag);
     }
 
-    public synchronized static void addVerboseCallback(LogCallback callback){
+    public synchronized static void addVerboseCallback(LogCallback callback) {
         verboseLogCallback.add(callback);
     }
 
     public synchronized static void removeCallback(String tag, LogCallback callback) {
-        if(logCallBack.containsValue(tag)){
+        if (logCallBack.containsValue(tag)) {
             logCallBack.get(tag).remove(callback);
-        Log.log("LogCallback","CALLBACK REMOVED FROM "+tag);
+            Log.log("LogCallback", "CALLBACK REMOVED FROM " + tag);
         }
 
     }

@@ -22,7 +22,7 @@ public class LinkSpriteSEN12804 extends AdaptorCamera {
     }
 
     //TODO Following Method Need Proper Implementation
-    public byte[] getData(){
+    public byte[] getData() {
         return null;
     }
 

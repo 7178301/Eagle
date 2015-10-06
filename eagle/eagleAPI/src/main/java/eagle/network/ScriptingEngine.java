@@ -159,7 +159,7 @@ public class ScriptingEngine {
                                 adaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
                                 break;
@@ -169,7 +169,7 @@ public class ScriptingEngine {
                                 adaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
                                 break;
@@ -180,7 +180,7 @@ public class ScriptingEngine {
                                 adaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
                                 break;
@@ -191,7 +191,7 @@ public class ScriptingEngine {
                             return "SUCCESS";
                         else
                             return "FAIL";
-                    
+
                     } else if (array.length == 7) {
                         double lon = Double.parseDouble(array[2]);
                         double lat = Double.parseDouble(array[3]);
@@ -206,7 +206,7 @@ public class ScriptingEngine {
                                 adaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
                                 break;
@@ -216,7 +216,7 @@ public class ScriptingEngine {
                                 adaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
                                 break;
@@ -227,21 +227,21 @@ public class ScriptingEngine {
                                 adaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
                                 break;
                             default:
                                 throw new InvalidInstructionException("Invalid Position Type: " + instruction);
                         }
-                        if (result[0]) 
+                        if (result[0])
                             return "SUCCESS";
                         else
                             return "FAIL";
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
-                    
+
                 case "CHANGELONGITUDE":
                     if (array.length == 3) {
                         double val = Double.parseDouble(array[2]);
@@ -253,7 +253,7 @@ public class ScriptingEngine {
                                 adaptor.changeLongitudeGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -263,7 +263,7 @@ public class ScriptingEngine {
                                 adaptor.changeLongitudeMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -274,7 +274,7 @@ public class ScriptingEngine {
                                 adaptor.changeLongitudeDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -297,7 +297,7 @@ public class ScriptingEngine {
                                 adaptor.changeLongitudeGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -307,7 +307,7 @@ public class ScriptingEngine {
                                 adaptor.changeLongitudeMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -318,7 +318,7 @@ public class ScriptingEngine {
                                 adaptor.changeLongitudeDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -344,7 +344,7 @@ public class ScriptingEngine {
                                 adaptor.changeLatitudeGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -354,7 +354,7 @@ public class ScriptingEngine {
                                 adaptor.changeLatitudeMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -365,7 +365,7 @@ public class ScriptingEngine {
                                 adaptor.changeLatitudeDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -388,7 +388,7 @@ public class ScriptingEngine {
                                 adaptor.changeLatitudeGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -398,7 +398,7 @@ public class ScriptingEngine {
                                 adaptor.changeLatitudeMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -409,7 +409,7 @@ public class ScriptingEngine {
                                 adaptor.changeLatitudeDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -435,7 +435,7 @@ public class ScriptingEngine {
                                 adaptor.changeAltitudeGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -445,7 +445,7 @@ public class ScriptingEngine {
                                 adaptor.changeAltitudeMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -456,7 +456,7 @@ public class ScriptingEngine {
                                 adaptor.changeAltitudeDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val);
                                 break;
@@ -479,7 +479,7 @@ public class ScriptingEngine {
                                 adaptor.changeAltitudeGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -489,7 +489,7 @@ public class ScriptingEngine {
                                 adaptor.changeAltitudeMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -500,7 +500,7 @@ public class ScriptingEngine {
                                 adaptor.changeAltitudeDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, val, spe);
                                 break;
@@ -526,7 +526,7 @@ public class ScriptingEngine {
                                 adaptor.changeYawGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new Angle(val));
                                 break;
@@ -536,7 +536,7 @@ public class ScriptingEngine {
                                 adaptor.changeYawMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new Angle(val));
                                 break;
@@ -547,7 +547,7 @@ public class ScriptingEngine {
                                 adaptor.changeYawDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new Angle(val));
                                 break;
@@ -570,7 +570,7 @@ public class ScriptingEngine {
                                 adaptor.changeYawGPS(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new Angle(val), spe);
                                 break;
@@ -580,7 +580,7 @@ public class ScriptingEngine {
                                 adaptor.changeYawMetric(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new Angle(val), spe);
                                 break;
@@ -591,7 +591,7 @@ public class ScriptingEngine {
                                 adaptor.changeYawDisplacement(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        result[0] =booleanResult;
+                                        result[0] = booleanResult;
                                     }
                                 }, new Angle(val), spe);
                                 break;
@@ -612,10 +612,10 @@ public class ScriptingEngine {
                         adaptor.goHome(new SDKAdaptorCallback() {
                             @Override
                             public void onResult(boolean booleanResult, String stringResult) {
-                                result[0] =booleanResult;
+                                result[0] = booleanResult;
                             }
                         });
-                        if(result[0])
+                        if (result[0])
                             return "SUCCESS";
                         else
                             return "FAIL";
@@ -624,10 +624,10 @@ public class ScriptingEngine {
                         adaptor.goHome(new SDKAdaptorCallback() {
                             @Override
                             public void onResult(boolean booleanResult, String stringResult) {
-                                result[0] =booleanResult;
+                                result[0] = booleanResult;
                             }
                         }, Double.parseDouble(array[1]));
-                        if(result[0])
+                        if (result[0])
                             return "SUCCESS";
                         else
                             return "FAIL";
@@ -712,7 +712,7 @@ public class ScriptingEngine {
                             sb.append(parts[i]);
                             sb.append(" ");
                         }
-                        Log.log("ScriptingEngine",sb.toString());
+                        Log.log("ScriptingEngine", sb.toString());
                         return "SUCCESS";
                     } else {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
@@ -751,7 +751,7 @@ public class ScriptingEngine {
 
     public class InvalidInstructionException extends Exception {
         public InvalidInstructionException(String s) {
-            super("Invalid Instruction: "+s);
+            super("Invalid Instruction: " + s);
         }
     }
 }

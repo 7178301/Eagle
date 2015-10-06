@@ -1,11 +1,9 @@
 package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
-import java.awt.Image;
-
 import eagle.navigation.positioning.PositionGPS;
 
 /**
- *  Sensor Adaptor Callback Class
+ * Sensor Adaptor GPS Event Callback Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1

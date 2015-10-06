@@ -59,7 +59,7 @@ public class ProtocolBufferClient {
     }
 
     public boolean isConnected() {
-        if(socket!=null&&!socket.isClosed())
+        if (socket != null && !socket.isClosed())
             return true;
         return false;
     }
@@ -110,9 +110,9 @@ public class ProtocolBufferClient {
                         rcb.handleResponse(response.getResponseStrings(0));
                         responseCallBackMap.remove(response.getId());
                     } else if (response.getType() == EagleProtoBuf.Response.ResponseType.LOG) {
-                        Log.log("ProtocolBufferClient",response.getResponseStrings(0));
+                        Log.log("ProtocolBufferClient", response.getResponseStrings(0));
                     } else {
-                        Log.log("ProtocolBufferClient",response.toString());
+                        Log.log("ProtocolBufferClient", response.toString());
                     }
                 } catch (IOException e) {
                     return;

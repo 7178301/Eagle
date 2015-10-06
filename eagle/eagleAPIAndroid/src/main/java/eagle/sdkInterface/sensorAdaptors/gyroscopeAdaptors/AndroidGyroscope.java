@@ -60,9 +60,10 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
     public float[] getData() {
         return gyroscopeData;
     }
+
     @Override
     public boolean isDataReady() {
-        if (gyroscopeData==null)
+        if (gyroscopeData == null)
             return false;
         else
             return true;
@@ -82,7 +83,7 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
             gyroscopeData[1] = event.values[1];
             gyroscopeData[2] = event.values[2];
         }
-        for(SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
             currentSensorAdaptorCallback.onSensorChanged();
     }
 }

@@ -47,11 +47,11 @@ public abstract class SensorAdaptor {
         return adaptorModel;
     }
 
-    public boolean setSensorPins(int[] pins){
+    public boolean setSensorPins(int[] pins) {
         return false;
     }
 
-    public String[] getSensorPinsDescription(){
+    public String[] getSensorPinsDescription() {
         return new String[0];
     }
 
@@ -63,7 +63,7 @@ public abstract class SensorAdaptor {
         return new String[0];
     }
 
-    public void addSensorAdaptorCallback(final eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback sensorAdaptorCallback){
+    public void addSensorAdaptorCallback(final eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback sensorAdaptorCallback) {
         this.sensorAdaptorCallback.add(sensorAdaptorCallback);
     }
 }

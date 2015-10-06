@@ -72,7 +72,7 @@ public class AndroidGPS extends AdaptorGPS {
     }
 
     @Override
-    public float getGPSAccuracy(){
+    public float getGPSAccuracy() {
         return accuracy;
     }
 
@@ -90,11 +90,11 @@ public class AndroidGPS extends AdaptorGPS {
                     gpsData = new PositionGPS(location.getLongitude(), location.getLatitude(), location.getAltitude(), new Angle(0), new Angle(0), new Angle(0));
                     accuracy = location.getAccuracy();
                 }
-            }else {
+            } else {
                 gpsData = null;
                 accuracy = 999999;
             }
-            for(SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+            for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
                 currentSensorAdaptorCallback.onSensorChanged();
         }
 

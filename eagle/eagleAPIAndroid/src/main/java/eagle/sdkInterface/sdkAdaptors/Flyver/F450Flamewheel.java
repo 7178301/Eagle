@@ -3,16 +3,13 @@ package eagle.sdkInterface.sdkAdaptors.Flyver;
 import android.content.Context;
 
 import eagle.Log;
-import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
-
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
-import eagle.sdkInterface.sensorAdaptors.SensorAdaptor;
 import ioio.lib.api.IOIO;
 
 /**
@@ -52,7 +49,7 @@ public class F450Flamewheel extends SDKAdaptor {
             return true;
         }
         else{
-            Log.log("F450Flamewheel", "flyToMetric FAIL");
+            Log.log("F450Flamewheel", "connectToDrone FAIL");
             return false;
         }
     }

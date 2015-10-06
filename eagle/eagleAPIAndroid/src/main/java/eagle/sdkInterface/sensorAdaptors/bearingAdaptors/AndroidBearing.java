@@ -34,7 +34,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
         if (this.context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null&&sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null && sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), SensorManager.SENSOR_DELAY_FASTEST);
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
             return true;
@@ -54,7 +54,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
         if (context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null&&sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null && sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null)
             return true;
         else
             return false;
@@ -64,6 +64,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
     public float getData() {
         return bearingData;
     }
+
     @Override
     public boolean isDataReady() {
         if (bearingData == 999999)
@@ -91,7 +92,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
             accelerometerData[1] = event.values[1];
             accelerometerData[2] = event.values[2];
         }
-        if(magneticData!=null&&accelerometerData!=null) {
+        if (magneticData != null && accelerometerData != null) {
 
             float R[] = new float[9];
             float I[] = new float[9];

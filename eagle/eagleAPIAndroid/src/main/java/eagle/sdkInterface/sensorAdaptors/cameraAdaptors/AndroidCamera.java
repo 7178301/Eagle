@@ -23,7 +23,7 @@ public class AndroidCamera extends AdaptorCamera {
     }
 
     //TODO Following Method Need Proper Implementation
-    public byte[] getData(){
+    public byte[] getData() {
         return null;
     }
 

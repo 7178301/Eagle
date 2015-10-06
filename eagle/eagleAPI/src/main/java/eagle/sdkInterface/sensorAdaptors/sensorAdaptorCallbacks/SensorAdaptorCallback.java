@@ -1,7 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
 /**
- *  Sensor Adaptor Callback Class
+ * Sensor Adaptor Callback Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1

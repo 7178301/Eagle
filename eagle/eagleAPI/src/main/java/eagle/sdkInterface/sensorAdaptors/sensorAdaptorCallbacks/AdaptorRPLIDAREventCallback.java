@@ -1,9 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
-import java.awt.Image;
-
 /**
- *  Sensor Adaptor Callback Class
+ * Sensor Adaptor RPLIDAR Event Callback Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1

@@ -40,7 +40,7 @@ public class ProtocolBufferServer {
 
         @Override
         public void run() {
-            while(true) {
+            while (true) {
                 try {
                     serverSocket = new ServerSocket(incomingPort);
                     Log.log("ProtocolBufferServer", "Server Started");
@@ -82,7 +82,7 @@ public class ProtocolBufferServer {
                 OutputStream outputStream = clientSocket.getOutputStream();
                 InputStream in = clientSocket.getInputStream();
 
-                while (clientSocket!=null&&!clientSocket.isClosed()) {
+                while (clientSocket != null && !clientSocket.isClosed()) {
                     EagleProtoBuf.Request request = EagleProtoBuf.Request.parseDelimitedFrom(in);
                     try {
                         if (scriptingEngine != null && request.getRequestStringsCount() > 0) {

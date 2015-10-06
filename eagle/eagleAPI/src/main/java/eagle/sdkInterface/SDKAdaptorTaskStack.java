@@ -157,17 +157,17 @@ public class SDKAdaptorTaskStack {
                                 sdkAdaptorTask.sensorEventUltrasonic.get(adaptorUltrasonic).onSensorEvent(adaptorUltrasonic.getCalibratedData());
                         }
 
-                        while(onResult[0]!=null){
-                            if (!onResult[0]){
+                        while (onResult[0] != null) {
+                            if (!onResult[0]) {
                                 try {
                                     Thread.sleep(1);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                            }else{
+                            } else {
                                 onResult[0] = null;
-                                if (!onResult[1]);
-                                    interupt();
+                                if (!onResult[1]) ;
+                                interupt();
                             }
                         }
                     }

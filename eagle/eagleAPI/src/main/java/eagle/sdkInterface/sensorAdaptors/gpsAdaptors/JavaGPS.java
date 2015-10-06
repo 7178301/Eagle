@@ -1,6 +1,5 @@
 package eagle.sdkInterface.sensorAdaptors.gpsAdaptors;
 
-import eagle.Log;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
@@ -78,11 +77,10 @@ public class JavaGPS extends AdaptorGPS {
     }
 
     class ReadThread implements Runnable {
-//protocol info from here: http://www.gpsinformation.org/dale/nmea.htm
+        //protocol info from here: http://www.gpsinformation.org/dale/nmea.htm
         @Override
         public void run() {
-            while (true)
-            {
+            while (true) {
                 try {
                     String gpsString = readString(serialPort);
                     //Log.log(gpsString);
@@ -104,10 +102,10 @@ public class JavaGPS extends AdaptorGPS {
             StringBuilder sb = new StringBuilder();
             while (true) {
                 byte[] val = serialPort.readBytes(1);
-                if ((char)val[0] == '\n') {
+                if ((char) val[0] == '\n') {
                     return sb.toString();
                 } else {
-                    sb.append((char)val[0]);
+                    sb.append((char) val[0]);
                 }
             }
         }
@@ -115,8 +113,7 @@ public class JavaGPS extends AdaptorGPS {
         private double parseAltitude(String part, String part1) {
             try {
                 return Double.parseDouble(part);
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return 0;
             }
         }
@@ -126,15 +123,13 @@ public class JavaGPS extends AdaptorGPS {
             try {
                 degree = Double.parseDouble(part.substring(0, 2));
                 minutes = Double.parseDouble(part.substring(2));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
 
-            }
-            catch (IndexOutOfBoundsException f) {
+            } catch (IndexOutOfBoundsException f) {
 
             }
             //01131.000,E
-            return degree+minutes/60;
+            return degree + minutes / 60;
         }
 
         private double parseLatitude(String part, String part1) {
@@ -142,15 +137,13 @@ public class JavaGPS extends AdaptorGPS {
             try {
                 degree = Double.parseDouble(part.substring(0, 2));
                 minutes = Double.parseDouble(part.substring(2));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
 
-            }
-            catch (IndexOutOfBoundsException f) {
+            } catch (IndexOutOfBoundsException f) {
 
             }
             //4807.038,N
-            return degree+minutes/60;
+            return degree + minutes / 60;
         }
     }
 
