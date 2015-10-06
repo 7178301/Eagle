@@ -23,6 +23,7 @@ import eagle.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.Log;
 import eagle.network.telnet.TelnetServer;
+import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
@@ -37,10 +38,11 @@ import au.edu.swin.sparrow.Fragment.LIDARFragment;
 import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
+import ioio.lib.api.IOIO;
 
-public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, LogCallback {
+import static au.edu.swin.sparrow.Fragment.AccelerometerFragment.*;
 
-
+public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentInteractionListener, View.OnClickListener, LogCallback {
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
@@ -59,6 +61,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private Timer myTimer;
 
     private Vector<String> logMessages = new Vector<String>();
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -67,10 +71,11 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
         initializeUI();
+
+
         telnet = new TelnetServer(drone.getSDKAdaptor().scriptingEngine,2323);
         protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine,2324);
         Log.addVerboseCallback(this);
-
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 1000);
@@ -87,6 +92,12 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updateUI();
+    }
+
+    @Override
+    public void setIOIO(IOIO ioio) {
+        Log.log("APIAdaptorIOIO", "IOIO connected and passed on");
+        drone.getSDKAdaptor().setController(ioio);
     }
 
 
@@ -121,7 +132,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
         ArrayList<AdaptorAccelerometer> accelerometerAdaptors = drone.getSDKAdaptor().getAccelerometers();
         for (AdaptorAccelerometer accelerometer : accelerometerAdaptors) {
-            AccelerometerFragment fragment = AccelerometerFragment.newInstance();
+            AccelerometerFragment fragment = newInstance();
             accelerometer.setAndroidContext(this);
             accelerometer.connectToSensor();
             fragment.setAccelerometerAdaptor(accelerometer);

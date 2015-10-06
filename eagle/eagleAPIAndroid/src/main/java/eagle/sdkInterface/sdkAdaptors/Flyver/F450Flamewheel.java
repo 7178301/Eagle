@@ -1,6 +1,8 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import eagle.Log;
 import eagle.navigation.positioning.Position;
@@ -26,7 +28,8 @@ public class F450Flamewheel extends SDKAdaptor {
 
     public static String adapterVersion;
     private Context context;
-    private IOIO controller;
+    private IOIO ioio;
+    private Controller controller;
 
     //TODO Create method implementations
 
@@ -44,7 +47,7 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
-        if (controller != null && controller.getState() != null) {
+        if (ioio != null && ioio.getState() != null) {
             Log.log("F450Flamewheel", "connectToDrone SUCCESS");
             return true;
         }
@@ -155,7 +158,8 @@ public class F450Flamewheel extends SDKAdaptor {
     @Override
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
-            this.controller = (IOIO) object;
+            this.ioio = (IOIO) object;
+            controller = new Controller(ioio);
             return true;
         } else
             return false;

@@ -25,6 +25,12 @@ Nicholas Alards - 7178301@student.swin.edu.au
 Cameron Cross - 7193432@student.swin.edu.au  
 Lara Mir - 9693726@student.swin.edu.au  
 
+##Special Thanks
+Ben Ripley (Allowed us to use his PID controller code for an arduino)
+https://github.com/benripley
+http://www.benripley.com/
+
+
 ##Licensing
 The MIT License (MIT)
 
