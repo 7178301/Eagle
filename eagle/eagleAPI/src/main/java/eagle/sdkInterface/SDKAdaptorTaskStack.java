@@ -45,7 +45,7 @@ public class SDKAdaptorTaskStack {
         sdkAdaptorTasks = new Stack<SDKAdaptorTask>();
     }
 
-    public void push(SDKAdaptorTask sdkAdaptorTask){
+    public void push(SDKAdaptorTask sdkAdaptorTask) {
         sdkAdaptorTasks.push(sdkAdaptorTask);
     }
 
@@ -68,43 +68,58 @@ public class SDKAdaptorTaskStack {
             sdkAdaptorTaskStackThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    final Boolean[] onResult = {null, null};
                     while (!sdkAdaptorTasks.empty()) {
+                        onResult[0] = null;
+                        onResult[1] = null;
                         SDKAdaptorTask sdkAdaptorTask = sdkAdaptorTasks.pop();
                         if (sdkAdaptorTask.position != null) {
                             if (sdkAdaptorTask.position instanceof PositionGPS) {
+                                onResult[0] = false;
                                 sdkAdaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
+                                        onResult[0] = true;
+                                        onResult[1] = booleanResult;
                                         if (!booleanResult) {
                                             sdkAdaptorCallback.onResult(booleanResult, stringResult);
-                                            Thread.currentThread().interrupt();
                                         }
                                     }
                                 }, (PositionGPS) sdkAdaptorTask.position);
                             } else if (sdkAdaptorTask.position instanceof PositionDisplacement) {
+                                onResult[0] = false;
                                 sdkAdaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
+                                        onResult[0] = true;
+                                        onResult[1] = booleanResult;
                                         if (!booleanResult) {
                                             sdkAdaptorCallback.onResult(booleanResult, stringResult);
-                                            Thread.currentThread().interrupt();
                                         }
                                     }
                                 }, (PositionDisplacement) sdkAdaptorTask.position);
                             } else if (sdkAdaptorTask.position instanceof PositionMetric) {
+                                onResult[0] = false;
                                 sdkAdaptor.flyTo(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
+                                        onResult[0] = true;
+                                        onResult[1] = booleanResult;
                                         if (!booleanResult) {
                                             sdkAdaptorCallback.onResult(booleanResult, stringResult);
-                                            Thread.currentThread().interrupt();
+                                            onResult[0] = true;
                                         }
                                     }
                                 }, (PositionMetric) sdkAdaptorTask.position);
                             }
                         }
-                        if (sdkAdaptorTask.delay > 0)
-                            sdkAdaptor.delay(sdkAdaptorTask.delay);
+                        if (sdkAdaptorTask.delay > 0) {
+                            try {
+                                Thread.sleep(sdkAdaptorTask.delay);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         if (sdkAdaptorTask.sensorEventAccelerometer != null) {
                             for (AdaptorAccelerometer adaptorAccelerometer : sdkAdaptorTask.sensorEventAccelerometer.keySet())
                                 sdkAdaptorTask.sensorEventAccelerometer.get(adaptorAccelerometer).onSensorEvent(adaptorAccelerometer.getCalibratedData());
@@ -140,6 +155,20 @@ public class SDKAdaptorTaskStack {
                         if (sdkAdaptorTask.sensorEventUltrasonic != null) {
                             for (AdaptorUltrasonic adaptorUltrasonic : sdkAdaptorTask.sensorEventUltrasonic.keySet())
                                 sdkAdaptorTask.sensorEventUltrasonic.get(adaptorUltrasonic).onSensorEvent(adaptorUltrasonic.getCalibratedData());
+                        }
+
+                        while(onResult[0]!=null){
+                            if (!onResult[0]){
+                                try {
+                                    Thread.sleep(1);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }else{
+                                onResult[0] = null;
+                                if (!onResult[1]);
+                                    interupt();
+                            }
                         }
                     }
                     sdkAdaptorCallback.onResult(true, "Stack Execution Successful");
