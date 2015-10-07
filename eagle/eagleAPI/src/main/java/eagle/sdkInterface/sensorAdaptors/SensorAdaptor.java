@@ -1,7 +1,9 @@
 package eagle.sdkInterface.sensorAdaptors;
 
+import java.util.HashSet;
+
 /**
- * Abstract SensorAdaptor Class
+ * Abstract Sensor Adaptor Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
@@ -15,12 +17,14 @@ public abstract class SensorAdaptor {
     private String adaptorVersion = null;
     private String adaptorManufacturer = null;
     private String adaptorModel = null;
+    protected HashSet<eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback> sensorAdaptorCallback;
 
     public SensorAdaptor(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         this.adaptorName = adaptorManufacturer + " " + adaptorModel;
         this.adaptorManufacturer = adaptorManufacturer;
         this.adaptorModel = adaptorModel;
         this.adaptorVersion = adaptorVersion;
+        sensorAdaptorCallback = new HashSet<>();
     }
 
     public abstract boolean isConnectedToSensor();
@@ -43,13 +47,27 @@ public abstract class SensorAdaptor {
         return adaptorModel;
     }
 
-    public boolean setSensorPins(int[] pins){
+    public boolean setSensorPins(int[] pins) {
         return false;
     }
 
-    public String[] getSensorPinsDescription(){
+    public String[] getSensorPinsDescription() {
         return new String[0];
     }
 
-    public boolean setController(Object object){return false;};
+    public boolean setController(Object object){
+        return false;
+    }
+
+    public boolean setSensorConfigurables(String[] confs) {
+        return false;
+    }
+
+    public String[] getSensorConfigurables() {
+        return new String[0];
+    }
+
+    public void addSensorAdaptorCallback(final eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback sensorAdaptorCallback) {
+        this.sensorAdaptorCallback.add(sensorAdaptorCallback);
+    }
 }

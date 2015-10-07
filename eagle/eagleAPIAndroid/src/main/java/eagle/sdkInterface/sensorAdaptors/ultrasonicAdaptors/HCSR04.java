@@ -25,7 +25,7 @@ public class HCSR04 extends AdaptorUltrasonic {
     private DigitalOutput trigger;
     private PulseInput echo;
     private float echoSeconds;
-    private float echoDistanceCm;
+    private float echoDistanceMetres; // Distance measurements in metres
     private IOIO ioio;
 
     public HCSR04() {
@@ -77,13 +77,13 @@ public class HCSR04 extends AdaptorUltrasonic {
             Thread.sleep(1);
             trigger.write(false);
             echoSeconds = (echo.getDuration() * 1000 * 1000);
-            echoDistanceCm = echoSeconds / 29 / 2;
+            echoDistanceMetres = (echoSeconds / 29 / 2) / 100;
         } catch (ConnectionLostException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return echoDistanceCm;
+        return echoDistanceMetres;
     }
 
     @Override

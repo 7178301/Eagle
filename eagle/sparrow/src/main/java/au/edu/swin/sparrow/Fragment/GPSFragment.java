@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 
 /**
@@ -58,6 +59,12 @@ public class GPSFragment extends SensorFragment {
 
     public void setGPSAdaptor(AdaptorGPS gps) {
         this.gps = gps;
+        gps.addSensorAdaptorCallback(new SensorAdaptorCallback() {
+            @Override
+            public void onSensorChanged() {
+                updateData();
+            }
+        });
     }
 
     public void updateData() {

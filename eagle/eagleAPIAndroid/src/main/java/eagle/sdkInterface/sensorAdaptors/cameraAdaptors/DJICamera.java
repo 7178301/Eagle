@@ -21,6 +21,11 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     }
 
     @Override
+    public byte[] getData() {
+        return null;
+    }
+
+    @Override
     public boolean connectToSensor() {
         DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(this);
         DJIDrone.getDjiGimbal().setGimbalUpdateAttitudeCallBack(this);

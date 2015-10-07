@@ -1,0 +1,22 @@
+package eagle;
+
+option java_package = "eagle.network";
+option java_outer_classname = "EagleProtoBuf";
+
+message Request {
+    	required uint32 id = 1;
+    	repeated string requestStrings = 5;
+}
+
+message Response {
+    	required uint32 id = 1;
+    	  enum ResponseType {
+            LOG = 0;
+            COMMAND = 1;
+            OTHER = 2;
+          }
+    	required ResponseType type = 2;
+		repeated string responseStrings = 3;
+}
+
+//protoc --java_out=../../ ProtoConfig.proto

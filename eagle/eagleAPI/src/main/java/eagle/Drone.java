@@ -13,6 +13,7 @@ package eagle;
  */
 
 import eagle.navigation.Navigation;
+import eagle.network.ScriptingEngine;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 
@@ -27,11 +28,6 @@ public class Drone {
     private SDKAdaptor adaptor = null;
     private Navigation navigation = null;
     private AdaptorLoader adaptorLoader = null;
-
-    private ScriptingEngine scriptingEngine = null;
-
-    double minSpeed = -0;
-    double maxSpeed = -0;
 
     public Drone() {
         this.adaptorLoader = new AdaptorLoader();
@@ -58,11 +54,6 @@ public class Drone {
     public void setSDKAdaptor(String adaptor) {
         this.adaptor = this.adaptorLoader.getSDKAdaptor(adaptor);
         this.adaptor.loadDefaultSensorAdaptors(adaptorLoader);
-        this.scriptingEngine = new ScriptingEngine(this.adaptor);
-    }
-
-    public ScriptingEngine getScriptingEngine() {
-        return this.scriptingEngine;
     }
 }
 

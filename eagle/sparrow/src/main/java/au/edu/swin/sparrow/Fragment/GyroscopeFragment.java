@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +55,12 @@ public class GyroscopeFragment extends SensorFragment {
 
     public void setGyroscopeAdaptor(AdaptorGyroscope gyroscope) {
         this.gyroscope = gyroscope;
+        gyroscope.addSensorAdaptorCallback(new SensorAdaptorCallback() {
+            @Override
+            public void onSensorChanged() {
+                updateData();
+            }
+        });
     }
 
     public void updateData() {

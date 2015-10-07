@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -18,11 +17,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import au.edu.swin.sparrow.Fragment.BearingFragment;
 import eagle.Drone;
-import eagle.sdkInterface.sdkAdaptors.Flyver.F450FlamewheelActivity;
+import eagle.LogCallback;
+import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.Log;
-import eagle.TelnetServer;
+import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
@@ -36,12 +38,15 @@ import au.edu.swin.sparrow.Fragment.MagneticFragment;
 import au.edu.swin.sparrow.Fragment.SensorFragment;
 import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 
-public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, Log.LogCallback {
+public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, LogCallback {
+
+
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
     Drone drone = new Drone();
-    TelnetServer telnet = new TelnetServer(drone);
+    TelnetServer telnet = null;
+    ProtocolBufferServer protocolBufferServer = null;
 
     private Button buttonExpandSensors;
     private LinearLayout linearLayoutSensors;
@@ -51,8 +56,9 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private WebView webViewLog;
     private boolean logCollapsed = false;
 
+    private Timer myTimer;
+
     private Vector<String> logMessages = new Vector<String>();
-    boolean newLog = true;
     @Override
     protected void onStart() {
         super.onStart();
@@ -61,17 +67,19 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
         initializeUI();
-        Log.addCallback(telnet);
-        new Thread(telnet).start();
+        telnet = new TelnetServer(drone.getSDKAdaptor().scriptingEngine,2323);
+        protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine,2324);
+        Log.addVerboseCallback(this);
 
         MyTimerTask myTask = new MyTimerTask();
-        Timer myTimer = new Timer();
-        myTimer.schedule(myTask, 3000, 50);
+        myTimer = new Timer();
+        myTimer.schedule(myTask, 3000, 1000);
     }
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback(telnet);
+        Log.removeCallback("TelnetServer", this);
+        myTimer.cancel();
         super.onDestroy();
     }
 
@@ -91,8 +99,23 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
                 TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewConnectedStatus);
                 if (drone.getSDKAdaptor().connectToDrone()) {
                     adaptorNameTextView.setText(getResources().getString(R.string.connected));
+                    Log.log("APIAdaptorActivity", "Drone Connect To Drone SUCCESS");
                 } else {
                     adaptorNameTextView.setText(getResources().getString(R.string.not_connected));
+                    Log.log("APIAdaptorActivity", "Drone Connect To Drone FAIL");
+                }
+            }
+        });
+        final Button turnOnMotors = (Button) findViewById(R.id.buttonTurnOnMotors);
+        turnOnMotors.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewTurnOnMotors);
+                if (drone.getSDKAdaptor().turnOnMotors()) {
+                    adaptorNameTextView.setText(getResources().getString(R.string.success));
+                    Log.log("APIAdaptorActivity", "Drone Turn On Motors SUCCESS");
+                } else {
+                    adaptorNameTextView.setText(getResources().getString(R.string.fail));
+                    Log.log("APIAdaptorActivity", "Drone Turn On Motors FAIL");
                 }
             }
         });
@@ -106,7 +129,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         buttonExpandLog.setOnClickListener(this);
 
         webViewLog = (WebView)findViewById(R.id.webViewLog);
-        Log.addCallback(this);
 
 
         FragmentManager fragMan = getFragmentManager();
@@ -166,6 +188,15 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }
+        ArrayList<AdaptorBearing> bearingAdaptors = drone.getSDKAdaptor().getBearings();
+        for (AdaptorBearing adaptorBearing : bearingAdaptors) {
+            BearingFragment fragment = BearingFragment.newInstance();
+            adaptorBearing.setAndroidContext(this);
+            adaptorBearing.connectToSensor();
+            fragment.setMagneticAccelerometerAdaptors(adaptorBearing);
+            sensorFragments.add(fragment);
+            fragTransaction.add(R.id.scrollViewSensors, fragment);
+        }
         fragTransaction.commit();
     }
 
@@ -174,15 +205,15 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             sensor.updateData();
         }
 
-        if (newLog && webViewLog != null) {
-            newLog = false;
+        if (webViewLog != null) {
             StringBuilder html = new StringBuilder();
             html.append("<html>");
             html.append("<head>");
 
             html.append("</head>");
             html.append("<body>");
-            for (String mess : logMessages) {
+            Vector<String> tempLog = new Vector<>(logMessages);
+            for (String mess : tempLog) {
                 html.append("<p>" + mess + "</p>");
             }
             html.append("</body></html>");
@@ -227,9 +258,9 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     }
 
     @Override
-    public void handleMessage(String message) {
-        logMessages.add(message);
-        newLog = true;
+    public void onLogEntry(String tag, String message) {
+        logMessages.add(tag+": "+message);
+
     }
 
     class MyTimerTask extends TimerTask {

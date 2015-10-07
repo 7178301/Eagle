@@ -2,6 +2,9 @@ package eagle.navigation.testFlights;
 
 import eagle.Drone;
 import eagle.navigation.TestFlight;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionDisplacement;
+import eagle.sdkInterface.SDKAdaptorCallback;
 
 /**
  * Sample Flight Simulation 1
@@ -24,12 +27,24 @@ public class TestFlight1 extends TestFlight {
         if (!getDrone().getSDKAdaptor().connectToDrone())
             return false;
 
-
+        final int[] result = new int[1];
         //try {
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(1);
-        getDrone().getSDKAdaptor().delay(1000);
-        getDrone().getSDKAdaptor().changeAltitudeDisplacement(-1);
-        getDrone().getSDKAdaptor().delay(1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, 1, new Angle(0), new Angle(0), new Angle(0)), 1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, -1, new Angle(0), new Angle(0), new Angle(0)), 1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.run(new SDKAdaptorCallback() {
+            @Override
+            public void onResult(boolean booleanResult, String stringResult) {
+                if (booleanResult)
+                    result[0] = 1;
+            }
+        });
+        while (getDrone().getSDKAdaptor().sdkAdaptorStack.isAlive()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         //    }
         //catch (InterruptedException e) {
 

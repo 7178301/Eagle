@@ -32,6 +32,27 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/buttonTurnOnMotors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/turn_on_motors" />
+
+        <TextView
+            android:id="@+id/textViewTurnOnMotors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignEnd="@+id/buttonTurnOnMotors"
+            android:layout_alignRight="@+id/buttonTurnOnMotors"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
 
     <ScrollView
         android:id="@+id/scrollview"
