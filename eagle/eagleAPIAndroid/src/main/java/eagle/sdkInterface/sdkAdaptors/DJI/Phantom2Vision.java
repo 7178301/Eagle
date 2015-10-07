@@ -2,7 +2,7 @@ package eagle.sdkInterface.sdkAdaptors.DJI;
 
 import android.content.Context;
 
-import au.edu.swin.eagleAPIAndroid.R;
+import dji.sdk.api.Battery.DJIBatteryProperty;
 import dji.sdk.api.DJIDrone;
 import dji.sdk.api.DJIDroneTypeDef;
 import dji.sdk.api.GroundStation.DJIGroundStationFlyingInfo;
@@ -10,21 +10,21 @@ import dji.sdk.api.GroundStation.DJIGroundStationTask;
 import dji.sdk.api.GroundStation.DJIGroundStationTypeDef;
 import dji.sdk.api.GroundStation.DJIGroundStationWaypoint;
 import dji.sdk.api.MainController.DJIMainControllerSystemState;
+import dji.sdk.interfaces.DJIBatteryUpdateInfoCallBack;
 import dji.sdk.interfaces.DJIGerneralListener;
 import dji.sdk.interfaces.DJIGroundStationExecutCallBack;
 import dji.sdk.interfaces.DJIGroundStationFlyingInfoCallBack;
 import dji.sdk.interfaces.DJIGroundStationTakeOffCallBack;
 import dji.sdk.interfaces.DJIMcuUpdateStateCallBack;
-import dji.sdk.interfaces.DJIReceivedVideoDataCallBack;
-import dji.sdk.widget.DjiGLSurfaceView;
 import eagle.Log;
-import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
+import eagle.sdkInterface.sensorAdaptors.cameraAdaptors.DJICamera;
 
 /**
  * DJI SDKAdaptor
@@ -35,11 +35,15 @@ import eagle.sdkInterface.SDKAdaptor;
  * <p/>
  * Date Modified	26/05/2015 - Nicholas
  */
-public class Phantom2Vision extends SDKAdaptor {
-    private Context context = null;
+public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlyingInfoCallBack, DJIMcuUpdateStateCallBack, DJIBatteryUpdateInfoCallBack{
 
-    boolean permission = false;
-    DJIGroundStationTypeDef.GroundStationResult groundStation = DJIGroundStationTypeDef.GroundStationResult.GS_Result_Unknown;
+    private Context context = null;
+    boolean permissionCheck = false;
+
+    private DJIGroundStationFlyingInfo djiGroundStationFlyingInfo;
+    private DJIMainControllerSystemState djiMainControllerSystemState;
+    private DJIBatteryProperty djiBatteryProperty;
+
     private PositionGPS initPos;
 
 
@@ -54,22 +58,20 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     public boolean connectToDrone() {
+        Log.log("Phantom2Vision", "Checking Android Context");
         if (context == null) {
-            return false;
-        }
+            return false;        }
         //must be run threaded (Networking Code)
+        Log.log("Phantom2Vision", "Checking DJI Application Key");
         Thread authThread = new Thread() {
             @Override
             public void run() {
                 try {
-                    //Your code goes here
                     DJIDrone.checkPermission(context, new DJIGerneralListener() {
                         @Override
                         public void onGetPermissionResult(int result) {
-                            //Log.log(, "checkPermission = " + result);
                             if (result == 0)
-                                permission = true;
-                            //else exit
+                                permissionCheck = true;
                         }
                     });
                 } catch (Exception e) {
@@ -83,10 +85,52 @@ public class Phantom2Vision extends SDKAdaptor {
         } catch (InterruptedException e) {
             return false;
         }
-        if (!permission) {
+        if (!permissionCheck)
             return false;
+        Log.log("Phantom2Vision", "DJI Application Key Level = " + DJIDrone.getLevel());
+
+        Log.log("Phantom2Vision", "Initializing Drone Type");
+        if(!DJIDrone.initWithType(context, DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision))
+            return false;
+
+        Log.log("Phantom2Vision", "Drone Communication Status = True");
+        if(!DJIDrone.connectToDrone())
+            return false;
+        Log.log("Phantom2Vision", "Drone Communication Status = True");
+
+        DJIDrone.getDjiBattery().setBatteryUpdateInfoCallBack(this);
+        DJIDrone.getDjiBattery().startUpdateTimer(1000);
+
+        boolean result = false;
+
+        Log.log("Phantom2Vision", "altitude = " + djiGroundStationFlyingInfo.altitude); //the results are rubbish
+
+
+        DJIDrone.getDjiGroundStation().setGroundStationFlyingInfoCallBack(this);
+        if(DJIDrone.getDjiGroundStation().startUpdateTimer(1000))
+            return false;
+        final DJIGroundStationTypeDef.GroundStationResult[] groundStationResult = {DJIGroundStationTypeDef.GroundStationResult.GS_Result_Unknown};
+        DJIDrone.getDjiGroundStation().openGroundStation(new DJIGroundStationExecutCallBack() {
+            @Override
+            public void onResult(DJIGroundStationTypeDef.GroundStationResult result) {
+                groundStationResult[0] = result;
+            }
+        });
+        while (groundStationResult[0] == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Unknown) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                return false;
+            }
         }
-        return onInitSDK();
+        if (groundStationResult[0]!=DJIGroundStationTypeDef.GroundStationResult.GS_Result_Successed)
+            return false;
+
+        DJIDrone.getDjiMC().setMcuUpdateStateCallBack(this);
+        if(!DJIDrone.getDjiMC().startUpdateTimer(1000))
+            return false;
+
+        return true;
     }
 
     //TODO: workout what to do for these functions
@@ -103,8 +147,8 @@ public class Phantom2Vision extends SDKAdaptor {
     }
 
     public Position getPositionInFlight() {
-        DJIGroundStationFlyingInfo fi = PhantomTracker.INSTANCE.getFlyingInfo();
-        PositionGPS pos = new PositionGPS(fi.phantomLocationLatitude, fi.phantomLocationLongitude, fi.altitude, new Angle(fi.roll), new Angle(fi.pitch), new Angle(fi.yaw));
+        DJIGroundStationFlyingInfo djiGroundStationFlyingInfo = this.djiGroundStationFlyingInfo;
+        PositionGPS pos = new PositionGPS(djiGroundStationFlyingInfo.phantomLocationLatitude, djiGroundStationFlyingInfo.phantomLocationLongitude, djiGroundStationFlyingInfo.altitude, new Angle(djiGroundStationFlyingInfo.roll), new Angle(djiGroundStationFlyingInfo.pitch), new Angle(djiGroundStationFlyingInfo.yaw));
         return pos;
     }
 
@@ -216,72 +260,19 @@ public class Phantom2Vision extends SDKAdaptor {
         return false;
     }
 
-
-    private boolean onInitSDK() {
-        //Log.log(, "init with type = " + DJIDrone.initWithType(getApplicationContext(), DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision));
-        boolean result = DJIDrone.initWithType(context, DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision);
-        if (!result) {
-            return false;
-        }
-        //Log.log(, "GetLevel = " + DJIDrone.getLevel());
-        //Log.log(, "connectToDrone = " + DJIDrone.connectToDrone());
-        result = DJIDrone.connectToDrone();
-        if (!result) {
-            return false;
-        }
-        result = GroundStationGo();
-        if (!result) {
-            return false;
-        }
-        result = MControllerGo();
-        return result;
-
+    @Override
+    public void onResult(DJIGroundStationFlyingInfo djiGroundStationFlyingInfo) {
+        this.djiGroundStationFlyingInfo = djiGroundStationFlyingInfo;
     }
 
-    private boolean MControllerGo() {
-        //DJIDrone.getDjiMC().
-        //Log.log(, "DJIDrone.getDjiMC.getClass = " + DJIDrone.getDjiMC().getClass()); //class dji.sdk.api.MainController.DJIPhantomMainController
-
-        boolean result = DJIDrone.getDjiMC().startUpdateTimer(1000);
-        if (!result) {
-            return false;
-        }
-        DJIDrone.getDjiMC().setMcuUpdateStateCallBack(new DJIMcuUpdateStateCallBack() {
-            public void onResult(DJIMainControllerSystemState state) {
-                //Log.log(, "DJIMainControllerSystemState altitude = " + state.altitude);
-            }
-        });
-        return true;
-        //if (drone.getDjiMC().getClass().equals(DJIPhantomMainController.class)) Log.log(, "DJIPhantomMainController");
-
-
+    @Override
+    public void onResult(DJIMainControllerSystemState djiMainControllerSystemState) {
+        this.djiMainControllerSystemState = djiMainControllerSystemState;
     }
 
-    private boolean GroundStationGo() {
-        PhantomTracker.INSTANCE.start();
-        initPos = (PositionGPS) getPositionInFlight();
-
-        boolean result = DJIDrone.getDjiGroundStation().startUpdateTimer(1000);
-        DJIDrone.getDjiGroundStation().setGroundStationFlyingInfoCallBack(new DJIGroundStationFlyingInfoCallBack() {
-            @Override
-            public void onResult(DJIGroundStationFlyingInfo djiGroundStationFlyingInfo) {
-                //Log.log(, "altitude = " + djiGroundStationFlyingInfo.altitude); //the results are rubbish
-            }
-        });
-        DJIDrone.getDjiGroundStation().openGroundStation(new DJIGroundStationExecutCallBack() {
-            @Override
-            public void onResult(DJIGroundStationTypeDef.GroundStationResult result) {
-                groundStation = result;
-            }
-        });
-        while (groundStation != DJIGroundStationTypeDef.GroundStationResult.GS_Result_Successed) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                return false;
-            }
-        }
-        return true;
+    @Override
+    public void onResult(DJIBatteryProperty djiBatteryProperty) {
+        this.djiBatteryProperty = djiBatteryProperty;
     }
 }
 

@@ -50,4 +50,6 @@ public abstract class SensorAdaptor {
     public String[] getSensorPinsDescription(){
         return new String[0];
     }
+
+    public boolean setController(Object object){return false;};
 }
