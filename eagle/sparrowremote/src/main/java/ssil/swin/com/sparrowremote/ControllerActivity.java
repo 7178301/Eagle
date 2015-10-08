@@ -20,8 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import eagle.Log;
-import eagle.LogCallback;
+import eagle.logging.Log;
+import eagle.logging.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferClient;
 import ssil.swin.com.sparrowremote.Fragment.LoggingFragment;
 import ssil.swin.com.sparrowremote.Fragment.OnFragmentInteractionListener;

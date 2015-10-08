@@ -1,6 +1,5 @@
 package au.edu.swin.sparrow;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
@@ -19,9 +18,10 @@ import java.util.Vector;
 
 import au.edu.swin.sparrow.Fragment.BearingFragment;
 import eagle.Drone;
-import eagle.LogCallback;
+import eagle.logging.LogBufferCircle;
+import eagle.logging.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
-import eagle.Log;
+import eagle.logging.Log;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
@@ -60,7 +60,7 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
 
     private Timer myTimer;
 
-    private Vector<String> logMessages = new Vector<String>();
+    private LogBufferCircle<String> logMessages = new LogBufferCircle<String>(100);
     private IOIO ioio;
     private boolean ioioChanged = false;
 
@@ -194,7 +194,7 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
             BearingFragment fragment = BearingFragment.newInstance();
             adaptorBearing.setAndroidContext(this);
             adaptorBearing.connectToSensor();
-            fragment.setMagneticAccelerometerAdaptors(adaptorBearing);
+            fragment.setBearingAdaptor(adaptorBearing);
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }
@@ -218,8 +218,7 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
 
             html.append("</head>");
             html.append("<body>");
-            Vector<String> tempLog = new Vector<>(logMessages);
-            for (String mess : tempLog) {
+            for (String mess : logMessages) {
                 html.append("<p>" + mess + "</p>");
             }
             html.append("</body></html>");

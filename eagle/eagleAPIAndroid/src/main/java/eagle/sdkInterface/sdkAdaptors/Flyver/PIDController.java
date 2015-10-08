@@ -6,7 +6,7 @@
 //
 // File: FL_PIDController.java
 //
-// Description: This PIDCOntroller class is a port from the FIRST PID Controller
+// Description: This PIDCOntroller class is a port from the FIRST PID IOIOController
 //              task. This port removes the additional thread overhead but it
 //              must run within a periodic task (not a continous task) to work
 //              correctly.
@@ -64,7 +64,7 @@ public class PIDController {
             m_error = m_setpoint - m_input;
 
             // !!!!DEBUG!!!
-            System.out.println(m_setpoint);
+//            System.out.println(m_setpoint);
 
             // If continuous is set to true allow wrap around
             if (m_continuous) {

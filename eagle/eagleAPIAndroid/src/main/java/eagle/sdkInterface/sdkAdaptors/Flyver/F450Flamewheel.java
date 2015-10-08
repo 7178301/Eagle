@@ -1,10 +1,8 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 
-import eagle.Log;
+import eagle.logging.Log;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
@@ -12,7 +10,7 @@ import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
-import eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors.AndroidAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.bearingAdaptors.AndroidBearing;
 import ioio.lib.api.IOIO;
 
 /**
@@ -30,13 +28,13 @@ public class F450Flamewheel extends SDKAdaptor {
     public static String adapterVersion;
     private Context context;
     private IOIO ioio;
-    private Controller controller;
+    private IOIOController controller;
 
     //TODO Create method implementations
 
     public F450Flamewheel() {
         super("Flyver", "F450 Flamewheel", "alpha", "0.0.1", 0, 0);
-        controller = new Controller();
+        controller = new IOIOController();
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
@@ -46,7 +44,7 @@ public class F450Flamewheel extends SDKAdaptor {
         addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
         addSensorAdaptorMagnetic(adaptorLoader.getSensorAdaptorMagnetic("AndroidMagnetic"));
         addSensorAdaptorBearing(adaptorLoader.getSensorAdaptorBearing("AndroidBearing"));
-        controller.setAccelerometer((AndroidAccelerometer) getAccelerometers().get(0));
+        controller.setBearing((AndroidBearing) getBearings().get(0));
     }
 
     public boolean connectToDrone() {
