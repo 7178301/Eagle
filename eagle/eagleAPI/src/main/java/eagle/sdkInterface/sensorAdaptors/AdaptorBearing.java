@@ -15,7 +15,7 @@ public abstract class AdaptorBearing extends SensorAdaptor {
     public static final int PITCH = 1;
     public static final int ROLL = 2;
 
-    private float[] calibrationOffset = new float[3];
+    private float[] calibrationOffset = null;
 
     public AdaptorBearing(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
@@ -27,7 +27,7 @@ public abstract class AdaptorBearing extends SensorAdaptor {
 
     public float[] getCalibratedData() {
         float[] value = getData();
-        if (value == null | getCalibrationOffset() == null | value.length < 3)
+        if (value == null || getCalibrationOffset() == null || value.length < 3)
             return null;
         else {
             float[] calibratedData = new float[3];

@@ -21,8 +21,7 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCal
 
 public class AndroidBearing extends AdaptorBearing implements SensorEventListener {
     private Context context = null;
-    private float[] bearingData = new float[3];
-    boolean ready = false;
+    private float[] bearingData = null;
 
     private float[] magneticData = null;
     private float[] accelerometerData = null;
@@ -68,7 +67,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
 
     @Override
     public boolean isDataReady() {
-        return ready;
+        return bearingData!=null;
     }
 
     @Override
@@ -78,7 +77,6 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        ready = false;
         Sensor sensor = event.sensor;
         if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             magneticData = new float[3];
@@ -93,6 +91,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
         }
         if (magneticData != null && accelerometerData != null) {
 
+            bearingData = new float[3];
             float R[] = new float[9];
             float I[] = new float[9];
 
@@ -105,7 +104,6 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
                 }
                 if (bearingData[0] < 0)
                     bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
-                ready = true;
             }
             for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
                 currentSensorAdaptorCallback.onSensorChanged();
