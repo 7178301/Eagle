@@ -1,4 +1,4 @@
-package eagle;
+package eagle.logging;
 
 /**
  * Java Log Callback

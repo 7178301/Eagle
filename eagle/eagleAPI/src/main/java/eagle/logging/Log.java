@@ -1,4 +1,4 @@
-package eagle;
+package eagle.logging;
 
 import java.util.HashMap;
 import java.util.Vector;

@@ -1,7 +1,7 @@
-package eagle.sdkInterface;
+package eagle.logging;
 
-import eagle.Log;
-import eagle.LogCallback;
+import eagle.logging.Log;
+import eagle.logging.LogCallback;
 
 
 /**
@@ -20,7 +20,7 @@ public class LogAndroid {
         Log.addVerboseCallback(new LogCallback() {
             @Override
             public void onLogEntry(String tag, String message) {
-                android.util.Log.e("EagleAPI", tag + ": " + message);
+                android.util.Log.i("EagleAPI", tag + ": " + message);
             }
         });
     }
