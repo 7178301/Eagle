@@ -72,10 +72,6 @@ public abstract class SDKAdaptor {
 
     public abstract boolean connectToDrone();
 
-    public boolean turnOnMotors(){
-        return false;
-    }
-
     public abstract boolean disconnectFromDrone();
 
     public abstract boolean isConnectedToDrone();
@@ -119,16 +115,12 @@ public abstract class SDKAdaptor {
     public abstract void flyTo(final SDKAdaptorCallback sdkAdaptorCallback, PositionMetric positionMetric);
 
     public void flyTo(final SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position, double speed) {
-        if (position == null)
-            throw new IllegalArgumentException("Arguments must not be null");
-        else if (sdkAdaptorCallback != null)
+        if (sdkAdaptorCallback != null)
             sdkAdaptorCallback.onResult(false, "flyTo(SDKAdaptorCallback,PositionGPS,double) not implemented in adaptor");
     }
 
     public void flyTo(final SDKAdaptorCallback sdkAdaptorCallback, PositionGPS position) {
-        if (position == null)
-            throw new IllegalArgumentException("Arguments must not be null");
-        else if (sdkAdaptorCallback != null)
+        if (sdkAdaptorCallback != null)
             sdkAdaptorCallback.onResult(false, "flyTo(SDKAdaptorCallback,PositionGPS) not implemented in adaptor");
     }
 
@@ -161,17 +153,11 @@ public abstract class SDKAdaptor {
     }
 
     final public void changeYawDisplacement(final SDKAdaptorCallback sdkAdaptorCallback, Angle yaw, double speed) {
-        if (yaw == null)
-            throw new IllegalArgumentException("Angle must not be null");
-        else
-            flyTo(sdkAdaptorCallback, new PositionDisplacement(0, 0, 0, new Angle(0), new Angle(0), yaw), speed);
+        flyTo(sdkAdaptorCallback, new PositionDisplacement(0, 0, 0, new Angle(0), new Angle(0), yaw), speed);
     }
 
     final public void changeYawDisplacement(final SDKAdaptorCallback sdkAdaptorCallback, Angle yaw) {
-        if (yaw == null)
-            throw new IllegalArgumentException("Angle must not be null");
-        else
-            flyTo(sdkAdaptorCallback, new PositionDisplacement(0, 0, 0, new Angle(0), new Angle(0), yaw));
+        flyTo(sdkAdaptorCallback, new PositionDisplacement(0, 0, 0, new Angle(0), new Angle(0), yaw));
     }
 
     final public void changeLongitudeMetric(final SDKAdaptorCallback sdkAdaptorCallback, double longitude, double speed) {
@@ -199,68 +185,64 @@ public abstract class SDKAdaptor {
     }
 
     final public void changeYawMetric(final SDKAdaptorCallback sdkAdaptorCallback, Angle yaw, double speed) {
-        if (yaw == null)
-            throw new IllegalArgumentException("Angle must not be null");
-        else
-            flyTo(sdkAdaptorCallback, new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), yaw), speed);
+        flyTo(sdkAdaptorCallback, new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), yaw), speed);
     }
 
     final public void changeYawMetric(final SDKAdaptorCallback sdkAdaptorCallback, Angle yaw) {
-        if (yaw == null)
-            throw new IllegalArgumentException("Angle must not be null");
-        else
-            flyTo(sdkAdaptorCallback, new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), yaw));
+        flyTo(sdkAdaptorCallback, new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), yaw));
     }
 
     final public void changeLongitudeGPS(final SDKAdaptorCallback sdkAdaptorCallback, double longitude, double speed) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), longitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
-        flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
-
+        if (getPositionAssigned() != null) {
+            this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), longitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+            flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
+        }
     }
 
     final public void changeLongitudeGPS(final SDKAdaptorCallback sdkAdaptorCallback, double longitude) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), longitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
-        flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
-
+        if (getPositionAssigned() != null) {
+            this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), longitude, getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+            flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
+        }
     }
 
     final public void changeLatitudeGPS(final SDKAdaptorCallback sdkAdaptorCallback, double latitude, double speed) {
-        this.currentPositionAssigned = new PositionGPS(latitude, getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
-        flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
-
+        if (getPositionAssigned() != null) {
+            this.currentPositionAssigned = new PositionGPS(latitude, getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+            flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
+        }
     }
 
     final public void changeLatitudeGPS(final SDKAdaptorCallback sdkAdaptorCallback, double latitude) {
-        this.currentPositionAssigned = new PositionGPS(latitude, getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
-        flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
-
+        if (getPositionAssigned() != null) {
+            this.currentPositionAssigned = new PositionGPS(latitude, getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+            flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
+        }
     }
 
     final public void changeAltitudeGPS(final SDKAdaptorCallback sdkAdaptorCallback, double altitude, double speed) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
-        flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
-
+        if (getPositionAssigned() != null) {
+            this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+            flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
+        }
     }
 
     final public void changeAltitudeGPS(final SDKAdaptorCallback sdkAdaptorCallback, double altitude) {
-        this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
-        flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
-
+        if (getPositionAssigned() != null) {
+            this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), altitude, new Angle(0), new Angle(0), getPositionAssigned().getYaw());
+            flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
+        }
     }
 
     final public void changeYawGPS(final SDKAdaptorCallback sdkAdaptorCallback, Angle yaw, double speed) {
-        if (yaw == null)
-            throw new IllegalArgumentException("Angle must not be null");
-        else {
+        if (getPositionAssigned() != null) {
             this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
             flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned, speed);
         }
     }
 
     final public void changeYawGPS(final SDKAdaptorCallback sdkAdaptorCallback, Angle yaw) {
-        if (yaw == null)
-            throw new IllegalArgumentException("Angle must not be null");
-        else {
+        if (getPositionAssigned() != null) {
             this.currentPositionAssigned = new PositionGPS(getPositionAssigned().getLatitude(), getPositionAssigned().getLongitude(), getPositionAssigned().getAltitude(), new Angle(0), new Angle(0), yaw);
             flyTo(sdkAdaptorCallback, (PositionGPS) this.currentPositionAssigned);
         }
@@ -275,7 +257,7 @@ public abstract class SDKAdaptor {
             flyTo(sdkAdaptorCallback, (PositionGPS) currentPositionAssigned, speed);
             this.currentPositionAssigned = new PositionGPS(homePosition);
             flyTo(sdkAdaptorCallback, (PositionGPS) homePosition, speed);
-        } else
+        } else if (sdkAdaptorCallback != null)
             sdkAdaptorCallback.onResult(false, "Unknown Home Position Type");
 
     }
@@ -289,7 +271,7 @@ public abstract class SDKAdaptor {
             flyTo(sdkAdaptorCallback, (PositionGPS) currentPositionAssigned);
             this.currentPositionAssigned = new PositionGPS(homePosition);
             flyTo(sdkAdaptorCallback, (PositionGPS) homePosition);
-        } else
+        } else if (sdkAdaptorCallback != null)
             sdkAdaptorCallback.onResult(false, "Unknown Home Position Type");
 
     }
@@ -317,39 +299,48 @@ public abstract class SDKAdaptor {
     }
 
     public void addSensorAdaptorAccelerometer(AdaptorAccelerometer adaptorAccelerometer) {
-        this.accelerometers.add(adaptorAccelerometer);
+        if (adaptorAccelerometer != null)
+            this.accelerometers.add(adaptorAccelerometer);
     }
 
     public void addSensorAdaptorBearing(AdaptorBearing adaptorBearing) {
-        this.bearings.add(adaptorBearing);
+        if (adaptorBearing != null)
+            this.bearings.add(adaptorBearing);
     }
 
     public void addSensorAdaptorCamera(AdaptorCamera adaptorCamera) {
-        this.cameras.add(adaptorCamera);
+        if (adaptorCamera != null)
+            this.cameras.add(adaptorCamera);
     }
 
     public void addSensorAdaptorGPS(AdaptorGPS adaptorGPS) {
-        this.gps.add(adaptorGPS);
+        if (adaptorGPS != null)
+            this.gps.add(adaptorGPS);
     }
 
     public void addSensorAdaptorGyroscope(AdaptorGyroscope adaptorGyroscope) {
-        this.gyroscopes.add(adaptorGyroscope);
+        if (adaptorGyroscope != null)
+            this.gyroscopes.add(adaptorGyroscope);
     }
 
     public void addSensorAdaptorLIDAR(AdaptorLIDAR lidar) {
-        this.lidars.add(lidar);
+        if (lidar != null)
+            this.lidars.add(lidar);
     }
 
     public void addSensorAdaptorMagnetic(AdaptorMagnetic magnetic) {
-        this.magnetics.add(magnetic);
+        if (magnetic != null)
+            this.magnetics.add(magnetic);
     }
 
     public void addSensorAdaptorRPLIDAR(AdaptorRPLIDAR adaptorRPLIDAR) {
-        this.rplidars.add(adaptorRPLIDAR);
+        if (adaptorRPLIDAR != null)
+            this.rplidars.add(adaptorRPLIDAR);
     }
 
     public void addSensorAdaptorUltrasonic(AdaptorUltrasonic adaptorUltrasonic) {
-        this.ultrasonics.add(adaptorUltrasonic);
+        if (adaptorUltrasonic != null)
+            this.ultrasonics.add(adaptorUltrasonic);
     }
 
     public ArrayList<AdaptorAccelerometer> getAccelerometers() {
@@ -401,7 +392,7 @@ public abstract class SDKAdaptor {
 
     public class InvalidPositionTypeException extends Exception {
         public InvalidPositionTypeException(String message) {
-            super(message);
+            super("Invalid Position Type: " + message);
         }
     }
 }

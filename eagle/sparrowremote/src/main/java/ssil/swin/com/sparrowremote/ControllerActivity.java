@@ -1,24 +1,24 @@
 package ssil.swin.com.sparrowremote;
 
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import eagle.Log;
 import eagle.LogCallback;
@@ -282,10 +282,10 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     }
 
     void updatePositionFragment() {
-        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ProtocolBufferClient.ResponseCallBack() {
+        boolean connected = commandConnection.sendMessage("GETPOSITIONINFLIGHT", new ProtocolBufferClient.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
-                if (position != null) {
+                if (position != null&&!position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
                     String parts[] = position.split(" ");
                     if (parts.length != 6) {
                         return;
