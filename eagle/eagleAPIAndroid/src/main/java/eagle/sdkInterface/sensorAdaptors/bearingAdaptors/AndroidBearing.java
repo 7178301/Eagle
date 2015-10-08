@@ -21,7 +21,8 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCal
 
 public class AndroidBearing extends AdaptorBearing implements SensorEventListener {
     private Context context = null;
-    private float bearingData = 999999;
+    private float[] bearingData = new float[3];
+    boolean ready = false;
 
     private float[] magneticData = null;
     private float[] accelerometerData = null;
@@ -61,16 +62,13 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
     }
 
     @Override
-    public float getData() {
+    public float[] getData() {
         return bearingData;
     }
 
     @Override
     public boolean isDataReady() {
-        if (bearingData == 999999)
-            return false;
-        else
-            return true;
+        return ready;
     }
 
     @Override
@@ -80,6 +78,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        ready = false;
         Sensor sensor = event.sensor;
         if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             magneticData = new float[3];
@@ -101,12 +100,16 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
 
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
-                bearingData = orientation[0] * 360 / (2 * (float) Math.PI);
-                if (bearingData < 0)
-                    bearingData = 180 + (180 - Math.abs(bearingData));
+                for (int i = 0; i < 3; i++) {
+                    bearingData[i] = orientation[i] * 360 / (2 * (float) Math.PI);
+                }
+                if (bearingData[0] < 0)
+                    bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
+                ready = true;
             }
             for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
                 currentSensorAdaptorCallback.onSensorChanged();
+
         }
     }
 }

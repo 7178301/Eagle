@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import eagle.Log;
+import eagle.logging.Log;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;

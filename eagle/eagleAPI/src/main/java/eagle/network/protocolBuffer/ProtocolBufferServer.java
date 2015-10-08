@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
-import eagle.Log;
+import eagle.logging.Log;
 import eagle.network.ScriptingEngine;
 
 

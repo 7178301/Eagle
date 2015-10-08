@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
-import eagle.Log;
+import eagle.logging.Log;
 
 /**
  * Created by cameron on 9/2/15.

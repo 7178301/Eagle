@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import eagle.Log;
+import eagle.logging.Log;
 import eagle.network.ScriptingEngine;
 
 

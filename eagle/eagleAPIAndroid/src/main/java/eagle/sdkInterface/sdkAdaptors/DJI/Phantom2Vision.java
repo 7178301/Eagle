@@ -1,6 +1,6 @@
 package eagle.sdkInterface.sdkAdaptors.DJI;
 
-import eagle.Log;
+import eagle.logging.Log;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;

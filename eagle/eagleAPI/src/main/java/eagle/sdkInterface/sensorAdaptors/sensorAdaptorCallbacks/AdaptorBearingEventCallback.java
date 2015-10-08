@@ -10,5 +10,5 @@ package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
  * Date Modified	30/09/2015 - Nicholas
  */
 public interface AdaptorBearingEventCallback {
-    void onSensorEvent(double getCalibratedData);
+    void onSensorEvent(float[] getCalibratedData);
 }
