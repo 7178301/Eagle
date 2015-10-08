@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import eagle.sdkInterface.LogAndroid;
+import eagle.logging.LogAndroid;
 
 public class MainActivity extends Activity {
 
