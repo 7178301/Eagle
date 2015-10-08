@@ -49,7 +49,7 @@ public class UltrasonicFragment extends SensorFragment {
     public void updateData() {
         if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            if (ultrasonic.isConnectedToSensor())
+            if (ultrasonic.isConnectedToSensor()&&ultrasonic.isDataReady())
                 sensorOutput1DataTextView.setText(String.valueOf(ultrasonic.getData()));
             else
                 sensorOutput1DataTextView.setText("");

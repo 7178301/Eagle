@@ -65,7 +65,7 @@ public class BearingFragment extends SensorFragment {
     @Override
     public void updateData() {
         if (view != null) {
-            if (adaptorBearing.isConnectedToSensor()) {
+            if (adaptorBearing.isConnectedToSensor()&&adaptorBearing.isDataReady()) {
                 sensorOutput1DataTextView.setText(String.valueOf(adaptorBearing.getData()[0]));
                 sensorOutput2DataTextView.setText(String.valueOf(adaptorBearing.getData()[1]));
                 sensorOutput3DataTextView.setText(String.valueOf(adaptorBearing.getData()[2]));

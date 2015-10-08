@@ -17,8 +17,16 @@ public abstract class AdaptorBearing extends SensorAdaptor {
 
     private float[] calibrationOffset = null;
 
+    protected AdaptorAccelerometer adaptorAccelerometer;
+    protected AdaptorMagnetic adaptorMagnetic;
+
     public AdaptorBearing(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
+    }
+
+    public void setAccelerometerMagnetic(AdaptorAccelerometer adaptorAccelerometer, AdaptorMagnetic adaptorMagnetic){
+        this.adaptorAccelerometer=adaptorAccelerometer;
+        this.adaptorMagnetic=adaptorMagnetic;
     }
 
     public abstract boolean connectToSensor();

@@ -62,7 +62,7 @@ public class MagneticFragment extends SensorFragment {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
             TextView sensorOutput3DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Data);
-            if (magnetic.isConnectedToSensor()) {
+            if (magnetic.isConnectedToSensor()&&magnetic.isDataReady()) {
                 sensorOutput1DataTextView.setText(String.valueOf(magnetic.getData()[0]));
                 sensorOutput2DataTextView.setText(String.valueOf(magnetic.getData()[1]));
                 sensorOutput3DataTextView.setText(String.valueOf(magnetic.getData()[2]));

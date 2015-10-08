@@ -68,7 +68,7 @@ public class GyroscopeFragment extends SensorFragment {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
             TextView sensorOutput3DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Data);
-            if (gyroscope.isConnectedToSensor()) {
+            if (gyroscope.isConnectedToSensor()&&gyroscope.isDataReady()) {
                 sensorOutput1DataTextView.setText(String.valueOf(gyroscope.getData()[0]));
                 sensorOutput2DataTextView.setText(String.valueOf(gyroscope.getData()[1]));
                 sensorOutput3DataTextView.setText(String.valueOf(gyroscope.getData()[2]));

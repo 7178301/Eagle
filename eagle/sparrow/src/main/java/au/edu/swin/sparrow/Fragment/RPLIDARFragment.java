@@ -51,7 +51,7 @@ public class RPLIDARFragment extends SensorFragment {
         if (view != null) {
             TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
             TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
-            if (rplidar.isConnectedToSensor()) {
+            if (rplidar.isConnectedToSensor()&&rplidar.isDataReady()) {
                 sensorOutput1DataTextView.setText(String.valueOf(rplidar.getData()));
                 sensorOutput2DataTextView.setText(String.valueOf(rplidar.getData()));
             } else {
