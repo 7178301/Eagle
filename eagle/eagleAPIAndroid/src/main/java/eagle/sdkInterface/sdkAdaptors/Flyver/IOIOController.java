@@ -90,8 +90,7 @@ public class IOIOController {
         pitch_controller.enable();
         yaw_controller.enable();
 
-        thread = new Thread(new ControllerThread());
-        thread.start();
+
     }
 
     void setIOIO(IOIO ioio) {
@@ -105,7 +104,8 @@ public class IOIOController {
                 setPulseWidth(MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL);
                 Thread.sleep(1000);
 
-
+                thread = new Thread(new ControllerThread());
+                thread.start();
 
 
                 Log.log(TAG, "IOIO is initialised");
@@ -154,25 +154,25 @@ public class IOIOController {
 
 
         // Motors
-        Double m0, m1, m2, m3; // Front, Right, Back, Left
+        Double fcc, fc, rcc, rc; // Front, Right, Back, Left
 
         throttle = 1500; //should be replaced with actual throttle;
 
         // yaw control disabled for stabilization testing...
-        m0 = throttle + pid_pitch_out;//+ pid_yaw_out;
-        m1 = throttle + pid_roll_out;//- pid_yaw_out;
-        m2 = throttle - pid_pitch_out;//+ pid_yaw_out;
-        m3 = throttle - pid_roll_out;//- pid_yaw_out;
+        fc = throttle - pid_pitch_out;//+ pid_yaw_out;
+        fcc = throttle - pid_roll_out;//- pid_yaw_out;
+        rc = throttle + pid_pitch_out;//+ pid_yaw_out;
+        rcc = throttle + pid_roll_out;//- pid_yaw_out;
 
         //Log.log(TAG, pid_pitch_out + "," + pid_roll_out);
 
-        m0 = correctRange(m0);
-        m1 = correctRange(m1);
-        m2 = correctRange(m2);
-        m3 = correctRange(m3);
+        fc = correctRange(fc);
+        fcc = correctRange(fcc);
+        rc = correctRange(rc);
+        rcc = correctRange(rcc);
 
         try {
-            setPulseWidth(m0.intValue(), m1.intValue(), m2.intValue(), m3.intValue());
+            setPulseWidth(fc.intValue(), fcc.intValue(), rc.intValue(), rcc.intValue());
         } catch (ConnectionLostException e) {
             e.printStackTrace();
         }
@@ -220,7 +220,7 @@ public class IOIOController {
             while (true) {
                 control_update();
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
