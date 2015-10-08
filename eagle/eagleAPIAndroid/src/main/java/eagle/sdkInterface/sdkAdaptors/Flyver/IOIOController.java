@@ -25,72 +25,44 @@ public class IOIOController {
     private PwmOutput motorRCC;
 
     //-------PID Config----------
+
+    public static final float PID_DERIV_SMOOTHING = 0.5f;
     static double ROLL_PID_KP = 2.4;
     static double ROLL_PID_KI = 0.1;
     static double ROLL_PID_KD = 0.4;
-    static double ROLL_PID_MIN = -100;
-    static double ROLL_PID_MAX = 100.0;
 
     static double PITCH_PID_KP = 2.4;
     static double PITCH_PID_KI = 0.1;
     static double PITCH_PID_KD = 0.4;
-    static double PITCH_PID_MIN = -100.0;
-    static double PITCH_PID_MAX = 100.0;
 
     static double YAW_PID_KP = 2.2;
     static double YAW_PID_KI = 0;
     static double YAW_PID_KD = 0.2;
-    static double YAW_PID_OUT_MIN = -100;
-    static double YAW_PID_OUT_MAX = 100;
-    static double YAW_PID_IN_MIN = -180;
-    static double YAW_PID_IN_MAX = 180;
 
     //-------Motor PWM Levels
     static int MOTOR_ZERO_LEVEL = 1000;
     static int MOTOR_MAX_LEVEL = 2023;
 
     //declare pid controllers
-    private PIDController roll_controller;
-    private PIDController pitch_controller;
-    private PIDController yaw_controller;
-
-    // RX Signals
-    double throttle = MOTOR_ZERO_LEVEL;
+    private PIDAngleController rollController;
+    private PIDAngleController pitchController;
+    private PIDAngleController yawController;
 
     // PID variables
-    double pid_roll_setpoint = 0;
-    double pid_pitch_setpoint = 0;
-    double pid_yaw_setpoint = 0;
+    double yawAngleTarget = 0;
+    double pitchAngleTarget = 0;
+    double rollAngleTarget = 0;
 
     private AndroidBearing bearing;
 
-    private Thread thread;
-
     private static final String TAG = "IOIOController";
+    private static long previousTime;
 
     IOIOController() {
         Log.log(TAG, "Setting up IOIO IOIOController");
-        roll_controller = new PIDController(ROLL_PID_KP, ROLL_PID_KI, ROLL_PID_KD);
-        pitch_controller = new PIDController(PITCH_PID_KP, PITCH_PID_KI, PITCH_PID_KD);
-        yaw_controller = new PIDController(YAW_PID_KP, YAW_PID_KI, YAW_PID_KD);
-
-        setpoint_update(0, 0, 0);
-
-        roll_controller.setOutputRange(ROLL_PID_MIN, ROLL_PID_MAX);
-        pitch_controller.setOutputRange(PITCH_PID_MIN, PITCH_PID_MAX);
-        yaw_controller.setOutputRange(YAW_PID_IN_MIN, YAW_PID_IN_MAX);
-
-        roll_controller.setInputRange(ROLL_PID_MIN, ROLL_PID_MAX);
-        pitch_controller.setInputRange(PITCH_PID_MIN, PITCH_PID_MAX);
-        yaw_controller.setInputRange(YAW_PID_OUT_MIN, YAW_PID_OUT_MAX);
-
-        yaw_controller.setContinuous();
-
-        roll_controller.enable();
-        pitch_controller.enable();
-        yaw_controller.enable();
-
-
+        rollController = new PIDAngleController(ROLL_PID_KP, ROLL_PID_KI, ROLL_PID_KD, PID_DERIV_SMOOTHING);
+        pitchController = new PIDAngleController(PITCH_PID_KP, PITCH_PID_KI, PITCH_PID_KD, PID_DERIV_SMOOTHING);
+        yawController = new PIDAngleController(YAW_PID_KP, YAW_PID_KI, YAW_PID_KD, PID_DERIV_SMOOTHING);
     }
 
     void setIOIO(IOIO ioio) {
@@ -101,20 +73,19 @@ public class IOIOController {
                 motorFCC = ioio.openPwmOutput(35, 200);
                 motorRC = ioio.openPwmOutput(36, 200);
                 motorRCC = ioio.openPwmOutput(37, 200);
+
                 setPulseWidth(MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL);
                 Thread.sleep(1000);
 
-                thread = new Thread(new ControllerThread());
+                Thread thread = new Thread(new ControllerThread());
                 thread.start();
 
 
                 Log.log(TAG, "IOIO is initialised");
-            } catch (ConnectionLostException e) {
+            } catch (ConnectionLostException | InterruptedException e) {
                 e.printStackTrace();
             } catch (IllegalArgumentException f) {
                 Log.log(TAG, "IOIO was already inited");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -138,47 +109,63 @@ public class IOIOController {
     }
 
     void control_update() {
-        setpoint_update(0, 0, 0);
         if (bearing != null) {
             float[] data = bearing.getData();
-            roll_controller.getInput(data[AdaptorBearing.ROLL]);
-            pitch_controller.getInput(data[AdaptorBearing.PITCH]);
-            yaw_controller.getInput(data[AdaptorBearing.YAW]);
-            //Log.log(TAG, data[AdaptorBearing.ROLL] + "," + data[AdaptorBearing.PITCH] + "," + data[AdaptorBearing.YAW]);
 
-        }
+            // Compute the power of each motor.
+            int tempPowerFCW = MOTOR_ZERO_LEVEL;
+            int tempPowerFCCW = MOTOR_ZERO_LEVEL;
+            int tempPowerRCW = MOTOR_ZERO_LEVEL;
+            int tempPowerRCCW = MOTOR_ZERO_LEVEL;
 
-        double pid_roll_out = roll_controller.performPID();
-        double pid_pitch_out = pitch_controller.performPID();
-        double pid_yaw_out = yaw_controller.performPID();
+            long currentTime = System.nanoTime();
+            float dt = ((float) (currentTime - previousTime)) / 1000000000.0f; // [s].
+            previousTime = currentTime;
+
+            double yawForce = yawController.getInput(yawAngleTarget, data[AdaptorBearing.YAW], dt);
+            double pitchForce = pitchController.getInput(pitchAngleTarget, -data[AdaptorBearing.PITCH], dt);
+            double rollForce = rollController.getInput(rollAngleTarget, data[AdaptorBearing.ROLL], dt);
+
+            //todo:
+            int altitudeForce = 500;
 
 
-        // Motors
-        Double fcc, fc, rcc, rc; // Front, Right, Back, Left
+            tempPowerFCW += altitudeForce; // Vertical "force".
+            tempPowerFCCW += altitudeForce; //
+            tempPowerRCW += altitudeForce; //
+            tempPowerRCCW += altitudeForce; //
 
-        throttle = 1500; //should be replaced with actual throttle;
+            tempPowerFCW += pitchForce; // Pitch "force".
+            tempPowerFCCW += pitchForce; //
+            tempPowerRCW -= pitchForce; //
+            tempPowerRCCW -= pitchForce; //
 
-        // yaw control disabled for stabilization testing...
-        fc = throttle - pid_pitch_out;//+ pid_yaw_out;
-        fcc = throttle - pid_roll_out;//- pid_yaw_out;
-        rc = throttle + pid_pitch_out;//+ pid_yaw_out;
-        rcc = throttle + pid_roll_out;//- pid_yaw_out;
+            tempPowerFCW += rollForce; // Roll "force".
+            tempPowerFCCW -= rollForce; //
+            tempPowerRCW -= rollForce; //
+            tempPowerRCCW += rollForce; //
 
-        //Log.log(TAG, pid_pitch_out + "," + pid_roll_out);
+            tempPowerFCW += yawForce; // Yaw "force".
+            tempPowerFCCW -= yawForce; //
+            tempPowerRCW += yawForce; //
+            tempPowerRCCW -= yawForce; //
 
-        fc = correctRange(fc);
-        fcc = correctRange(fcc);
-        rc = correctRange(rc);
-        rcc = correctRange(rcc);
+            //Log.log(TAG, pid_pitch_out + "," + pid_roll_out);
 
-        try {
-            setPulseWidth(fc.intValue(), fcc.intValue(), rc.intValue(), rcc.intValue());
-        } catch (ConnectionLostException e) {
-            e.printStackTrace();
+            tempPowerFCW = correctRange(tempPowerFCW);
+            tempPowerFCCW = correctRange(tempPowerFCCW);
+            tempPowerRCW = correctRange(tempPowerRCW);
+            tempPowerRCCW = correctRange(tempPowerRCCW);
+
+            try {
+                setPulseWidth(tempPowerFCW, tempPowerFCCW, tempPowerRCW, tempPowerRCW);
+            } catch (ConnectionLostException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    double correctRange(double val) {
+    int correctRange(int val) {
         if (val > MOTOR_MAX_LEVEL) {
             return MOTOR_MAX_LEVEL;
         }
@@ -186,12 +173,6 @@ public class IOIOController {
             return MOTOR_ZERO_LEVEL;
         }
         return val;
-    }
-
-    void setpoint_update(double roll, double pitch, double yaw) {
-        roll_controller.setSetpoint(roll);
-        pitch_controller.setSetpoint(pitch);
-        yaw_controller.setSetpoint(yaw);
     }
 
     public void setPulseWidth(int fcRange, int fccRange, int rcRange, int rccRange) throws ConnectionLostException {
@@ -208,8 +189,7 @@ public class IOIOController {
 
             } else
                 throw new IllegalArgumentException();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException ignored) {
 
         }
     }
@@ -217,13 +197,15 @@ public class IOIOController {
     private class ControllerThread implements Runnable {
         @Override
         public void run() {
-            while (true) {
-                control_update();
-                try {
+            try {
+                //noinspection InfiniteLoopStatement
+                while (true) {
+                    control_update();
                     Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
