@@ -3,6 +3,7 @@ package eagle.sdkInterface.sdkAdaptors.Flyver;
 import eagle.logging.Log;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.bearingAdaptors.AndroidBearing;
+import ioio.lib.api.AnalogInput;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.PwmOutput;
 import ioio.lib.api.exception.ConnectionLostException;
@@ -24,15 +25,17 @@ public class IOIOController {
     private PwmOutput motorRC;
     private PwmOutput motorRCC;
 
+    private AnalogInput batteryInput;
+
     //-------PID Config----------
 
     public static final float PID_DERIV_SMOOTHING = 0.5f;
     static double ROLL_PID_KP = 2.4;
-    static double ROLL_PID_KI = 0.1;
+    static double ROLL_PID_KI = 0.0;
     static double ROLL_PID_KD = 0.4;
 
     static double PITCH_PID_KP = 2.4;
-    static double PITCH_PID_KI = 0.1;
+    static double PITCH_PID_KI = 0.0;
     static double PITCH_PID_KD = 0.4;
 
     static double YAW_PID_KP = 2.2;
@@ -57,6 +60,8 @@ public class IOIOController {
 
     private static final String TAG = "IOIOController";
     private static long previousTime;
+    private Thread thread;
+//    private Thread batteryThread;
 
     IOIOController() {
         Log.log(TAG, "Setting up IOIO IOIOController");
@@ -74,11 +79,21 @@ public class IOIOController {
                 motorRC = ioio.openPwmOutput(36, 200);
                 motorRCC = ioio.openPwmOutput(37, 200);
 
-                setPulseWidth(MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL, MOTOR_ZERO_LEVEL);
+//                batteryInput = ioio.openAnalogInput(46);
+                motorFC.setPulseWidth(MOTOR_ZERO_LEVEL);
+                motorFCC.setPulseWidth(MOTOR_ZERO_LEVEL);
+                motorRC.setPulseWidth(MOTOR_ZERO_LEVEL);
+                motorRCC.setPulseWidth(MOTOR_ZERO_LEVEL);
+//
                 Thread.sleep(1000);
 
-                Thread thread = new Thread(new ControllerThread());
+                if (thread != null) {
+                    thread.interrupt();
+                }
+                thread = new Thread(new ControllerThread());
                 thread.start();
+//                batteryThread = new Thread(new BatteryThread());
+//                batteryThread.start();
 
 
                 Log.log(TAG, "IOIO is initialised");
@@ -92,20 +107,6 @@ public class IOIOController {
 
     public void setBearing(AndroidBearing bearing) {
         this.bearing = bearing;
-    }
-
-    /**
-     * map value from one range to another, from arduino codebase
-     *
-     * @param value    input value
-     * @param fromLow  initial range low
-     * @param fromHigh initial range high
-     * @param toLow    output range low
-     * @param toHigh   output range high
-     * @return remapped value
-     */
-    double map(double value, int fromLow, int fromHigh, double toLow, double toHigh) {
-        return (value - fromLow) * ((toHigh - toLow) / (fromHigh - fromLow)) + toLow;
     }
 
     void control_update() {
@@ -127,7 +128,7 @@ public class IOIOController {
             double rollForce = rollController.getInput(rollAngleTarget, data[AdaptorBearing.ROLL], dt);
 
             //todo:
-            int altitudeForce = 500;
+            int altitudeForce = 200;
 
 
             tempPowerFCW += altitudeForce; // Vertical "force".
@@ -145,6 +146,9 @@ public class IOIOController {
             tempPowerRCW -= rollForce; //
             tempPowerRCCW += rollForce; //
 
+            Log.log(TAG, data[AdaptorBearing.ROLL]+","+rollAngleTarget+","+rollForce);
+            //Log.log(TAG, tempPowerFCW+","+tempPowerFCCW+","+tempPowerRCW+","+tempPowerRCCW);
+//
             tempPowerFCW += yawForce; // Yaw "force".
             tempPowerFCCW -= yawForce; //
             tempPowerRCW += yawForce; //
@@ -158,9 +162,9 @@ public class IOIOController {
             tempPowerRCCW = correctRange(tempPowerRCCW);
 
             try {
-                setPulseWidth(tempPowerFCW, tempPowerFCCW, tempPowerRCW, tempPowerRCW);
+                setPulseWidth(tempPowerFCW, tempPowerFCCW, tempPowerRCW, tempPowerRCCW);
             } catch (ConnectionLostException e) {
-                e.printStackTrace();
+                thread.interrupt();
             }
         }
     }
@@ -176,7 +180,7 @@ public class IOIOController {
     }
 
     public void setPulseWidth(int fcRange, int fccRange, int rcRange, int rccRange) throws ConnectionLostException {
-        //Log.log(TAG, fcRange+","+fccRange+","+rcRange+","+rccRange);
+
         try {
             if (fcRange >= 1000 && fcRange <= 2023 &&
                     fccRange >= 1000 && fccRange <= 2023 &&
@@ -200,8 +204,8 @@ public class IOIOController {
             try {
                 //noinspection InfiniteLoopStatement
                 while (true) {
+                    Thread.sleep(1);
                     control_update();
-                    Thread.sleep(10);
 
                 }
             } catch (InterruptedException e) {
@@ -209,4 +213,20 @@ public class IOIOController {
             }
         }
     }
+
+//    private class BatteryThread implements Runnable {
+//        @Override
+//        public void run() {
+//            try {
+//                //noinspection InfiniteLoopStatement
+//                while (true) {
+//                    Log.log(TAG, "Battery Voltage is: " +batteryInput.getVoltage());
+//                    Thread.sleep(10000);
+//
+//                }
+//            } catch (InterruptedException | ConnectionLostException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }
