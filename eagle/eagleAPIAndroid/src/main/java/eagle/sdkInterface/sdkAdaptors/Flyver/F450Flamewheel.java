@@ -10,6 +10,7 @@ import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.bearingAdaptors.AndroidBearing;
 import ioio.lib.api.IOIO;
 
@@ -43,7 +44,9 @@ public class F450Flamewheel extends SDKAdaptor {
         addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("AndroidGPS"));
         addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
         addSensorAdaptorMagnetic(adaptorLoader.getSensorAdaptorMagnetic("AndroidMagnetic"));
-        addSensorAdaptorBearing(adaptorLoader.getSensorAdaptorBearing("AndroidBearing"));
+        AdaptorBearing androidBearing = adaptorLoader.getSensorAdaptorBearing("AndroidBearing");
+        androidBearing.setAccelerometerMagnetic(getAccelerometers().get(0),getMagnetics().get(0));
+        addSensorAdaptorBearing(androidBearing);
         controller.setBearing((AndroidBearing) getBearings().get(0));
     }
 

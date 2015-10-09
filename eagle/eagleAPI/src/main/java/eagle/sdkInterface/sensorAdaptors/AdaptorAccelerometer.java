@@ -22,7 +22,7 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
 
     public float[] getCalibratedData() {
         float[] value = getData();
-        if (value == null | getCalibrationOffset() == null | value.length < 3)
+        if (value == null || getCalibrationOffset() == null || value.length < 3)
             return null;
         else {
             float[] calibratedData = new float[3];
