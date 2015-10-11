@@ -159,6 +159,9 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
                             closeGroundStation[0] = false;
                     }
                 });
+                DJIDrone.getDjiBattery().stopUpdateTimer();
+                DJIDrone.getDjiMainController().stopUpdateTimer();
+                DJIDrone.getDjiGroundStation().stopUpdateTimer();
             }
         };
         openGroundStationThread.start();
@@ -324,11 +327,10 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
                         DJIDrone.getDjiGroundStation().startGroundStationTask(new DJIGroundStationExecuteCallBack() {
                             @Override
                             public void onResult(DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
-                                Log.log("Phantom2Vision", "Ground Station Task " + groundStationResult);
-                                if (sdkAdaptorCallback != null && groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Success) {
-                                    Log.log("Phantom2Vision", "Ground Station Task Started");
+                                Log.log("Phantom2Vision", "Start Ground Station Task " + groundStationResult);
+                                if (sdkAdaptorCallback != null && groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Success)
                                     sdkAdaptorCallback.onResult(true, groundStationResult.toString());
-                                }else if (sdkAdaptorCallback != null)
+                                else if (sdkAdaptorCallback != null)
                                     sdkAdaptorCallback.onResult(false, groundStationResult.toString());
                             }
                         });
@@ -366,10 +368,10 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
-            Log.log("Phnatom2Vision", "FlyToDisplacement: DisplacementPosition: " + positionDisplacement.toString());
+            Log.log("Phantom2Vision", "FlyToDisplacement: DisplacementPosition: " + positionDisplacement.toString());
             PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(positionDisplacement);
-            Log.log("Phnatom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionInFlight().toString());
-            Log.log("Phnatom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
+            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionInFlight().toString());
+            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
             flyTo(sdkAdaptorCallback, positionGPS);
         }
     }
