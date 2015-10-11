@@ -1,11 +1,19 @@
 package eagle.sdkInterface;
 
-import eagle.Drone;
-import eagle.sdkInterface.sensorAdaptors.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import eagle.Drone;
+import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBarometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
+import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 /**
  * Adaptor Loader
@@ -21,6 +29,7 @@ public class AdaptorLoader {
     private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision",
             "Flyver.F450Flamewheel", "Simulator.Simulator"));
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
+    private HashSet<String> barometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBarometer"));
     private HashSet<String> bearingAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBearing"));
     private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));
     private HashSet<String> magneticAdaptorPaths = new HashSet<>(Arrays.asList("AndroidMagnetic"));
@@ -124,7 +133,18 @@ public class AdaptorLoader {
         }
         return result;
     }
-
+    public AdaptorBarometer getSensorAdaptorBarometer(String path) {
+        AdaptorBarometer result = null;
+        ClassLoader classLoader = Drone.class.getClassLoader();
+        if (barometerAdaptorPaths.contains(path)) {
+            try {
+                result = (AdaptorBarometer) classLoader.loadClass("eagle.sdkInterface.sensorAdaptors.barometerAdaptors." + path).newInstance();
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+                System.out.println(e.toString());
+            }
+        }
+        return result;
+    }
     public AdaptorBearing getSensorAdaptorBearing(String path) {
         AdaptorBearing result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();

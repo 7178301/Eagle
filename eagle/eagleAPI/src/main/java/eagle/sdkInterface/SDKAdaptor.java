@@ -9,6 +9,7 @@ import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.network.ScriptingEngine;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBarometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
@@ -30,6 +31,7 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 public abstract class SDKAdaptor {
 
     private ArrayList<AdaptorAccelerometer> accelerometers = new ArrayList<>();
+    private ArrayList<AdaptorBarometer> barometers = new ArrayList<>();
     private ArrayList<AdaptorBearing> bearings = new ArrayList<>();
     private ArrayList<AdaptorCamera> cameras = new ArrayList<>();
     private ArrayList<AdaptorGPS> gps = new ArrayList<>();
@@ -316,6 +318,10 @@ public abstract class SDKAdaptor {
         this.accelerometers.add(adaptorAccelerometer);
     }
 
+    public void addSensorAdaptorBarometer(AdaptorBarometer adaptorBarometer) {
+        this.barometers.add(adaptorBarometer);
+    }
+
     public void addSensorAdaptorBearing(AdaptorBearing adaptorBearing) {
         this.bearings.add(adaptorBearing);
     }
@@ -350,6 +356,10 @@ public abstract class SDKAdaptor {
 
     public ArrayList<AdaptorAccelerometer> getAccelerometers() {
         return accelerometers;
+    }
+
+    public ArrayList<AdaptorBarometer> getBarometers() {
+        return barometers;
     }
 
     public ArrayList<AdaptorBearing> getBearings() {
