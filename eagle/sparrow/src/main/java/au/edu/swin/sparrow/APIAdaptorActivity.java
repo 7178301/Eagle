@@ -16,12 +16,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
 import au.edu.swin.sparrow.Fragment.BearingFragment;
+import au.edu.swin.sparrow.Fragment.GPSFragment;
+import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
+import au.edu.swin.sparrow.Fragment.LIDARFragment;
+import au.edu.swin.sparrow.Fragment.MagneticFragment;
+import au.edu.swin.sparrow.Fragment.SensorFragment;
+import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 import eagle.Drone;
+import eagle.logging.Log;
+import eagle.logging.LogAndroid;
 import eagle.logging.LogBufferCircle;
 import eagle.logging.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
-import eagle.logging.Log;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
@@ -31,16 +39,10 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
-import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
-import au.edu.swin.sparrow.Fragment.GPSFragment;
-import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
-import au.edu.swin.sparrow.Fragment.LIDARFragment;
-import au.edu.swin.sparrow.Fragment.MagneticFragment;
-import au.edu.swin.sparrow.Fragment.SensorFragment;
-import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 import ioio.lib.api.IOIO;
 
-import static au.edu.swin.sparrow.Fragment.AccelerometerFragment.*;
+import static au.edu.swin.sparrow.Fragment.AccelerometerFragment.OnFragmentInteractionListener;
+import static au.edu.swin.sparrow.Fragment.AccelerometerFragment.newInstance;
 
 public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentInteractionListener, View.OnClickListener, LogCallback {
 
@@ -81,6 +83,7 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 1000);
+        new LogAndroid();
     }
 
     @Override
@@ -264,7 +267,7 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements OnFragmentI
 
     @Override
     public void onLogEntry(String tag, String message) {
-        logMessages.add(tag + ": " + message);
+        //logMessages.add(tag + ": " + message);
 
     }
 

@@ -1,8 +1,11 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
 import eagle.logging.Log;
+import eagle.navigation.positioning.Position;
+import eagle.navigation.positioning.PositionGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.bearingAdaptors.AndroidBearing;
+import eagle.sdkInterface.sensorAdaptors.gpsAdaptors.AndroidGPS;
 import ioio.lib.api.AnalogInput;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.PwmOutput;
@@ -42,6 +45,15 @@ public class IOIOController {
     static double YAW_PID_KI = 0;
     static double YAW_PID_KD = 0.2;
 
+    static double THROTTLE_PID_KP = 2.4;
+    static double THROTTLE_PID_KI = 1.0;
+    static double THROTTLE_PID_KD = 0.4;
+
+
+    static double TILT_PID_KP = 0.024;
+    static double TILT_PID_KI = 0.0;
+    static double TILT_PID_KD = 0.004;
+
     //-------Motor PWM Levels
     static int MOTOR_ZERO_LEVEL = 1000;
     static int MOTOR_MAX_LEVEL = 2023;
@@ -50,17 +62,23 @@ public class IOIOController {
     private PIDAngleController rollController;
     private PIDAngleController pitchController;
     private PIDAngleController yawController;
+    private PIDAltitudeController throttleController;
+    private PIDPercentageController tiltController;
 
     // PID variables
     double yawAngleTarget = 0;
     double pitchAngleTarget = 0;
     double rollAngleTarget = 0;
+    double altitudeTarget = 0;
 
     private AndroidBearing bearing;
+    private AndroidGPS position;
 
     private static final String TAG = "IOIOController";
     private static long previousTime;
     private Thread thread;
+    private Position desiredPosition;
+    private double maxTilt = 10;
 //    private Thread batteryThread;
 
     IOIOController() {
@@ -68,6 +86,8 @@ public class IOIOController {
         rollController = new PIDAngleController(ROLL_PID_KP, ROLL_PID_KI, ROLL_PID_KD, PID_DERIV_SMOOTHING);
         pitchController = new PIDAngleController(PITCH_PID_KP, PITCH_PID_KI, PITCH_PID_KD, PID_DERIV_SMOOTHING);
         yawController = new PIDAngleController(YAW_PID_KP, YAW_PID_KI, YAW_PID_KD, PID_DERIV_SMOOTHING);
+//        throttleController = new PIDAltitudeController(THROTTLE_PID_KP, THROTTLE_PID_KI, THROTTLE_PID_KD, PID_DERIV_SMOOTHING);
+//        tiltController = new PIDPercentageController(TILT_PID_KP, TILT_PID_KI, TILT_PID_KD, PID_DERIV_SMOOTHING);
     }
 
     void setIOIO(IOIO ioio) {
@@ -105,13 +125,24 @@ public class IOIOController {
         }
     }
 
-    public void setBearing(AndroidBearing bearing) {
+    public void setBearingAdaptor(AndroidBearing bearing) {
         this.bearing = bearing;
     }
 
+    public void setPositionAdaptor(AndroidGPS position) {
+        this.position = position;
+    }
+
+
+    public void setDesiredPosition(Position desiredPosition) {
+        this.desiredPosition = desiredPosition;
+    }
+
     void control_update() {
-        if (bearing != null) {
+        if (bearing != null && position != null) {
             float[] data = bearing.getData();
+            PositionGPS posData = position.getData();
+            
 
             // Compute the power of each motor.
             int tempPowerFCW = MOTOR_ZERO_LEVEL;
@@ -123,12 +154,30 @@ public class IOIOController {
             float dt = ((float) (currentTime - previousTime)) / 1000000000.0f; // [s].
             previousTime = currentTime;
 
+//            if (desiredPosition != null) {
+//                PositionDisplacement disp = ((PositionGPS)desiredPosition).compare(posData);
+//                double displacement = disp.getDisplacement();
+//                double angle = disp.getAngle();
+//                double tiltAngle = maxTilt*tiltController.getInput(displacement, 0, dt);
+////
+////                pitchAngleTarget = tiltAngle*Math.cos(data[AndroidBearing.YAW]+angle);
+////                yawAngleTarget = tiltAngle*Math.sin(data[AndroidBearing.YAW]+angle);
+//
+//            }
+
             double yawForce = yawController.getInput(yawAngleTarget, data[AdaptorBearing.YAW], dt);
             double pitchForce = pitchController.getInput(pitchAngleTarget, -data[AdaptorBearing.PITCH], dt);
             double rollForce = rollController.getInput(rollAngleTarget, data[AdaptorBearing.ROLL], dt);
+            double altitudeForce = 0;
+            if (desiredPosition != null) {
+                altitudeForce = desiredPosition.getAltitude() * 10;
+            }
 
-            //todo:
-            int altitudeForce = 200;
+            Log.log(TAG, altitudeForce+"");
+
+
+//            //todo:
+//            int altitudeForce = 200;
 
 
             tempPowerFCW += altitudeForce; // Vertical "force".
@@ -146,13 +195,13 @@ public class IOIOController {
             tempPowerRCW -= rollForce; //
             tempPowerRCCW += rollForce; //
 
-            Log.log(TAG, data[AdaptorBearing.ROLL]+","+rollAngleTarget+","+rollForce);
+            //Log.log(TAG, data[AdaptorBearing.ROLL]+","+rollAngleTarget+","+rollForce);
             //Log.log(TAG, tempPowerFCW+","+tempPowerFCCW+","+tempPowerRCW+","+tempPowerRCCW);
 //
-            tempPowerFCW += yawForce; // Yaw "force".
-            tempPowerFCCW -= yawForce; //
-            tempPowerRCW += yawForce; //
-            tempPowerRCCW -= yawForce; //
+//            tempPowerFCW += yawForce; // Yaw "force".
+//            tempPowerFCCW -= yawForce; //
+//            tempPowerRCW += yawForce; //
+//            tempPowerRCCW -= yawForce; //
 
             //Log.log(TAG, pid_pitch_out + "," + pid_roll_out);
 
