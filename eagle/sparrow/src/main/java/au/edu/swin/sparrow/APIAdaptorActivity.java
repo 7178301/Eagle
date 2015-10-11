@@ -89,7 +89,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateUI();
+        updateUISensors();
     }
 
 
@@ -186,25 +186,9 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         fragTransaction.commit();
     }
 
-    private void updateUI() {
+    private void updateUISensors() {
         for (SensorFragment sensor : sensorFragments) {
             sensor.updateData();
-        }
-
-        if (webViewLog != null) {
-            StringBuilder html = new StringBuilder();
-            html.append("<html>");
-            html.append("<head>");
-
-            html.append("</head>");
-            html.append("<body>");
-            Vector<String> tempLog = new Vector<>(logMessages);
-            for (String mess : tempLog) {
-                html.append(mess+"<br>");
-            }
-            html.append("</body></html>");
-
-            webViewLog.loadDataWithBaseURL("file:///android_asset/", html.toString(), "text/html", "UTF-8", "");
         }
     }
 
@@ -247,6 +231,28 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     public void onLogEntry(String tag, String message) {
         logMessages.add(tag + ": " + message);
 
+        if (webViewLog != null)
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updateLogUI();
+                }
+            });
+    }
+
+    public synchronized void updateLogUI(){
+        StringBuilder html = new StringBuilder();
+        html.append("<html>");
+        html.append("<head>");
+
+        html.append("</head>");
+        html.append("<body>");
+        Vector<String> tempLog = new Vector<>(logMessages);
+        for (String mess : tempLog) {
+            html.append(mess + "<br>");
+        }
+        html.append("</body></html>");
+        webViewLog.loadDataWithBaseURL("file:///android_asset/", html.toString(), "text/html", "UTF-8", "");
     }
 
     class MyTimerTask extends TimerTask {
@@ -254,7 +260,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updateUI();
+                    updateUISensors();
                 }
             });
         }

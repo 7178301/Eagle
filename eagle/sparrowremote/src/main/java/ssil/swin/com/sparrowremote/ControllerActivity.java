@@ -179,6 +179,8 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+        double longitude;
+        double latitude;
         switch (uri.getPath()) {
             case "/buttonConnect":
                 commandConnection.sendMessage("CONNECTTODRONE", rcb);
@@ -193,14 +195,14 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 commandConnection.sendMessage("CHANGEALTITUDE -D -1", rcb);
                 break;
             case "/buttonRotateLeft":
-                commandConnection.sendMessage("CHANGEYAW -D -1", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D -10", rcb);
                 break;
             case "/buttonRotateRight":
-                commandConnection.sendMessage("CHANGEYAW -D 1", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D 10", rcb);
                 break;
             case "/buttonLeft":
-                double longitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
-                double latitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
+                longitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
+                latitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
                 commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
                 break;
             case "/buttonRight":

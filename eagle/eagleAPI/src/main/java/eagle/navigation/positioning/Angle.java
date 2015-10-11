@@ -46,6 +46,13 @@ public final class Angle {
         return degrees;
     }
 
+    public double getDegrees180() {
+        if (degrees <= 180)
+            return degrees;
+        else
+            return -(360 - degrees);
+    }
+
     public boolean equals(Object obj) {
         if (!(obj instanceof Angle))
             return false;

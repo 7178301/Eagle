@@ -280,10 +280,10 @@ public abstract class SDKAdaptor {
         return currentPositionAssigned;
     }
 
-    public void setPositionAssigned(Position pos) throws InvalidPositionTypeException {
-        if (pos instanceof PositionDisplacement)
+    public void setPositionAssigned(Position position) throws InvalidPositionTypeException {
+        if (!(position instanceof PositionGPS)&&!(position instanceof PositionMetric))
             throw new InvalidPositionTypeException("PositionDisplacement isn't a valid assigned position");
-        currentPositionAssigned = pos;
+        currentPositionAssigned = position;
     }
 
     public abstract Position getPositionInFlight();

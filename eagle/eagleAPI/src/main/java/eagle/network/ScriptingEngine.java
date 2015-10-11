@@ -152,10 +152,10 @@ public class ScriptingEngine {
                             break;
                         case "FLYTO":
                             if (array.length == 6) {
-                                double lon = Double.parseDouble(array[2]);
-                                double lat = Double.parseDouble(array[3]);
-                                double alt = Double.parseDouble(array[4]);
-                                double bea = Double.parseDouble(array[5]);
+                                double latitude = Double.parseDouble(array[2]);
+                                double longitude = Double.parseDouble(array[3]);
+                                double altitude= Double.parseDouble(array[4]);
+                                double bearing= Double.parseDouble(array[5]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -168,7 +168,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                        }, new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -181,7 +181,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                        }, new PositionMetric(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -195,17 +195,17 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                        }, new PositionDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else if (array.length == 7) {
-                                double lon = Double.parseDouble(array[2]);
-                                double lat = Double.parseDouble(array[3]);
-                                double alt = Double.parseDouble(array[4]);
-                                double bea = Double.parseDouble(array[5]);
-                                double spe = Double.parseDouble(array[6]);
+                                double latitude = Double.parseDouble(array[2]);
+                                double longitude = Double.parseDouble(array[3]);
+                                double altitude= Double.parseDouble(array[4]);
+                                double bearing= Double.parseDouble(array[5]);
+                                double speed = Double.parseDouble(array[6]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -218,7 +218,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                        }, new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -231,7 +231,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                        }, new PositionMetric(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -245,7 +245,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new PositionDisplacement(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)), spe);
+                                        }, new PositionDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -255,7 +255,7 @@ public class ScriptingEngine {
                                 break;
                         case "CHANGELONGITUDE":
                             if (array.length == 3) {
-                                double val = Double.parseDouble(array[2]);
+                                double value  = Double.parseDouble(array[2]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -268,7 +268,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -281,7 +281,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -295,14 +295,14 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else if (array.length == 4) {
-                                double val = Double.parseDouble(array[2]);
-                                double spe = Double.parseDouble(array[3]);
+                                double value  = Double.parseDouble(array[2]);
+                                double speed = Double.parseDouble(array[3]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -315,7 +315,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -328,7 +328,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -342,7 +342,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -352,7 +352,7 @@ public class ScriptingEngine {
                             break;
                         case "CHANGELATITUDE":
                             if (array.length == 3) {
-                                double val = Double.parseDouble(array[2]);
+                                double value  = Double.parseDouble(array[2]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -365,7 +365,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -378,7 +378,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -392,15 +392,14 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else if (array.length == 4) {
-                                double val = Double.parseDouble(array[2]);
-                                double spe = Double.parseDouble(array[3]);
-                                final boolean[] result = new boolean[1];
+                                double value = Double.parseDouble(array[2]);
+                                double speed = Double.parseDouble(array[3]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -413,7 +412,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -426,7 +425,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -440,7 +439,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -450,7 +449,7 @@ public class ScriptingEngine {
                             break;
                         case "CHANGEALTITUDE":
                             if (array.length == 3) {
-                                double val = Double.parseDouble(array[2]);
+                                double value = Double.parseDouble(array[2]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -463,7 +462,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -476,7 +475,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -490,14 +489,14 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val);
+                                        }, value );
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else if (array.length == 4) {
-                                double val = Double.parseDouble(array[2]);
-                                double spe = Double.parseDouble(array[3]);
+                                double value = Double.parseDouble(array[2]);
+                                double speed = Double.parseDouble(array[3]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -510,7 +509,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -523,7 +522,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -537,7 +536,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, val, spe);
+                                        }, value , speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -547,7 +546,7 @@ public class ScriptingEngine {
                             break;
                         case "CHANGEYAW":
                             if (array.length == 3) {
-                                double val = Double.parseDouble(array[2]);
+                                double value = Double.parseDouble(array[2]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -560,7 +559,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new Angle(val));
+                                        }, new Angle(value ));
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -573,7 +572,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new Angle(val));
+                                        }, new Angle(value ));
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -587,14 +586,14 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new Angle(val));
+                                        }, new Angle(value));
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else if (array.length == 4) {
-                                double val = Double.parseDouble(array[2]);
-                                double spe = Double.parseDouble(array[3]);
+                                double value = Double.parseDouble(array[2]);
+                                double speed = Double.parseDouble(array[3]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -607,7 +606,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new Angle(val), spe);
+                                        }, new Angle(value ), speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -620,7 +619,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new Angle(val), spe);
+                                        }, new Angle(value ), speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -634,7 +633,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = "FAIL";
                                             }
-                                        }, new Angle(val), spe);
+                                        }, new Angle(value ), speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -698,21 +697,21 @@ public class ScriptingEngine {
                             break;
                         case "SETHOMEPOSITION":
                             if (array.length == 6) {
-                                double lon = Double.parseDouble(array[2]);
-                                double lat = Double.parseDouble(array[3]);
-                                double alt = Double.parseDouble(array[4]);
-                                double bea = Double.parseDouble(array[5]);
+                                double latitude = Double.parseDouble(array[2]);
+                                double longitude = Double.parseDouble(array[3]);
+                                double altitude= Double.parseDouble(array[4]);
+                                double bearing= Double.parseDouble(array[5]);
                                 try {
                                     switch (array[1]) {
                                         case "GPS":
                                         case "G":
                                         case "-G":
-                                            adaptor.setHomePosition(new PositionGPS(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                            adaptor.setHomePosition(new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                             break;
                                         case "METRIC":
                                         case "M":
                                         case "-M":
-                                            adaptor.setHomePosition(new PositionMetric(lon, lat, alt, new Angle(0), new Angle(0), new Angle(bea)));
+                                            adaptor.setHomePosition(new PositionMetric(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                             break;
                                         default:
                                             ExceptionResult[0] = "Invalid Position Type:  " + instruction;
