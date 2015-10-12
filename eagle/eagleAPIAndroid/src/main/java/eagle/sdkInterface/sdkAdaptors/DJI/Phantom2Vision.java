@@ -11,6 +11,7 @@ import dji.sdk.api.GroundStation.DJIGroundStationTask;
 import dji.sdk.api.GroundStation.DJIGroundStationTypeDef;
 import dji.sdk.api.GroundStation.DJIGroundStationWaypoint;
 import dji.sdk.api.MainController.DJIMainControllerSystemState;
+import dji.sdk.api.MainController.DJIMainControllerTypeDef;
 import dji.sdk.interfaces.DJIBatteryUpdateInfoCallBack;
 import dji.sdk.interfaces.DJIGeneralListener;
 import dji.sdk.interfaces.DJIGroundStationExecuteCallBack;
@@ -38,7 +39,6 @@ import eagle.sdkInterface.SDKAdaptorCallback;
 public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlyingInfoCallBack, DJIMcuUpdateStateCallBack, DJIBatteryUpdateInfoCallBack {
 
     private Context context = null;
-    boolean permissionCheck = false;
 
     private DJIGroundStationFlyingInfo djiGroundStationFlyingInfo = null;
     private DJIMainControllerSystemState djiMainControllerSystemState = null;
@@ -59,6 +59,8 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
             return false;
         //must be run threaded (Networking Code)
 
+
+        final Boolean[] permissionCheck = {null};
         Log.log("Phantom2Vision", "Checking DJI Application Key");
         Thread checkPermissionThread = new Thread() {
             @Override
@@ -68,11 +70,15 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
                     DJIDrone.checkPermission(context, new DJIGeneralListener() {
                         @Override
                         public void onGetPermissionResult(int result) {
-                            if (result == 0)
-                                permissionCheck = true;
-                            Log.log("Phantom2Vision", "Initializing Drone Type");
-                            if (!DJIDrone.initWithType(context, DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision))
-                                permissionCheck = false;
+                            if (result == 0) {
+                                permissionCheck[0] = true;
+                                Log.log("Phantom2Vision", "Initializing Drone Type");
+                                if (!DJIDrone.initWithType(context, DJIDroneTypeDef.DJIDroneType.DJIDrone_Vision))
+                                    permissionCheck[0] = false;
+                            }else {
+                                Log.log("Phantom2Vision", "Application Key Check: FAIL");
+                                permissionCheck[0] = false;
+                            }
                         }
                     });
                 } catch (Exception e) {
@@ -86,7 +92,7 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         } catch (InterruptedException e) {
             return false;
         }
-        if (!permissionCheck)
+        if (!permissionCheck[0])
             return false;
         Log.log("Phantom2Vision", "DJI Application Key Level = " + DJIDrone.getLevel());
 
@@ -145,23 +151,25 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
     //TODO: workout what to do for these functions
     public boolean disconnectFromDrone() {
         final Boolean[] closeGroundStation = {null};
-        Log.log("Phantom2Vision", "Starting  DJI GroundStation Communications");
+        Log.log("Phantom2Vision", "Stopping  DJI GroundStation Communications");
         Thread openGroundStationThread = new Thread() {
             @Override
             public void run() {
-                DJIDrone.getDjiGroundStation().openGroundStation(new DJIGroundStationExecuteCallBack() {
-                    @Override
-                    public void onResult(DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
-                        Log.log("Phantom2Vision", "DJI GroundStation Communications " + groundStationResult);
-                        if (groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Success)
-                            closeGroundStation[0] = true;
-                        else
-                            closeGroundStation[0] = false;
-                    }
-                });
-                DJIDrone.getDjiBattery().stopUpdateTimer();
-                DJIDrone.getDjiMainController().stopUpdateTimer();
-                DJIDrone.getDjiGroundStation().stopUpdateTimer();
+                if(DJIDrone.disconnectToDrone()) {
+                    DJIDrone.getDjiGroundStation().closeGroundStation(new DJIGroundStationExecuteCallBack() {
+                        @Override
+                        public void onResult(DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
+                            Log.log("Phantom2Vision", "DJI GroundStation Communications " + groundStationResult);
+                            if (groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Success)
+                                closeGroundStation[0] = true;
+                            else
+                                closeGroundStation[0] = false;
+                        }
+                    });
+                    DJIDrone.getDjiBattery().stopUpdateTimer();
+                    DJIDrone.getDjiMainController().stopUpdateTimer();
+                    DJIDrone.getDjiGroundStation().stopUpdateTimer();
+                }
             }
         };
         openGroundStationThread.start();
@@ -228,11 +236,11 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         } else if (speed <= 0) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Speed Must Be Positive");
-        } else if (getPositionInFlight() == null) {
+        } else if (getPositionAssigned() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
-            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(new PositionDisplacement(positionMetric));
+            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(new PositionDisplacement(positionMetric));
             flyTo(sdkAdaptorCallback, positionGPS, speed);
         }
     }
@@ -242,11 +250,11 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         if (positionMetric == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Arguments must not be null");
-        } else if (getPositionInFlight() == null) {
+        } else if (getPositionAssigned() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
-            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(new PositionDisplacement(positionMetric));
+            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(new PositionDisplacement(positionMetric));
             flyTo(sdkAdaptorCallback, positionGPS);
         }
     }
@@ -272,8 +280,10 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
 
             djiGroundStationWaypoint.speed = Double.valueOf(speed).floatValue() * 10;
             djiGroundStationTask.addWaypoint(djiGroundStationWaypoint);
+            Log.log("Phantom2Vision", "Waypoint Added: " + djiGroundStationWaypoint.latitude + " " + djiGroundStationWaypoint.longitude + " " + djiGroundStationWaypoint.altitude + " * * " + djiGroundStationWaypoint.heading);
 
-            Log.log("Phantom2Vision", "Uploading Ground Station Task");
+
+            //Log.log("Phantom2Vision", "Uploading Ground Station Task");
             DJIDrone.getDjiGroundStation().uploadGroundStationTask(djiGroundStationTask, new DJIGroundStationExecuteCallBack() {
                 @Override
                 public void onResult(final DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
@@ -285,7 +295,7 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
                             public void onResult(DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
                                 Log.log("Phantom2Vision", "Ground Station Task " + groundStationResult);
                                 if (sdkAdaptorCallback != null && groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Success)
-                                    sdkAdaptorCallback.onResult(false, groundStationResult.toString());
+                                    sdkAdaptorCallback.onResult(true, groundStationResult.toString());
                                 else if (sdkAdaptorCallback != null)
                                     sdkAdaptorCallback.onResult(false, groundStationResult.toString());
                             }
@@ -321,7 +331,7 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
             DJIDrone.getDjiGroundStation().uploadGroundStationTask(djiGroundStationTask, new DJIGroundStationExecuteCallBack() {
                 @Override
                 public void onResult(final DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
-                    Log.log("Phantom2Vision", "Upload Of Ground Station Task = " + groundStationResult);
+                    //Log.log("Phantom2Vision", "Upload Of Ground Station Task = " + groundStationResult);
                     if (groundStationResult == DJIGroundStationTypeDef.GroundStationResult.GS_Result_Success) {
                         //Log.log("Phantom2Vision", "Starting Ground Station Task ");
                         DJIDrone.getDjiGroundStation().startGroundStationTask(new DJIGroundStationExecuteCallBack() {
@@ -350,11 +360,14 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         } else if (speed <= 0) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Speed Must Be Positive");
-        } else if (getPositionInFlight() == null) {
+        } else if (getPositionAssigned() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
-            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(positionDisplacement);
+            Log.log("Phantom2Vision", "FlyToDisplacement: DisplacementPosition: " + positionDisplacement.toString());
+            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(positionDisplacement);
+            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionAssigned().toString());
+            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
             flyTo(sdkAdaptorCallback, positionGPS, speed);
         }
     }
@@ -364,13 +377,13 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         if (positionDisplacement == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Arguments must not be null");
-        } else if (getPositionInFlight() == null) {
+        } else if (getPositionAssigned() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
             Log.log("Phantom2Vision", "FlyToDisplacement: DisplacementPosition: " + positionDisplacement.toString());
-            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(positionDisplacement);
-            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionInFlight().toString());
+            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(positionDisplacement);
+            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionAssigned().toString());
             //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
             flyTo(sdkAdaptorCallback, positionGPS);
         }
@@ -412,14 +425,14 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
     @Override
     public void onResult(DJIGroundStationFlyingInfo djiGroundStationFlyingInfo) {
         this.djiGroundStationFlyingInfo = djiGroundStationFlyingInfo;
-        if (getPositionAssigned() == null&&djiGroundStationFlyingInfo.gpsStatus!=DJIGroundStationTypeDef.GroundStationGpsStatus.GS_GPS_Unknown) {
+        if (getPositionAssigned() == null&&djiGroundStationFlyingInfo.gpsStatus==DJIGroundStationTypeDef.GroundStationGpsStatus.GS_GPS_Excellent) {
             try {
                 setPositionAssigned(new PositionGPS(getPositionInFlight()));
             } catch (InvalidPositionTypeException e) {
                 Log.log("Phantom2Vision", e.getMessage());
             }
         }
-        if (getHomePosition() == null&&djiGroundStationFlyingInfo.gpsStatus!=DJIGroundStationTypeDef.GroundStationGpsStatus.GS_GPS_Unknown) {
+        if (getHomePosition() == null&&djiGroundStationFlyingInfo.gpsStatus==DJIGroundStationTypeDef.GroundStationGpsStatus.GS_GPS_Excellent) {
             try {
                 setHomePosition(new PositionGPS(getPositionInFlight()));
             } catch (InvalidPositionTypeException e) {
@@ -431,6 +444,17 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
     @Override
     public void onResult(DJIMainControllerSystemState djiMainControllerSystemState) {
         this.djiMainControllerSystemState = djiMainControllerSystemState;
+        if(djiMainControllerSystemState.fightControlState==DJIMainControllerTypeDef.DJIFlightControlState.Atti||
+                djiMainControllerSystemState.fightControlState==DJIMainControllerTypeDef.DJIFlightControlState.F_Atti||
+                djiMainControllerSystemState.fightControlState==DJIMainControllerTypeDef.DJIFlightControlState.P_Atti){
+            if (djiGroundStationFlyingInfo!=null) {
+                try {
+                    setPositionAssigned(getPositionInFlight());
+                } catch (InvalidPositionTypeException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

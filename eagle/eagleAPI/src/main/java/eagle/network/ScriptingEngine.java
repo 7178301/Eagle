@@ -166,7 +166,7 @@ public class ScriptingEngine {
                                                 if(booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
@@ -179,7 +179,7 @@ public class ScriptingEngine {
                                                 if(booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new PositionMetric(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
@@ -193,7 +193,7 @@ public class ScriptingEngine {
                                                 if(booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new PositionDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
@@ -216,7 +216,7 @@ public class ScriptingEngine {
                                                 if(booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
@@ -229,7 +229,7 @@ public class ScriptingEngine {
                                                 if(booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new PositionMetric(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
@@ -243,7 +243,7 @@ public class ScriptingEngine {
                                                 if(booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new PositionDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
@@ -266,7 +266,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -279,7 +279,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -293,7 +293,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -313,7 +313,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -326,7 +326,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -340,7 +340,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -363,7 +363,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -376,7 +376,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -390,7 +390,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -410,7 +410,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -423,7 +423,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -437,7 +437,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -460,7 +460,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -473,7 +473,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -487,7 +487,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value );
                                         break;
@@ -507,7 +507,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -520,7 +520,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -534,7 +534,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, value , speed);
                                         break;
@@ -557,7 +557,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new Angle(value ));
                                         break;
@@ -570,7 +570,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new Angle(value ));
                                         break;
@@ -584,7 +584,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new Angle(value));
                                         break;
@@ -604,7 +604,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new Angle(value ), speed);
                                         break;
@@ -617,7 +617,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new Angle(value ), speed);
                                         break;
@@ -631,7 +631,7 @@ public class ScriptingEngine {
                                                 if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
-                                                    returnString[0] = "FAIL";
+                                                    returnString[0] = stringResult;
                                             }
                                         }, new Angle(value ), speed);
                                         break;
@@ -649,7 +649,7 @@ public class ScriptingEngine {
                                         if(booleanResult)
                                             returnString[0] = "SUCCESS";
                                         else
-                                            returnString[0] = "FAIL";
+                                            returnString[0] = stringResult;
                                     }
                                 });
                             } else if (array.length == 2) {
@@ -659,7 +659,7 @@ public class ScriptingEngine {
                                         if(booleanResult)
                                             returnString[0] = "SUCCESS";
                                         else
-                                            returnString[0] = "FAIL";
+                                            returnString[0] = stringResult;
                                     }
                                 }, Double.parseDouble(array[1]));
                             } else

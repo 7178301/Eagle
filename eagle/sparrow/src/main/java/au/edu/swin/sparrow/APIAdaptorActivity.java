@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
@@ -12,7 +13,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -83,7 +89,24 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     protected void onDestroy() {
         Log.removeCallback("TelnetServer", this);
         myTimer.cancel();
+        try {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+            Log.writeLogToFile(Environment.getExternalStorageDirectory().getPath() + "/sparrow/log-" + timeStamp + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onPause() {
+        try {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+            Log.writeLogToFile(Environment.getExternalStorageDirectory().getPath() + "/sparrow/log-" + timeStamp + ".txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onPause();
     }
 
     @Override
@@ -240,16 +263,17 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             });
     }
 
-    public synchronized void updateLogUI(){
+    public synchronized void updateLogUI() {
         StringBuilder html = new StringBuilder();
         html.append("<html>");
         html.append("<head>");
 
         html.append("</head>");
         html.append("<body>");
-        Vector<String> tempLog = new Vector<>(logMessages);
-        for (String mess : tempLog) {
-            html.append(mess + "<br>");
+        Vector<String> tempLog = (Vector<String>) logMessages.clone();
+
+        for (int i = tempLog.size(); i > 0; i--) {
+            html.append(tempLog.get(i - 1) + "<br>");
         }
         html.append("</body></html>");
         webViewLog.loadDataWithBaseURL("file:///android_asset/", html.toString(), "text/html", "UTF-8", "");
