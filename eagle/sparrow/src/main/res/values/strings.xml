@@ -37,6 +37,8 @@
     <string name="log_data">Logs</string>
     <string name="collapseLog">Collapse Log</string>
     <string name="expandLog">Expand Log</string>
+    <string name="barometer">Barometer</string>
+    <string name="pressure">Pressure</string>
     <!--<string name="ioio">IOIO</string>-->
 
 
