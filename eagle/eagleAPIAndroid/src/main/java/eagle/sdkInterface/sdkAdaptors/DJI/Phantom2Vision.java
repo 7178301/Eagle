@@ -236,11 +236,11 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         } else if (speed <= 0) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Speed Must Be Positive");
-        } else if (getPositionAssigned() == null) {
+        } else if (getPositionInFlight() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
-            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(new PositionDisplacement(positionMetric));
+            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(new PositionDisplacement(positionMetric));
             flyTo(sdkAdaptorCallback, positionGPS, speed);
         }
     }
@@ -250,11 +250,11 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         if (positionMetric == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Arguments must not be null");
-        } else if (getPositionAssigned() == null) {
+        } else if (getPositionInFlight() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
-            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(new PositionDisplacement(positionMetric));
+            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(new PositionDisplacement(positionMetric));
             flyTo(sdkAdaptorCallback, positionGPS);
         }
     }
@@ -279,6 +279,8 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
             djiGroundStationWaypoint.heading = Double.valueOf(positionGPS.getYaw().getDegrees180()).shortValue();
 
             djiGroundStationWaypoint.speed = Double.valueOf(speed).floatValue() * 10;
+            djiGroundStationWaypoint.stayTime = 1;
+
             djiGroundStationTask.addWaypoint(djiGroundStationWaypoint);
             Log.log("Phantom2Vision", "Waypoint Added: " + djiGroundStationWaypoint.latitude + " " + djiGroundStationWaypoint.longitude + " " + djiGroundStationWaypoint.altitude + " * * " + djiGroundStationWaypoint.heading);
 
@@ -360,14 +362,14 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         } else if (speed <= 0) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Speed Must Be Positive");
-        } else if (getPositionAssigned() == null) {
+        } else if (getPositionInFlight() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
             Log.log("Phantom2Vision", "FlyToDisplacement: DisplacementPosition: " + positionDisplacement.toString());
-            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(positionDisplacement);
-            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionAssigned().toString());
-            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
+            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(positionDisplacement);
+            Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionInFlight().toString());
+            Log.log("Phantom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
             flyTo(sdkAdaptorCallback, positionGPS, speed);
         }
     }
@@ -377,13 +379,13 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
         if (positionDisplacement == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Arguments must not be null");
-        } else if (getPositionAssigned() == null) {
+        } else if (getPositionInFlight() == null) {
             if (sdkAdaptorCallback != null)
                 sdkAdaptorCallback.onResult(false, "Current Position Not Available");
         } else {
             Log.log("Phantom2Vision", "FlyToDisplacement: DisplacementPosition: " + positionDisplacement.toString());
-            PositionGPS positionGPS = (PositionGPS) getPositionAssigned().add(positionDisplacement);
-            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionAssigned().toString());
+            PositionGPS positionGPS = (PositionGPS) getPositionInFlight().add(positionDisplacement);
+            //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position Current: "+getPositionInFlight().toString());
             //Log.log("Phantom2Vision","FlyToDisplacement: GPS Position: "+positionGPS.toString());
             flyTo(sdkAdaptorCallback, positionGPS);
         }
