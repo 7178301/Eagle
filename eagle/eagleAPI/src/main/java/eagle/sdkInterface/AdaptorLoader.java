@@ -1,11 +1,18 @@
 package eagle.sdkInterface;
 
-import eagle.Drone;
-import eagle.sdkInterface.sensorAdaptors.*;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import eagle.Drone;
+import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
+import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
+import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
+import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
+import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 /**
  * Adaptor Loader
@@ -28,7 +35,7 @@ public class AdaptorLoader {
     private HashSet<String> gyroscopeAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGyroscope"));
     //private HashSet<String> LIDARAdaptorPaths = new HashSet<>(Arrays.asList());
     private HashSet<String> RPLIDARAdaptorPaths = new HashSet<>(Arrays.asList("RoboPeakRPLIDARA1M1R1"));
-    private HashSet<String> ultrasonicAdaptorPaths = new HashSet<>(Arrays.asList("SeeedStudioSEN10737P"));
+    private HashSet<String> ultrasonicAdaptorPaths = new HashSet<>(Arrays.asList("SeeedStudioSEN10737P", "HCSR04"));
 
     public HashMap getSDKAdaptorMap() {
         HashMap<String, SDKAdaptor> sdkAdaptors = new HashMap<>();

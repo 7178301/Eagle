@@ -49,6 +49,7 @@ public class HCSR04 extends AdaptorUltrasonic {
     public boolean setAndroidContext(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
+            connectToSensor();
             return true;
         } else
             return false;
@@ -65,7 +66,7 @@ public class HCSR04 extends AdaptorUltrasonic {
 
     @Override
     public boolean isDataReady() {
-        return false;
+        return true;
     }
 
     @Override
