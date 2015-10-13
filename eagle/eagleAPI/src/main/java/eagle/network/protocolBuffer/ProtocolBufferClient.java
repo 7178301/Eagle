@@ -15,6 +15,7 @@ import eagle.logging.Log;
  */
 public class ProtocolBufferClient {
     private Socket socket = null;
+    private Object outputMutex;
     private OutputStream outputStream = null;
     private InputStream inputStream = null;
     private String serverAddress;
@@ -138,7 +139,9 @@ public class ProtocolBufferClient {
                     .build();
 
             try {
-                request.writeDelimitedTo(outputStream);
+                synchronized (outputMutex) {
+                    request.writeDelimitedTo(outputStream);
+                }
             } catch (IOException e) {
             }
         }
