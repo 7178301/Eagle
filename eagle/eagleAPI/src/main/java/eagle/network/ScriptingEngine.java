@@ -43,9 +43,10 @@ public class ScriptingEngine {
             put("GETPOSITIONASSIGNED", "GETPOSITIONASSIGNED | prints out the drones current position");
             put("GETHOMEPOSITION", "GETHOMEPOSITION | prints the home position of the drone");
             put("SETHOMEPOSITION", "SETHOMEPOSITION _PositionType_ _longitude_ _latitude_ _altitude_ _Angle_ | Set the home position");
-            put("GETACCELDATA", "GETACCELDATA _id_ | Get the values of the accelerometer given by _id_");
+            put("GETACCELEROMETERDATA", "GETACCELEROMETERDATA _id_ | Get the values of the accelerometer given by _id_");
+            put("GETBEARINGDATA", "GETBEARINGDATA _id_ | Get the values of the bearing given by _id_");
             put("GETGPSDATA", "GETGPSDATA _id_ | Get the values of the gps given by _id_");
-            put("GETGYRODATA", "GETGYRODATA _id_ | Get the values of the gyroscope given by _id_");
+            put("GETGYROSCOPEDATA", "GETGYROSCOPEDATA _id_ | Get the values of the gyroscope given by _id_");
             put("GETLIDARDATA", "GETLIDARDATA _id_ | Get the values of the LIDAR given by _id_");
             put("GETMAGNETICDATA", "GETMAGNETICDATA _id_ | Get the values of the magnetic sensor given by _id_");
             put("GETRPLIDARDATA", "GETRPLIDARDATA _id_ | Get the values of the RPLIDAR given by _id_");
@@ -80,7 +81,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "FAIL";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "DISCONNECTFROMDRONE":
                             if (array.length == 1) {
@@ -89,7 +90,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "FAIL";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "ISCONNECTEDTODRONE":
                             if (array.length == 1) {
@@ -98,7 +99,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "FALSE";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "STANDBYDRONE":
                             if (array.length == 1) {
@@ -107,7 +108,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "FAIL";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "RESUMEDRONE":
                             if (array.length == 1) {
@@ -116,7 +117,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "FAIL";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "SHUTDOWNDRONE":
                             if (array.length == 1) {
@@ -125,37 +126,37 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "FAIL";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETADAPTORVERSION":
                             if (array.length == 1)
                                 returnString[0] = adaptor.getAdaptorVersion();
                             else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETSDKVERSION":
                             if (array.length == 1)
                                 returnString[0] = adaptor.getSdkVersion();
                             else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETADAPTORNAME":
                             if (array.length == 1)
                                 returnString[0] = adaptor.getAdaptorName();
                             else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETADAPTORMANUFACTURER":
                             if (array.length == 1)
                                 returnString[0] = adaptor.getAdaptorManufacturer();
                             else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETADAPTORMODEL":
                             if (array.length == 1)
                                 returnString[0] = adaptor.getAdaptorModel();
                             else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "FLYTO":
                             if (array.length == 6) {
@@ -258,7 +259,7 @@ public class ScriptingEngine {
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "CHANGELONGITUDE":
                             if (array.length == 3) {
@@ -355,7 +356,7 @@ public class ScriptingEngine {
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "CHANGELATITUDE":
                             if (array.length == 3) {
@@ -452,7 +453,7 @@ public class ScriptingEngine {
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "CHANGEALTITUDE":
                             if (array.length == 3) {
@@ -549,7 +550,7 @@ public class ScriptingEngine {
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "CHANGEYAW":
                             if (array.length == 3) {
@@ -646,7 +647,7 @@ public class ScriptingEngine {
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GOHOME":
                             if (array.length == 1) {
@@ -670,7 +671,7 @@ public class ScriptingEngine {
                                     }
                                 }, Double.parseDouble(array[1]));
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETPOSITIONASSIGNED":
                             if (array.length == 1) {
@@ -680,7 +681,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = pos.toString();
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETPOSITIONINFLIGHT":
                             if (array.length == 1) {
@@ -690,7 +691,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = pos.toString();
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETHOMEPOSITION":
                             if (array.length == 1) {
@@ -700,7 +701,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = pos.toString();
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "SETHOMEPOSITION":
                             if (array.length == 6) {
@@ -727,9 +728,9 @@ public class ScriptingEngine {
                                     ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
-                        case "GETACCELDATA":
+                        case "GETACCELEROMETERDATA":
                             if (array.length == 2) {
                                 int id = Integer.parseInt(array[1]);
                                 if (id >= 0 && id < adaptor.getAccelerometers().size()) {
@@ -737,9 +738,19 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
-                        case "GETGYRODATA":
+                        case "GETBEARINGDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getBearings().size()) {
+                                    returnString[0] = adaptor.getBearings().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
+                            break;
+                        case "GETGYROSCOPEDATA":
                             if (array.length == 2) {
                                 int id = Integer.parseInt(array[1]);
                                 if (id >= 0 && id < adaptor.getGyroscopes().size()) {
@@ -747,7 +758,7 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETGPSDATA":
                             if (array.length == 2) {
@@ -757,7 +768,7 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETLIDARDATA":
                             if (array.length == 2) {
@@ -767,7 +778,7 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETMAGNETICDATA":
                             if (array.length == 2) {
@@ -777,7 +788,7 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETRPLIDARDATA":
                             if (array.length == 2) {
@@ -787,7 +798,7 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "GETULTRASONICDATA":
                             if (array.length == 2) {
@@ -797,14 +808,14 @@ public class ScriptingEngine {
                                 } else
                                     returnString[0] = "NO SENSOR WITH THAT ID";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "DELAY":
                             if (array.length == 2) {
                                 int time = Integer.parseInt(array[1]);
                                 adaptor.delay(time);
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "HELP":
                             if (array.length == 1) {
@@ -817,7 +828,7 @@ public class ScriptingEngine {
                                 else
                                     returnString[0] = "UNKNOWN COMMAND";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         case "LOG":
                             if (array.length >= 1) {
@@ -830,7 +841,7 @@ public class ScriptingEngine {
                                 Log.log("ScriptingEngine", sb.toString());
                                 returnString[0] = "SUCCESS";
                             } else
-                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                                ExceptionResult[0] = "Wrong Number of Arguments. Type HELP For Mor Information: " + instruction;
                             break;
                         default:
                             ExceptionResult[0] = instruction;
