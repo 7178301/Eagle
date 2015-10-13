@@ -11,7 +11,6 @@ public class PIDAngleController {
         this.kp = kp;
         this.ki = ki;
         this.kd = kd;
-        this.smoothingStrength = smoothingStrength;
         previousDifference = 0.0f;
 
         integrator = 0.0f;

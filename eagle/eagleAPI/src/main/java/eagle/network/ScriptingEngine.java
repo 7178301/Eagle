@@ -718,6 +718,39 @@ public class ScriptingEngine {
                         throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
                     }
 
+                case "SETTHROTTLE":
+                    if (array.length == 2) {
+                        double percentage = Double.parseDouble(array[1]);
+                        adaptor.setThrottle(percentage);
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                    break;
+                case "SETYAW":
+                    if (array.length == 2) {
+                        double angle = Double.parseDouble(array[1]);
+                        adaptor.setYaw(angle);
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                    break;
+                case "SETPITCH":
+                    if (array.length == 2) {
+                        double angle = Double.parseDouble(array[1]);
+                        adaptor.setPitch(angle);
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                    break;
+                case "SETROLL":
+                    if (array.length == 2) {
+                        double angle = Double.parseDouble(array[1]);
+                        adaptor.setRoll(angle);
+                    } else {
+                        throw new InvalidInstructionException("Wrong Number of Values: " + instruction);
+                    }
+                    break;
+
                 default:
                     throw new InvalidInstructionException(instruction);
             }

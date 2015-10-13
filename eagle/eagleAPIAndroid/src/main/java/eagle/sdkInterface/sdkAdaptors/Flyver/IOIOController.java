@@ -33,13 +33,13 @@ public class IOIOController {
     //-------PID Config----------
 
     public static final float PID_DERIV_SMOOTHING = 0.5f;
-    static double ROLL_PID_KP = 2.4;
+    static double ROLL_PID_KP = 20.0;
     static double ROLL_PID_KI = 0.0;
-    static double ROLL_PID_KD = 0.4;
+    static double ROLL_PID_KD = 0.0;
 
-    static double PITCH_PID_KP = 2.4;
+    static double PITCH_PID_KP = 20.0;
     static double PITCH_PID_KI = 0.0;
-    static double PITCH_PID_KD = 0.4;
+    static double PITCH_PID_KD = 0.0;
 
     static double YAW_PID_KP = 2.2;
     static double YAW_PID_KI = 0;
@@ -79,6 +79,7 @@ public class IOIOController {
     private Thread thread;
     private Position desiredPosition;
     private double maxTilt = 10;
+    double throttlePercentage = -1;
 //    private Thread batteryThread;
 
     IOIOController() {
@@ -168,12 +169,10 @@ public class IOIOController {
             double yawForce = yawController.getInput(yawAngleTarget, data[AdaptorBearing.YAW], dt);
             double pitchForce = pitchController.getInput(pitchAngleTarget, -data[AdaptorBearing.PITCH], dt);
             double rollForce = rollController.getInput(rollAngleTarget, data[AdaptorBearing.ROLL], dt);
-            double altitudeForce = 0;
-            if (desiredPosition != null) {
-                altitudeForce = desiredPosition.getAltitude() * 10;
-            }
 
-            Log.log(TAG, altitudeForce+"");
+            double altitudeForce = (MOTOR_MAX_LEVEL-MOTOR_ZERO_LEVEL)*throttlePercentage;
+
+
 
 
 //            //todo:
@@ -190,20 +189,16 @@ public class IOIOController {
             tempPowerRCW -= pitchForce; //
             tempPowerRCCW -= pitchForce; //
 
-            tempPowerFCW += rollForce; // Roll "force".
-            tempPowerFCCW -= rollForce; //
-            tempPowerRCW -= rollForce; //
-            tempPowerRCCW += rollForce; //
+//            tempPowerFCW += rollForce; // Roll "force".
+//            tempPowerFCCW -= rollForce; //
+//            tempPowerRCW -= rollForce; //
+//            tempPowerRCCW += rollForce; //
 
-            //Log.log(TAG, data[AdaptorBearing.ROLL]+","+rollAngleTarget+","+rollForce);
-            //Log.log(TAG, tempPowerFCW+","+tempPowerFCCW+","+tempPowerRCW+","+tempPowerRCCW);
-//
 //            tempPowerFCW += yawForce; // Yaw "force".
 //            tempPowerFCCW -= yawForce; //
 //            tempPowerRCW += yawForce; //
 //            tempPowerRCCW -= yawForce; //
 
-            //Log.log(TAG, pid_pitch_out + "," + pid_roll_out);
 
             tempPowerFCW = correctRange(tempPowerFCW);
             tempPowerFCCW = correctRange(tempPowerFCCW);
@@ -245,6 +240,37 @@ public class IOIOController {
         } catch (NullPointerException ignored) {
 
         }
+    }
+
+    public boolean kill() {
+        thread.interrupt();
+        try {
+            motorFC.setPulseWidth(MOTOR_ZERO_LEVEL);
+            motorFCC.setPulseWidth(MOTOR_ZERO_LEVEL);
+            motorRC.setPulseWidth(MOTOR_ZERO_LEVEL);
+            motorRCC.setPulseWidth(MOTOR_ZERO_LEVEL);
+            return true;
+        } catch (ConnectionLostException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void setThrottle(double percentage) {
+        throttlePercentage = percentage;
+    }
+
+    public void setYaw(double angle) {
+
+    }
+
+    public void setPitch(double angle) {
+        pitchAngleTarget = angle*15;
+    }
+
+    public void setRoll(double angle) {
+        rollAngleTarget = angle*15;
+
     }
 
     private class ControllerThread implements Runnable {

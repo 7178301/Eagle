@@ -75,7 +75,7 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public boolean disconnectFromDrone() {
-        return false;
+        return controller.kill();
     }
 
     public boolean isConnectedToDrone() {
@@ -132,7 +132,7 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
 
-    PositionDisplacement posDisp = new PositionDisplacement(0,0,0,new Angle(0));
+    PositionDisplacement posDisp = new PositionDisplacement(0,0,30,new Angle(0));
 
     @Override
     public void flyTo(SDKAdaptorCallback sdkAdaptorCallback, PositionDisplacement position, double speed) {
@@ -158,6 +158,26 @@ public class F450Flamewheel extends SDKAdaptor {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void setThrottle(double percentage) {
+        controller.setThrottle(percentage);
+    }
+
+    @Override
+    public void setYaw(double angle) {
+        controller.setYaw(angle);
+    }
+
+    @Override
+    public void setPitch(double angle) {
+        controller.setPitch(angle);
+    }
+
+    @Override
+    public void setRoll(double angle) {
+        controller.setRoll(angle);
     }
 
     public void updateCurrentPosition() {
