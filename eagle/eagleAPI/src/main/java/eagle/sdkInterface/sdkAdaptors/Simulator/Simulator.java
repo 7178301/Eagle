@@ -173,4 +173,24 @@ public class Simulator extends SDKAdaptor {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void setThrottle(double percentage) {
+
+    }
+
+    @Override
+    public void setYaw(double angle) {
+
+    }
+
+    @Override
+    public void setPitch(double angle) {
+
+    }
+
+    @Override
+    public void setRoll(double angle) {
+
+    }
 }
