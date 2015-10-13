@@ -91,12 +91,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     protected void onDestroy() {
         Log.removeCallback("TelnetServer", this);
         myTimer.cancel();
-        try {
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(Calendar.getInstance().getTime());
-            Log.writeLogToFile(Environment.getExternalStorageDirectory().getPath() + "/sparrow/log-" + timeStamp + ".txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         super.onDestroy();
     }
 
