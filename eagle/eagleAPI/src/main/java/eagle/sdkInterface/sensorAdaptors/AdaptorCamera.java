@@ -18,8 +18,6 @@ public abstract class AdaptorCamera extends SensorAdaptor {
 
     public abstract byte[] getData();
 
-    public abstract boolean connectToSensor();
-
     //TODO Following Method Need Proper Implementation
     //public abstract Object saveImage();
     // Store the photo and send back location of storage

@@ -18,8 +18,6 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract PositionGPS getData();
 
     public PositionGPS getCalibratedData() {

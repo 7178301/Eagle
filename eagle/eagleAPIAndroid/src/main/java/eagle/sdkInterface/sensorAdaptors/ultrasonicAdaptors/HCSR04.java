@@ -46,6 +46,12 @@ public class HCSR04 extends AdaptorUltrasonic {
         return true;
     }
 
+    //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
+        return false;
+    }
+
     public boolean setAndroidContext(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;

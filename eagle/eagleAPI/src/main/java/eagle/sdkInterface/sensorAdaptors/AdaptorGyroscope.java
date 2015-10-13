@@ -16,8 +16,6 @@ public abstract class AdaptorGyroscope extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float[] getData();
 
     public float[] getCalibratedData() {

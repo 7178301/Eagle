@@ -39,6 +39,13 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
             return false;
     }
 
+    //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
+        return false;
+    }
+
+
     @Override
     public boolean setAndroidContext(Object object) {
         if (object instanceof Context) {

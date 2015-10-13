@@ -56,7 +56,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
 
     @Override
     public boolean connectToSensor() {
-        if (ioio == null||rxPin==-1||txPin==-1||motorPin==-1) {
+        if (ioio == null || rxPin == -1 || txPin == -1 || motorPin == -1) {
             return false;
         }
         try {
@@ -70,6 +70,12 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
+        return false;
     }
 
     //TODO LINK IOIO CONTROLLER TO THIS FUNCTION
@@ -108,7 +114,6 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return RPLIDARData;
     }
 
@@ -250,13 +255,13 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
 
         // wait for 5 bytes of data
         int available = inputStream.available();
-        while(available <5){
+        while (available < 5) {
             available = inputStream.available();
         }
         Log.log("RoboPeakRPLIDARA1M1R1", "5 bytes Of Data Available");
 
         // clear the buffer of all but 1 packet (and possible part packet)
-        for(int i=0;i<(((available/5)-1)*5);i++){
+        for (int i = 0; i < (((available / 5) - 1) * 5); i++) {
             inputStream.read();
         }
 
@@ -274,11 +279,10 @@ class RPLidar_DataPacket {
     private int angle;
     private int distance;
 
-    RPLidar_DataPacket(byte[] data)
-    {
+    RPLidar_DataPacket(byte[] data) {
         sync_quality = data[0];
-        angle = (((int)data[2]&0xFF)<<8) | ((int)data[1]&0xFF);
-        distance = (((int)data[4]&0xFF)<<8) | ((int)data[3]&0xFF);
+        angle = (((int) data[2] & 0xFF) << 8) | ((int) data[1] & 0xFF);
+        distance = (((int) data[4] & 0xFF) << 8) | ((int) data[3] & 0xFF);
     }
 
     public int getSync_quality() {
@@ -286,11 +290,11 @@ class RPLidar_DataPacket {
     }
 
     public float getAngle() {
-        return ((angle>>1)/64.0f);
+        return ((angle >> 1) / 64.0f);
     }
 
     public float getDistance() {
-        return ((float)distance/4.0f)/1000.0f;
+        return ((float) distance / 4.0f) / 1000.0f;
     }
 }
 
@@ -298,10 +302,9 @@ class RPLidar_HealthPacket {
     private int status;
     private int error;
 
-    RPLidar_HealthPacket(byte[] data)
-    {
+    RPLidar_HealthPacket(byte[] data) {
         status = data[0];
-        error = (data[2]<<8) | data[1];
+        error = (data[2] << 8) | data[1];
     }
 
     public int getStatus() {
@@ -319,14 +322,12 @@ class RPLidar_InfoPacket {
     private int hardware_version;
     private int[] serialnum = new int[16];
 
-    RPLidar_InfoPacket(byte[] data)
-    {
+    RPLidar_InfoPacket(byte[] data) {
         model = data[0];
-        firmware_version = (data[2]<<8) | data[1];
+        firmware_version = (data[2] << 8) | data[1];
         hardware_version = data[3];
-        for(int i = 0; i<16; i++)
-        {
-            serialnum[i] = data[i+4];
+        for (int i = 0; i < 16; i++) {
+            serialnum[i] = data[i + 4];
         }
     }
 

@@ -16,8 +16,6 @@ public abstract class AdaptorBearing extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float getData();
 
     public double getCalibratedData() {

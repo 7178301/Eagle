@@ -16,16 +16,24 @@ public abstract class SensorAdaptor {
     private String adaptorName = null;
     private String adaptorVersion = null;
     private String adaptorManufacturer = null;
-    private String adaptorModel = null;
+    private String adaptorHardwareModel = null;
+    protected String adaptorHardwareFirmwareVersion = null;
+    protected String adaptorHardwareVersion = null;
+    protected String adaptorHardwareSerialNumber = null;
+
     protected HashSet<eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback> sensorAdaptorCallback;
 
-    public SensorAdaptor(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
-        this.adaptorName = adaptorManufacturer + " " + adaptorModel;
+    public SensorAdaptor(String adaptorManufacturer, String adaptorHardwareModel, String adaptorVersion) {
+        this.adaptorName = adaptorManufacturer + " " + adaptorHardwareModel;
         this.adaptorManufacturer = adaptorManufacturer;
-        this.adaptorModel = adaptorModel;
+        this.adaptorHardwareModel = adaptorHardwareModel;
         this.adaptorVersion = adaptorVersion;
         sensorAdaptorCallback = new HashSet<>();
     }
+
+    public abstract boolean connectToSensor();
+
+    public abstract boolean disconnectFromSensor();
 
     public abstract boolean isConnectedToSensor();
 
@@ -43,8 +51,20 @@ public abstract class SensorAdaptor {
         return adaptorManufacturer;
     }
 
-    public String getAdaptorModel() {
-        return adaptorModel;
+    public String getAdaptorHardwareModel() {
+        return adaptorHardwareModel;
+    }
+
+    public String adaptorHardwareFirmwareVersion(){
+        return adaptorHardwareFirmwareVersion;
+    }
+
+    public String adaptorHardwareVersion(){
+        return adaptorHardwareVersion;
+    }
+
+    public String adaptorHardwareSerialNumber(){
+        return adaptorHardwareSerialNumber;
     }
 
     public boolean setSensorPins(int[] pins) {
