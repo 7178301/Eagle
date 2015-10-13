@@ -201,30 +201,30 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 commandConnection.sendMessage("CHANGEALTITUDE -D -1", rcb);
                 break;
             case "/buttonRotateLeft":
-                commandConnection.sendMessage("CHANGEYAW -D -45 5", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D -10", rcb);
                 break;
             case "/buttonRotateRight":
-                commandConnection.sendMessage("CHANGEYAW -D 45 5", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D 10", rcb);
                 break;
             case "/buttonLeft":
-                latitude = -5 * Math.sin(Math.toRadians(bearingAngle));
-                longitude = -5 * Math.cos(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0 5", rcb);
+                latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
+                longitude = -1 * Math.cos(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonRight":
-                latitude = 5 * Math.sin(Math.toRadians(bearingAngle));
-                longitude = 5 * Math.cos(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0 5", rcb);
+                latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
+                longitude = 1 * Math.cos(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonForward":
-                latitude = 5 * Math.cos(Math.toRadians(bearingAngle));
-                longitude = 5 * Math.sin(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0 5", rcb);
+                latitude = 1 * Math.cos(Math.toRadians(bearingAngle));
+                longitude = 1 * Math.sin(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonBackward":
-                latitude = -5 * Math.cos(Math.toRadians(bearingAngle));
-                longitude = -5 * Math.sin(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0 5", rcb);
+                latitude = -1 * Math.cos(Math.toRadians(bearingAngle));
+                longitude = -1 * Math.sin(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonGoHome":
                 commandConnection.sendMessage("GOHOME", rcb);
