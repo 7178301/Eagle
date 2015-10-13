@@ -43,6 +43,13 @@ public class ScriptingEngine {
             put("GETPOSITIONASSIGNED", "GETPOSITIONASSIGNED | prints out the drones current position");
             put("GETHOMEPOSITION", "GETHOMEPOSITION | prints the home position of the drone");
             put("SETHOMEPOSITION", "SETHOMEPOSITION _PositionType_ _longitude_ _latitude_ _altitude_ _Angle_ | Set the home position");
+            put("GETACCELDATA", "GETACCELDATA _id_ | Get the values of the accelerometer given by _id_");
+            put("GETGPSDATA", "GETGPSDATA _id_ | Get the values of the gps given by _id_");
+            put("GETGYRODATA", "GETGYRODATA _id_ | Get the values of the gyroscope given by _id_");
+            put("GETLIDARDATA", "GETLIDARDATA _id_ | Get the values of the LIDAR given by _id_");
+            put("GETMAGNETICDATA", "GETMAGNETICDATA _id_ | Get the values of the magnetic sensor given by _id_");
+            put("GETRPLIDARDATA", "GETRPLIDARDATA _id_ | Get the values of the RPLIDAR given by _id_");
+            put("GETULTRASONICDATA", "GETULTRASONICDATA _id_ | Get the values of the ultrasonic sensor given by _id_");
             put("DELAY", "DELAY _time_ | Delays for _time_ milliseconds");
             put("HELP", "HELP _[command]_ | Prints a list of commands");
             put("LOG", "LOG _message_ | Write a message to the log");
@@ -154,8 +161,8 @@ public class ScriptingEngine {
                             if (array.length == 6) {
                                 double latitude = Double.parseDouble(array[2]);
                                 double longitude = Double.parseDouble(array[3]);
-                                double altitude= Double.parseDouble(array[4]);
-                                double bearing= Double.parseDouble(array[5]);
+                                double altitude = Double.parseDouble(array[4]);
+                                double bearing = Double.parseDouble(array[5]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -163,7 +170,7 @@ public class ScriptingEngine {
                                         adaptor.flyTo(new SDKAdaptorCallback() {
                                             @Override
                                             public void onResult(boolean booleanResult, String stringResult) {
-                                                if(booleanResult)
+                                                if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
                                                     returnString[0] = stringResult;
@@ -176,7 +183,7 @@ public class ScriptingEngine {
                                         adaptor.flyTo(new SDKAdaptorCallback() {
                                             @Override
                                             public void onResult(boolean booleanResult, String stringResult) {
-                                                if(booleanResult)
+                                                if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
                                                     returnString[0] = stringResult;
@@ -190,7 +197,7 @@ public class ScriptingEngine {
                                         adaptor.flyTo(new SDKAdaptorCallback() {
                                             @Override
                                             public void onResult(boolean booleanResult, String stringResult) {
-                                                if(booleanResult)
+                                                if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
                                                     returnString[0] = stringResult;
@@ -203,8 +210,8 @@ public class ScriptingEngine {
                             } else if (array.length == 7) {
                                 double latitude = Double.parseDouble(array[2]);
                                 double longitude = Double.parseDouble(array[3]);
-                                double altitude= Double.parseDouble(array[4]);
-                                double bearing= Double.parseDouble(array[5]);
+                                double altitude = Double.parseDouble(array[4]);
+                                double bearing = Double.parseDouble(array[5]);
                                 double speed = Double.parseDouble(array[6]);
                                 switch (array[1]) {
                                     case "GPS":
@@ -213,7 +220,7 @@ public class ScriptingEngine {
                                         adaptor.flyTo(new SDKAdaptorCallback() {
                                             @Override
                                             public void onResult(boolean booleanResult, String stringResult) {
-                                                if(booleanResult)
+                                                if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
                                                     returnString[0] = stringResult;
@@ -226,7 +233,7 @@ public class ScriptingEngine {
                                         adaptor.flyTo(new SDKAdaptorCallback() {
                                             @Override
                                             public void onResult(boolean booleanResult, String stringResult) {
-                                                if(booleanResult)
+                                                if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
                                                     returnString[0] = stringResult;
@@ -240,7 +247,7 @@ public class ScriptingEngine {
                                         adaptor.flyTo(new SDKAdaptorCallback() {
                                             @Override
                                             public void onResult(boolean booleanResult, String stringResult) {
-                                                if(booleanResult)
+                                                if (booleanResult)
                                                     returnString[0] = "SUCCESS";
                                                 else
                                                     returnString[0] = stringResult;
@@ -252,10 +259,10 @@ public class ScriptingEngine {
                                 }
                             } else
                                 ExceptionResult[0] = "Wrong Number of Values: " + instruction;
-                                break;
+                            break;
                         case "CHANGELONGITUDE":
                             if (array.length == 3) {
-                                double value  = Double.parseDouble(array[2]);
+                                double value = Double.parseDouble(array[2]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -268,7 +275,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -281,7 +288,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -295,13 +302,13 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
                             } else if (array.length == 4) {
-                                double value  = Double.parseDouble(array[2]);
+                                double value = Double.parseDouble(array[2]);
                                 double speed = Double.parseDouble(array[3]);
                                 switch (array[1]) {
                                     case "GPS":
@@ -315,7 +322,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -328,7 +335,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -342,7 +349,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -352,7 +359,7 @@ public class ScriptingEngine {
                             break;
                         case "CHANGELATITUDE":
                             if (array.length == 3) {
-                                double value  = Double.parseDouble(array[2]);
+                                double value = Double.parseDouble(array[2]);
                                 switch (array[1]) {
                                     case "GPS":
                                     case "G":
@@ -365,7 +372,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -378,7 +385,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -392,7 +399,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -412,7 +419,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -425,7 +432,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -439,7 +446,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -462,7 +469,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -475,7 +482,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -489,7 +496,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value );
+                                        }, value);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -509,7 +516,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -522,7 +529,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -536,7 +543,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, value , speed);
+                                        }, value, speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -559,7 +566,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new Angle(value ));
+                                        }, new Angle(value));
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -572,7 +579,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new Angle(value ));
+                                        }, new Angle(value));
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -606,7 +613,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new Angle(value ), speed);
+                                        }, new Angle(value), speed);
                                         break;
                                     case "METRIC":
                                     case "M":
@@ -619,7 +626,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new Angle(value ), speed);
+                                        }, new Angle(value), speed);
                                         break;
                                     case "DISPLACEMENT":
                                     case "DISP":
@@ -633,7 +640,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new Angle(value ), speed);
+                                        }, new Angle(value), speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -646,7 +653,7 @@ public class ScriptingEngine {
                                 adaptor.goHome(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        if(booleanResult)
+                                        if (booleanResult)
                                             returnString[0] = "SUCCESS";
                                         else
                                             returnString[0] = stringResult;
@@ -656,7 +663,7 @@ public class ScriptingEngine {
                                 adaptor.goHome(new SDKAdaptorCallback() {
                                     @Override
                                     public void onResult(boolean booleanResult, String stringResult) {
-                                        if(booleanResult)
+                                        if (booleanResult)
                                             returnString[0] = "SUCCESS";
                                         else
                                             returnString[0] = stringResult;
@@ -699,8 +706,8 @@ public class ScriptingEngine {
                             if (array.length == 6) {
                                 double latitude = Double.parseDouble(array[2]);
                                 double longitude = Double.parseDouble(array[3]);
-                                double altitude= Double.parseDouble(array[4]);
-                                double bearing= Double.parseDouble(array[5]);
+                                double altitude = Double.parseDouble(array[4]);
+                                double bearing = Double.parseDouble(array[5]);
                                 try {
                                     switch (array[1]) {
                                         case "GPS":
@@ -719,9 +726,78 @@ public class ScriptingEngine {
                                 } catch (SDKAdaptor.InvalidPositionTypeException e) {
                                     ExceptionResult[0] = "Invalid Position Type:  " + instruction;
                                 }
-                            } else {
+                            } else
                                 ExceptionResult[0] = "Wrong Number of Values: " + instruction;
-                            }
+                            break;
+                        case "GETACCELDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getAccelerometers().size()) {
+                                    returnString[0] = adaptor.getAccelerometers().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                            break;
+                        case "GETGYRODATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getGyroscopes().size()) {
+                                    returnString[0] = adaptor.getGyroscopes().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                            break;
+                        case "GETGPSDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getGPSs().size()) {
+                                    returnString[0] = adaptor.getGPSs().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                            break;
+                        case "GETLIDARDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getLidars().size()) {
+                                    returnString[0] = adaptor.getLidars().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                            break;
+                        case "GETMAGNETICDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getMagnetics().size()) {
+                                    returnString[0] = adaptor.getMagnetics().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                            break;
+                        case "GETRPLIDARDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getRplidars().size()) {
+                                    returnString[0] = adaptor.getRplidars().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
+                            break;
+                        case "GETULTRASONICDATA":
+                            if (array.length == 2) {
+                                int id = Integer.parseInt(array[1]);
+                                if (id >= 0 && id < adaptor.getUltrasonics().size()) {
+                                    returnString[0] = adaptor.getUltrasonics().get(id).toString();
+                                } else
+                                    returnString[0] = "NO SENSOR WITH THAT ID";
+                            } else
+                                ExceptionResult[0] = "Wrong Number of Values: " + instruction;
                             break;
                         case "DELAY":
                             if (array.length == 2) {

@@ -58,4 +58,9 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         } else
             return false;
     }
+
+    @Override
+    public String toString() {
+        return getData().toStringLong();
+    }
 }

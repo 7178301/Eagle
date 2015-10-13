@@ -35,4 +35,13 @@ public abstract class AdaptorUltrasonic extends SensorAdaptor {
     public void setCalibrationOffset(float calibrationOffset) {
         this.calibrationOffset = calibrationOffset;
     }
+
+    @Override
+    public String toString() {
+        float data = getCalibratedData();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Distance: ");
+        sb.append(data);
+        return sb.toString();
+    }
 }
