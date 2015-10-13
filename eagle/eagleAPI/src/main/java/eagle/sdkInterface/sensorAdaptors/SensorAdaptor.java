@@ -63,6 +63,14 @@ public abstract class SensorAdaptor {
         return new String[0];
     }
 
+    public boolean setAndroidContext(Object object){
+        return false;
+    }
+
+    public boolean setController(Object object){
+        return false;
+    }
+
     public void addSensorAdaptorCallback(final eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback sensorAdaptorCallback) {
         this.sensorAdaptorCallback.add(sensorAdaptorCallback);
     }

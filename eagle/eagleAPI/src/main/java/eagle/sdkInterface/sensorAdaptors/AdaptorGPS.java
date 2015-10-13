@@ -43,10 +43,6 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         return 99999999;
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public PositionGPS getCalibrationOffset() {
         return calibrationOffset;
     }

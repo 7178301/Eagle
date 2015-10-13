@@ -24,10 +24,6 @@ public abstract class AdaptorUltrasonic extends SensorAdaptor {
         return getData() - calibrationOffset;
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public float getCalibrationOffset() {
         return calibrationOffset;
     }

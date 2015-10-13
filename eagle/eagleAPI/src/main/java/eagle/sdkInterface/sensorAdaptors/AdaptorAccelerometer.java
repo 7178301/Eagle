@@ -44,8 +44,4 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
         } else
             return false;
     }
-
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
 }

@@ -33,10 +33,6 @@ public abstract class AdaptorGyroscope extends SensorAdaptor {
         }
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public float[] getCalibrationOffset() {
         return calibrationOffset;
     }

@@ -1,5 +1,6 @@
 package eagle.sdkInterface.sensorAdaptors.RPLIDARAdaptors;
 
+import eagle.Log;
 import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
 
 import ioio.lib.api.IOIO;
@@ -42,27 +43,28 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     private static final byte[] RPLIDAR_SCAN_R_DESCRIPTOR = {RPLIDAR_ANS_SYNC_BYTE1, RPLIDAR_ANS_SYNC_BYTE2, 0x05, 0x00, 0x00, 0x40, (byte) 0x81};
     private static final byte[] RPLIDAR_FORCE_SCAN_R_DESCRIPTOR = {RPLIDAR_ANS_SYNC_BYTE1, RPLIDAR_ANS_SYNC_BYTE2, 0x05, 0x00, 0x00, 0x40, (byte) 0x81};
 
-    private Uart lidar;
-    private int rxPin;
-    private int txPin;
+    private Uart rplidar = null;
+    private int rxPin = -1;
+    private int txPin = -1;
     private int baudRate = 115200;
-    private IOIO ioio;
-    private InputStream in;
-    private OutputStream out;
-    private int motorPin;
-    private PwmOutput lidarMotor;
+    private IOIO ioio = null;
+    private InputStream inputStream = null;
+    private OutputStream outputStream = null;
+    private int motorPin = -1;
+    private PwmOutput rplidarMotor = null;
     private float[] RPLIDARData = new float[2];
 
+    @Override
     public boolean connectToSensor() {
-        if (ioio == null) {
+        if (ioio == null||rxPin==-1||txPin==-1||motorPin==-1) {
             return false;
         }
         try {
-            lidar = ioio.openUart(rxPin, txPin, baudRate, Uart.Parity.NONE, Uart.StopBits.ONE);
-            in = lidar.getInputStream();
-            out = lidar.getOutputStream();
-            lidarMotor = ioio.openPwmOutput(motorPin, 490);
-            lidarMotor.setDutyCycle(0);
+            rplidar = ioio.openUart(rxPin, txPin, baudRate, Uart.Parity.NONE, Uart.StopBits.ONE);
+            inputStream = rplidar.getInputStream();
+            outputStream = rplidar.getOutputStream();
+            rplidarMotor = ioio.openPwmOutput(motorPin, 490);
+            rplidarMotor.setDutyCycle(0);
             reset();
             return isConnectedToSensor();
         } catch (Exception e) {
@@ -70,7 +72,9 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         }
     }
 
-    public boolean setAndroidContext(Object object) {
+    //TODO LINK IOIO CONTROLLER TO THIS FUNCTION
+    @Override
+    public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
             return true;
@@ -78,122 +82,19 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             return false;
     }
 
+    @Override
     public boolean isConnectedToSensor() {
         try {
             getInfoPacket();
-
-            if (in.available() != 0) {
-                return false;
-            }
-            return true;
-
+            return inputStream.available() == 0;
         } catch (Exception e) {
             return false;
         }
     }
 
+    @Override
     public boolean isDataReady() {
-        if(isConnectedToSensor()) {
-            return true;
-        }
-        return false;
-    }
-
-    public void reset() throws InterruptedException, IOException {
-        sendRequest(RPLIDAR_CMD_RESET);
-        Thread.sleep(1000);
-        while (in.available() != 0) {
-            in.read();
-        }
-    }
-
-    public void stop() throws IOException, InterruptedException, ConnectionLostException {
-        sendRequest(RPLIDAR_CMD_STOP);
-        lidarMotor.setDutyCycle(0);
-        Thread.sleep(1);
-    }
-
-    public RPLidar_InfoPacket getInfoPacket() throws IOException, TimeoutException, InterruptedException {
-
-        byte[] data = new byte[20];
-
-        sendRequest(RPLIDAR_CMD_GET_DEVICE_INFO);
-        if (checkDescriptor(RPLIDAR_GET_DEVICE_INFO_R_DESCRIPTOR) == false) {
-            throw new IOException("Invalid Response");
-        }
-
-        if (in.read(data, 0, data.length) != data.length) {
-            throw new IOException("Invalid Response");
-        }
-        return new RPLidar_InfoPacket(data);
-    }
-
-    public RPLidar_HealthPacket getHealthPacket() throws IOException, TimeoutException, InterruptedException {
-        byte[] data = new byte[3];
-
-        sendRequest(RPLIDAR_CMD_GET_DEVICE_HEALTH);
-        if (checkDescriptor(RPLIDAR_GET_DEVICE_HEALTH_R_DESCRIPTOR) == false) {
-            throw new IOException("Invalid Response");
-        }
-
-        if (in.read(data, 0, data.length) != data.length) {
-            throw new IOException("Invalid Response");
-        }
-        return new RPLidar_HealthPacket(data);
-    }
-
-    public boolean startForceScan() throws InterruptedException, TimeoutException, IOException {
-        reset();
-        if (getHealthPacket().getError() != 0) {
-            reset();
-            return false;
-        }
-        sendRequest(RPLIDAR_CMD_FORCE_SCAN);
-        if (checkDescriptor(RPLIDAR_FORCE_SCAN_R_DESCRIPTOR) == false) {
-            reset();
-            return false;
-        }
-        return true;
-    }
-
-    public boolean startScan() throws InterruptedException, TimeoutException, IOException, ConnectionLostException {
-        reset();
-        lidarMotor.setDutyCycle(1);
-        if (getHealthPacket().getError() != 0) {
-            reset();
-            return false;
-        }
-        sendRequest(RPLIDAR_CMD_SCAN);
-        if (checkDescriptor(RPLIDAR_SCAN_R_DESCRIPTOR) == false) {
-            reset();
-            return false;
-        }
-        return true;
-    }
-
-    public RPLidar_DataPacket getDataPacket() throws IOException {
-        byte[] data = new byte[5];
-
-        // wait for 5 bytes of data
-        int available = in.available();
-        while(available <5)
-        {
-            available = in.available();
-        }
-        System.out.println(in.available());
-
-        // clear the buffer of all but 1 packet (and possible part packet)
-        for(int i=0;i<(((available/5)-1)*5);i++)
-        {
-            in.read();
-        }
-
-        // read the valid packet
-        for (int i = 0; i < data.length; i++) {
-            data[i] = (byte) in.read();
-        }
-
-        return new RPLidar_DataPacket(data);
+        return isConnectedToSensor();
     }
 
     @Override
@@ -231,13 +132,56 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             return false;
     }
 
+    public void reset() throws InterruptedException, IOException {
+        sendRequest(RPLIDAR_CMD_RESET);
+        Thread.sleep(1000);
+        while (inputStream.available() != 0) {
+            inputStream.read();
+        }
+    }
+
+    public void stop() throws IOException, InterruptedException, ConnectionLostException {
+        sendRequest(RPLIDAR_CMD_STOP);
+        rplidarMotor.setDutyCycle(0);
+        Thread.sleep(1);
+    }
+
+    public boolean startForceScan() throws InterruptedException, TimeoutException, IOException {
+        reset();
+        if (getHealthPacket().getError() != 0) {
+            reset();
+            return false;
+        }
+        sendRequest(RPLIDAR_CMD_FORCE_SCAN);
+        if (!checkDescriptor(RPLIDAR_FORCE_SCAN_R_DESCRIPTOR)) {
+            reset();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean startScan() throws InterruptedException, TimeoutException, IOException, ConnectionLostException {
+        reset();
+        rplidarMotor.setDutyCycle(1);
+        if (getHealthPacket().getError() != 0) {
+            reset();
+            return false;
+        }
+        sendRequest(RPLIDAR_CMD_SCAN);
+        if (!checkDescriptor(RPLIDAR_SCAN_R_DESCRIPTOR)) {
+            reset();
+            return false;
+        }
+        return true;
+    }
+
     private byte[] getResponseDescriptor() throws IOException, TimeoutException, InterruptedException {
         byte[] read = new byte[7];
         int readCount = 0;
         int timeoutCount = 0;
         while (true) {
-            if (in.available() != 0) {
-                read[readCount] = (byte) (in.read());
+            if (inputStream.available() != 0) {
+                read[readCount] = (byte) (inputStream.read());
                 readCount++;
                 if (readCount == 7) {
                     break;
@@ -254,8 +198,8 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     }
 
     private void sendRequest(int request) throws IOException {
-        out.write(RPLIDAR_CMD_SYNC_BYTE);
-        out.write(request);
+        outputStream.write(RPLIDAR_CMD_SYNC_BYTE);
+        outputStream.write(request);
     }
 
     private boolean checkDescriptor(byte[] validDescriptor) {
@@ -272,5 +216,133 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             }
         }
         return true;
+    }
+
+    public RPLidar_InfoPacket getInfoPacket() throws IOException, TimeoutException, InterruptedException {
+
+        byte[] data = new byte[20];
+
+        sendRequest(RPLIDAR_CMD_GET_DEVICE_INFO);
+        if (!checkDescriptor(RPLIDAR_GET_DEVICE_INFO_R_DESCRIPTOR))
+            throw new IOException("Invalid Response");
+
+        if (inputStream.read(data, 0, data.length) != data.length)
+            throw new IOException("Invalid Response");
+
+        return new RPLidar_InfoPacket(data);
+    }
+
+    public RPLidar_HealthPacket getHealthPacket() throws IOException, TimeoutException, InterruptedException {
+        byte[] data = new byte[3];
+
+        sendRequest(RPLIDAR_CMD_GET_DEVICE_HEALTH);
+        if (!checkDescriptor(RPLIDAR_GET_DEVICE_HEALTH_R_DESCRIPTOR))
+            throw new IOException("Invalid Response");
+
+        if (inputStream.read(data, 0, data.length) != data.length)
+            throw new IOException("Invalid Response");
+
+        return new RPLidar_HealthPacket(data);
+    }
+
+    public RPLidar_DataPacket getDataPacket() throws IOException {
+        byte[] data = new byte[5];
+
+        // wait for 5 bytes of data
+        int available = inputStream.available();
+        while(available <5){
+            available = inputStream.available();
+        }
+        Log.log("RoboPeakRPLIDARA1M1R1", "5 bytes Of Data Available");
+
+        // clear the buffer of all but 1 packet (and possible part packet)
+        for(int i=0;i<(((available/5)-1)*5);i++){
+            inputStream.read();
+        }
+
+        // read the valid packet
+        for (int i = 0; i < data.length; i++) {
+            data[i] = (byte) inputStream.read();
+        }
+
+        return new RPLidar_DataPacket(data);
+    }
+}
+
+class RPLidar_DataPacket {
+    private int sync_quality;
+    private int angle;
+    private int distance;
+
+    RPLidar_DataPacket(byte[] data)
+    {
+        sync_quality = data[0];
+        angle = (((int)data[2]&0xFF)<<8) | ((int)data[1]&0xFF);
+        distance = (((int)data[4]&0xFF)<<8) | ((int)data[3]&0xFF);
+    }
+
+    public int getSync_quality() {
+        return sync_quality;
+    }
+
+    public float getAngle() {
+        return ((angle>>1)/64.0f);
+    }
+
+    public float getDistance() {
+        return ((float)distance/4.0f)/1000.0f;
+    }
+}
+
+class RPLidar_HealthPacket {
+    private int status;
+    private int error;
+
+    RPLidar_HealthPacket(byte[] data)
+    {
+        status = data[0];
+        error = (data[2]<<8) | data[1];
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public int getError() {
+        return error;
+    }
+}
+
+class RPLidar_InfoPacket {
+    private int model;
+    private int firmware_version;
+    private int hardware_version;
+    private int[] serialnum = new int[16];
+
+    RPLidar_InfoPacket(byte[] data)
+    {
+        model = data[0];
+        firmware_version = (data[2]<<8) | data[1];
+        hardware_version = data[3];
+        for(int i = 0; i<16; i++)
+        {
+            serialnum[i] = data[i+4];
+        }
+    }
+
+    public int getModel() {
+        return model;
+    }
+
+    public int getFirmware_version() {
+        return firmware_version;
+    }
+
+    public int getHardware_version() {
+        return hardware_version;
+    }
+
+    public int[] getSerialnum() {
+        return serialnum;
     }
 }

@@ -36,8 +36,4 @@ public abstract class AdaptorBearing extends SensorAdaptor {
         this.calibrationOffset = calibrationOffset;
         return true;
     }
-
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
 }

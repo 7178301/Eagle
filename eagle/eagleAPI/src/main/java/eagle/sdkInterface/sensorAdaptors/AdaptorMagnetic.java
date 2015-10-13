@@ -33,10 +33,6 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
         }
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public float[] getCalibrationOffset() {
         return calibrationOffset;
     }
