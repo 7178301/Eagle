@@ -1,9 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
-import eagle.navigation.positioning.PositionGPS;
-
 /**
- * Sensor Adaptor GPS Event Callback Class
+ * Sensor Adaptor Bearing Event Callback Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
@@ -11,6 +9,6 @@ import eagle.navigation.positioning.PositionGPS;
  * <p/>
  * Date Modified	30/09/2015 - Nicholas
  */
-public interface AdaptorGPSEventCallback {
-    void onSensorEvent(PositionGPS positionGPS);
+public interface SensorAdaptorBearingEventCallback {
+    void onSensorEvent(double getCalibratedData);
 }

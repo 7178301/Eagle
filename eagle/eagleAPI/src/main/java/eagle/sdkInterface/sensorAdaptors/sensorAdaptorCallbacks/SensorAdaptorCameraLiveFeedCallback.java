@@ -1,7 +1,7 @@
 package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
 
 /**
- * Sensor Adaptor LIDAR Event Callback Class
+ *  Sensor Adaptor Camera Event Callback Class
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
@@ -9,6 +9,6 @@ package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
  * <p/>
  * Date Modified	30/09/2015 - Nicholas
  */
-public interface AdaptorLIDAREventCallback {
-    void onSensorEvent(float getCalibratedData);
+public interface SensorAdaptorCameraLiveFeedCallback {
+    void onSensorEvent(byte[] getData, int getSize);
 }

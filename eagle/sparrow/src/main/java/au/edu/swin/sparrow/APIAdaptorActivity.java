@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import au.edu.swin.sparrow.Fragment.AccelerometerFragment;
 import au.edu.swin.sparrow.Fragment.BearingFragment;
+import au.edu.swin.sparrow.Fragment.CameraFragment;
 import au.edu.swin.sparrow.Fragment.GPSFragment;
 import au.edu.swin.sparrow.Fragment.GyroscopeFragment;
 import au.edu.swin.sparrow.Fragment.LIDARFragment;
@@ -38,6 +39,7 @@ import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
+import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
@@ -115,7 +117,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         updateUISensors();
     }
 
-
     private void initializeUI() {
         TextView adaptorNameTextView = (TextView) findViewById(R.id.adaptorNameTextView);
         adaptorNameTextView.setText(drone.getSDKAdaptor().getAdaptorName());
@@ -149,6 +150,14 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             accelerometer.setAndroidContext(this);
             accelerometer.connectToSensor();
             fragment.setAccelerometerAdaptor(accelerometer);
+            sensorFragments.add(fragment);
+            fragTransaction.add(R.id.scrollViewSensors, fragment);
+        }
+        ArrayList<AdaptorCamera> adaptorCameras = drone.getSDKAdaptor().getCameras();
+        for (AdaptorCamera camera : adaptorCameras) {
+            CameraFragment fragment = CameraFragment.newInstance();
+            camera.connectToSensor();
+            fragment.setCameraAdaptor(camera);
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }

@@ -1,5 +1,9 @@
 package eagle.sdkInterface.sensorAdaptors;
 
+import java.util.HashSet;
+
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCameraLiveFeedCallback;
+
 /**
  * Camera Adaptor Interface
  *
@@ -11,6 +15,8 @@ package eagle.sdkInterface.sensorAdaptors;
  * Date Modified	26/05/2015 - Nicholas
  */
 public abstract class AdaptorCamera extends SensorAdaptor {
+
+    protected HashSet<SensorAdaptorCameraLiveFeedCallback> sensorAdaptorCameraLiveFeedCallbacks;
 
     public AdaptorCamera(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
@@ -25,4 +31,9 @@ public abstract class AdaptorCamera extends SensorAdaptor {
     // Store the photo and send back location of storage
     // OR send back image data
 
+    public void addSensorAdaptorCameraLiveFeedallback(final SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback) {
+        if (sensorAdaptorCameraLiveFeedCallbacks==null)
+            sensorAdaptorCameraLiveFeedCallbacks = new HashSet<>();
+        this.sensorAdaptorCameraLiveFeedCallbacks.add(sensorAdaptorCameraLiveFeedCallback);
+    }
 }
