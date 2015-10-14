@@ -23,7 +23,7 @@ public class Simulator extends SDKAdaptor {
     private boolean connected = false;
 
     public Simulator() {
-        super("Simulator", "Siumulator", "alpha", "0.0.1", 1, 30);
+        super("Simulator", "Siumulator", "alpha", "0.0.1", 1, 2, 2, 30);
         try {
             setPositionAssigned(new PositionMetric(0, 0, 0, new Angle(0), new Angle(0), new Angle(0)));
             setHomePosition(getPositionAssigned());
@@ -34,7 +34,7 @@ public class Simulator extends SDKAdaptor {
 
 
     public Simulator(int speed, int rotateSpeed) {
-        super("Simulator", "Siumulator", "alpha", "0.0.1", speed, rotateSpeed);
+        super("Simulator", "Siumulator", "alpha", "0.0.1", speed, 2, 2, rotateSpeed);
     }
 
     @Override

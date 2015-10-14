@@ -53,11 +53,13 @@ public abstract class SDKAdaptor {
 
     private double maxSpeed = 0;
     private double maxRotationSpeed = 0;
+    private double maxAsscend = 0;
+    private double maxDecend = 0;
 
     //TODO create way to set current assigned position
     private Position currentPositionAssigned = null;
 
-    public SDKAdaptor(String adaptorManufacturer, String adaptorModel, String sdkVersion, String adaptorVersion, double maxSpeed, double maxRotateSpeed) {
+    public SDKAdaptor(String adaptorManufacturer, String adaptorModel, String sdkVersion, String adaptorVersion, double maxSpeed, double maxRotateSpeed, double maxAsscend, double maxDecend) {
         this.adaptorName = adaptorManufacturer + " " + adaptorModel;
         this.adaptorManufacturer = adaptorManufacturer;
         this.adaptorModel = adaptorModel;
@@ -65,6 +67,8 @@ public abstract class SDKAdaptor {
         this.adaptorVersion = adaptorVersion;
         this.maxSpeed = maxSpeed;
         this.maxRotationSpeed = maxRotateSpeed;
+        this.maxAsscend = maxAsscend;
+        this.maxDecend = maxDecend;
         sdkAdaptorStack = new SDKAdaptorTaskStack(this);
     }
 
@@ -107,6 +111,14 @@ public abstract class SDKAdaptor {
     }
 
     public double getMaxRotationSpeed() {
+        return maxRotationSpeed;
+    }
+
+    public double getMaxAsscend() {
+        return maxSpeed;
+    }
+
+    public double getMaxDecend() {
         return maxRotationSpeed;
     }
 

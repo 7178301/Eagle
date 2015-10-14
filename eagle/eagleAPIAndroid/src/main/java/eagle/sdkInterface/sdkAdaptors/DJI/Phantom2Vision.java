@@ -48,7 +48,7 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
     //TODO Create method implementations
 
     public Phantom2Vision() {
-        super("DJI", "Phantom 2 Vision", "2.4.0", "0.0.1", 0, 0);
+        super("DJI", "Phantom 2 Vision", "2.4.0", "0.0.1", 15, 6, 2, 0);
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
@@ -187,7 +187,7 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
     }
 
     public boolean isConnectedToDrone() {
-        return false;
+        return DJIDrone.getDjiGroundStation()!=null;
     }
 
     public boolean standbyDrone() {
@@ -328,7 +328,7 @@ public class Phantom2Vision extends SDKAdaptor implements DJIGroundStationFlying
             djiGroundStationWaypoint.altitude = Double.valueOf(positionGPS.getAltitude()).floatValue();
             djiGroundStationWaypoint.heading = Double.valueOf(Math.toRadians(positionGPS.getYaw().getDegrees180())).floatValue();
 
-            djiGroundStationWaypoint.speed = 50;
+            djiGroundStationWaypoint.speed = Double.valueOf(getMaxSpeed()).floatValue() * 10;
             djiGroundStationWaypoint.stayTime = 1;
 
             djiGroundStationTask.addWaypoint(djiGroundStationWaypoint);

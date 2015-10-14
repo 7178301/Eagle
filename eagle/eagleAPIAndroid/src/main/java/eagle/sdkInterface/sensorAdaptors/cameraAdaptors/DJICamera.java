@@ -53,12 +53,12 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public boolean isConnectedToSensor() {
-        return DJIDrone.getDjiCamera().getCameraConnectIsOk();
+        return DJIDrone.getDjiCamera()!=null&&DJIDrone.getDjiCamera().getCameraConnectIsOk();
     }
 
     @Override
     public boolean isDataReady() {
-        return djiCameraSystemState == null;
+        return djiCameraSystemState != null;
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
@@ -53,18 +54,20 @@ public class CameraFragment extends SensorFragment {
 
         if (camera instanceof DJICamera) {
             djiGLSurfaceView = (DjiGLSurfaceView) this.view.findViewById(R.id.djiSurfaceView);
+            djiGLSurfaceView.setLayoutParams(new LinearLayout.LayoutParams(djiGLSurfaceView.getMeasuredWidth(), djiGLSurfaceView.getMeasuredWidth()));
             djiGLSurfaceView.setVisibility(View.VISIBLE);
             Button upButton = (Button) view.findViewById(R.id.buttonCameraUp);
             upButton.setVisibility(View.VISIBLE);
             upButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    camera.updateCameraAttitude(new SDKAdaptorCallback() {
-                        @Override
-                        public void onResult(boolean booleanResult, String stringResult) {
+                    if (camera.isConnectedToSensor())
+                        camera.updateCameraAttitude(new SDKAdaptorCallback() {
+                            @Override
+                            public void onResult(boolean booleanResult, String stringResult) {
 
-                        }
-                    }, 0, camera.getCameraAttitude()[1] - 100, 0);
+                            }
+                        }, 0, camera.getCameraAttitude()[1] - 100, 0);
                 }
             });
             Button downButton = (Button) view.findViewById(R.id.buttonCameraDown);
@@ -72,12 +75,13 @@ public class CameraFragment extends SensorFragment {
             downButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    camera.updateCameraAttitude(new SDKAdaptorCallback() {
-                        @Override
-                        public void onResult(boolean booleanResult, String stringResult) {
+                    if (camera.isConnectedToSensor())
+                        camera.updateCameraAttitude(new SDKAdaptorCallback() {
+                            @Override
+                            public void onResult(boolean booleanResult, String stringResult) {
 
-                        }
-                    }, 0, camera.getCameraAttitude()[1] + 100, 0);
+                            }
+                        }, 0, camera.getCameraAttitude()[1] + 100, 0);
                 }
             });
         }
@@ -106,11 +110,12 @@ public class CameraFragment extends SensorFragment {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                camera.takePicture(new SDKAdaptorCallback() {
-                    @Override
-                    public void onResult(boolean booleanResult, String stringResult) {
-                    }
-                });
+                if (camera.isConnectedToSensor())
+                    camera.takePicture(new SDKAdaptorCallback() {
+                        @Override
+                        public void onResult(boolean booleanResult, String stringResult) {
+                        }
+                    });
             }
         });
 
