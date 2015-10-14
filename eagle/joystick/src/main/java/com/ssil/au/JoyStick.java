@@ -1,121 +1,176 @@
 package com.ssil.au;
 
-import net.java.games.input.Component;
-import net.java.games.input.Component.Identifier;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
+import org.lwjgl.Sys;
+import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
-import org.lwjgl.LWJGLException;
-
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.nio.FloatBuffer;
 
 import eagle.network.protocolBuffer.ProtocolBufferClient;
 
+import static org.lwjgl.glfw.GLFW.GLFW_JOYSTICK_1;
+import static org.lwjgl.glfw.GLFW.GLFW_JOYSTICK_16;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetJoystickAxes;
+import static org.lwjgl.glfw.GLFW.glfwGetJoystickName;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwJoystickPresent;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glClearColor;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
+;
+
 public class JoyStick {
     private ProtocolBufferClient pcb;
+    // We need to strongly reference callback instances.
+    private GLFWErrorCallback errorCallback;
+    private GLFWKeyCallback keyCallback;
 
-    static void main(String[] args) throws LWJGLException {
+    // The window handle
+    private long window;
 
-        new JoyStick();
+    public static void main(String[] args) {
+        new JoyStick().run();
     }
-
-    private ArrayList<Controller> foundControllers;
 
     public JoyStick() {
-        System.out.println("What is the address:");
-        Scanner scan = new Scanner(System.in);
-        String address = scan.nextLine();
+//        System.out.println("What is the address:");
+//        Scanner scan = new Scanner(System.in);
+//        String address = scan.nextLine();
 
-        pcb = new ProtocolBufferClient(address);
+        pcb = new ProtocolBufferClient("192.168.1.122");
         pcb.connectToServer();
 
-        foundControllers = new ArrayList<>();
-        searchForControllers();
 
-        // If at least one controller was found we start showing controller data on window.
-        if (!foundControllers.isEmpty())
-            startShowingControllerData();
-        else
-            System.out.println("No controller found!");
     }
 
-    /**
-     * Search (and save) for controllers of type Controller.Type.STICK,
-     * Controller.Type.GAMEPAD, Controller.Type.WHEEL and Controller.Type.FINGERSTICK.
-     */
-    private void searchForControllers() {
-        Controller[] controllers = ControllerEnvironment.getDefaultEnvironment().getControllers();
 
-        for (int i = 0; i < controllers.length; i++) {
-            Controller controller = controllers[i];
+    public void run() {
+        System.out.println("Hello LWJGL " + Sys.getVersion() + "!");
 
-            if (
-                    controller.getType() == Controller.Type.STICK ||
-                            controller.getType() == Controller.Type.GAMEPAD ||
-                            controller.getType() == Controller.Type.WHEEL ||
-                            controller.getType() == Controller.Type.FINGERSTICK
-                    ) {
-                // Add new controller to the list of all controllers.
-                foundControllers.add(controller);
+        try {
+            init();
+            loop();
 
-                // Add new controller to the list on the window.
-                System.out.println(controller.getName() + " - " + controller.getType().toString() + " type");
-            }
+            // Release window and window callbacks
+            glfwDestroyWindow(window);
+            keyCallback.release();
+        } finally {
+            // Terminate GLFW and release the GLFWErrorCallback
+            glfwTerminate();
+            errorCallback.release();
         }
     }
 
-    /**
-     * Starts showing controller data on the window.
-     */
-    private void startShowingControllerData() {
-        while (true) {
-            Controller controller = foundControllers.get(0);
 
-            // Pull controller for current data, and break while loop if controller is disconnected.
-            if (!controller.poll()) {
-                System.out.println("Controller Disconnected");
-                break;
+    private void init() {
+        // Setup an error callback. The default implementation
+        // will print the error message in System.err.
+        glfwSetErrorCallback(errorCallback = new GLFWErrorCallback() {
+            @Override
+            public void invoke(int i, long l) {
+                System.err.println(Callbacks.errorCallbackDescriptionString(l));
             }
+        });
 
-            // X axis and Y axis
-            int xAxisPercentage = 0;
-            int yAxisPercentage = 0;
+        // Initialize GLFW. Most GLFW functions will not work before doing this.
+        if (glfwInit() != GL11.GL_TRUE)
+            throw new IllegalStateException("Unable to initialize GLFW");
 
-            // Go trough all components of the controller.
-            Component[] components = controller.getComponents();
-            for (int i = 0; i < components.length; i++) {
-                Component component = components[i];
-                Identifier componentIdentifier = component.getIdentifier();
+        // Configure our window
+        glfwDefaultWindowHints(); // optional, the current window hints are already the default
+        glfwWindowHint(GLFW_VISIBLE, GL_FALSE); // the window will stay hidden after creation
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE); // the window will be resizable
 
-                // Axes
-                if (component.isAnalog()) {
-                    float axisValue = component.getPollData();
+        int WIDTH = 300;
+        int HEIGHT = 300;
 
-                    // X axis
-                    if (componentIdentifier == Component.Identifier.Axis.X) {
-                        pcb.sendMessage("SETROLL "+axisValue);
-                        continue; // Go to next component.
-                    }
-                    // Y axis
-                    if (componentIdentifier == Component.Identifier.Axis.Y) {
-                        pcb.sendMessage("SETPITCH "+axisValue);
-                        continue; // Go to next component.
-                    }
+        // Create the window
+        window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+        if (window == NULL)
+            throw new RuntimeException("Failed to create the GLFW window");
 
-                    //Z Axis
-                    if (componentIdentifier == Component.Identifier.Axis.Y) {
-                        pcb.sendMessage("SETTHROTTLE "+axisValue);
-                        continue; // Go to next component.
-                    }
+        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+                    glfwSetWindowShouldClose(window, GL_TRUE); // We will detect this in our rendering loop
+            }
+        });
+
+        // Make the OpenGL context current
+        glfwMakeContextCurrent(window);
+        // Enable v-sync
+        glfwSwapInterval(1);
+    }
+
+    private void loop() {
+        // This line is critical for LWJGL's interoperation with GLFW's
+        // OpenGL context, or any context that is managed externally.
+        // LWJGL detects the context that is current in the current thread,
+        // creates the GLCapabilities instance and makes the OpenGL
+        // bindings available for use.
+        GL.createCapabilities();
+
+        // Set the clear color
+        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+
+        // Run the rendering loop until the user has attempted to close
+        // the window or has pressed the ESCAPE key.
+        while (glfwWindowShouldClose(window) == GL_FALSE) {
+
+            glfwSwapBuffers(window); // swap the color buffers
+
+            // Poll for window events. The key callback above will only be
+            // invoked during this call.
+            glfwPollEvents();
+
+            int id = -1;
+
+
+            for (int i = GLFW_JOYSTICK_1; i <= GLFW_JOYSTICK_16; i++) {
+                if (glfwJoystickPresent(i) == 1) {
+                    id = i;
+                    break;
                 }
             }
 
-            // We have to give processor some rest.
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+            System.out.println(glfwGetJoystickName(id));
+
+            while (true) {
+                FloatBuffer fb = glfwGetJoystickAxes(id);
+                System.out.println(fb.get(3));
+                //pcb.sendMessage("SETROLL "+fb.get(0));
+                //pcb.sendMessage("SETPITCH "+-fb.get(1));
+                //pcb.sendMessage("SETTHROTTLE"+-fb.get(3));
+
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    break;
+                }
             }
         }
     }
