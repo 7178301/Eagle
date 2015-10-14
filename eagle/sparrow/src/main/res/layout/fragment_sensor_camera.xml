@@ -24,13 +24,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/connect"
-            android:id="@+id/buttonCameraConnect" />
+            android:id="@+id/buttonCameraConnect"
+            android:layout_column="1"/>
+
+    </TableRow>
+
+    <TableRow
+        style="?android:attr/buttonBarStyle">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/capture"
+            android:id="@+id/buttonCapture"
+            android:layout_column="0" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/up"
+            android:id="@+id/buttonCameraUp"
+            android:visibility="invisible"
+            android:layout_column="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/down"
+            android:id="@+id/buttonCameraDown"
+            android:visibility="invisible"
+            android:layout_column="2" />
+
     </TableRow>
 
     <dji.sdk.widget.DjiGLSurfaceView
         android:id="@+id/djiSurfaceView"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:visibility="invisible"/>
+        android:visibility="invisible">
+
+    </dji.sdk.widget.DjiGLSurfaceView>
 
 </TableLayout>

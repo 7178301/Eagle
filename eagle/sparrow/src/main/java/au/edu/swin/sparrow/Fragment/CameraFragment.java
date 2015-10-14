@@ -10,6 +10,7 @@ import android.widget.TextView;
 import au.edu.swin.sparrow.R;
 import dji.sdk.widget.DjiGLSurfaceView;
 import eagle.Log;
+import eagle.sdkInterface.SDKAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
 import eagle.sdkInterface.sensorAdaptors.cameraAdaptors.DJICamera;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCameraLiveFeedCallback;
@@ -50,16 +51,43 @@ public class CameraFragment extends SensorFragment {
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         sensorOutputTitleTextView.setText(getResources().getString(R.string.camera));
 
-        if(camera instanceof DJICamera) {
+        if (camera instanceof DJICamera) {
             djiGLSurfaceView = (DjiGLSurfaceView) this.view.findViewById(R.id.djiSurfaceView);
             djiGLSurfaceView.setVisibility(View.VISIBLE);
+            Button upButton = (Button) view.findViewById(R.id.buttonCameraUp);
+            upButton.setVisibility(View.VISIBLE);
+            upButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    camera.updateCameraAttitude(new SDKAdaptorCallback() {
+                        @Override
+                        public void onResult(boolean booleanResult, String stringResult) {
+
+                        }
+                    }, 0, camera.getCameraAttitude()[1] - 100, 0);
+                }
+            });
+            Button downButton = (Button) view.findViewById(R.id.buttonCameraDown);
+            downButton.setVisibility(View.VISIBLE);
+            downButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    camera.updateCameraAttitude(new SDKAdaptorCallback() {
+                        @Override
+                        public void onResult(boolean booleanResult, String stringResult) {
+
+                        }
+                    }, 0, camera.getCameraAttitude()[1] + 100, 0);
+                }
+            });
         }
 
         Button connectCameraButton = (Button) view.findViewById(R.id.buttonCameraConnect);
         connectCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 if (camera instanceof DJICamera) {
-                    if(camera.connectToSensor()) {
+                    if (camera.connectToSensor()) {
                         djiGLSurfaceView.start();
                         camera.addSensorAdaptorCameraLiveFeedallback(new SensorAdaptorCameraLiveFeedCallback() {
                             @Override
@@ -68,11 +96,24 @@ public class CameraFragment extends SensorFragment {
                             }
                         });
                         Log.log("APIAdaptorActivity", "Connect To Camera SUCCESS");
-                    }else
+                    } else
                         Log.log("CameraFragment", "Connect To Camera FAIL");
                 }
             }
         });
+
+        Button captureButton = (Button) view.findViewById(R.id.buttonCapture);
+        captureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                camera.takePicture(new SDKAdaptorCallback() {
+                    @Override
+                    public void onResult(boolean booleanResult, String stringResult) {
+                    }
+                });
+            }
+        });
+
 
         return view;
     }
