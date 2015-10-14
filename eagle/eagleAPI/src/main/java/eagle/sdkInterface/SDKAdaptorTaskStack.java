@@ -60,7 +60,7 @@ public class SDKAdaptorTaskStack {
     }
 
     public void push(Position position) {
-        sdkAdaptorTasks.push(new SDKAdaptorTask().Position(position).Speed(sdkAdaptor.getMaxSpeed()));
+        sdkAdaptorTasks.push(new SDKAdaptorTask().Position(position).Speed(sdkAdaptor.getMaxFlightSpeed()));
     }
 
     public void push(Position position, double metersPerSecond) {

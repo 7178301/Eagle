@@ -51,24 +51,24 @@ public abstract class SDKAdaptor {
 
     final public SDKAdaptorTaskStack sdkAdaptorStack;
 
-    private double maxSpeed = 0;
-    private double maxRotationSpeed = 0;
-    private double maxAsscend = 0;
-    private double maxDecend = 0;
+    private double maxFlightSpeed = 0;
+    private double maxYawAngularVelocity = 0;
+    private double maxAscentSpeed = 0;
+    private double maxDecentSpeed = 0;
 
     //TODO create way to set current assigned position
     private Position currentPositionAssigned = null;
 
-    public SDKAdaptor(String adaptorManufacturer, String adaptorModel, String sdkVersion, String adaptorVersion, double maxSpeed, double maxRotateSpeed, double maxAsscend, double maxDecend) {
+    public SDKAdaptor(String adaptorManufacturer, String adaptorModel, String sdkVersion, String adaptorVersion, double maxFlightSpeed, double maxRotateSpeed, double maxAscentSpeed, double maxDecentSpeed) {
         this.adaptorName = adaptorManufacturer + " " + adaptorModel;
         this.adaptorManufacturer = adaptorManufacturer;
         this.adaptorModel = adaptorModel;
         this.sdkVersion = sdkVersion;
         this.adaptorVersion = adaptorVersion;
-        this.maxSpeed = maxSpeed;
-        this.maxRotationSpeed = maxRotateSpeed;
-        this.maxAsscend = maxAsscend;
-        this.maxDecend = maxDecend;
+        this.maxFlightSpeed = maxFlightSpeed;
+        this.maxYawAngularVelocity = maxRotateSpeed;
+        this.maxAscentSpeed = maxAscentSpeed;
+        this.maxDecentSpeed = maxDecentSpeed;
         sdkAdaptorStack = new SDKAdaptorTaskStack(this);
     }
 
@@ -106,20 +106,20 @@ public abstract class SDKAdaptor {
         return adaptorModel;
     }
 
-    public double getMaxSpeed() {
-        return maxSpeed;
+    public double getMaxFlightSpeed() {
+        return maxFlightSpeed;
     }
 
-    public double getMaxRotationSpeed() {
-        return maxRotationSpeed;
+    public double getMaxYawAngularVelocity() {
+        return maxYawAngularVelocity;
     }
 
-    public double getMaxAsscend() {
-        return maxSpeed;
+    public double getMaxAscentSpeed() {
+        return maxAscentSpeed;
     }
 
-    public double getMaxDecend() {
-        return maxRotationSpeed;
+    public double getMaxDecentSpeed() {
+        return maxDecentSpeed;
     }
 
     public abstract void flyTo(final SDKAdaptorCallback sdkAdaptorCallback, PositionMetric positionMetric, double speed);

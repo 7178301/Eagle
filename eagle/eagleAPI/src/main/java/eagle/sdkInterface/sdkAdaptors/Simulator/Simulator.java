@@ -101,7 +101,7 @@ public class Simulator extends SDKAdaptor {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else
-            flyTo(sdkAdaptorCallback, position, getMaxSpeed());
+            flyTo(sdkAdaptorCallback, position, getMaxFlightSpeed());
     }
 
     @Override
@@ -129,7 +129,7 @@ public class Simulator extends SDKAdaptor {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else
-            flyTo(sdkAdaptorCallback, position, getMaxSpeed());
+            flyTo(sdkAdaptorCallback, position, getMaxFlightSpeed());
     }
 
     @Override
@@ -157,7 +157,7 @@ public class Simulator extends SDKAdaptor {
         if (sdkAdaptorCallback == null || position == null)
             throw new IllegalArgumentException("Arguments must not be null");
         else
-            flyTo(sdkAdaptorCallback, position, getMaxSpeed());
+            flyTo(sdkAdaptorCallback, position, getMaxFlightSpeed());
     }
 
     @Override
