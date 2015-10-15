@@ -177,7 +177,7 @@ public class IOIOController {
 
 //            //todo:
 //            int altitudeForce = 200;
-
+            System.out.println(pitchAngleTarget+"\t"+rollAngleTarget+"\t"+altitudeForce);
 
             tempPowerFCW += altitudeForce; // Vertical "force".
             tempPowerFCCW += altitudeForce; //
@@ -189,10 +189,10 @@ public class IOIOController {
             tempPowerRCW -= pitchForce; //
             tempPowerRCCW -= pitchForce; //
 
-//            tempPowerFCW += rollForce; // Roll "force".
-//            tempPowerFCCW -= rollForce; //
-//            tempPowerRCW -= rollForce; //
-//            tempPowerRCCW += rollForce; //
+            tempPowerFCW += rollForce; // Roll "force".
+            tempPowerFCCW -= rollForce; //
+            tempPowerRCW -= rollForce; //
+            tempPowerRCCW += rollForce; //
 
 //            tempPowerFCW += yawForce; // Yaw "force".
 //            tempPowerFCCW -= yawForce; //

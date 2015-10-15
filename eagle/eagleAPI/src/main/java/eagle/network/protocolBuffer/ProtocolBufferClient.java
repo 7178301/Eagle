@@ -15,7 +15,7 @@ import eagle.logging.Log;
  */
 public class ProtocolBufferClient {
     private Socket socket = null;
-    private Object outputMutex;
+    private Object outputMutex = new Object();
     private OutputStream outputStream = null;
     private InputStream inputStream = null;
     private String serverAddress;

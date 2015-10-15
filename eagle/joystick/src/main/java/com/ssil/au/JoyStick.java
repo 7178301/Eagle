@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.FloatBuffer;
+import java.util.Scanner;
 
 import eagle.network.protocolBuffer.ProtocolBufferClient;
 
@@ -55,18 +56,23 @@ public class JoyStick {
     }
 
     public JoyStick() {
-//        System.out.println("What is the address:");
-//        Scanner scan = new Scanner(System.in);
-//        String address = scan.nextLine();
+        System.out.println("What is the address:");
+        Scanner scan = new Scanner(System.in);
+        String address = scan.nextLine();
 
-        pcb = new ProtocolBufferClient("192.168.1.122");
+        pcb = new ProtocolBufferClient(address);
         pcb.connectToServer();
+
 
 
     }
 
 
     public void run() {
+        if (!pcb.isConnected()) {
+            System.out.println("Not connected");
+            return;
+        }
         System.out.println("Hello LWJGL " + Sys.getVersion() + "!");
 
         try {
@@ -161,10 +167,10 @@ public class JoyStick {
 
             while (true) {
                 FloatBuffer fb = glfwGetJoystickAxes(id);
-                System.out.println(fb.get(3));
-                //pcb.sendMessage("SETROLL "+fb.get(0));
-                //pcb.sendMessage("SETPITCH "+-fb.get(1));
-                //pcb.sendMessage("SETTHROTTLE"+-fb.get(3));
+//                System.out.println(fb.get(3));
+                pcb.sendMessage("SETROLL "+fb.get(0));
+                pcb.sendMessage("SETPITCH "+fb.get(1));
+                pcb.sendMessage("SETTHROTTLE "+-fb.get(3));
 
                 try {
                     Thread.sleep(20);
