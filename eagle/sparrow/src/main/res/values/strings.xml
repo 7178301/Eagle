@@ -27,7 +27,7 @@
     <string name="rplidar">RPLIDAR</string>
     <string name="gps">GPS</string>
     <string name="ultrasonic">Ultrasonic</string>
-    <string name="longatude">Longatude</string>
+    <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="altitude">Altitude</string>
     <string name="bearing">Bearing</string>
@@ -43,11 +43,6 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="capture">Capture</string>
-
-
-    <!--<string name="ioio">IOIO</string>-->
-
-
-    <!-- DJI strings -->
-
+    <string name="barometer">Barometer</string>
+    <string name="pressure">Pressure</string>
 </resources>
