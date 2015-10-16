@@ -36,7 +36,7 @@ public final class Angle {
         while (angle < 0) {
             angle += 360;
         }
-        while (angle > 360) {
+        while (angle >= 360) {
             angle -= 360;
         }
         return angle;
@@ -44,6 +44,13 @@ public final class Angle {
 
     public double getDegrees() {
         return degrees;
+    }
+
+    public double getDegrees180() {
+        if (degrees <= 180)
+            return degrees;
+        else
+            return -(360 - degrees);
     }
 
     public boolean equals(Object obj) {

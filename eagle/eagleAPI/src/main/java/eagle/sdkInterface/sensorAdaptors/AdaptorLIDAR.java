@@ -36,4 +36,13 @@ public abstract class AdaptorLIDAR extends SensorAdaptor {
         this.calibrationOffset = calibrationOffset;
     }
 
+    @Override
+    public String toString() {
+        float data = getCalibratedData();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Distance: ");
+        sb.append(data);
+        return sb.toString();
+    }
+
 }

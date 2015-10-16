@@ -12,8 +12,8 @@ package eagle.navigation.positioning;
  */
 
 public abstract class Position {
-    protected final double longitude;
     protected final double latitude;
+    protected final double longitude;
     protected final double altitude;
     protected final Angle roll;
     protected final Angle pitch;

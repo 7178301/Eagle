@@ -48,7 +48,7 @@ public class GPSFragment extends SensorFragment {
         TextView sensorOutput4TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput4Title);
         TextView sensorOutput5TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput5Title);
         sensorOutputTitleTextView.setText(getResources().getString(R.string.gps));
-        sensorOutput1TitleTextView.setText(getResources().getString(R.string.longatude));
+        sensorOutput1TitleTextView.setText(getResources().getString(R.string.longitude));
         sensorOutput2TitleTextView.setText(getResources().getString(R.string.latitude));
         sensorOutput3TitleTextView.setText(getResources().getString(R.string.altitude));
         sensorOutput4TitleTextView.setText(getResources().getString(R.string.bearing));

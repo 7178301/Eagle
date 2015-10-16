@@ -55,6 +55,10 @@ public abstract class SensorAdaptor {
         return new String[0];
     }
 
+    public boolean setController(Object object){
+        return false;
+    }
+
     public boolean setSensorConfigurables(String[] confs) {
         return false;
     }

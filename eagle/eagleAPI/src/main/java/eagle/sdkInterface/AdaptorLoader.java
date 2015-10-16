@@ -31,7 +31,7 @@ public class AdaptorLoader {
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
     private HashSet<String> barometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBarometer"));
     private HashSet<String> bearingAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBearing"));
-    private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804"));
+    private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804","DJICamera"));
     private HashSet<String> magneticAdaptorPaths = new HashSet<>(Arrays.asList("AndroidMagnetic"));
     private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS", "JavaGPS"));
     private HashSet<String> gyroscopeAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGyroscope"));
@@ -58,6 +58,13 @@ public class AdaptorLoader {
         for (String path : cameraAdaptorPaths)
             cameraAdaptors.put(path, getSensorAdaptorCamera(path));
         return cameraAdaptors;
+    }
+
+    public HashMap getSensorAdaptorListBarometer() {
+        HashMap<String, AdaptorBarometer> barometerAdaptors = new HashMap<>();
+        for (String path : barometerAdaptorPaths)
+            barometerAdaptors.put(path, getSensorAdaptorBarometer(path));
+        return barometerAdaptors;
     }
 
     public HashMap getSensorAdaptorListBearing() {
