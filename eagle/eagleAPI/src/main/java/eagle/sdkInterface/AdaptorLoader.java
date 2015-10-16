@@ -60,6 +60,13 @@ public class AdaptorLoader {
         return cameraAdaptors;
     }
 
+    public HashMap getSensorAdaptorListBarometer() {
+        HashMap<String, AdaptorBarometer> barometerAdaptors = new HashMap<>();
+        for (String path : barometerAdaptorPaths)
+            barometerAdaptors.put(path, getSensorAdaptorBarometer(path));
+        return barometerAdaptors;
+    }
+
     public HashMap getSensorAdaptorListBearing() {
         HashMap<String, AdaptorBearing> bearingAdaptors = new HashMap<>();
         for (String path : bearingAdaptorPaths)
