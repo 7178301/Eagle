@@ -1,24 +1,22 @@
 package eagle.sdkInterface.sensorAdaptors.RPLIDARAdaptors;
 
-import eagle.Log;
-import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
-
-import ioio.lib.api.IOIO;
-import ioio.lib.api.PwmOutput;
-import ioio.lib.api.Uart;
-import ioio.lib.api.exception.ConnectionLostException;
-import ioio.lib.util.IOIOConnectionManager.Thread;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 
+import eagle.Log;
+import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
+import ioio.lib.api.IOIO;
+import ioio.lib.api.PwmOutput;
+import ioio.lib.api.Uart;
+import ioio.lib.api.exception.ConnectionLostException;
+import ioio.lib.util.IOIOConnectionManager.Thread;
+
 /**
  * Robo Peak RPLIDAR Adaptor
  *
- * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @author Angela Lau [7160852@student.swin.edu.au]
  * @version 0.0.1
  * @since 14/06/2015
@@ -53,7 +51,6 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     private OutputStream outputStream = null;
     private int motorPin = -1;
     private PwmOutput rplidarMotor = null;
-    private float[] RPLIDARData = new float[2];
 
     @Override
     public boolean connectToSensor() {
@@ -68,10 +65,9 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             rplidarMotor.setDutyCycle(0);
             reset();
             Thread.sleep(1000);
-            if(!isConnectedToSensor())
-            {
+            if (!isConnectedToSensor())
                 return false;
-            }
+
             RPLidar_InfoPacket infoPacket = getInfoPacket();
             adaptorHardwareModel = Integer.toString(infoPacket.getModel());
             adaptorHardwareFirmwareVersion = Integer.toString(infoPacket.getFirmware_version());
@@ -115,11 +111,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     @Override
     public boolean isDataReady() {
         try {
-            if(inputStream.available() >= 5)
-            {
-            return true;
-            }
-            return false;
+            return inputStream.available() >= 5;
         } catch (IOException e) {
             return false;
         }
@@ -127,16 +119,21 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
 
     @Override
     public float[] getData() {
-        try {
-            RPLidar_DataPacket data = getDataPacket();
+        if (!isDataReady())
+            return null;
+        else {
+            float[] RPLIDARData = new float[2];
+            try {
+                RPLidar_DataPacket data = getDataPacket();
 
-            RPLIDARData[0] = data.getAngle();
-            RPLIDARData[1] = data.getDistance();
+                RPLIDARData[0] = data.getAngle();
+                RPLIDARData[1] = data.getDistance();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return RPLIDARData;
         }
-        return RPLIDARData;
     }
 
     @Override
@@ -238,9 +235,8 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             return false;
         }
         for (int i = 0; i < descriptor.length; i++) {
-            if (descriptor[i] != validDescriptor[i]) {
+            if (descriptor[i] != validDescriptor[i])
                 return false;
-            }
         }
         return true;
     }
