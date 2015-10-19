@@ -12,6 +12,7 @@ import ioio.lib.util.IOIOConnectionManager.Thread;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -71,6 +72,11 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             {
                 return false;
             }
+            RPLidar_InfoPacket infoPacket = getInfoPacket();
+            adaptorHardwareModel = Integer.toString(infoPacket.getModel());
+            adaptorHardwareFirmwareVersion = Integer.toString(infoPacket.getFirmware_version());
+            adaptorHardwareVersion = Integer.toString(infoPacket.getHardware_version());
+            adaptorHardwareSerialNumber = Arrays.toString(infoPacket.getSerialnum());
             return startScan();
         } catch (Exception e) {
             return false;

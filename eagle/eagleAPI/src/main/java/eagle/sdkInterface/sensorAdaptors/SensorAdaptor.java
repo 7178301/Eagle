@@ -16,7 +16,7 @@ public abstract class SensorAdaptor {
     private String adaptorName = null;
     private String adaptorVersion = null;
     private String adaptorManufacturer = null;
-    private String adaptorHardwareModel = null;
+    protected String adaptorHardwareModel = null;
     protected String adaptorHardwareFirmwareVersion = null;
     protected String adaptorHardwareVersion = null;
     protected String adaptorHardwareSerialNumber = null;
