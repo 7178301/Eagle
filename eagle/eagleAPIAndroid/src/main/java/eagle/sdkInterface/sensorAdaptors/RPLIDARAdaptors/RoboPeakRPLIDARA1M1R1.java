@@ -66,24 +66,32 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             rplidarMotor = ioio.openPwmOutput(motorPin, 490);
             rplidarMotor.setDutyCycle(0);
             reset();
-            return isConnectedToSensor();
+            Thread.sleep(1000);
+            if(!isConnectedToSensor())
+            {
+                return false;
+            }
+            return startScan();
         } catch (Exception e) {
             return false;
         }
     }
 
-    //TODO Following Method Need Proper Implementation
     @Override
     public boolean disconnectFromSensor() {
-        return false;
+        try {
+            stop();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    //TODO LINK IOIO CONTROLLER TO THIS FUNCTION
     @Override
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
-            return true;
+            return connectToSensor();
         } else
             return false;
     }
@@ -137,7 +145,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             return false;
     }
 
-    public void reset() throws InterruptedException, IOException {
+    private void reset() throws InterruptedException, IOException {
         sendRequest(RPLIDAR_CMD_RESET);
         Thread.sleep(1000);
         while (inputStream.available() != 0) {
@@ -145,13 +153,13 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         }
     }
 
-    public void stop() throws IOException, InterruptedException, ConnectionLostException {
+    private void stop() throws IOException, InterruptedException, ConnectionLostException {
         sendRequest(RPLIDAR_CMD_STOP);
         rplidarMotor.setDutyCycle(0);
         Thread.sleep(1);
     }
 
-    public boolean startForceScan() throws InterruptedException, TimeoutException, IOException {
+    private boolean startForceScan() throws InterruptedException, TimeoutException, IOException {
         reset();
         if (getHealthPacket().getError() != 0) {
             reset();
@@ -165,7 +173,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return true;
     }
 
-    public boolean startScan() throws InterruptedException, TimeoutException, IOException, ConnectionLostException {
+    private boolean startScan() throws InterruptedException, TimeoutException, IOException, ConnectionLostException {
         reset();
         rplidarMotor.setDutyCycle(1);
         if (getHealthPacket().getError() != 0) {
@@ -223,7 +231,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return true;
     }
 
-    public RPLidar_InfoPacket getInfoPacket() throws IOException, TimeoutException, InterruptedException {
+    private RPLidar_InfoPacket getInfoPacket() throws IOException, TimeoutException, InterruptedException {
 
         byte[] data = new byte[20];
 
@@ -237,7 +245,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return new RPLidar_InfoPacket(data);
     }
 
-    public RPLidar_HealthPacket getHealthPacket() throws IOException, TimeoutException, InterruptedException {
+    private RPLidar_HealthPacket getHealthPacket() throws IOException, TimeoutException, InterruptedException {
         byte[] data = new byte[3];
 
         sendRequest(RPLIDAR_CMD_GET_DEVICE_HEALTH);
@@ -250,7 +258,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return new RPLidar_HealthPacket(data);
     }
 
-    public RPLidar_DataPacket getDataPacket() throws IOException {
+    private RPLidar_DataPacket getDataPacket() throws IOException {
         byte[] data = new byte[5];
 
         // wait for 5 bytes of data
