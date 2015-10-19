@@ -22,7 +22,7 @@ public abstract class AdaptorGPS extends SensorAdaptor {
 
     public PositionGPS getCalibratedData() {
         PositionGPS value = getData();
-        if (value == null | calibrationOffset == null)
+        if (value == null || calibrationOffset == null)
             return null;
         else {
             PositionGPS calibratedData = new PositionGPS(
@@ -51,5 +51,10 @@ public abstract class AdaptorGPS extends SensorAdaptor {
             return true;
         } else
             return false;
+    }
+
+    @Override
+    public String toString() {
+        return getData().toStringLong();
     }
 }

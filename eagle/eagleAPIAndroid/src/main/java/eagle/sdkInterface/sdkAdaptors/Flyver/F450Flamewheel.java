@@ -31,7 +31,7 @@ public class F450Flamewheel extends SDKAdaptor {
     //TODO Create method implementations
 
     public F450Flamewheel() {
-        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1", 0, 0);
+        super("Flyver", "F450 Flamewheel", "alpha", "0.0.1", 0, 0, 0, 0);
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {

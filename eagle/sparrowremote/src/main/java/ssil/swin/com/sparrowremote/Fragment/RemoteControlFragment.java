@@ -162,7 +162,7 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    public void setPosition(final String lat, final String lon, final String alt, final String bear) {
+    public void setPosition(final String latitude, final String longitude, final String altitude, final String bearing) {
         if (isAdded()) {
             getActivity().runOnUiThread(
                     new Runnable() {
@@ -170,10 +170,10 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
                         @Override
                         public void run() {
 
-                            editTextLongitude.setText(lat);
-                            editTextLatitude.setText(lon);
-                            editTextAltitude.setText(alt);
-                            editTextBearing.setText(bear);
+                            editTextLatitude.setText(latitude);
+                            editTextLongitude.setText(longitude);
+                            editTextAltitude.setText(altitude);
+                            editTextBearing.setText(bearing);
                         }
                     }
             );

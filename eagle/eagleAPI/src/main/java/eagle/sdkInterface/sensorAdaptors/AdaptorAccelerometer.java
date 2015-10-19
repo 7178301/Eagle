@@ -20,7 +20,7 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
 
     public float[] getCalibratedData() {
         float[] value = getData();
-        if (value == null | getCalibrationOffset() == null | value.length < 3)
+        if (value == null || getCalibrationOffset() == null || value.length < 3)
             return null;
         else {
             float[] calibratedData = new float[3];
@@ -41,5 +41,36 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
             return true;
         } else
             return false;
+    }
+
+    public boolean setAndroidContext(Object object) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        boolean uncalibrated = false;
+        float data[] = getCalibratedData();
+        if (data == null) {
+            uncalibrated = true;
+            data = getData();
+            if (data == null) {
+                return "No Data Available";
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (uncalibrated) {
+            sb.append("Uncalibrarted Data: ");
+        } else {
+            sb.append("Calibrated Data: ");
+        }
+        sb.append("X-axis: ");
+        sb.append(data[0]);
+        sb.append(" Y-axis: ");
+        sb.append(data[1]);
+        sb.append(" Z-axis: ");
+        sb.append(data[2]);
+        return sb.toString();
     }
 }

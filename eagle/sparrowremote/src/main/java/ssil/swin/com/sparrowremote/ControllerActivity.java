@@ -1,24 +1,25 @@
 package ssil.swin.com.sparrowremote;
 
-import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
+
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import eagle.Log;
 import eagle.LogCallback;
@@ -132,6 +133,11 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     }
 
+    protected void onStart(){
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        super.onStart();
+    }
+
     @Override
     protected void onDestroy() {
         Log.removeCallback("ControllerActivity",this);
@@ -179,6 +185,8 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+        double longitude;
+        double latitude;
         switch (uri.getPath()) {
             case "/buttonConnect":
                 commandConnection.sendMessage("CONNECTTODRONE", rcb);
@@ -193,30 +201,30 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 commandConnection.sendMessage("CHANGEALTITUDE -D -1", rcb);
                 break;
             case "/buttonRotateLeft":
-                commandConnection.sendMessage("CHANGEYAW -D -1", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D -10", rcb);
                 break;
             case "/buttonRotateRight":
-                commandConnection.sendMessage("CHANGEYAW -D 1", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D 10", rcb);
                 break;
             case "/buttonLeft":
-                double longitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
-                double latitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
+                latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
+                longitude = -1 * Math.cos(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonRight":
-                longitude = 1 * Math.cos(bearingAngle * Math.PI / 180);
-                latitude = 1 * Math.sin(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
+                latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
+                longitude = 1 * Math.cos(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonForward":
-                longitude = 1 * Math.sin(bearingAngle * Math.PI / 180);
-                latitude = 1 * Math.cos(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
+                latitude = 1 * Math.cos(Math.toRadians(bearingAngle));
+                longitude = 1 * Math.sin(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonBackward":
-                longitude = -1 * Math.sin(bearingAngle * Math.PI / 180);
-                latitude = -1 * Math.cos(bearingAngle * Math.PI / 180);
-                commandConnection.sendMessage("FLYTO -D " + longitude + " " + latitude + " 0 0", rcb);
+                latitude = -1 * Math.cos(Math.toRadians(bearingAngle));
+                longitude = -1 * Math.sin(Math.toRadians(bearingAngle));
+                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonGoHome":
                 commandConnection.sendMessage("GOHOME", rcb);
@@ -282,10 +290,10 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     }
 
     void updatePositionFragment() {
-        boolean connected = commandConnection.sendMessage("GETPOSITIONASSIGNED", new ProtocolBufferClient.ResponseCallBack() {
+        boolean connected = commandConnection.sendMessage("GETPOSITIONINFLIGHT", new ProtocolBufferClient.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
-                if (position != null) {
+                if (position != null&&!position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
                     String parts[] = position.split(" ");
                     if (parts.length != 6) {
                         return;

@@ -16,12 +16,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/longitude" />
+            android:text="@string/latitude" />
 
         <EditText
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editTextLongitude"
+            android:id="@+id/editTextLatitude"
             android:inputType="text"
             android:enabled="false"/>
 
@@ -29,12 +29,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/latitude" />
+            android:text="@string/longitude" />
 
         <EditText
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editTextLatitude"
+            android:id="@+id/editTextLongitude"
             android:inputType="text"
             android:enabled="false"/>
 

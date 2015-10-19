@@ -20,7 +20,7 @@ public abstract class AdaptorRPLIDAR extends SensorAdaptor {
 
     public float[] getCalibratedData() {
         float[] value = getData();
-        if (value == null | getCalibrationOffset() == null | value.length < 2)
+        if (value == null || getCalibrationOffset() == null || value.length < 2)
             return null;
         else {
             float[] calibratedData = new float[3];

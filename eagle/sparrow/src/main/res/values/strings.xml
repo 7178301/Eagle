@@ -27,7 +27,7 @@
     <string name="rplidar">RPLIDAR</string>
     <string name="gps">GPS</string>
     <string name="ultrasonic">Ultrasonic</string>
-    <string name="longatude">Longatude</string>
+    <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="altitude">Altitude</string>
     <string name="bearing">Bearing</string>
@@ -37,58 +37,12 @@
     <string name="log_data">Logs</string>
     <string name="collapseLog">Collapse Log</string>
     <string name="expandLog">Expand Log</string>
-    <!--<string name="ioio">IOIO</string>-->
-
-
-    <!-- DJI strings -->
-    <!-- Will Require These When DJI Adaptor Built
-    <string name="ERR_DESCRIPTION_GET_SMART_BATTERY_INFO_FAILED">Get smart battery info failed</string>
-    <string name="ERR_DESCRIPTION_GET_REMOTE_NO_MEDIA">Get remote no media</string>
-    <string name="ERR_DESCRIPTION_GET_REMOTE_MEDIA_HTTP_ERROR">Get remote media http error</string>
-    <string name="ERR_DESCRIPTION_GET_REMOTE_MEDIA_FAILED">Get remote media failed</string>
-    <string name="ERR_DESCRIPTION_GET_THUMBNAIL_FAILED">Thumbnail bitmap get failed</string>
-    <string name="ERR_DESCRIPTION_CAM_NOT_USB_STATE">Camera not usb state</string>
-    <string name="ERR_DESCRIPTION_PLUS_GIMBAL_MOTOR">Gimbal Motor Error</string>
-    <string name="ERR_DESCRIPTION_PLUS_REMOVE_LOCK">Remove Gimbal Clamp</string>
-    <string name="ERR_DESCRIPTION_CONNECTION_NOT_OK" tools:ignore="Typos">Connection not ok</string>
-    <string name="ERR_DESCRIPTION_UNSUPPORTED">Not supported</string>
-    <string name="ERR_DESCRIPTION_AUTH_FAILED">Auth failed</string>
-    <string name="ERR_DESCRIPTION_CMD_RECEIVE_PACK_NULL">Receive pack null</string>
-    <string name="ERR_DESCRIPTION_PARAM_ILLEGAL">Param illegal</string>
-    <string name="DESCRIPTION_RESULT_OK">OK</string>
-    <string name="ERR_DESCRIPTION_CAM_UNSUPPORTED_CMD">Camera unsupported cmd</string>
-    <string name="ERR_DESCRIPTION_CAM_EXEC_TIMEOUT">Camera exec timeout</string>
-    <string name="ERR_DESCRIPTION_CAM_MEM_ALLOC_FAILED">Camera memalloc failed</string>
-    <string name="ERR_DESCRIPTION_CAM_INVALID_PARAM">Camera invalid param</string>
-    <string name="ERR_DESCRIPTION_CAM_UNSUPPORTED_CMD_STATE">Camera unsupported cmd state</string>
-    <string name="ERR_DESCRIPTION_CAM_TIME_NO_SYNC">Camera time is not sync</string>
-    <string name="ERR_DESCRIPTION_CAM_PARAM_SET_FAILED">Camera param set failed</string>
-    <string name="ERR_DESCRIPTION_CAM_PARAM_GET_FAILED">Camera param get failed</string>
-    <string name="ERR_DESCRIPTION_CAM_NO_SDCARD">Camera no sdcard</string>
-    <string name="ERR_DESCRIPTION_CAM_SDCARD_FULL">Camera sdcard full</string>
-    <string name="ERR_DESCRIPTION_CAM_SDCARD_ERROR">Camera sdcard error</string>
-    <string name="ERR_DESCRIPTION_CAM_SENSOR_ERROR">Camera sensor error</string>
-    <string name="ERR_DESCRIPTION_CAM_SYSTEM_ERROR">Camera system error</string>
-    <string name="DetailCheckPermissionSuccess">Check permission successful</string>
-    <string name="ErrorDetailCheckPermissionConnectInternet">Cannot connect to internet</string>
-    <string name="ErrorDetailCheckPermissionInvalidAppKey">Invalid App Key</string>
-    <string name="ErrorDetailCheckPermissionGetServerDataTimeout">Get server permission data timeout</string>
-    <string name="ErrorDetailCheckPermissionDeviceNotMatch">Device uuid not match</string>
-    <string name="ErrorDetailCheckPermissionPackageNameNotMatch">Project package name not match</string>
-    <string name="ErrorDetailCheckPermissionAppKeyProhibited">App key forbidden</string>
-    <string name="ErrorDetailCheckPermissionActivationExceed">Active device num is up to the most allow num</string>
-    <string name="ErrorDetailCheckPermissionAppKeyPlatformError">App key platform error</string>
-    <string name="ErrorDetailCheckPermissionAppKeyNotExist">APP key not exist</string>
-    <string name="ErrorDetailCheckPermissionAppKeyNoPermission">APP key no permission</string>
-    <string name="ErrorDetailCheckPermissionServerParseFailure">Server parser failed</string>
-    <string name="ErrorDetailCheckPermissionServerWriteError">Server data abnormal</string>
-    <string name="ErrorDetailCheckPermissionServerDataAbnormal">Server data abnormal</string>
-    <string name="ErrorDetailCheckPermissionInvalidMetaData">Server meta data parer failed</string>
-    <string name="ErrorDetailCheckPermissionUnsupportedAesEncrypt">AES 256 encrypt unsupported</string>
-    <string name="ErrorDetailCheckPermissionAesEncryptFailed">AES 256 encrypt failed</string>
-    <string name="ErrorDetailCheckPermissionInvalidUUID">Get device uuid failed</string>
-    <string name="ErrorDetailCheckPermissionServerUnknown">Server unknown error</string>
-    <string name="ErrorDetailCheckPermissionGetSupport">Visit http://dev.dji.com and select "Chat Now"to get on-line technical support, if you find the prompted debugging message is not clear.</string>
-    -->
-
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
+    <string name="camera">Camera</string>
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+    <string name="capture">Capture</string>
+    <string name="barometer">Barometer</string>
+    <string name="pressure">Pressure</string>
 </resources>

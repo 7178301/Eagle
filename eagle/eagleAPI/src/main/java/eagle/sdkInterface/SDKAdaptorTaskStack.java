@@ -8,6 +8,7 @@ import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBarometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
@@ -16,15 +17,17 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
 import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorAccelerometerEventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorBearingEventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorCameraEventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorGPSEventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorGyroscopeEventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorLIDAREventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorMagneticEventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorRPLIDAREventCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.AdaptorUltrasonicEventCallback;
+
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorAccelerometerEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorBearingEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCameraEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorGPSEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorGyroscopeEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorLIDAREventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorMagneticEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorRPLIDAREventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorUltrasonicEventCallback;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorBarometerEventCallback;
 
 /**
  * SDK Adaptor Flight Stack Class
@@ -60,7 +63,7 @@ public class SDKAdaptorTaskStack {
     }
 
     public void push(Position position) {
-        sdkAdaptorTasks.push(new SDKAdaptorTask().Position(position).Speed(sdkAdaptor.getMaxSpeed()));
+        sdkAdaptorTasks.push(new SDKAdaptorTask().Position(position).Speed(sdkAdaptor.getMaxFlightSpeed()));
     }
 
     public void push(Position position, double metersPerSecond) {
@@ -205,15 +208,18 @@ public class SDKAdaptorTaskStack {
         Position position = null;
         double speed = 0;
         int delay = 0;
-        HashMap<AdaptorAccelerometer, AdaptorAccelerometerEventCallback> sensorEventAccelerometer = null;
-        HashMap<AdaptorBearing, AdaptorBearingEventCallback> sensorEventBearing = null;
-        HashMap<AdaptorCamera, AdaptorCameraEventCallback> sensorEventCamera = null;
-        HashMap<AdaptorGPS, AdaptorGPSEventCallback> sensorEventGPS = null;
-        HashMap<AdaptorGyroscope, AdaptorGyroscopeEventCallback> sensorEventGyroscope = null;
-        HashMap<AdaptorLIDAR, AdaptorLIDAREventCallback> sensorEventLIDAR = null;
-        HashMap<AdaptorMagnetic, AdaptorMagneticEventCallback> sensorEventMagnetic = null;
-        HashMap<AdaptorRPLIDAR, AdaptorRPLIDAREventCallback> sensorEventRPLIDAR = null;
-        HashMap<AdaptorUltrasonic, AdaptorUltrasonicEventCallback> sensorEventUltrasonic = null;
+
+        HashMap<AdaptorAccelerometer, SensorAdaptorAccelerometerEventCallback> sensorEventAccelerometer = null;
+        HashMap<AdaptorBearing, SensorAdaptorBearingEventCallback> sensorEventBearing = null;
+        HashMap<AdaptorCamera, SensorAdaptorCameraEventCallback> sensorEventCamera = null;
+        HashMap<AdaptorGPS, SensorAdaptorGPSEventCallback> sensorEventGPS = null;
+        HashMap<AdaptorGyroscope, SensorAdaptorGyroscopeEventCallback> sensorEventGyroscope = null;
+        HashMap<AdaptorLIDAR, SensorAdaptorLIDAREventCallback> sensorEventLIDAR = null;
+        HashMap<AdaptorMagnetic, SensorAdaptorMagneticEventCallback> sensorEventMagnetic = null;
+        HashMap<AdaptorRPLIDAR, SensorAdaptorRPLIDAREventCallback> sensorEventRPLIDAR = null;
+        HashMap<AdaptorUltrasonic, SensorAdaptorUltrasonicEventCallback> sensorEventUltrasonic = null;
+        HashMap<AdaptorBarometer, SensorAdaptorBarometerEventCallback> sensorEventBarometer = null;
+
 
         public SDKAdaptorTask() {
             ;
@@ -234,9 +240,9 @@ public class SDKAdaptorTaskStack {
             return this;
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorAccelerometerEventCallback adaptorAccelerometerCallback, AdaptorAccelerometer adaptorAccelerometer) {
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorAccelerometerEventCallback adaptorAccelerometerCallback, AdaptorAccelerometer adaptorAccelerometer) {
             if (adaptorAccelerometerCallback == null)
-                throw new IllegalArgumentException("AdaptorAccelerometerEventCallback Must Not Be Null");
+                throw new IllegalArgumentException("SensorAdaptorAccelerometerEventCallback Must Not Be Null");
             else {
                 if (sensorEventAccelerometer == null)
                     sensorEventAccelerometer = new HashMap<>();
@@ -245,86 +251,98 @@ public class SDKAdaptorTaskStack {
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorBearingEventCallback adaptorBearingEventCallback, AdaptorBearing adaptorBearing) {
-            if (adaptorBearingEventCallback == null)
-                throw new IllegalArgumentException("AdaptorBearingEventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorBarometerEventCallback adaptorBarometerEventCallback, AdaptorBarometer adaptorBarometer) {
+            if (adaptorBarometerEventCallback == null)
+                throw new IllegalArgumentException("AdaptorBarometerEventCallback Must Not Be Null");
+            else {
+                if (sensorEventBarometer == null)
+                    sensorEventBarometer = new HashMap<>();
+                sensorEventBarometer.put(adaptorBarometer, adaptorBarometerEventCallback);
+                return this;
+            }
+        }
+
+
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorBearingEventCallback sensorAdaptorBearingEventCallback, AdaptorBearing adaptorBearing) {
+            if (sensorAdaptorBearingEventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorBearingEventCallback Must Not Be Null");
             else {
                 if (sensorEventBearing == null)
                     sensorEventBearing = new HashMap<>();
-                sensorEventBearing.put(adaptorBearing, adaptorBearingEventCallback);
+                sensorEventBearing.put(adaptorBearing, sensorAdaptorBearingEventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorCameraEventCallback adaptorCameraEventCallback, AdaptorCamera adaptorCamera) {
-            if (adaptorCameraEventCallback == null)
-                throw new IllegalArgumentException("AdaptorCameraEventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorCameraEventCallback sensorAdaptorCameraEventCallback, AdaptorCamera adaptorCamera) {
+            if (sensorAdaptorCameraEventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorCameraEventCallback Must Not Be Null");
             else {
                 if (sensorEventCamera == null)
                     sensorEventCamera = new HashMap<>();
-                sensorEventCamera.put(adaptorCamera, adaptorCameraEventCallback);
+                sensorEventCamera.put(adaptorCamera, sensorAdaptorCameraEventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorGPSEventCallback adaptorGPSEventCallback, AdaptorGPS adaptorGPS) {
-            if (adaptorGPSEventCallback == null)
-                throw new IllegalArgumentException("AdaptorGPSEventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorGPSEventCallback sensorAdaptorGPSEventCallback, AdaptorGPS adaptorGPS) {
+            if (sensorAdaptorGPSEventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorGPSEventCallback Must Not Be Null");
             else {
                 if (sensorEventGPS == null)
                     sensorEventGPS = new HashMap<>();
-                sensorEventGPS.put(adaptorGPS, adaptorGPSEventCallback);
+                sensorEventGPS.put(adaptorGPS, sensorAdaptorGPSEventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorGyroscopeEventCallback adaptorGyroscopeEventCallback, AdaptorGyroscope adaptorGyroscope) {
-            if (adaptorGyroscopeEventCallback == null)
-                throw new IllegalArgumentException("AdaptorGyroscopeEventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorGyroscopeEventCallback sensorAdaptorGyroscopeEventCallback, AdaptorGyroscope adaptorGyroscope) {
+            if (sensorAdaptorGyroscopeEventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorGyroscopeEventCallback Must Not Be Null");
             else {
                 if (sensorEventGyroscope == null)
                     sensorEventGyroscope = new HashMap<>();
-                sensorEventGyroscope.put(adaptorGyroscope, adaptorGyroscopeEventCallback);
+                sensorEventGyroscope.put(adaptorGyroscope, sensorAdaptorGyroscopeEventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorLIDAREventCallback adaptorLIDAREventCallback, AdaptorLIDAR adaptorLIDAR) {
-            if (adaptorLIDAREventCallback == null)
-                throw new IllegalArgumentException("AdaptorLIDAREventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorLIDAREventCallback sensorAdaptorLIDAREventCallback, AdaptorLIDAR adaptorLIDAR) {
+            if (sensorAdaptorLIDAREventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorLIDAREventCallback Must Not Be Null");
             else {
                 if (sensorEventLIDAR == null)
                     sensorEventLIDAR = new HashMap<>();
-                sensorEventLIDAR.put(adaptorLIDAR, adaptorLIDAREventCallback);
+                sensorEventLIDAR.put(adaptorLIDAR, sensorAdaptorLIDAREventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorMagneticEventCallback adaptorMagneticEventCallback, AdaptorMagnetic adaptorMagnetic) {
-            if (adaptorMagneticEventCallback == null)
-                throw new IllegalArgumentException("AdaptorMagneticEventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorMagneticEventCallback sensorAdaptorMagneticEventCallback, AdaptorMagnetic adaptorMagnetic) {
+            if (sensorAdaptorMagneticEventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorMagneticEventCallback Must Not Be Null");
             else {
                 if (sensorEventMagnetic == null)
                     sensorEventMagnetic = new HashMap<>();
-                sensorEventMagnetic.put(adaptorMagnetic, adaptorMagneticEventCallback);
+                sensorEventMagnetic.put(adaptorMagnetic, sensorAdaptorMagneticEventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorRPLIDAREventCallback adaptorRPLIDAREventCallback, AdaptorRPLIDAR adaptorRPLIDAR) {
-            if (adaptorRPLIDAREventCallback == null)
-                throw new IllegalArgumentException("AdaptorRPLIDAREventCallback Must Not Be Null");
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorRPLIDAREventCallback sensorAdaptorRPLIDAREventCallback, AdaptorRPLIDAR adaptorRPLIDAR) {
+            if (sensorAdaptorRPLIDAREventCallback == null)
+                throw new IllegalArgumentException("SensorAdaptorRPLIDAREventCallback Must Not Be Null");
             else {
                 if (sensorEventRPLIDAR == null)
                     sensorEventRPLIDAR = new HashMap<>();
-                sensorEventRPLIDAR.put(adaptorRPLIDAR, adaptorRPLIDAREventCallback);
+                sensorEventRPLIDAR.put(adaptorRPLIDAR, sensorAdaptorRPLIDAREventCallback);
                 return this;
             }
         }
 
-        public SDKAdaptorTask SensorEvent(final AdaptorUltrasonicEventCallback adaptorUltrasonicTaskCallback, AdaptorUltrasonic adaptorUltrasonic) {
+        public SDKAdaptorTask SensorEvent(final SensorAdaptorUltrasonicEventCallback adaptorUltrasonicTaskCallback, AdaptorUltrasonic adaptorUltrasonic) {
             if (adaptorUltrasonicTaskCallback == null)
-                throw new IllegalArgumentException("AdaptorUltrasonicEventCallback Must Not Be Null");
+                throw new IllegalArgumentException("SensorAdaptorUltrasonicEventCallback Must Not Be Null");
             else {
                 if (sensorEventUltrasonic == null)
                     sensorEventUltrasonic = new HashMap<>();

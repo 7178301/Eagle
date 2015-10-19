@@ -1,5 +1,10 @@
 package eagle;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -71,5 +76,49 @@ public class Log {
             Log.log("LogCallback", "CALLBACK REMOVED FROM " + tag);
         }
 
+    }
+
+    public synchronized static void writeTagToFile(String tag, String filename) throws IOException{
+        PrintWriter output = null;
+        try{
+            File file = new File(filename);
+            if(!file.exists()) {
+                if(!file.createNewFile())
+                    throw new IOException("Failed To Create File");
+            }
+            output = new PrintWriter(new FileOutputStream(file));
+                for (String message : log.get(tag)) {
+                    output.println(tag+": "+message);
+            }
+        }
+        finally{
+            if(output!=null)
+                output.close();
+        }
+    }
+
+    public synchronized static void writeLogToFile(String filename) throws IOException{
+        PrintWriter output = null;
+        try{
+            File file = new File(filename);
+            if(!file.exists()) {
+                if(!file.getParentFile().exists()) {
+                    if (!file.getParentFile().mkdirs())
+                        throw new IOException("Failed To Create Folder");
+                }
+                if(!file.createNewFile())
+                    throw new IOException("Failed To Create File");
+            }
+            output = new PrintWriter(new FileOutputStream(file));
+            for(String tag : log.keySet()){
+                for (String message : log.get(tag)) {
+                    output.println(tag+": "+message);
+                }
+            }
+        }
+        finally{
+            if(output!=null)
+                output.close();
+        }
     }
 }
