@@ -40,6 +40,11 @@ public class AndroidBarometer extends AdaptorBarometer implements SensorEventLis
     }
 
     @Override
+    public boolean disconnectFromSensor() {
+        return false;
+    }
+
+    @Override
     public boolean setAndroidContext(Object object) {
         if (object instanceof Context) {
             this.context = (Context) object;
