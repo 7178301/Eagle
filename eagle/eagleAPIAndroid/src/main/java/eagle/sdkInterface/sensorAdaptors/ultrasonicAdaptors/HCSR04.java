@@ -55,7 +55,7 @@ public class HCSR04 extends AdaptorUltrasonic {
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
-            return connectToSensor();
+            return true;
         } else
             return false;
     }

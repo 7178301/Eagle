@@ -97,7 +97,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
-            return connectToSensor();
+            return true;
         } else
             return false;
     }
@@ -114,7 +114,15 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
 
     @Override
     public boolean isDataReady() {
-        return isConnectedToSensor();
+        try {
+            if(inputStream.available() >= 5)
+            {
+            return true;
+            }
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     @Override
