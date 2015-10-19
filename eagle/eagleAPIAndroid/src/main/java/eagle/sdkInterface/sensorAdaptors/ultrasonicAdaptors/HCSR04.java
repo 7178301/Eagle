@@ -20,8 +20,8 @@ import ioio.lib.api.exception.ConnectionLostException;
  */
 public class HCSR04 extends AdaptorUltrasonic {
 
-    private int triggerPin;
-    private int echoPin;
+    private int triggerPin = -1;
+    private int echoPin = -1;
     private DigitalOutput trigger;
     private PulseInput echo;
     private float echoSeconds;
@@ -33,7 +33,7 @@ public class HCSR04 extends AdaptorUltrasonic {
     }
 
     public boolean connectToSensor() {
-        if (ioio == null) {
+        if (ioio == null || triggerPin == -1 || echoPin == -1) {
             return false;
         }
         try {
@@ -52,10 +52,10 @@ public class HCSR04 extends AdaptorUltrasonic {
         return false;
     }
 
-    public boolean setAndroidContext(Object object) {
+    public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
-            return true;
+            return connectToSensor();
         } else
             return false;
     }
@@ -71,7 +71,7 @@ public class HCSR04 extends AdaptorUltrasonic {
 
     @Override
     public boolean isDataReady() {
-        return false;
+        return true;
     }
 
     @Override
