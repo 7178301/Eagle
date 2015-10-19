@@ -38,6 +38,12 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
             return false;
     }
 
+    //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
+        return false;
+    }
+
     public boolean setAndroidContext(Object object) {
         if (object instanceof Context) {
             this.context = (Context) object;

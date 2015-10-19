@@ -21,6 +21,12 @@ public class SeeedStudioSEN10737P extends AdaptorUltrasonic {
         return false;
     }
 
+    //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
+        return false;
+    }
+
     //TODO Following Method Need Propper Implementation
     public boolean isConnectedToSensor() {
         return false;

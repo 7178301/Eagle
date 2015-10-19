@@ -29,8 +29,6 @@ public abstract class AdaptorCamera extends SensorAdaptor {
     // OR send back image data
     public abstract byte[] getData();
 
-    public abstract boolean connectToSensor();
-
     public void takePicture(final SDKAdaptorCallback sdkAdaptorCallback){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");

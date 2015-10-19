@@ -16,8 +16,6 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float[] getData();
 
     public float[] getCalibratedData() {
@@ -31,10 +29,6 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
             calibratedData[2] = value[2] - getCalibrationOffset()[2];
             return calibratedData;
         }
-    }
-
-    public boolean setAndroidContext(Object object) {
-        return false;
     }
 
     public float[] getCalibrationOffset() {

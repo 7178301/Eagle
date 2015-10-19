@@ -23,6 +23,12 @@ public class AndroidCamera extends AdaptorCamera {
     }
 
     //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
+        return false;
+    }
+
+    //TODO Following Method Need Proper Implementation
     public byte[] getData() {
         return null;
     }

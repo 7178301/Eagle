@@ -23,13 +23,19 @@ public class JavaGPS extends AdaptorGPS {
     double altitude, longitude, latitude;
     boolean ready = false;
 
-
     public JavaGPS() {
         super("JavaGPS", "NMEA_GPS", "0.0.1");
     }
 
+    //TODO Following Method Need Proper Implementation
     @Override
     public boolean connectToSensor() {
+        return false;
+    }
+
+    //TODO Following Method Need Proper Implementation
+    @Override
+    public boolean disconnectFromSensor() {
         return false;
     }
 
@@ -39,6 +45,7 @@ public class JavaGPS extends AdaptorGPS {
         return new PositionGPS(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(0));
     }
 
+    //TODO Following Method Need Proper Implementation
     @Override
     public boolean isConnectedToSensor() {
         return false;

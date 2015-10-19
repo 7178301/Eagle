@@ -16,8 +16,6 @@ public abstract class AdaptorBearing extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float getData();
 
     public double getCalibratedData() {
@@ -35,9 +33,5 @@ public abstract class AdaptorBearing extends SensorAdaptor {
     public boolean setCalibrationOffset(float calibrationOffset) {
         this.calibrationOffset = calibrationOffset;
         return true;
-    }
-
-    public boolean setAndroidContext(Object object) {
-        return false;
     }
 }
