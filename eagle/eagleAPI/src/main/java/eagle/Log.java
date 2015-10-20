@@ -62,6 +62,10 @@ public class Log {
         }
     }
 
+    public synchronized static ArrayList<String> getLog() {
+        return (ArrayList<String>) log.clone();
+    }
+
     public synchronized static void writeLogToFile(String filename) throws IOException {
         PrintWriter output = null;
         try {
