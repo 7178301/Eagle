@@ -41,8 +41,10 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     public boolean connectToSensor() {
         if (DJIDrone.getLevel() < 1)
             return false;
+        DJIDrone.getDjiCamera().stopUpdateTimer();
         if (!DJIDrone.getDjiCamera().startUpdateTimer(1000))
             return false;
+        DJIDrone.getDjiGimbal().stopUpdateTimer();
         if (!DJIDrone.getDjiGimbal().startUpdateTimer(1000))
             return false;
         DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(this);
@@ -58,7 +60,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public boolean isConnectedToSensor() {
-        return DJIDrone.getDjiCamera()!=null&&DJIDrone.getDjiCamera().getCameraConnectIsOk();
+        return DJIDrone.getDjiCamera()!=null&&DJIDrone.getDjiCamera().getCameraConnectIsOk()&&djiGimbalAttitude!=null&&djiCameraSystemState!=null;
     }
 
     @Override
@@ -194,7 +196,9 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public void onResult(byte[] videoBuffer, int size) {
-        for (SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback : sensorAdaptorCameraLiveFeedCallbacks)
-            sensorAdaptorCameraLiveFeedCallback.onSensorEvent(videoBuffer, size);
+        if(sensorAdaptorCameraLiveFeedCallbacks!=null) {
+            for (SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback : sensorAdaptorCameraLiveFeedCallbacks)
+                sensorAdaptorCameraLiveFeedCallback.onSensorEvent(videoBuffer, size);
+        }
     }
 }
