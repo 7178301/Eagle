@@ -25,10 +25,11 @@ public class Log {
     private static ArrayList<String> log = new ArrayList<>();
     private static HashMap<String, Vector<LogCallback>> logCallBack = new HashMap<>();
     private static Vector<LogCallback> verboseLogCallback = new Vector<>();
+    private static int logLimit = 10000;
 
 
     public synchronized static void log(String tag, String message) {
-        while (log.size() > 10000) {
+        while (log.size() > logLimit) {
             log.remove(0);
         }
         log.add(tag + ": " + message);
@@ -64,6 +65,14 @@ public class Log {
 
     public synchronized static ArrayList<String> getLog() {
         return (ArrayList<String>) log.clone();
+    }
+
+    public synchronized boolean setLogLimit(int logLimit){
+        if(logLimit>0){
+            Log.logLimit =logLimit;
+            return true;
+        }else
+            return false;
     }
 
     public synchronized static void writeLogToFile(String filename) throws IOException {
