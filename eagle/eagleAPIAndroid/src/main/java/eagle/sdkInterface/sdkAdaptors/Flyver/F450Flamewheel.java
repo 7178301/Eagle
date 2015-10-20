@@ -12,7 +12,6 @@ import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
-import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 import eagle.sdkInterface.sensorAdaptors.bearingAdaptors.AndroidBearing;
 import eagle.sdkInterface.sensorAdaptors.gpsAdaptors.AndroidGPS;
 import ioio.lib.api.IOIO;
@@ -33,7 +32,7 @@ public class F450Flamewheel extends SDKAdaptor {
     private Context context;
     private IOIO ioio;
     private IOIOController controller;
-    private AdaptorUltrasonic adaptorUltrasonic;
+//    private AdaptorUltrasonic adaptorUltrasonic;
 
     //TODO Create method implementations
 
@@ -48,13 +47,13 @@ public class F450Flamewheel extends SDKAdaptor {
         addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("AndroidGPS"));
         addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
         addSensorAdaptorMagnetic(adaptorLoader.getSensorAdaptorMagnetic("AndroidMagnetic"));
-        adaptorUltrasonic = adaptorLoader.getSensorAdaptorUltrasonic("HCSR04");
-        int[] pins = new int[2];
-        pins[0]=13;
-        pins[1]=14;
-        adaptorUltrasonic.setSensorPins(pins);
-
-        addSensorAdaptorUltrasonic(adaptorUltrasonic);
+//        adaptorUltrasonic = adaptorLoader.getSensorAdaptorUltrasonic("HCSR04");
+//        int[] pins = new int[2];
+//        pins[0]=13;
+//        pins[1]=14;
+//        adaptorUltrasonic.setSensorPins(pins);
+//
+//        addSensorAdaptorUltrasonic(adaptorUltrasonic);
         AdaptorBearing androidBearing = adaptorLoader.getSensorAdaptorBearing("AndroidBearing");
 
         androidBearing.setAccelerometerMagnetic(getAccelerometers().get(0), getMagnetics().get(0));
@@ -197,7 +196,7 @@ public class F450Flamewheel extends SDKAdaptor {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
             controller.setIOIO(ioio);
-            adaptorUltrasonic.setAndroidContext(ioio);
+//            adaptorUltrasonic.setAndroidContext(ioio);
             return true;
         } else
             return false;
