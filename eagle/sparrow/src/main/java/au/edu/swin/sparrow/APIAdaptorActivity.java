@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -206,7 +205,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             BearingFragment fragment = BearingFragment.newInstance();
             adaptorBearing.setAndroidContext(this);
             adaptorBearing.connectToSensor();
-            fragment.setMagneticAccelerometerAdaptors(adaptorBearing);
+            fragment.setBearingAdaptor(adaptorBearing);
             sensorFragments.add(fragment);
             fragTransaction.add(R.id.scrollViewSensors, fragment);
         }

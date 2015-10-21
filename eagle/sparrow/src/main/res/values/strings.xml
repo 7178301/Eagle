@@ -45,4 +45,6 @@
     <string name="capture">Capture</string>
     <string name="barometer">Barometer</string>
     <string name="pressure">Pressure</string>
+    <string name="pitch">Pitch</string>
+    <string name="roll">Roll</string>
 </resources>
