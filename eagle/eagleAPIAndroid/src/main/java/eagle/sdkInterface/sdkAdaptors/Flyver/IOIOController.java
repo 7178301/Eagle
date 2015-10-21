@@ -33,11 +33,11 @@ public class IOIOController {
     //-------PID Config----------
 
     public static final float PID_DERIV_SMOOTHING = 0.5f;
-    static double ROLL_PID_KP = 20.0;
+    static double ROLL_PID_KP = 2.0;
     static double ROLL_PID_KI = 0.0;
     static double ROLL_PID_KD = 0.0;
 
-    static double PITCH_PID_KP = 20.0;
+    static double PITCH_PID_KP = 2.0;
     static double PITCH_PID_KI = 0.0;
     static double PITCH_PID_KD = 0.0;
 
@@ -111,6 +111,8 @@ public class IOIOController {
                 if (thread != null) {
                     thread.interrupt();
                 }
+
+                previousTime = System.nanoTime();
                 thread = new Thread(new ControllerThread());
                 thread.start();
 //                batteryThread = new Thread(new BatteryThread());
@@ -177,7 +179,7 @@ public class IOIOController {
 
 //            //todo:
 //            int altitudeForce = 200;
-            System.out.println(pitchAngleTarget+"\t"+rollAngleTarget+"\t"+altitudeForce);
+            System.out.println(rollForce+"\t"+pitchForce+"\t"+altitudeForce);
 
             tempPowerFCW += altitudeForce; // Vertical "force".
             tempPowerFCCW += altitudeForce; //
