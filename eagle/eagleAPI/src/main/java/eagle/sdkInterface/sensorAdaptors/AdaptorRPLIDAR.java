@@ -16,8 +16,6 @@ public abstract class AdaptorRPLIDAR extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float[] getData();
 
     public float[] getCalibratedData() {
@@ -30,10 +28,6 @@ public abstract class AdaptorRPLIDAR extends SensorAdaptor {
             calibratedData[1] = value[1] - getCalibrationOffset()[1];
             return calibratedData;
         }
-    }
-
-    public boolean setAndroidContext(Object object) {
-        return false;
     }
 
     public float[] getCalibrationOffset() {

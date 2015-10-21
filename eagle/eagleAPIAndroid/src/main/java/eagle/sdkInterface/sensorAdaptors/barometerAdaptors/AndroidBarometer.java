@@ -1,4 +1,4 @@
-package eagle.sdkInterface.sensorAdaptors.gyroscopeAdaptors;
+package eagle.sdkInterface.sensorAdaptors.barometerAdaptors;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -6,44 +6,45 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBarometer;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 /**
- * Android Gyroscope Adaptor
+ * Android Accelerometer Adaptor
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
- * @since 14/06/2015
+ * @since 09/04/2015
  * <p/>
- * Date Modified	14/06/2015 - Nicholas
+ * Date Modified	26/05/2015 - Nicholas
  */
 
-public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventListener {
+public class AndroidBarometer extends AdaptorBarometer implements SensorEventListener {
     private Context context = null;
-    private float[] gyroscopeData;
+    private float accelerometerData = 0;
 
-    public AndroidGyroscope() {
-        super("Android", "Gyroscope", "0.0.1");
+    public AndroidBarometer() {
+        super("Android", "Accelerometer", "0.0.1");
     }
 
+    @Override
     public boolean connectToSensor() {
         if (this.context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null) {
-            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_FASTEST);
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null) {
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE), SensorManager.SENSOR_DELAY_FASTEST);
             return true;
         } else
             return false;
     }
 
-    //TODO Following Method Need Proper Implementation
     @Override
     public boolean disconnectFromSensor() {
         return false;
     }
 
+    @Override
     public boolean setAndroidContext(Object object) {
         if (object instanceof Context) {
             this.context = (Context) object;
@@ -52,24 +53,25 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
             return false;
     }
 
+    @Override
     public boolean isConnectedToSensor() {
         if (context == null)
             return false;
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null)
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null)
             return true;
         else
             return false;
     }
 
     @Override
-    public float[] getData() {
-        return gyroscopeData;
+    public float getData() {
+        return accelerometerData;
     }
 
     @Override
     public boolean isDataReady() {
-        if (gyroscopeData == null)
+        if (accelerometerData == 0)
             return false;
         else
             return true;
@@ -83,11 +85,8 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
-        if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            gyroscopeData = new float[3];
-            gyroscopeData[0] = event.values[0];
-            gyroscopeData[1] = event.values[1];
-            gyroscopeData[2] = event.values[2];
+        if (sensor.getType() == Sensor.TYPE_PRESSURE) {
+            accelerometerData = event.values[0];
         }
         for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
             currentSensorAdaptorCallback.onSensorChanged();

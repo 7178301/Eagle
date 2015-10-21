@@ -16,8 +16,6 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float[] getData();
 
     public float[] getCalibratedData() {
@@ -33,10 +31,6 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
         }
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public float[] getCalibrationOffset() {
         return calibrationOffset;
     }
@@ -47,5 +41,32 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
             return true;
         } else
             return false;
+    }
+
+    @Override
+    public String toString() {
+        boolean uncalibrated = false;
+        float data[] = getCalibratedData();
+        if (data == null) {
+            uncalibrated = true;
+            data = getData();
+            if (data == null) {
+                return "No Data Available";
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (uncalibrated) {
+            sb.append("Uncalibrarted Data: ");
+        } else {
+            sb.append("Calibrated Data: ");
+        }
+        sb.append("X-axis: ");
+        sb.append(data[0]);
+        sb.append(" Y-axis: ");
+        sb.append(data[1]);
+        sb.append(" Z-axis: ");
+        sb.append(data[2]);
+        return sb.toString();
     }
 }

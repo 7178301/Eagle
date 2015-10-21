@@ -18,8 +18,6 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract PositionGPS getData();
 
     public PositionGPS getCalibratedData() {
@@ -43,10 +41,6 @@ public abstract class AdaptorGPS extends SensorAdaptor {
         return 99999999;
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     public PositionGPS getCalibrationOffset() {
         return calibrationOffset;
     }
@@ -57,5 +51,10 @@ public abstract class AdaptorGPS extends SensorAdaptor {
             return true;
         } else
             return false;
+    }
+
+    @Override
+    public String toString() {
+        return getData().toStringLong();
     }
 }

@@ -9,6 +9,6 @@ package eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks;
  * <p/>
  * Date Modified	30/09/2015 - Nicholas
  */
-public interface AdaptorLIDAREventCallback {
+public interface SensorAdaptorLIDAREventCallback {
     void onSensorEvent(float getCalibratedData);
 }

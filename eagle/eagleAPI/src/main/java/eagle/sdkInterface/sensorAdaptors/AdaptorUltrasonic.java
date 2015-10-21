@@ -16,16 +16,10 @@ public abstract class AdaptorUltrasonic extends SensorAdaptor {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
 
-    public abstract boolean connectToSensor();
-
     public abstract float getData();
 
     public float getCalibratedData() {
         return getData() - calibrationOffset;
-    }
-
-    public boolean setAndroidContext(Object object) {
-        return false;
     }
 
     public float getCalibrationOffset() {
@@ -34,5 +28,14 @@ public abstract class AdaptorUltrasonic extends SensorAdaptor {
 
     public void setCalibrationOffset(float calibrationOffset) {
         this.calibrationOffset = calibrationOffset;
+    }
+
+    @Override
+    public String toString() {
+        float data = getCalibratedData();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Distance: ");
+        sb.append(data);
+        return sb.toString();
     }
 }

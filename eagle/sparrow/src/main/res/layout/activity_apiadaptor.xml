@@ -32,7 +32,6 @@
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
 
-
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_width="fill_parent"
