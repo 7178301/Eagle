@@ -3,7 +3,6 @@ package au.edu.swin.sparrow;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,7 +53,7 @@ public class MainActivity extends ListActivity {
 
     public void onListItemClick(ListView l, View v, int position, long id) {
         String selectedItem = (String) getListView().getItemAtPosition(position);
-        drone.setSDKAdaptor(selectedItem);
+        //drone.setSDKAdaptor(selectedItem);
 
         Button selectAdaptorButton = (Button) findViewById(R.id.buttonSelectAdaptor);
 
@@ -62,14 +61,14 @@ public class MainActivity extends ListActivity {
 
         if (selectAdaptorButton.getVisibility() == View.INVISIBLE)
             makeSettingsVisible();
-
-        TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewAdaptorName);
-        TextView sdkVersionTextView = (TextView) findViewById(R.id.textViewSDKVersion);
-        TextView adaptorVersionTextView = (TextView) findViewById(R.id.textViewAdaptorVersion);
-
-        adaptorNameTextView.setText(getResources().getString(R.string.adaptor_name) + ": " + drone.getSDKAdaptor().getAdaptorName());
-        sdkVersionTextView.setText(getResources().getString(R.string.sdk_version) + ": " + drone.getSDKAdaptor().getSdkVersion());
-        adaptorVersionTextView.setText(getResources().getString(R.string.adaptor_version) + ": " + drone.getSDKAdaptor().getAdaptorVersion());
+//
+//        TextView adaptorNameTextView = (TextView) findViewById(R.id.textViewAdaptorName);
+//        TextView sdkVersionTextView = (TextView) findViewById(R.id.textViewSDKVersion);
+//        TextView adaptorVersionTextView = (TextView) findViewById(R.id.textViewAdaptorVersion);
+//
+//        adaptorNameTextView.setText(getResources().getString(R.string.adaptor_name) + ": " + drone.getSDKAdaptor().getAdaptorName());
+//        sdkVersionTextView.setText(getResources().getString(R.string.sdk_version) + ": " + drone.getSDKAdaptor().getSdkVersion());
+//        adaptorVersionTextView.setText(getResources().getString(R.string.adaptor_version) + ": " + drone.getSDKAdaptor().getAdaptorVersion());
 
         eagle.Log.log(TAG, "Selected Adaptor " + selectedItem);
     }
