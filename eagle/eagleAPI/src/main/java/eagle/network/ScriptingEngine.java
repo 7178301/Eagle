@@ -847,6 +847,7 @@ public class ScriptingEngine {
                             if (array.length == 2) {
                                 double percentage = Double.parseDouble(array[1]);
                                 adaptor.setThrottle(percentage);
+                                returnString[0] = "SUCCESS";
                             } else {
                                 ExceptionResult[0] = "Wrong Number of Values: " + instruction;
                             }
@@ -855,6 +856,7 @@ public class ScriptingEngine {
                             if (array.length == 2) {
                                 double angle = Double.parseDouble(array[1]);
                                 adaptor.setYaw(angle);
+                                returnString[0] = "SUCCESS";
                             } else {
                                 ExceptionResult[0] = "Wrong Number of Values: " + instruction;
                             }
@@ -863,6 +865,7 @@ public class ScriptingEngine {
                             if (array.length == 2) {
                                 double angle = Double.parseDouble(array[1]);
                                 adaptor.setPitch(angle);
+                                returnString[0] = "SUCCESS";
                             } else {
                                 ExceptionResult[0] = "Wrong Number of Values: " + instruction;
                             }
@@ -871,6 +874,7 @@ public class ScriptingEngine {
                             if (array.length == 2) {
                                 double angle = Double.parseDouble(array[1]);
                                 adaptor.setRoll(angle);
+                                returnString[0] = "SUCCESS";
                             } else {
                                 ExceptionResult[0] = "Wrong Number of Values: " + instruction;
                             }
