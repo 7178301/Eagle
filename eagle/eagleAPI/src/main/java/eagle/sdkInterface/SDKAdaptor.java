@@ -412,6 +412,18 @@ public abstract class SDKAdaptor {
 
     public abstract void delay(int milliseconds);
 
+    public void setThrottle(double percentage) {
+    }
+
+    public void setYaw(double angle) {
+    }
+
+    public void setPitch(double angle) {
+    }
+
+    public void setRoll(double angle) {
+    }
+
     public class InvalidPositionTypeException extends Exception {
         public InvalidPositionTypeException(String message) {
             super("Invalid Position Type: " + message);
