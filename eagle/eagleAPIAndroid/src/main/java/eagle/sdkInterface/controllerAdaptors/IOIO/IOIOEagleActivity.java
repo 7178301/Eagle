@@ -3,7 +3,6 @@ package eagle.sdkInterface.controllerAdaptors.IOIO;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.BaseIOIOLooper;
@@ -20,25 +19,21 @@ import ioio.lib.util.android.IOIOActivity;
  * Date Modified	01/09/2015 - Nicholas
  */
 
-public class IOIOEagleActivity extends IOIOActivity {
-
+public abstract class IOIOEagleActivity extends IOIOActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     class Looper extends BaseIOIOLooper {
-        private DigitalOutput led_;
-
         @Override
         protected void setup() throws ConnectionLostException {
             showVersions(ioio_, "IOIO connected!");
-            led_ = ioio_.openDigitalOutput(0, true);
+            setIOIO(ioio_);
         }
 
         @Override
         public void loop() throws ConnectionLostException, InterruptedException {
-            led_.write(false);
         }
 
         @Override
@@ -51,6 +46,9 @@ public class IOIOEagleActivity extends IOIOActivity {
             showVersions(ioio_, "Incompatible firmware version!");
         }
     }
+
+
+    abstract public void setIOIO(IOIO ioio);
 
     @Override
     protected IOIOLooper createIOIOLooper() {
