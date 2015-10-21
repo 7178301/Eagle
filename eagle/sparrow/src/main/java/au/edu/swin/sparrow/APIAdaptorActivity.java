@@ -1,6 +1,5 @@
 package au.edu.swin.sparrow;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.net.Uri;
@@ -36,6 +35,7 @@ import eagle.Log;
 import eagle.LogCallback;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.network.telnet.TelnetServer;
+import eagle.sdkInterface.controllerAdaptors.IOIO.IOIOEagleActivity;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
@@ -44,9 +44,11 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
 import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
+import ioio.lib.api.IOIO;
 
-public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, LogCallback {
-
+public class APIAdaptorActivity extends IOIOEagleActivity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, LogCallback {
+    private IOIO ioio;
+    private boolean ioioChanged = false;
 
     Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
 
@@ -108,6 +110,14 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         updateUISensors();
+    }
+
+    @Override
+    public void setIOIO(IOIO ioio) {
+        if (this.ioio == null || !this.ioio.equals(ioio)) {
+            ioioChanged = true;
+            this.ioio = ioio;
+        }
     }
 
     private void initializeUI() {
@@ -215,6 +225,11 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private void updateUISensors() {
         for (SensorFragment sensor : sensorFragments) {
             sensor.updateData();
+        }
+
+        if (ioioChanged && ioio != null && drone.getSDKAdaptor() != null) {
+            drone.getSDKAdaptor().setController(ioio);
+            ioioChanged = false;
         }
     }
 
