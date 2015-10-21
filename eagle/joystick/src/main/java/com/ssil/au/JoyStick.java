@@ -42,6 +42,9 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 ;
 
+/**
+ * If you have library loading issues, be sure to add -Djava.library.path=./lib to the runtime arguements
+ */
 public class JoyStick {
     private ProtocolBufferClient pcb;
     // We need to strongly reference callback instances.
