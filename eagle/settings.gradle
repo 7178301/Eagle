@@ -1,1 +1,1 @@
-include ':eagleAPI', ':eagleAPIAndroid', ':sparrow', ':sparrowremote'
+include ':eagleAPI', ':eagleAPIAndroid', ':sparrow', ':sparrowremote', ':joystick'
