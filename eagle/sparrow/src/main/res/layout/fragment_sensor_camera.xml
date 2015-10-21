@@ -58,8 +58,8 @@
 
     <dji.sdk.widget.DjiGLSurfaceView
         android:id="@+id/djiSurfaceView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_width="600dp"
         android:visibility="invisible">
 
     </dji.sdk.widget.DjiGLSurfaceView>

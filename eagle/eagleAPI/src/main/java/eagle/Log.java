@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -21,19 +22,17 @@ import java.util.Vector;
  */
 public class Log {
 
-    private static HashMap<String, Vector<String>> log = new HashMap<>();
+    private static ArrayList<String> log = new ArrayList<>();
     private static HashMap<String, Vector<LogCallback>> logCallBack = new HashMap<>();
     private static Vector<LogCallback> verboseLogCallback = new Vector<>();
+    private static int logLimit = 10000;
 
 
     public synchronized static void log(String tag, String message) {
-        if (log.containsKey(tag))
-            log.get(tag).add(message);
-        else {
-            Vector<String> initial = new Vector<>();
-            initial.add(message);
-            log.put(tag, initial);
+        while (log.size() > logLimit) {
+            log.remove(0);
         }
+        log.add(tag + ": " + message);
         for (LogCallback vLogCallback : verboseLogCallback)
             vLogCallback.onLogEntry(tag, message);
         if (logCallBack.containsKey(tag)) {
@@ -42,26 +41,13 @@ public class Log {
         }
     }
 
-    public synchronized static String lastMessage(String tag) {
-        if (log.containsKey(tag))
-            return log.get(tag).lastElement();
-        else
-            return "TAG DOES NOT EXIST";
-    }
-
     public synchronized static void addCallback(String tag, LogCallback callback) {
-        if (log.containsKey(tag) && logCallBack.containsKey(tag))
+        if (logCallBack.containsKey(tag))
             logCallBack.get(tag).add(callback);
-        else if (log.containsKey(tag) && !logCallBack.containsKey(tag)) {
+        else if (!logCallBack.containsKey(tag)) {
             Vector<LogCallback> initial = new Vector<>();
             initial.add(callback);
             logCallBack.put(tag, initial);
-        } else if (!log.containsKey(tag) && !logCallBack.containsKey(tag)) {
-            Vector<String> initialTag = new Vector<>();
-            log.put(tag, initialTag);
-            Vector<LogCallback> initialLogCallback = new Vector<>();
-            initialLogCallback.add(callback);
-            logCallBack.put(tag, initialLogCallback);
         }
         Log.log("LogCallback", "NEW CALLBACK ADDED TO " + tag);
     }
@@ -71,53 +57,42 @@ public class Log {
     }
 
     public synchronized static void removeCallback(String tag, LogCallback callback) {
-        if (logCallBack.containsValue(tag)) {
+        if (logCallBack.containsKey(tag)) {
             logCallBack.get(tag).remove(callback);
             Log.log("LogCallback", "CALLBACK REMOVED FROM " + tag);
         }
-
     }
 
-    public synchronized static void writeTagToFile(String tag, String filename) throws IOException{
-        PrintWriter output = null;
-        try{
-            File file = new File(filename);
-            if(!file.exists()) {
-                if(!file.createNewFile())
-                    throw new IOException("Failed To Create File");
-            }
-            output = new PrintWriter(new FileOutputStream(file));
-                for (String message : log.get(tag)) {
-                    output.println(tag+": "+message);
-            }
-        }
-        finally{
-            if(output!=null)
-                output.close();
-        }
+    public synchronized static ArrayList<String> getLog() {
+        return (ArrayList<String>) log.clone();
     }
 
-    public synchronized static void writeLogToFile(String filename) throws IOException{
+    public synchronized boolean setLogLimit(int logLimit){
+        if(logLimit>0){
+            Log.logLimit =logLimit;
+            return true;
+        }else
+            return false;
+    }
+
+    public synchronized static void writeLogToFile(String filename) throws IOException {
         PrintWriter output = null;
-        try{
+        try {
             File file = new File(filename);
-            if(!file.exists()) {
-                if(!file.getParentFile().exists()) {
+            if (!file.exists()) {
+                if (!file.getParentFile().exists()) {
                     if (!file.getParentFile().mkdirs())
                         throw new IOException("Failed To Create Folder");
                 }
-                if(!file.createNewFile())
+                if (!file.createNewFile())
                     throw new IOException("Failed To Create File");
             }
             output = new PrintWriter(new FileOutputStream(file));
-            for(String tag : log.keySet()){
-                for (String message : log.get(tag)) {
-                    output.println(tag+": "+message);
-                }
+            for (String message : log) {
+                output.println(message);
             }
-        }
-        finally{
-            if(output!=null)
+        } finally {
+            if (output != null)
                 output.close();
         }
     }

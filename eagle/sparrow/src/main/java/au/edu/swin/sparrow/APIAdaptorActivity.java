@@ -134,6 +134,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
         buttonExpandLog = (Button) findViewById(R.id.buttonExpandLog);
         webViewLog = (WebView) findViewById(R.id.webViewLog);
+        updateLogUI();
 
         FragmentManager fragMan = getFragmentManager();
         FragmentTransaction fragTransaction = fragMan.beginTransaction();
@@ -273,7 +274,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
         html.append("</head>");
         html.append("<body>");
-        Vector<String> tempLog = (Vector<String>) logMessages.clone();
+        ArrayList<String> tempLog = Log.getLog();
 
         for (int i = tempLog.size(); i > 0; i--) {
             html.append(tempLog.get(i - 1) + "<br>");
