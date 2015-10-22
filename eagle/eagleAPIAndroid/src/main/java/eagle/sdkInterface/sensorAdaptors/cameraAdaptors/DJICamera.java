@@ -55,7 +55,17 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public boolean disconnectFromSensor() {
-        return false;
+        Log.log("DJICamera", "Stopping  DJI Camera Polling Interval");
+        DJIDrone.getDjiCamera().stopUpdateTimer();
+        DJIDrone.getDjiCamera().setReceivedVideoDataCallBack(null);
+        DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(null);
+        djiCameraSystemState=null;
+        Log.log("DJICamera", "Stopping  DJI Gimble Polling Interval");
+        DJIDrone.getDjiGimbal().stopUpdateTimer();
+        DJIDrone.getDjiGimbal().setGimbalUpdateAttitudeCallBack(null);
+        djiGimbalAttitude=null;
+
+        return true;
     }
 
     @Override
@@ -91,14 +101,44 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public void startTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback) {
-        if (sdkAdaptorCallback != null)
-            sdkAdaptorCallback.onResult(false, "Function Not Implemented");
+        if (isConnectedToSensor())
+            DJIDrone.getDjiCamera().startRecord(new DJIExecuteResultCallback() {
+                @Override
+                public void onResult(DJIError djiError) {
+                    if (sdkAdaptorCallback != null && djiError.errorCode == DJIError.RESULT_OK) {
+                        Log.log("DJICamera", "Start Record SUCCESS");
+                        sdkAdaptorCallback.onResult(true, djiError.errorDescription);
+                    } else if (sdkAdaptorCallback != null) {
+                        Log.log("DJICamera", "Start Record FAIL " + djiError.errorDescription);
+                        sdkAdaptorCallback.onResult(false, "Start Record FAIL " + djiError.errorDescription);
+                    }
+                }
+            });
+        else if (sdkAdaptorCallback != null) {
+            Log.log("DJICamera", "Start Record FAIL - Not Connected To The Camera");
+            sdkAdaptorCallback.onResult(false, "Start Record FAIL - Not Connected To The Camera");
+        }
     }
 
     @Override
     public void stopTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback) {
-        if (sdkAdaptorCallback != null)
-            sdkAdaptorCallback.onResult(false, "Function Not Implemented");
+        if (isConnectedToSensor())
+            DJIDrone.getDjiCamera().stopRecord(new DJIExecuteResultCallback() {
+                @Override
+                public void onResult(DJIError djiError) {
+                    if (sdkAdaptorCallback != null && djiError.errorCode == DJIError.RESULT_OK) {
+                        Log.log("DJICamera", "Stop Record SUCCESS");
+                        sdkAdaptorCallback.onResult(true, djiError.errorDescription);
+                    } else if (sdkAdaptorCallback != null) {
+                        Log.log("DJICamera", "Stop Record FAIL " + djiError.errorDescription);
+                        sdkAdaptorCallback.onResult(false, "Stop Record FAIL " + djiError.errorDescription);
+                    }
+                }
+            });
+        else if (sdkAdaptorCallback != null) {
+            Log.log("DJICamera", "Stop Record FAIL - Not Connected To The Camera");
+            sdkAdaptorCallback.onResult(false, "Stop Record FAIL - Not Connected To The Camera");
+        }
     }
 
     @Override

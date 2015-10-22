@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:text="@string/capture"
             android:id="@+id/buttonCapture"
+            android:visibility="invisible"
             android:layout_column="0" />
 
         <Button
@@ -58,10 +59,14 @@
 
     <dji.sdk.widget.DjiGLSurfaceView
         android:id="@+id/djiSurfaceView"
-        android:layout_height="600dp"
-        android:layout_width="600dp"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
         android:visibility="invisible">
-
     </dji.sdk.widget.DjiGLSurfaceView>
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_height="fill_parent"
+        android:layout_width="fill_parent"
+        android:visibility="invisible"/>
 
 </TableLayout>
