@@ -207,12 +207,12 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 commandConnection.sendMessage("CHANGEYAW -D 10", rcb);
                 break;
             case "/buttonLeft":
-                latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
+                latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
                 longitude = -1 * Math.cos(Math.toRadians(bearingAngle));
                 commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonRight":
-                latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
+                latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
                 longitude = 1 * Math.cos(Math.toRadians(bearingAngle));
                 commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
