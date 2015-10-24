@@ -27,11 +27,6 @@ public class AccelerometerFragment extends SensorFragment {
 
     private Activity activity = null;
 
-    private TextView sensorOutputTitleTextView = null;
-    private TextView sensorOutput1TitleTextView = null;
-    private TextView sensorOutput2TitleTextView = null;
-    private TextView sensorOutput3TitleTextView = null;
-
     private TextView sensorOutput1DataTextView = null;
     private TextView sensorOutput2DataTextView = null;
     private TextView sensorOutput3DataTextView = null;
@@ -56,10 +51,10 @@ public class AccelerometerFragment extends SensorFragment {
         activity = getActivity();
 
 
-        sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
-        sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
-        sensorOutput2TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Title);
-        sensorOutput3TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Title);
+        TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
+        TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+        TextView sensorOutput2TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Title);
+        TextView sensorOutput3TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Title);
 
         sensorOutputTitleTextView.setText(getResources().getString(R.string.accelerometer));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.x_axis_));
@@ -84,11 +79,11 @@ public class AccelerometerFragment extends SensorFragment {
     }
 
     public void updateData() {
-        if(activity!=null) {
+        if (activity != null) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (accelerometer.isConnectedToSensor()) {
+                    if (accelerometer != null && accelerometer.isConnectedToSensor() && accelerometer.isDataReady()) {
                         sensorOutput1DataTextView.setText(String.valueOf(accelerometer.getData()[0]));
                         sensorOutput2DataTextView.setText(String.valueOf(accelerometer.getData()[1]));
                         sensorOutput3DataTextView.setText(String.valueOf(accelerometer.getData()[2]));

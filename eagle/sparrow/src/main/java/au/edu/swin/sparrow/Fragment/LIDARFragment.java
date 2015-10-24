@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 public class LIDARFragment extends SensorFragment {
 
     AdaptorLIDAR lidar = null;
+
+    private Activity activity;
+
+    private TextView sensorOutput1DataTextView = null;
 
     public static LIDARFragment newInstance() {
         LIDARFragment fragment = new LIDARFragment();
@@ -32,10 +37,15 @@ public class LIDARFragment extends SensorFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sensor_1_output, container, false);
 
+        activity = getActivity();
+
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+
         sensorOutputTitleTextView.setText(getResources().getString(R.string.lidar));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.distance_cm_));
+
+        sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
 
         return view;
     }
@@ -46,13 +56,17 @@ public class LIDARFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null) {
-            TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            if (lidar.isConnectedToSensor()) {
-                sensorOutput1DataTextView.setText(String.valueOf(lidar.getData()));
-            } else {
-                sensorOutput1DataTextView.setText("");
-            }
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (lidar != null && lidar.isConnectedToSensor() && lidar.isDataReady()) {
+                        sensorOutput1DataTextView.setText(String.valueOf(lidar.getData()));
+                    } else {
+                        sensorOutput1DataTextView.setText("");
+                    }
+                }
+            });
         }
     }
 }

@@ -47,10 +47,14 @@ public class DJIGPS extends AdaptorGPS implements DJIGroundStationFlyingInfoCall
     //TODO Following Method Need Proper Implementation
     @Override
     public boolean disconnectFromSensor() {
-        Log.log("DJIGPS", "Stopping  DJI GroundStation Polling Interval");
-        DJIDrone.getDjiGroundStation().stopUpdateTimer();
-        DJIDrone.getDjiGroundStation().setGroundStationFlyingInfoCallBack(null);
+        if (DJIDrone.getDjiGroundStation() != null) {
+            Log.log("DJIGPS", "Stopping  DJI GroundStation Polling Interval");
+            DJIDrone.getDjiGroundStation().stopUpdateTimer();
+            DJIDrone.getDjiGroundStation().setGroundStationFlyingInfoCallBack(null);
+        } else
+            return false;
         djiGroundStationFlyingInfo = null;
+        gpsData = null;
         return true;
     }
 

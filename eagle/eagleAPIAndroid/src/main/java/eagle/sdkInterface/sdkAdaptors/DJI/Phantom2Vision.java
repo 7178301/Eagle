@@ -179,29 +179,32 @@ public class Phantom2Vision extends SDKAdaptor implements DJIMcuUpdateStateCallB
 
     //TODO: workout what to do for these functions
     public boolean disconnectFromDrone() {
-        Log.log("Phantom2VisionDissconectFromDrone", "Stopping  DJI GroundStation Communications");
-        DJIDrone.getDjiGroundStation().closeGroundStation(new DJIGroundStationExecutCallBack() {
-            @Override
-            public void onResult(DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
-                Log.log("Phantom2VisionDissconectFromDrone", "DJI GroundStation Communications " + groundStationResult);
+        if(DJIDrone.getDjiGroundStation()!=null) {
+            Log.log("Phantom2VisionDissconectFromDrone", "Stopping  DJI GroundStation Communications");
+            DJIDrone.getDjiGroundStation().closeGroundStation(new DJIGroundStationExecutCallBack() {
+                @Override
+                public void onResult(DJIGroundStationTypeDef.GroundStationResult groundStationResult) {
+                    Log.log("Phantom2VisionDissconectFromDrone", "DJI GroundStation Communications " + groundStationResult);
+                }
+            });
+            Log.log("Phantom2VisionDissconectFromDrone", "Stopping  DJI Battery Polling Interval");
+            DJIDrone.getDjiBattery().stopUpdateTimer();
+            DJIDrone.getDjiBattery().setBatteryUpdateInfoCallBack(null);
+            djiBatteryProperty = null;
+            Log.log("Phantom2VisionDissconectFromDrone", "Stopping  DJI MainController Polling Interval");
+            DJIDrone.getDjiMC().stopUpdateTimer();
+            DJIDrone.getDjiMC().setMcuUpdateStateCallBack(null);
+            djiMainControllerSystemState = null;
+
+            if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS")) {
+                if (!getGPSs().get(0).disconnectFromSensor())
+                    return false;
             }
-        });
-        Log.log("Phantom2VisionDissconectFromDrone", "Stopping  DJI Battery Polling Interval");
-        DJIDrone.getDjiBattery().stopUpdateTimer();
-        DJIDrone.getDjiBattery().setBatteryUpdateInfoCallBack(null);
-        djiBatteryProperty = null;
-        Log.log("Phantom2VisionDissconectFromDrone", "Stopping  DJI MainController Polling Interval");
-        DJIDrone.getDjiMC().stopUpdateTimer();
-        DJIDrone.getDjiMC().setMcuUpdateStateCallBack(null);
-        djiMainControllerSystemState = null;
 
-        if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS")) {
-            if (!getGPSs().get(0).disconnectFromSensor())
-                return false;
+            Log.log("Phantom2VisionDissconectFromDrone", "Destroying All Initialized Values/Variables");
+            return DJIDrone.disconnectToDrone();
         }
-
-        Log.log("Phantom2VisionDissconectFromDrone", "Destroying All Initialized Values/Variables");
-        return DJIDrone.disconnectToDrone();
+        return false;
     }
 
     public boolean isConnectedToDrone() {

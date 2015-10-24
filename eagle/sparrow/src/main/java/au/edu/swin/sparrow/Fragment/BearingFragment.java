@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,11 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCal
  */
 public class BearingFragment extends SensorFragment {
 
-    AdaptorBearing adaptorBearing = null;
+    AdaptorBearing bearing = null;
+
+    private Activity activity;
+
+    private TextView sensorOutput1DataTextView = null;
 
     public static BearingFragment newInstance() {
         BearingFragment fragment = new BearingFragment();
@@ -34,16 +39,22 @@ public class BearingFragment extends SensorFragment {
 
         view = inflater.inflate(R.layout.fragment_sensor_1_output, container, false);
 
+        activity = getActivity();
+
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+
         sensorOutputTitleTextView.setText(getResources().getString(R.string.bearing));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.bearing));
+
+        sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
+
         return view;
     }
 
     public void setMagneticAccelerometerAdaptors(AdaptorBearing adaptorBearing) {
-        this.adaptorBearing = adaptorBearing;
-        this.adaptorBearing.addSensorAdaptorCallback(new SensorAdaptorCallback() {
+        this.bearing = adaptorBearing;
+        this.bearing.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
                 updateData();
@@ -53,12 +64,16 @@ public class BearingFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null) {
-            TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            if (adaptorBearing.isConnectedToSensor()&&adaptorBearing.isDataReady())
-                sensorOutput1DataTextView.setText(String.valueOf(adaptorBearing.getData()));
-            else
-                sensorOutput1DataTextView.setText("");
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (bearing != null && bearing.isConnectedToSensor() && bearing.isDataReady())
+                        sensorOutput1DataTextView.setText(String.valueOf(bearing.getData()));
+                    else
+                        sensorOutput1DataTextView.setText("");
+                }
+            });
         }
     }
 }

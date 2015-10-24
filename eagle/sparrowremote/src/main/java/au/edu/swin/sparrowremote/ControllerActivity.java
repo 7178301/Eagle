@@ -59,12 +59,14 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 ca.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.log("ControllerActivity", "Command failed (" + response + "). Perhaps you need to connect first?");
+                        Log.log("ControllerActivity","Command failed (" + response + "). Perhaps you need to connect first?");
                         Toast toast = Toast.makeText(ca, "Command failed (" + response + "). Perhaps you need to connect first?", Toast.LENGTH_LONG);
                         toast.show();
+
                     }
                 });
             }
+
         }
     };
 
@@ -131,14 +133,14 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     }
 
-    protected void onStart() {
+    protected void onStart(){
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onStart();
     }
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback("ControllerActivity", this);
+        Log.removeCallback("ControllerActivity",this);
         myTimer.cancel();
         super.onDestroy();
     }
@@ -193,35 +195,35 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 commandConnection.sendMessage("DISCONNECTFROMDRONE", rcb);
                 break;
             case "/buttonUp":
-                commandConnection.sendMessage("CHANGEALTITUDE -D 2", rcb);
+                commandConnection.sendMessage("CHANGEALTITUDE -D 1", rcb);
                 break;
             case "/buttonDown":
-                commandConnection.sendMessage("CHANGEALTITUDE -D -2", rcb);
+                commandConnection.sendMessage("CHANGEALTITUDE -D -1", rcb);
                 break;
             case "/buttonRotateLeft":
-                commandConnection.sendMessage("CHANGEYAW -D -45", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D -10", rcb);
                 break;
             case "/buttonRotateRight":
-                commandConnection.sendMessage("CHANGEYAW -D 45", rcb);
+                commandConnection.sendMessage("CHANGEYAW -D 10", rcb);
                 break;
             case "/buttonLeft":
-                latitude = 5 * Math.sin(Math.toRadians(bearingAngle));
-                longitude = -5 * Math.cos(Math.toRadians(bearingAngle));
+                latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
+                longitude = -1 * Math.cos(Math.toRadians(bearingAngle));
                 commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonRight":
-                latitude = 5 * Math.sin(Math.toRadians(bearingAngle));
-                longitude = 5 * Math.cos(Math.toRadians(bearingAngle));
+                latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
+                longitude = 1 * Math.cos(Math.toRadians(bearingAngle));
                 commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonForward":
-                latitude = 5 * Math.cos(Math.toRadians(bearingAngle));
-                longitude = 5 * Math.sin(Math.toRadians(bearingAngle));
+                latitude = 1 * Math.cos(Math.toRadians(bearingAngle));
+                longitude = 1 * Math.sin(Math.toRadians(bearingAngle));
                 commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonBackward":
-                latitude = -5 * Math.cos(Math.toRadians(bearingAngle));
-                longitude = -5 * Math.sin(Math.toRadians(bearingAngle));
+                latitude = -1 * Math.cos(Math.toRadians(bearingAngle));
+                longitude = -1 * Math.sin(Math.toRadians(bearingAngle));
                 commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonGoHome":
@@ -291,7 +293,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         boolean connected = commandConnection.sendMessage("GETPOSITIONINFLIGHT", new ProtocolBufferClient.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
-                if (position != null && !position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
+                if (position != null&&!position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
                     String parts[] = position.split(" ");
                     if (parts.length != 6) {
                         return;

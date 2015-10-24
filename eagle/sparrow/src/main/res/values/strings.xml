@@ -47,4 +47,17 @@
     <string name="pressure">Pressure</string>
     <string name="startRecord">Start Record</string>
     <string name="stopRecord">Stop Record</string>
+    <string name="controls">Controls</string>
+    <string name="collapseControls">Collapse Controls</string>
+    <string name="expandControls">Expand Controls</string>
+
+
+    <string name="disconnect">Disconnect</string>
+    <string name="left">Left</string>
+    <string name="forward">Forward</string>
+    <string name="backward">Backward</string>
+    <string name="right">Right</string>
+    <string name="rotate_left">Rotate Left</string>
+    <string name="rotate_right">Rotate Right</string>
+    <string name="gohome">GOHOME</string>
 </resources>

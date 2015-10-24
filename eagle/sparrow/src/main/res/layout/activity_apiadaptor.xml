@@ -4,32 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/adaptorNameTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/adaptor_name"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <RelativeLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/buttonConnect"
+
+        <TextView
+            android:id="@+id/adaptorNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connect" />
+            android:text="@string/adaptor_name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_alignParentStart="true"/>
 
         <TextView
             android:id="@+id/textViewConnectedStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_alignEnd="@+id/buttonConnect"
-            android:layout_alignRight="@+id/buttonConnect"
+            android:text="@string/not_connected"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_toEndOf="@id/textViewConnectedStatus"/>
     </RelativeLayout>
 
     <ScrollView
@@ -40,6 +34,152 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textViewControls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/controls"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <Button
+                    android:id="@+id/buttonExpandControls"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_alignEnd="@+id/textViewControls"
+                    android:layout_alignRight="@+id/textViewControls"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/expandControls" />
+
+            </RelativeLayout>
+
+            <GridLayout
+                android:id="@+id/gridLayoutControls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:useDefaultMargins="true">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disconnect"
+                    android:id="@+id/buttonControlDisconnect"
+                    android:layout_row="0"
+                    android:layout_column="2"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/left"
+                    android:id="@+id/buttonControlLeft"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connect"
+                    android:id="@+id/buttonControlConnect"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forward"
+                    android:id="@+id/buttonControlForward"
+                    android:layout_row="0"
+                    android:layout_column="1"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backward"
+                    android:id="@+id/buttonControlBackward"
+                    android:layout_row="2"
+                    android:layout_column="1"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/right"
+                    android:id="@+id/buttonControlRight"
+                    android:layout_row="1"
+                    android:layout_column="2"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Space
+                    android:layout_row="3"
+                    android:layout_column="0"
+                    android:layout_columnWeight="1" />
+
+                <Space
+                    android:layout_row="3"
+                    android:layout_column="1"
+                    android:layout_columnWeight="1" />
+
+                <Space
+                    android:layout_row="3"
+                    android:layout_column="2"
+                    android:layout_columnWeight="1" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rotate_left"
+                    android:id="@+id/buttonControlRotateLeft"
+                    android:layout_row="5"
+                    android:layout_column="0"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rotate_right"
+                    android:id="@+id/buttonControlRotateRight"
+                    android:layout_row="5"
+                    android:layout_column="2"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/up"
+                    android:id="@+id/buttonControlUp"
+                    android:layout_row="6"
+                    android:layout_column="0"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gohome"
+                    android:id="@+id/buttonControlGoHome"
+                    android:layout_row="6"
+                    android:layout_column="1"
+                    android:layout_gravity="fill_horizontal" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/down"
+                    android:id="@+id/buttonControlDown"
+                    android:layout_row="6"
+                    android:layout_column="2"
+                    android:layout_gravity="fill_horizontal" />
+
+            </GridLayout>
+
             <RelativeLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
@@ -58,7 +198,7 @@
                     android:layout_alignRight="@+id/textViewSensorData"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="@string/collapseSensors" />
+                    android:text="@string/expandSensors" />
 
             </RelativeLayout>
 
@@ -66,6 +206,7 @@
                 android:id="@+id/scrollViewSensors"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:orientation="vertical"/>
 
             <RelativeLayout
@@ -86,10 +227,11 @@
                     android:layout_alignRight="@+id/textViewLogData"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:text="@string/collapseLog" />
+                    android:text="@string/expandLog" />
                 <WebView
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:id="@+id/webViewLog"
                     android:layout_below="@+id/buttonExpandLog" />
             </RelativeLayout>

@@ -28,13 +28,6 @@ public class GPSFragment extends SensorFragment {
 
     private Activity activity;
 
-    private TextView sensorOutputTitleTextView = null;
-    private TextView sensorOutput1TitleTextView = null;
-    private TextView sensorOutput2TitleTextView = null;
-    private TextView sensorOutput3TitleTextView = null;
-    private TextView sensorOutput4TitleTextView = null;
-    private TextView sensorOutput5TitleTextView = null;
-
     private TextView sensorOutput1DataTextView = null;
     private TextView sensorOutput2DataTextView = null;
     private TextView sensorOutput3DataTextView = null;
@@ -61,12 +54,12 @@ public class GPSFragment extends SensorFragment {
 
         activity = getActivity();
 
-        sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
-        sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
-        sensorOutput2TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Title);
-        sensorOutput3TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Title);
-        sensorOutput4TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput4Title);
-        sensorOutput5TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput5Title);
+        TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
+        TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+        TextView sensorOutput2TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Title);
+        TextView sensorOutput3TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput3Title);
+        TextView sensorOutput4TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput4Title);
+        TextView sensorOutput5TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput5Title);
 
         sensorOutputTitleTextView.setText(getResources().getString(R.string.gps));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.longitude));
@@ -95,11 +88,11 @@ public class GPSFragment extends SensorFragment {
     }
 
     public void updateData() {
-        if(activity!=null) {
+        if (activity != null) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (gps.isConnectedToSensor() && gps.isDataReady()) {
+                    if (gps != null && gps.isConnectedToSensor() && gps.isDataReady()) {
                         sensorOutput1DataTextView.setText(String.valueOf(gps.getData().getLongitude()));
                         sensorOutput2DataTextView.setText(String.valueOf(gps.getData().getLatitude()));
                         sensorOutput3DataTextView.setText(String.valueOf(gps.getData().getAltitude()));
