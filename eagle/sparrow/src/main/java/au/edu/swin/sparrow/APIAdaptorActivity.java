@@ -117,7 +117,8 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 1000);
 
-        drone.getSDKAdaptor().connectToDrone();
+        if(drone.getSDKAdaptor().connectToDrone())
+            textViewConnectedStatus.setText(getResources().getString(R.string.connected));
     }
 
     @Override
