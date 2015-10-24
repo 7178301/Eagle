@@ -39,12 +39,15 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public boolean connectToSensor() {
+        Log.log("DJICamera", "Checking DJI Application Key Permissions");
         if (DJIDrone.getLevel() < 1)
             return false;
         DJIDrone.getDjiCamera().stopUpdateTimer();
+        Log.log("DJICamera", "Starting  DJI Camera Polling Interval");
         if (!DJIDrone.getDjiCamera().startUpdateTimer(1000))
             return false;
         DJIDrone.getDjiGimbal().stopUpdateTimer();
+        Log.log("DJICamera", "Starting  DJI Gimble Polling Interval");
         if (!DJIDrone.getDjiGimbal().startUpdateTimer(1000))
             return false;
         DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(this);
@@ -55,22 +58,27 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public boolean disconnectFromSensor() {
-        Log.log("DJICamera", "Stopping  DJI Camera Polling Interval");
-        DJIDrone.getDjiCamera().stopUpdateTimer();
-        DJIDrone.getDjiCamera().setReceivedVideoDataCallBack(null);
-        DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(null);
-        djiCameraSystemState=null;
-        Log.log("DJICamera", "Stopping  DJI Gimble Polling Interval");
-        DJIDrone.getDjiGimbal().stopUpdateTimer();
-        DJIDrone.getDjiGimbal().setGimbalUpdateAttitudeCallBack(null);
-        djiGimbalAttitude=null;
-
+        if (DJIDrone.getDjiCamera() != null) {
+            Log.log("DJICamera", "Stopping  DJI Camera Polling Interval");
+            DJIDrone.getDjiCamera().stopUpdateTimer();
+            DJIDrone.getDjiCamera().setReceivedVideoDataCallBack(null);
+            DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(null);
+            djiCameraSystemState = null;
+        } else
+            return false;
+        if (DJIDrone.getDjiGimbal() != null) {
+            Log.log("DJICamera", "Stopping  DJI Gimble Polling Interval");
+            DJIDrone.getDjiGimbal().stopUpdateTimer();
+            DJIDrone.getDjiGimbal().setGimbalUpdateAttitudeCallBack(null);
+            djiGimbalAttitude = null;
+        } else
+            return false;
         return true;
     }
 
     @Override
     public boolean isConnectedToSensor() {
-        return DJIDrone.getDjiCamera()!=null&&DJIDrone.getDjiCamera().getCameraConnectIsOk()&&djiGimbalAttitude!=null&&djiCameraSystemState!=null;
+        return DJIDrone.getDjiCamera() != null && DJIDrone.getDjiCamera().getCameraConnectIsOk() && djiGimbalAttitude != null && djiCameraSystemState != null;
     }
 
     @Override
@@ -100,7 +108,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     }
 
     @Override
-    public void startTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback) {
+    public void startRecord(final SDKAdaptorCallback sdkAdaptorCallback) {
         if (isConnectedToSensor())
             DJIDrone.getDjiCamera().startRecord(new DJIExecuteResultCallback() {
                 @Override
@@ -121,7 +129,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     }
 
     @Override
-    public void stopTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback) {
+    public void stopRecord(final SDKAdaptorCallback sdkAdaptorCallback) {
         if (isConnectedToSensor())
             DJIDrone.getDjiCamera().stopRecord(new DJIExecuteResultCallback() {
                 @Override
@@ -236,7 +244,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public void onResult(byte[] videoBuffer, int size) {
-        if(sensorAdaptorCameraLiveFeedCallbacks!=null) {
+        if (sensorAdaptorCameraLiveFeedCallbacks != null) {
             for (SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback : sensorAdaptorCameraLiveFeedCallbacks)
                 sensorAdaptorCameraLiveFeedCallback.onSensorEvent(videoBuffer, size);
         }

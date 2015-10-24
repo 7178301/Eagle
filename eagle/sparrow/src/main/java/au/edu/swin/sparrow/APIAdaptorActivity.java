@@ -74,6 +74,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         drone.setSDKAdaptor(this.getIntent().getStringExtra("drone"));
         drone.getSDKAdaptor().setAndroidContext(this);
+        drone.getSDKAdaptor().connectToDrone();
         initializeUI();
         telnet = new TelnetServer(drone.getSDKAdaptor().scriptingEngine, 2323);
         protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine, 2324);
@@ -89,7 +90,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback("TelnetServer", this);
         myTimer.cancel();
         super.onDestroy();
     }
@@ -256,8 +256,6 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
     @Override
     public void onLogEntry(String tag, String message) {
-        logMessages.add(tag + ": " + message);
-
         if (webViewLog != null)
             runOnUiThread(new Runnable() {
                 @Override

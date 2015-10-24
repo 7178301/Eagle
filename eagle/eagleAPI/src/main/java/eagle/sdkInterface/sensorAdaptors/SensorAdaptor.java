@@ -21,14 +21,14 @@ public abstract class SensorAdaptor {
     protected String adaptorHardwareVersion = null;
     protected String adaptorHardwareSerialNumber = null;
 
-    protected HashSet<eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback> sensorAdaptorCallback;
+    protected HashSet<eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback> sensorAdaptorCallbacks;
 
     public SensorAdaptor(String adaptorManufacturer, String adaptorHardwareModel, String adaptorVersion) {
         this.adaptorName = adaptorManufacturer + " " + adaptorHardwareModel;
         this.adaptorManufacturer = adaptorManufacturer;
         this.adaptorHardwareModel = adaptorHardwareModel;
         this.adaptorVersion = adaptorVersion;
-        sensorAdaptorCallback = new HashSet<>();
+        sensorAdaptorCallbacks = new HashSet<>();
     }
 
     public abstract boolean connectToSensor();
@@ -92,6 +92,6 @@ public abstract class SensorAdaptor {
     }
 
     public void addSensorAdaptorCallback(final eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback sensorAdaptorCallback) {
-        this.sensorAdaptorCallback.add(sensorAdaptorCallback);
+        this.sensorAdaptorCallbacks.add(sensorAdaptorCallback);
     }
 }

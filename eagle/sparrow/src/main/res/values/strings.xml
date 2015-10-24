@@ -45,4 +45,6 @@
     <string name="capture">Capture</string>
     <string name="barometer">Barometer</string>
     <string name="pressure">Pressure</string>
+    <string name="startRecord">Start Record</string>
+    <string name="stopRecord">Stop Record</string>
 </resources>

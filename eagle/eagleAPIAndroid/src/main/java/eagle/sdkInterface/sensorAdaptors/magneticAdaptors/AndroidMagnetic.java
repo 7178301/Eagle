@@ -89,7 +89,7 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
             magneticData[1] = event.values[1];
             magneticData[2] = event.values[2];
         }
-        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
             currentSensorAdaptorCallback.onSensorChanged();
     }
 }

@@ -28,12 +28,12 @@ public class AdaptorLoader {
 
     private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision",
             "Flyver.F450Flamewheel", "Simulator.Simulator"));
-    private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
+    private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer", "DJIAccelerometer"));
     private HashSet<String> barometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBarometer"));
     private HashSet<String> bearingAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBearing"));
     private HashSet<String> cameraAdaptorPaths = new HashSet<>(Arrays.asList("AndroidCamera", "LinkSpriteSEN12804","DJICamera"));
     private HashSet<String> magneticAdaptorPaths = new HashSet<>(Arrays.asList("AndroidMagnetic"));
-    private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS", "JavaGPS"));
+    private HashSet<String> gpsAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGPS", "JavaGPS", "DJIGPS"));
     private HashSet<String> gyroscopeAdaptorPaths = new HashSet<>(Arrays.asList("AndroidGyroscope"));
     //private HashSet<String> LIDARAdaptorPaths = new HashSet<>(Arrays.asList());
     private HashSet<String> RPLIDARAdaptorPaths = new HashSet<>(Arrays.asList("RoboPeakRPLIDARA1M1R1"));

@@ -21,52 +21,77 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
+            android:id="@+id/buttonCameraConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connect"
-            android:id="@+id/buttonCameraConnect"
-            android:layout_column="1"/>
+            android:layout_column="1"
+            android:text="@string/connect" />
 
     </TableRow>
 
     <TableRow
-        style="?android:attr/buttonBarStyle">
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/capture"
             android:id="@+id/buttonCapture"
-            android:visibility="invisible"
-            android:layout_column="0" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/up"
+            android:layout_column="0"
+            android:text="@string/capture"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonStartRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:text="@string/startRecord"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/buttonStopRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:text="@string/stopRecord"
+            android:visibility="gone" />
+
+    </TableRow>
+
+    <TableRow
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
             android:id="@+id/buttonCameraUp"
-            android:visibility="invisible"
-            android:layout_column="1" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/down"
-            android:id="@+id/buttonCameraDown"
-            android:visibility="invisible"
-            android:layout_column="2" />
+            android:layout_column="1"
+            android:text="@string/up"
+            android:visibility="gone" />
 
+        <Button
+            android:id="@+id/buttonCameraDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:text="@string/down"
+            android:visibility="gone" />
     </TableRow>
 
     <dji.sdk.widget.DjiGLSurfaceView
         android:id="@+id/djiSurfaceView"
-        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:visibility="invisible">
-    </dji.sdk.widget.DjiGLSurfaceView>
+        android:layout_height="fill_parent"
+        android:visibility="gone"/>
+
     <SurfaceView
         android:id="@+id/surfaceView"
-        android:layout_height="fill_parent"
         android:layout_width="fill_parent"
-        android:visibility="invisible"/>
+        android:layout_height="fill_parent"
+        android:visibility="gone" />
 
 </TableLayout>

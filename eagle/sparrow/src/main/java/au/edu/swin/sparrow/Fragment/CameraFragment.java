@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow.Fragment;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -9,7 +10,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import au.edu.swin.sparrow.R;
@@ -31,12 +31,14 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCam
  */
 public class CameraFragment extends SensorFragment {
 
-    AdaptorCamera camera = null;
+    private AdaptorCamera camera = null;
 
-    Button connectCameraButton = null;
-    Button upButton = null;
-    Button downButton = null;
-    Button captureButton = null;
+    private Button connectCameraButton = null;
+    private Button upButton = null;
+    private Button downButton = null;
+    private Button captureButton = null;
+    private Button startRecordButton = null;
+    private Button stopRecordButton = null;
 
     private DjiGLSurfaceView djiGLSurfaceView = null;
     private SurfaceView surfaceView = null;
@@ -54,6 +56,16 @@ public class CameraFragment extends SensorFragment {
     }
 
     @Override
+    public void onDestroy() {
+        if (camera != null) {
+            if (camera instanceof DJICamera)
+                djiGLSurfaceView.destroy();
+            camera.disconnectFromSensor();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -65,51 +77,53 @@ public class CameraFragment extends SensorFragment {
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         sensorOutputTitleTextView.setText(getResources().getString(R.string.camera));
 
-        djiGLSurfaceView = (DjiGLSurfaceView) this.view.findViewById(R.id.djiSurfaceView);
-        surfaceView = (SurfaceView) this.view.findViewById(R.id.surfaceView);
-
         connectCameraButton = (Button) view.findViewById(R.id.buttonCameraConnect);
         upButton = (Button) view.findViewById(R.id.buttonCameraUp);
         downButton = (Button) view.findViewById(R.id.buttonCameraDown);
         captureButton = (Button) view.findViewById(R.id.buttonCapture);
+        startRecordButton = (Button) view.findViewById(R.id.buttonStartRecord);
+        stopRecordButton = (Button) view.findViewById(R.id.buttonStopRecord);
 
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        final int screenWidth = size.x;
+        djiGLSurfaceView = (DjiGLSurfaceView) this.view.findViewById(R.id.djiSurfaceView);
+        surfaceView = (SurfaceView) this.view.findViewById(R.id.surfaceView);
+
+        if (camera instanceof DJICamera) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    camera.addSensorAdaptorCameraLiveFeedallback(new SensorAdaptorCameraLiveFeedCallback() {
+                        @Override
+                        public void onSensorEvent(final byte[] getData, final int getSize) {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    djiGLSurfaceView.setDataToDecoder(getData, getSize);
+                                }
+                            });
+                        }
+                    });
+                    djiGLSurfaceView.start();
+                }
+            });
+        }
+
+        if (camera != null) {
+            if(camera.isConnectedToSensor())
+                displayCameraHUD();
+            else if (camera.connectToSensor())
+                displayCameraHUD();
+        }
 
         connectCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                if (!camera.isConnectedToSensor() && camera.connectToSensor()) {
-                    if (camera instanceof DJICamera) {
-                        djiGLSurfaceView.setVisibility(View.VISIBLE);
-                        djiGLSurfaceView.getHolder().setFixedSize(screenWidth, screenWidth);
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                camera.addSensorAdaptorCameraLiveFeedallback(new SensorAdaptorCameraLiveFeedCallback() {
-                                    @Override
-                                    public void onSensorEvent(final byte[] getData, final int getSize) {
-                                        activity.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                djiGLSurfaceView.setDataToDecoder(getData, getSize);
-                                            }
-                                        });
-                                    }
-                                });
-                                djiGLSurfaceView.start();
-                            }
-                        });
-                        downButton.setVisibility(View.VISIBLE);
-                        upButton.setVisibility(View.VISIBLE);
-                    }
-                    captureButton.setVisibility(View.VISIBLE);
+                if (camera != null && !camera.isConnectedToSensor() && camera.connectToSensor()) {
+                    displayCameraHUD();
                     Log.log("APIAdaptorActivity", "Connect To Camera SUCCESS");
-                } else if (camera.isConnectedToSensor())
+                } else if (camera != null && camera.isConnectedToSensor()) {
+                    displayCameraHUD();
                     Log.log("CameraFragment", "Already Connected To Camera");
-                else
+                } else
                     Log.log("CameraFragment", "Connect To Camera FAIL");
 
             }
@@ -118,8 +132,32 @@ public class CameraFragment extends SensorFragment {
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (camera.isConnectedToSensor())
+                if (camera != null && camera.isConnectedToSensor())
                     camera.takePicture(new SDKAdaptorCallback() {
+                        @Override
+                        public void onResult(boolean booleanResult, String stringResult) {
+                        }
+                    });
+            }
+        });
+
+        startRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (camera != null && camera.isConnectedToSensor())
+                    camera.startRecord(new SDKAdaptorCallback() {
+                        @Override
+                        public void onResult(boolean booleanResult, String stringResult) {
+                        }
+                    });
+            }
+        });
+
+        stopRecordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (camera != null && camera.isConnectedToSensor())
+                    camera.stopRecord(new SDKAdaptorCallback() {
                         @Override
                         public void onResult(boolean booleanResult, String stringResult) {
                         }
@@ -130,7 +168,7 @@ public class CameraFragment extends SensorFragment {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (camera.isConnectedToSensor())
+                if (camera != null && camera.isConnectedToSensor())
                     camera.updateCameraAttitude(new SDKAdaptorCallback() {
                         @Override
                         public void onResult(boolean booleanResult, String stringResult) {
@@ -142,7 +180,7 @@ public class CameraFragment extends SensorFragment {
         downButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (camera.isConnectedToSensor())
+                if (camera != null && camera.isConnectedToSensor())
                     camera.updateCameraAttitude(new SDKAdaptorCallback() {
                         @Override
                         public void onResult(boolean booleanResult, String stringResult) {
@@ -159,5 +197,42 @@ public class CameraFragment extends SensorFragment {
     }
 
     public void updateData() {
+    }
+
+    private void displayCameraHUD() {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        final int screenWidth = size.x;
+        final int screenHeight = size.y;
+        int surfaceViewWidthHeight = 0;
+        if (screenWidth < screenHeight)
+            surfaceViewWidthHeight = (int) (screenWidth - (screenWidth * 0.2));
+        else
+            surfaceViewWidthHeight = (int) (screenHeight - (screenHeight * 0.2));
+        //Set The Surface View
+
+        if (camera instanceof DJICamera) {
+            djiGLSurfaceView.setVisibility(View.VISIBLE);
+            djiGLSurfaceView.getHolder().setFixedSize(surfaceViewWidthHeight, surfaceViewWidthHeight);
+        } else {
+            surfaceView.setVisibility(View.VISIBLE);
+            surfaceView.getHolder().setFixedSize(surfaceViewWidthHeight, surfaceViewWidthHeight);
+        }
+
+        //Set Adaptor Specific Buttons
+        if (camera instanceof DJICamera) {
+            captureButton.setVisibility(View.VISIBLE);
+            downButton.setVisibility(View.VISIBLE);
+            upButton.setVisibility(View.VISIBLE);
+            startRecordButton.setVisibility(View.VISIBLE);
+            stopRecordButton.setVisibility(View.VISIBLE);
+        } else {
+            captureButton.setVisibility(View.GONE);
+            downButton.setVisibility(View.GONE);
+            upButton.setVisibility(View.GONE);
+            startRecordButton.setVisibility(View.GONE);
+            stopRecordButton.setVisibility(View.GONE);
+        }
     }
 }

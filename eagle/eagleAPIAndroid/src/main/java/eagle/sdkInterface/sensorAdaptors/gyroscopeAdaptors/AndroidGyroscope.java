@@ -89,7 +89,7 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
             gyroscopeData[1] = event.values[1];
             gyroscopeData[2] = event.values[2];
         }
-        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
             currentSensorAdaptorCallback.onSensorChanged();
     }
 }

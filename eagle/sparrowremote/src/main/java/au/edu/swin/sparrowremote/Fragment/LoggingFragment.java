@@ -1,4 +1,4 @@
-package ssil.swin.com.sparrowremote.Fragment;
+package au.edu.swin.sparrowremote.Fragment;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,7 +11,7 @@ import android.webkit.WebView;
 
 import java.util.Vector;
 
-import ssil.swin.com.sparrowremote.R;
+import au.edu.swin.sparrowremote.R;
 
 
 /**

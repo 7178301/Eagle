@@ -1,4 +1,4 @@
-package ssil.swin.com.sparrowremote.Fragment;
+package au.edu.swin.sparrowremote.Fragment;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import ssil.swin.com.sparrowremote.R;
+import au.edu.swin.sparrowremote.R;
 
 
 /**

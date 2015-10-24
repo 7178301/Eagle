@@ -112,7 +112,7 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
                 if (bearingData < 0)
                     bearingData = 180 + (180 - Math.abs(bearingData));
             }
-            for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+            for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
                 currentSensorAdaptorCallback.onSensorChanged();
         }
     }

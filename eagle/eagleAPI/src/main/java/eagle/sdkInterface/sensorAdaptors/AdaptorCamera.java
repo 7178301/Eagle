@@ -34,12 +34,12 @@ public abstract class AdaptorCamera extends SensorAdaptor {
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }
 
-    public void startTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback){
+    public void startRecord(final SDKAdaptorCallback sdkAdaptorCallback){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }
 
-    public void stopTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback){
+    public void stopRecord(final SDKAdaptorCallback sdkAdaptorCallback){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }

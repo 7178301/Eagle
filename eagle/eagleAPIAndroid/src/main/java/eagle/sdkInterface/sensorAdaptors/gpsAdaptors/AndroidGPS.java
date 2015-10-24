@@ -100,7 +100,7 @@ public class AndroidGPS extends AdaptorGPS {
                 gpsData = null;
                 accuracy = 999999;
             }
-            for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+            for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
                 currentSensorAdaptorCallback.onSensorChanged();
         }
 
