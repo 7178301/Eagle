@@ -10,6 +10,10 @@ package eagle.sdkInterface.sensorAdaptors;
  * Date Modified	26/05/2015 - Nicholas
  */
 public abstract class AdaptorAccelerometer extends SensorAdaptor {
+    public static int X = 0;
+    public static int Y = 1;
+    public static int Z = 2;
+
     private float[] calibrationOffset = null;
 
     public AdaptorAccelerometer(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
