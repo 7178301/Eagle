@@ -268,7 +268,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
                     gridLayoutControls.setVisibility(View.GONE);
                     isControlsVisible = false;
                 } else {
-                    buttonExpandSensors.setText(R.string.collapseControls);
+                    buttonExpandControls.setText(R.string.collapseControls);
                     gridLayoutControls.setVisibility(View.VISIBLE);
                     isControlsVisible = true;
                 }
@@ -310,42 +310,42 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
             case R.id.buttonControlForward:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(1 * Math.cos(Math.toRadians(bearingAngle)), 1 * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(5 * Math.cos(Math.toRadians(bearingAngle)), 5 * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlBackward:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-1 * Math.cos(Math.toRadians(bearingAngle)), -1 * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-5 * Math.cos(Math.toRadians(bearingAngle)), -5 * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlLeft:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(1 * Math.sin(Math.toRadians(bearingAngle)), -1 * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(5 * Math.sin(Math.toRadians(bearingAngle)), -5 * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlRight:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-1 * Math.sin(Math.toRadians(bearingAngle)), 1 * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-5 * Math.sin(Math.toRadians(bearingAngle)), 5 * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlRotateLeft:
                 if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(350));
+                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(315));
                 break;
             case R.id.buttonControlRotateRight:
                 if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(10));
+                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(45));
                 break;
             case R.id.buttonControlUp:
                 if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, 1);
+                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, 2);
                 break;
             case R.id.buttonControlDown:
                 if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, -1);
+                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, -2);
                 break;
             case R.id.buttonControlGoHome:
                 if (drone != null && drone.getSDKAdaptor() != null)
