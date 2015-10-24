@@ -58,7 +58,12 @@ public class GyroscopeFragment extends SensorFragment {
         gyroscope.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
-                updateData();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateData();
+                    }
+                });
             }
         });
     }

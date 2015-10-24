@@ -58,7 +58,12 @@ public class AccelerometerFragment extends SensorFragment {
         accelerometer.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
-                updateData();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateData();
+                    }
+                });
             }
         });
     }

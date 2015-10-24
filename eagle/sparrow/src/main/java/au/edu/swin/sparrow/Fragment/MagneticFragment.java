@@ -51,7 +51,12 @@ public class MagneticFragment extends SensorFragment {
         magnetic.addSensorAdaptorCallback(new SensorAdaptorCallback() {
             @Override
             public void onSensorChanged() {
-                updateData();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateData();
+                    }
+                });
             }
         });
     }
