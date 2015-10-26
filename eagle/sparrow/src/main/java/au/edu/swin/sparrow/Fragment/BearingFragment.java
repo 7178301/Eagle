@@ -51,7 +51,7 @@ public class BearingFragment extends SensorFragment {
         sensorOutputTitleTextView.setText(getResources().getString(R.string.bearing));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.x_axis_));
         sensorOutput2TitleTextView.setText(getResources().getString(R.string.y_axis_));
-        sensorOutput3TitleTextView.setText(getResources().getString(R.string.z_axis_));
+        sensorOutput3TitleTextView.setText(getResources().getString(R.string.azimuth_));
 
         sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
         sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
