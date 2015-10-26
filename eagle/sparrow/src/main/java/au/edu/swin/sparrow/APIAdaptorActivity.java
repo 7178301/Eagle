@@ -124,6 +124,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     @Override
     protected void onDestroy() {
         myTimer.cancel();
+        Log.removeVerboseCallback(this);
         super.onDestroy();
     }
 
