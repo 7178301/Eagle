@@ -122,7 +122,9 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
 
                 if (bearingData[0] < 0)
                     bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
-                if (bearingData[1] < 0)
+                if (accelerometerData[2] < 0)
+                    bearingData[1] = 180 - bearingData[1];
+                else if (bearingData[1] < 0)
                     bearingData[1] = 180 + (180 - Math.abs(bearingData[1]));
                 if (bearingData[2] < 0)
                     bearingData[2] = 180 + (180 - Math.abs(bearingData[2]));
@@ -155,7 +157,9 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
 
                 if (bearingData[0] < 0)
                     bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
-                if (bearingData[1] < 0)
+                if (accelerometerData[2] < 0)
+                    bearingData[1] = 180 - bearingData[1];
+                else if (bearingData[1] < 0)
                     bearingData[1] = 180 + (180 - Math.abs(bearingData[1]));
                 if (bearingData[2] < 0)
                     bearingData[2] = 180 + (180 - Math.abs(bearingData[2]));
