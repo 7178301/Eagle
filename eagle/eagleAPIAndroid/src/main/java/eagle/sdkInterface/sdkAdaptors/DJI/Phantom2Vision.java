@@ -123,16 +123,15 @@ public class Phantom2Vision extends SDKAdaptor implements DJIMcuUpdateStateCallB
                             Log.log("Phantom2Vision", e.getMessage());
                         }
                     }
-
                 }
             });
-
         }
 
-        if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS")) {
-            if (!getGPSs().get(0).connectToSensor())
-                returnValue[0] = false;
-        }
+        if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS"))
+            getGPSs().get(0).connectToSensor();
+
+        if (getCameras().size() > 0 && getCameras().get(0).getAdaptorName().equals("DJI Camera"))
+            getCameras().get(0).connectToSensor();
 
         Log.log("Phantom2VisionConnectToDrone", "Registering DJI Battery Polling Interval");
         DJIDrone.getDjiBattery().setBatteryUpdateInfoCallBack(this);
@@ -187,10 +186,12 @@ public class Phantom2Vision extends SDKAdaptor implements DJIMcuUpdateStateCallB
             DJIDrone.getDjiMC().setMcuUpdateStateCallBack(null);
             djiMainControllerSystemState = null;
 
-            if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS")) {
-                if (!getGPSs().get(0).disconnectFromSensor())
-                    return false;
-            }
+            if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS")) 
+                getGPSs().get(0).disconnectFromSensor();
+
+            if (getCameras().size() > 0 && getCameras().get(0).getAdaptorName().equals("DJI Camera"))
+                getCameras().get(0).disconnectFromSensor();
+
 
             Log.log("Phantom2VisionDisconectFromDrone", "Destroying All Initialized Values/Variables");
             return DJIDrone.disconnectToDrone();

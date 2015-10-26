@@ -58,4 +58,8 @@ public abstract class AdaptorCamera extends SensorAdaptor {
             sensorAdaptorCameraLiveFeedCallbacks = new HashSet<>();
         this.sensorAdaptorCameraLiveFeedCallbacks.add(sensorAdaptorCameraLiveFeedCallback);
     }
+    public void removeSensorAdaptorCameraLiveFeedbackCallback(final SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback){
+        if(sensorAdaptorCameraLiveFeedCallbacks.contains(sensorAdaptorCameraLiveFeedCallback))
+            sensorAdaptorCameraLiveFeedCallbacks.remove(sensorAdaptorCameraLiveFeedCallback);
+    }
 }

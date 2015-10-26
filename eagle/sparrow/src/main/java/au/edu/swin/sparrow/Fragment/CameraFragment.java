@@ -42,6 +42,7 @@ public class CameraFragment extends SensorFragment {
 
     private DjiGLSurfaceView djiGLSurfaceView = null;
     private SurfaceView surfaceView = null;
+    private SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback = null;
 
     private Activity activity;
 
@@ -58,6 +59,8 @@ public class CameraFragment extends SensorFragment {
     @Override
     public void onDestroy() {
         if (camera != null) {
+            if(sensorAdaptorCameraLiveFeedCallback!=null)
+                camera.removeSensorAdaptorCameraLiveFeedbackCallback(sensorAdaptorCameraLiveFeedCallback);
             if (camera instanceof DJICamera)
                 djiGLSurfaceView.destroy();
             camera.disconnectFromSensor();
@@ -88,27 +91,23 @@ public class CameraFragment extends SensorFragment {
         surfaceView = (SurfaceView) this.view.findViewById(R.id.surfaceView);
 
         if (camera instanceof DJICamera) {
-            activity.runOnUiThread(new Runnable() {
+            sensorAdaptorCameraLiveFeedCallback = new SensorAdaptorCameraLiveFeedCallback() {
                 @Override
-                public void run() {
-                    camera.addSensorAdaptorCameraLiveFeedallback(new SensorAdaptorCameraLiveFeedCallback() {
+                public void onSensorEvent(final byte[] getData, final int getSize) {
+                    activity.runOnUiThread(new Runnable() {
                         @Override
-                        public void onSensorEvent(final byte[] getData, final int getSize) {
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    djiGLSurfaceView.setDataToDecoder(getData, getSize);
-                                }
-                            });
+                        public void run() {
+                            djiGLSurfaceView.setDataToDecoder(getData, getSize);
                         }
                     });
-                    djiGLSurfaceView.start();
                 }
-            });
+            };
+            camera.addSensorAdaptorCameraLiveFeedallback(sensorAdaptorCameraLiveFeedCallback);
+            djiGLSurfaceView.start();
         }
 
         if (camera != null) {
-            if(camera.isConnectedToSensor())
+            if (camera.isConnectedToSensor())
                 displayCameraHUD();
             else if (camera.connectToSensor())
                 displayCameraHUD();
@@ -215,6 +214,7 @@ public class CameraFragment extends SensorFragment {
         if (camera instanceof DJICamera) {
             djiGLSurfaceView.setVisibility(View.VISIBLE);
             djiGLSurfaceView.getHolder().setFixedSize(surfaceViewWidthHeight, surfaceViewWidthHeight);
+            djiGLSurfaceView.start();
         } else {
             surfaceView.setVisibility(View.VISIBLE);
             surfaceView.getHolder().setFixedSize(surfaceViewWidthHeight, surfaceViewWidthHeight);

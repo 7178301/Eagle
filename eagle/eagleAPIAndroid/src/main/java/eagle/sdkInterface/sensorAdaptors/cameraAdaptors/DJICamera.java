@@ -29,7 +29,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     private DJIGimbalAttitude djiGimbalAttitude = null;
 
     public DJICamera() {
-        super("DJI", "DJICamera", "0.0.1");
+        super("DJI", "Camera", "0.0.1");
     }
 
     @Override
@@ -39,8 +39,8 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public boolean connectToSensor() {
-        Log.log("DJICamera", "Checking DJI Application Key Permissions");
-        if (DJIDrone.getLevel() < 1)
+        Log.log("DJICamera", "Checking Drone Connection Status");
+        if (DJIDrone.getDjiCamera() == null || DJIDrone.getDjiGimbal() == null)
             return false;
         DJIDrone.getDjiCamera().stopUpdateTimer();
         Log.log("DJICamera", "Starting  DJI Camera Polling Interval");
