@@ -84,7 +84,8 @@ public class AndroidMagnetic extends AdaptorMagnetic implements SensorEventListe
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            magneticData = new float[3];
+            if(magneticData==null)
+                magneticData = new float[3];
             magneticData[0] = event.values[0];
             magneticData[1] = event.values[1];
             magneticData[2] = event.values[2];

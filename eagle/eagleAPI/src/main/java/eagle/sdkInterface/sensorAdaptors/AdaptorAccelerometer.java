@@ -43,10 +43,6 @@ public abstract class AdaptorAccelerometer extends SensorAdaptor {
             return false;
     }
 
-    public boolean setAndroidContext(Object object) {
-        return false;
-    }
-
     @Override
     public String toString() {
         boolean uncalibrated = false;

@@ -84,7 +84,8 @@ public class AndroidGyroscope extends AdaptorGyroscope implements SensorEventLis
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         if (sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-            gyroscopeData = new float[3];
+            if(gyroscopeData==null)
+                gyroscopeData = new float[3];
             gyroscopeData[0] = event.values[0];
             gyroscopeData[1] = event.values[1];
             gyroscopeData[2] = event.values[2];

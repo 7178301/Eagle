@@ -1,11 +1,12 @@
-package eagle.sdkInterface.sensorAdaptors.accelerometerAdaptors;
+package eagle.sdkInterface.sensorAdaptors.bearingAdaptors;
 
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
+import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.gpsAdaptors.DJIGPS;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 
 /**
- * DJI Accelerometer Adaptor
+ * DJI Bearing Adaptor
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
@@ -14,11 +15,11 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCal
  * Date Modified	26/05/2015 - Nicholas
  */
 
-public class DJIAccelerometer extends AdaptorAccelerometer {
+public class DJIBearing extends AdaptorBearing {
     private DJIGPS controller = null;
     private SensorAdaptorCallback DJIGPSCallback = null;
 
-    public DJIAccelerometer() {
+    public DJIBearing() {
         super("DJI", "Accelerometer", "0.0.1");
     }
 

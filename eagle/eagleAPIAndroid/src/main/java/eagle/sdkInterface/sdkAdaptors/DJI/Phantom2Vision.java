@@ -3,26 +3,20 @@ package eagle.sdkInterface.sdkAdaptors.DJI;
 import android.content.Context;
 import android.os.Looper;
 
-import dji.sdk.api.Battery.DJIBattery;
 import dji.sdk.api.Battery.DJIBatteryProperty;
 import dji.sdk.api.DJIDrone;
 import dji.sdk.api.DJIDroneTypeDef;
-import dji.sdk.api.GroundStation.DJIGroundStation;
-import dji.sdk.api.GroundStation.DJIGroundStationFlyingInfo;
 import dji.sdk.api.GroundStation.DJIGroundStationTask;
 import dji.sdk.api.GroundStation.DJIGroundStationTypeDef;
 import dji.sdk.api.GroundStation.DJIGroundStationWaypoint;
 import dji.sdk.api.MainController.DJIMainControllerSystemState;
-import dji.sdk.api.MainController.DJIMainControllerTypeDef;
 import dji.sdk.interfaces.DJIBatteryUpdateInfoCallBack;
 import dji.sdk.interfaces.DJIGerneralListener;
 import dji.sdk.interfaces.DJIGroundStationExecutCallBack;
-import dji.sdk.interfaces.DJIGroundStationFlyingInfoCallBack;
 import dji.sdk.interfaces.DJIGroundStationGoHomeCallBack;
 import dji.sdk.interfaces.DJIGroundStationTakeOffCallBack;
 import dji.sdk.interfaces.DJIMcuUpdateStateCallBack;
 import eagle.Log;
-import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionDisplacement;
 import eagle.navigation.positioning.PositionGPS;
@@ -31,7 +25,6 @@ import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
-import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorGPSEventCallback;
 
 /**
  * DJI SDKAdaptor
@@ -57,9 +50,9 @@ public class Phantom2Vision extends SDKAdaptor implements DJIMcuUpdateStateCallB
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
         addSensorAdaptorCamera(adaptorLoader.getSensorAdaptorCamera("DJICamera"));
         addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("DJIGPS"));
-        addSensorAdaptorAccelerometer(adaptorLoader.getSensorAdaptorAccelerometer("DJIAccelerometer"));
-        if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS") && getAccelerometers().size() > 0 && getAccelerometers().get(0).getAdaptorName().equals("DJI Accelerometer"))
-            getAccelerometers().get(0).setController(getGPSs().get(0));
+        addSensorAdaptorBearing(adaptorLoader.getSensorAdaptorBearing("DJIBearing"));
+        if (getGPSs().size() > 0 && getGPSs().get(0).getAdaptorName().equals("DJI GPS") && getBearings().size() > 0 && getBearings().get(0).getAdaptorName().equals("DJI Accelerometer"))
+            getBearings().get(0).setController(getGPSs().get(0));
     }
 
     public boolean connectToDrone() {

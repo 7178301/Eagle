@@ -21,7 +21,7 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCal
 
 public class AndroidBearing extends AdaptorBearing implements SensorEventListener {
     private Context context = null;
-    private float bearingData = 999999;
+    private float[] bearingData = null;
 
     private float[] magneticData = null;
     private float[] accelerometerData = null;
@@ -68,13 +68,13 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
     }
 
     @Override
-    public float getData() {
+    public float[] getData() {
         return bearingData;
     }
 
     @Override
     public boolean isDataReady() {
-        if (bearingData == 999999)
+        if (bearingData == null)
             return false;
         else
             return true;
@@ -100,17 +100,24 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
             accelerometerData[2] = event.values[2];
         }
         if (magneticData != null && accelerometerData != null) {
+            if(bearingData==null)
+                bearingData = new float[3];
 
             float R[] = new float[9];
             float I[] = new float[9];
 
             if (SensorManager.getRotationMatrix(R, I, accelerometerData, magneticData)) {
-
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
-                bearingData = orientation[0] * 360 / (2 * (float) Math.PI);
-                if (bearingData < 0)
-                    bearingData = 180 + (180 - Math.abs(bearingData));
+                for (int i = 0; i < 3; i++) {
+                    bearingData[i] = orientation[i] * 360 / (2 * (float) Math.PI);
+                }
+                if (bearingData[0] < 0)
+                    bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
+                if (bearingData[1] < 0)
+                    bearingData[1] = 180 + (180 - Math.abs(bearingData[1]));
+                if (bearingData[2] < 0)
+                    bearingData[2] = 180 + (180 - Math.abs(bearingData[2]));
             }
             for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
                 currentSensorAdaptorCallback.onSensorChanged();
