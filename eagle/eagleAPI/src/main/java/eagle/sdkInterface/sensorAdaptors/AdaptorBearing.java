@@ -10,11 +10,26 @@ package eagle.sdkInterface.sensorAdaptors;
  * Date Modified	0410/2015 - Nicholas
  */
 public abstract class AdaptorBearing extends SensorAdaptor {
+
+    public static final int YAW = 0;
+    public static final int PITCH = 1;
+    public static final int ROLL = 2;
+
     private float[] calibrationOffset = null;
+
+    protected AdaptorAccelerometer adaptorAccelerometer;
+    protected AdaptorMagnetic adaptorMagnetic;
 
     public AdaptorBearing(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
     }
+
+    public void setAccelerometerMagnetic(AdaptorAccelerometer adaptorAccelerometer, AdaptorMagnetic adaptorMagnetic){
+        this.adaptorAccelerometer=adaptorAccelerometer;
+        this.adaptorMagnetic=adaptorMagnetic;
+    }
+
+    public abstract boolean connectToSensor();
 
     public abstract float[] getData();
 
@@ -36,37 +51,7 @@ public abstract class AdaptorBearing extends SensorAdaptor {
     }
 
     public boolean setCalibrationOffset(float[] calibrationOffset) {
-        if (calibrationOffset != null && calibrationOffset.length == 3) {
-            this.calibrationOffset = calibrationOffset;
-            return true;
-        } else
-            return false;
-    }
-
-    @Override
-    public String toString() {
-        boolean uncalibrated = false;
-        float data[] = getCalibratedData();
-        if (data == null) {
-            uncalibrated = true;
-            data = getData();
-            if (data == null) {
-                return "No Data Available";
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-        if (uncalibrated) {
-            sb.append("Uncalibrarted Data: ");
-        } else {
-            sb.append("Calibrated Data: ");
-        }
-        sb.append("X-axis: ");
-        sb.append(data[0]);
-        sb.append(" Y-axis: ");
-        sb.append(data[1]);
-        sb.append(" Z-axis: ");
-        sb.append(data[2]);
-        return sb.toString();
+        this.calibrationOffset = calibrationOffset;
+        return true;
     }
 }
