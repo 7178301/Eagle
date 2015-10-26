@@ -11,9 +11,10 @@ package eagle.sdkInterface.sensorAdaptors;
  */
 public abstract class AdaptorBearing extends SensorAdaptor {
 
-    public static final int YAW = 0;
-    public static final int PITCH = 1;
-    public static final int ROLL = 2;
+    public static final int AXISX = 0;
+    public static final int AXISY = 1;
+    public static final int AXISZ = 2;
+    public static final int AZIMUTH = 2;
 
     private float[] calibrationOffset = null;
 
@@ -39,9 +40,9 @@ public abstract class AdaptorBearing extends SensorAdaptor {
             return null;
         else {
             float[] calibratedData = new float[3];
-            calibratedData[0] = value[0] - getCalibrationOffset()[0];
-            calibratedData[1] = value[1] - getCalibrationOffset()[1];
-            calibratedData[2] = value[2] - getCalibrationOffset()[2];
+            calibratedData[AXISX] = value[AXISX] - getCalibrationOffset()[AXISX];
+            calibratedData[AXISY] = value[AXISY] - getCalibrationOffset()[AXISY];
+            calibratedData[AZIMUTH] = value[AZIMUTH] - getCalibrationOffset()[AZIMUTH];
             return calibratedData;
         }
     }

@@ -95,15 +95,15 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
         if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             if (magneticData == null)
                 magneticData = new float[3];
-            magneticData[0] = event.values[0];
-            magneticData[1] = event.values[1];
-            magneticData[2] = event.values[2];
+            magneticData[AXISX] = event.values[AXISX];
+            magneticData[AXISY] = event.values[AXISY];
+            magneticData[AXISZ] = event.values[AXISZ];
         } else if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             if (accelerometerData == null)
                 accelerometerData = new float[3];
-            accelerometerData[0] = event.values[0];
-            accelerometerData[1] = event.values[1];
-            accelerometerData[2] = event.values[2];
+            accelerometerData[AXISX] = event.values[AXISX];
+            accelerometerData[AXISY] = event.values[AXISY];
+            accelerometerData[AXISZ] = event.values[AXISZ];
         }
         if (magneticData != null && accelerometerData != null) {
             if (bearingData == null)
@@ -116,18 +116,18 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
 
-                bearingData[0] = orientation[2] * 360 / (2 * (float) Math.PI);
-                bearingData[1] = orientation[1] * 360 / (2 * (float) Math.PI);
-                bearingData[2] = orientation[0] * 360 / (2 * (float) Math.PI);
+                bearingData[AXISX] = orientation[2] * 360 / (2 * (float) Math.PI);
+                bearingData[AXISY] = orientation[1] * 360 / (2 * (float) Math.PI);
+                bearingData[AZIMUTH] = orientation[0] * 360 / (2 * (float) Math.PI);
 
-                if (bearingData[0] < 0)
-                    bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
-                if (accelerometerData[2] < 0)
-                    bearingData[1] = 180 - bearingData[1];
-                else if (bearingData[1] < 0)
-                    bearingData[1] = 180 + (180 - Math.abs(bearingData[1]));
-                if (bearingData[2] < 0)
-                    bearingData[2] = 180 + (180 - Math.abs(bearingData[2]));
+                if (bearingData[AXISX] < 0)
+                    bearingData[AXISX] = 180 + (180 - Math.abs(bearingData[AXISX]));
+                if (accelerometerData[AXISZ] < 0)
+                    bearingData[AXISY] = 180 - bearingData[AXISY];
+                else if (bearingData[AXISY] < 0)
+                    bearingData[AXISY] = 180 + (180 - Math.abs(bearingData[AXISY]));
+                if (bearingData[AZIMUTH] < 0)
+                    bearingData[AZIMUTH] = 180 + (180 - Math.abs(bearingData[AZIMUTH]));
             }
             for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
                 currentSensorAdaptorCallback.onSensorChanged();
@@ -151,18 +151,18 @@ public class AndroidBearing extends AdaptorBearing implements SensorEventListene
                 float orientation[] = new float[3];
                 SensorManager.getOrientation(R, orientation);
 
-                bearingData[0] = orientation[2] * 360 / (2 * (float) Math.PI);
-                bearingData[1] = orientation[1] * 360 / (2 * (float) Math.PI);
-                bearingData[2] = orientation[0] * 360 / (2 * (float) Math.PI);
+                bearingData[AXISX] = orientation[2] * 360 / (2 * (float) Math.PI);
+                bearingData[AXISY] = orientation[1] * 360 / (2 * (float) Math.PI);
+                bearingData[AZIMUTH] = orientation[0] * 360 / (2 * (float) Math.PI);
 
-                if (bearingData[0] < 0)
-                    bearingData[0] = 180 + (180 - Math.abs(bearingData[0]));
-                if (accelerometerData[2] < 0)
-                    bearingData[1] = 180 - bearingData[1];
-                else if (bearingData[1] < 0)
-                    bearingData[1] = 180 + (180 - Math.abs(bearingData[1]));
-                if (bearingData[2] < 0)
-                    bearingData[2] = 180 + (180 - Math.abs(bearingData[2]));
+                if (bearingData[AXISX] < 0)
+                    bearingData[AXISX] = 180 + (180 - Math.abs(bearingData[0]));
+                if (accelerometerData[AXISZ] < 0)
+                    bearingData[AXISY] = 180 - bearingData[AXISY];
+                else if (bearingData[AXISY] < 0)
+                    bearingData[AXISY] = 180 + (180 - Math.abs(bearingData[AXISY]));
+                if (bearingData[AZIMUTH] < 0)
+                    bearingData[AZIMUTH] = 180 + (180 - Math.abs(bearingData[AZIMUTH]));
             }
             for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
                 currentSensorAdaptorCallback.onSensorChanged();
