@@ -36,6 +36,7 @@
 
         <Button
             android:id="@+id/buttonCapture"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
@@ -44,6 +45,7 @@
 
         <Button
             android:id="@+id/buttonStartRecord"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -52,6 +54,7 @@
 
         <Button
             android:id="@+id/buttonStopRecord"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
@@ -67,6 +70,7 @@
 
         <Button
             android:id="@+id/buttonCameraUp"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -75,6 +79,7 @@
 
         <Button
             android:id="@+id/buttonCameraDown"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
@@ -86,7 +91,7 @@
         android:id="@+id/djiSurfaceView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <SurfaceView
         android:id="@+id/surfaceView"

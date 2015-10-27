@@ -38,8 +38,6 @@
     <string name="log_data">Logs</string>
     <string name="collapseLog">Collapse Log</string>
     <string name="expandLog">Expand Log</string>
-    <string name="success">Success</string>
-    <string name="fail">Fail</string>
     <string name="camera">Camera</string>
     <string name="up">Up</string>
     <string name="down">Down</string>

@@ -68,7 +68,7 @@ public class Log {
     }
 
     public synchronized static ArrayList<String> getLog() {
-        return (ArrayList<String>) log.clone();
+        return new ArrayList<>(log);
     }
 
     public synchronized boolean setLogLimit(int logLimit){

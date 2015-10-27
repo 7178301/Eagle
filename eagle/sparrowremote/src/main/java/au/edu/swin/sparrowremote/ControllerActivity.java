@@ -45,7 +45,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
      */
     ViewPager mViewPager;
     private String serverAddress;
-    private ProtocolBufferClient commandConnection;
+    private ProtocolBufferClient protocolBufferClient;
     private RemoteControlFragment remoteControlFragment;
     private LoggingFragment logFragment;
     private ControllerActivity ca = this;
@@ -113,13 +113,13 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         }
 
         serverAddress = getIntent().getStringExtra("serverAddress");
-        commandConnection = new ProtocolBufferClient(serverAddress);
+        protocolBufferClient = new ProtocolBufferClient(serverAddress);
 
         remoteControlFragment = RemoteControlFragment.newInstance();
         logFragment = LoggingFragment.newInstance();
 
-        commandConnection.connectToServer();
-        if (!commandConnection.isConnected()) {
+        protocolBufferClient.connectToServer();
+        if (!protocolBufferClient.isConnected()) {
             Toast toast = Toast.makeText(this, "Failed to connect to drone", Toast.LENGTH_LONG);
             toast.show();
             finish();
@@ -140,7 +140,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback("ControllerActivity",this);
+        Log.removeVerboseCallback(this);
         myTimer.cancel();
         super.onDestroy();
     }
@@ -161,9 +161,8 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
             return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -189,45 +188,45 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         double latitude;
         switch (uri.getPath()) {
             case "/buttonConnect":
-                commandConnection.sendMessage("CONNECTTODRONE", rcb);
+                protocolBufferClient.sendMessage("CONNECTTODRONE", rcb);
                 break;
             case "/buttonDisconnect":
-                commandConnection.sendMessage("DISCONNECTFROMDRONE", rcb);
+                protocolBufferClient.sendMessage("DISCONNECTFROMDRONE", rcb);
                 break;
             case "/buttonUp":
-                commandConnection.sendMessage("CHANGEALTITUDE -D 1", rcb);
+                protocolBufferClient.sendMessage("CHANGEALTITUDE -D 1", rcb);
                 break;
             case "/buttonDown":
-                commandConnection.sendMessage("CHANGEALTITUDE -D -1", rcb);
+                protocolBufferClient.sendMessage("CHANGEALTITUDE -D -1", rcb);
                 break;
             case "/buttonRotateLeft":
-                commandConnection.sendMessage("CHANGEYAW -D -10", rcb);
+                protocolBufferClient.sendMessage("CHANGEYAW -D -10", rcb);
                 break;
             case "/buttonRotateRight":
-                commandConnection.sendMessage("CHANGEYAW -D 10", rcb);
+                protocolBufferClient.sendMessage("CHANGEYAW -D 10", rcb);
                 break;
             case "/buttonLeft":
                 latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
                 longitude = -1 * Math.cos(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonRight":
                 latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
                 longitude = 1 * Math.cos(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonForward":
                 latitude = 1 * Math.cos(Math.toRadians(bearingAngle));
                 longitude = 1 * Math.sin(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonBackward":
                 latitude = -1 * Math.cos(Math.toRadians(bearingAngle));
                 longitude = -1 * Math.sin(Math.toRadians(bearingAngle));
-                commandConnection.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
                 break;
             case "/buttonGoHome":
-                commandConnection.sendMessage("GOHOME", rcb);
+                protocolBufferClient.sendMessage("GOHOME", rcb);
                 break;
             case "/finish":
                 finish();
@@ -290,16 +289,14 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
     }
 
     void updatePositionFragment() {
-        boolean connected = commandConnection.sendMessage("GETPOSITIONINFLIGHT", new ProtocolBufferClient.ResponseCallBack() {
+        boolean connected = protocolBufferClient.sendMessage("GETPOSITIONINFLIGHT", new ProtocolBufferClient.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
                 if (position != null&&!position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
                     String parts[] = position.split(" ");
-                    if (parts.length != 6) {
+                    if (parts.length != 6)
                         return;
-                    }
                     remoteControlFragment.setPosition(parts[0], parts[1], parts[2], parts[5]);
-
                     bearingAngle = Double.parseDouble(parts[5]);
                 }
             }

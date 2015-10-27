@@ -1,8 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ssil.swin.com.sparrowremote.Fragment.RemoteControlFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="ssil.swin.com.sparrowremote.Fragment.RemoteControlFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <GridLayout
@@ -12,77 +13,77 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/latitude"
-            android:layout_row="0"
             android:layout_column="0"
-            android:layout_gravity="fill_horizontal" />
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:text="@string/latitude"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:layout_height="wrap_content"
             android:id="@+id/editTextLatitude"
-            android:inputType="text"
-            android:enabled="false"
-            android:layout_row="0"
+            android:layout_height="wrap_content"
             android:layout_column="1"
-            android:layout_gravity="fill_horizontal"/>
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:enabled="false"
+            android:inputType="text" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/longitude"
-            android:layout_row="0"
             android:layout_column="2"
-            android:layout_gravity="fill_horizontal" />
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:text="@string/longitude"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:layout_height="wrap_content"
             android:id="@+id/editTextLongitude"
-            android:inputType="text"
-            android:enabled="false"
-            android:layout_row="0"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:layout_column="3"
             android:layout_gravity="fill_horizontal"
-            android:layout_width="100dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/altitude"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal" />
-
-        <EditText
-            android:layout_height="wrap_content"
-            android:id="@+id/editTextAltitude"
-            android:inputType="text"
+            android:layout_row="0"
             android:enabled="false"
-            android:layout_row="1"
-            android:layout_column="1"
-            android:layout_gravity="fill_horizontal"/>
+            android:inputType="text" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/bearing"
-            android:id="@+id/textView4"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
             android:layout_row="1"
-            android:layout_column="2"
-            android:layout_gravity="fill_horizontal" />
+            android:text="@string/altitude"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
+            android:id="@+id/editTextAltitude"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:enabled="false"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:text="@string/bearing"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/editTextBearing"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:id="@+id/editTextBearing"
-            android:inputType="text"
-            android:enabled="false"
-            android:layout_row="1"
             android:layout_column="3"
-            android:layout_gravity="fill_horizontal"/>
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:enabled="false"
+            android:inputType="text" />
     </GridLayout>
 
     <GridLayout
@@ -91,118 +92,115 @@
         android:useDefaultMargins="true">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/disconnect"
             android:id="@+id/buttonDisconnect"
-            android:layout_row="0"
-            android:layout_column="2"
-            android:layout_gravity="fill_horizontal" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/left"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:text="@string/disconnect" />
+
+        <Button
             android:id="@+id/buttonLeft"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connect"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:text="@string/left" />
+
+        <Button
             android:id="@+id/buttonConnect"
-            android:layout_row="0"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/forward"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:text="@string/connect" />
+
+        <Button
             android:id="@+id/buttonForward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
             android:layout_row="0"
-            android:layout_column="1"
-            android:layout_gravity="fill_horizontal" />
+            android:text="@string/forward" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/backward"
             android:id="@+id/buttonBackward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
             android:layout_row="2"
-            android:layout_column="1"
-            android:layout_gravity="fill_horizontal" />
+            android:text="@string/backward" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/right"
             android:id="@+id/buttonRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
             android:layout_row="1"
-            android:layout_column="2"
-            android:layout_gravity="fill_horizontal" />
+            android:text="@string/right" />
 
         <Space
-            android:layout_row="3"
             android:layout_column="0"
-            android:layout_columnWeight="1" />
+            android:layout_row="3" />
 
         <Space
-            android:layout_row="3"
             android:layout_column="1"
-            android:layout_columnWeight="1" />
+            android:layout_row="3" />
 
         <Space
-            android:layout_row="3"
             android:layout_column="2"
-            android:layout_columnWeight="1" />
+            android:layout_row="3" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/rotate_left"
             android:id="@+id/buttonRotateLeft"
-            android:layout_row="5"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/rotate_right"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="5"
+            android:text="@string/rotate_left" />
+
+        <Button
             android:id="@+id/buttonRotateRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
             android:layout_row="5"
-            android:layout_column="2"
-            android:layout_gravity="fill_horizontal" />
+            android:text="@string/rotate_right" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/up"
             android:id="@+id/buttonUp"
-            android:layout_row="6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_column="0"
-            android:layout_gravity="fill_horizontal" />
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="6"
+            android:text="@string/up" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gohome"
             android:id="@+id/buttonGoHome"
-            android:layout_row="6"
-            android:layout_column="1"
-            android:layout_gravity="fill_horizontal" />
-
-        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/down"
-            android:id="@+id/buttonDown"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
             android:layout_row="6"
+            android:text="@string/gohome" />
+
+        <Button
+            android:id="@+id/buttonDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_column="2"
-            android:layout_gravity="fill_horizontal" />
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="6"
+            android:text="@string/down" />
 
     </GridLayout>
 
