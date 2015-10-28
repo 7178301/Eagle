@@ -11,7 +11,6 @@ import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.AdaptorLoader;
 import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
-import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.bearingAdaptors.AndroidBearing;
 import eagle.sdkInterface.sensorAdaptors.gpsAdaptors.AndroidGPS;
 import ioio.lib.api.IOIO;
@@ -42,11 +41,8 @@ public class F450Flamewheel extends SDKAdaptor {
     }
 
     public void loadDefaultSensorAdaptors(AdaptorLoader adaptorLoader) {
-        addSensorAdaptorAccelerometer(adaptorLoader.getSensorAdaptorAccelerometer("AndroidAccelerometer"));
         addSensorAdaptorCamera(adaptorLoader.getSensorAdaptorCamera("AndroidCamera"));
         addSensorAdaptorGPS(adaptorLoader.getSensorAdaptorGPS("AndroidGPS"));
-        addSensorAdaptorGyroscope(adaptorLoader.getSensorAdaptorGyroscope("AndroidGyroscope"));
-        addSensorAdaptorMagnetic(adaptorLoader.getSensorAdaptorMagnetic("AndroidMagnetic"));
 //        adaptorUltrasonic = adaptorLoader.getSensorAdaptorUltrasonic("HCSR04");
 //        int[] pins = new int[2];
 //        pins[0]=13;
@@ -54,10 +50,7 @@ public class F450Flamewheel extends SDKAdaptor {
 //        adaptorUltrasonic.setSensorPins(pins);
 //
 //        addSensorAdaptorUltrasonic(adaptorUltrasonic);
-        AdaptorBearing androidBearing = adaptorLoader.getSensorAdaptorBearing("AndroidBearing");
-
-        androidBearing.setAccelerometerMagnetic(getAccelerometers().get(0), getMagnetics().get(0));
-        addSensorAdaptorBearing(androidBearing);
+        addSensorAdaptorBearing(adaptorLoader.getSensorAdaptorBearing("AndroidBearing"));
         controller.setBearingAdaptor((AndroidBearing) getBearings().get(0));
         controller.setPositionAdaptor((AndroidGPS) getGPSs().get(0));
     }

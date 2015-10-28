@@ -1,5 +1,12 @@
 package eagle.sdkInterface.sdkAdaptors.Flyver;
 
+import android.os.Environment;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 import eagle.Log;
 import eagle.navigation.positioning.Position;
 import eagle.navigation.positioning.PositionGPS;
@@ -27,6 +34,8 @@ public class IOIOController {
     private PwmOutput motorFCC;
     private PwmOutput motorRC;
     private PwmOutput motorRCC;
+
+    private static Thread thread;
 
     private AnalogInput batteryInput;
 
@@ -56,13 +65,14 @@ public class IOIOController {
 
     //-------Motor PWM Levels
     static int MOTOR_ZERO_LEVEL = 1000;
+    static int MOTOR_DESCENT_LEVEL = 1500;
     static int MOTOR_MAX_LEVEL = 2023;
 
     //declare pid controllers
     private PIDAngleController rollController;
     private PIDAngleController pitchController;
     private PIDAngleController yawController;
-    private PIDAltitudeController throttleController;
+    private ThrottleController throttleController;
     private PIDPercentageController tiltController;
 
     // PID variables
@@ -76,25 +86,84 @@ public class IOIOController {
 
     private static final String TAG = "IOIOController";
     private static long previousTime;
-    private Thread thread;
+
     private Position desiredPosition;
     private double maxTilt = 10;
     double throttlePercentage = -1;
+    //private Sequencer seq;
 //    private Thread batteryThread;
 
+
+//    private Sequencer.ChannelCuePwmSpeed motorFCcue = new Sequencer.ChannelCuePwmSpeed();
+//    private Sequencer.ChannelCuePwmSpeed motorFCCcue = new Sequencer.ChannelCuePwmSpeed();
+//    private Sequencer.ChannelCuePwmSpeed motorRCcue = new Sequencer.ChannelCuePwmSpeed();
+//    private Sequencer.ChannelCuePwmSpeed motorRCCcue = new Sequencer.ChannelCuePwmSpeed();
+//
+//    private Sequencer.ChannelCue[] cue = new Sequencer.ChannelCue[] {motorFCCcue, motorFCcue, motorRCCcue, motorRCcue};
+
     IOIOController() {
+        Log.log(TAG, "Loading config file");
+        String filename = Environment.getExternalStorageDirectory().getPath() + "/sparrow/f450config.txt";
+        loadConfig(filename);
         Log.log(TAG, "Setting up IOIO IOIOController");
         rollController = new PIDAngleController(ROLL_PID_KP, ROLL_PID_KI, ROLL_PID_KD, PID_DERIV_SMOOTHING);
         pitchController = new PIDAngleController(PITCH_PID_KP, PITCH_PID_KI, PITCH_PID_KD, PID_DERIV_SMOOTHING);
         yawController = new PIDAngleController(YAW_PID_KP, YAW_PID_KI, YAW_PID_KD, PID_DERIV_SMOOTHING);
-//        throttleController = new PIDAltitudeController(THROTTLE_PID_KP, THROTTLE_PID_KI, THROTTLE_PID_KD, PID_DERIV_SMOOTHING);
+        throttleController = new ThrottleController(MOTOR_ZERO_LEVEL, MOTOR_DESCENT_LEVEL, MOTOR_MAX_LEVEL);
 //        tiltController = new PIDPercentageController(TILT_PID_KP, TILT_PID_KI, TILT_PID_KD, PID_DERIV_SMOOTHING);
+    }
+
+    private void loadConfig(String filename) {
+        //echo "MOTOR_ZERO_LEVEL,MOTOR_DESCENT_LEVEL,MOTOR_MAX_LEVEL,ROLL_PID_KP,ROLL_PID_KI,ROLL_PID_KD,PITCH_PID_KP,PITCH_PID_KI,PITCH_PID_KD\n1000,1500,2023,2.0,0,0,2.0,0,0" > sparrow/f450config.txt
+        File file = new File(filename);
+        if (file.exists()) {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new FileReader(file));
+                br.readLine(); //discard first line, its comments anyway
+                String[] values = br.readLine().split(",");
+                if (values.length != 9) {
+                    return;
+                }
+                MOTOR_ZERO_LEVEL = Integer.parseInt(values[0]);
+                MOTOR_DESCENT_LEVEL = Integer.parseInt(values[1]);
+                MOTOR_MAX_LEVEL = Integer.parseInt(values[2]);
+                ROLL_PID_KP = Double.parseDouble(values[3]);
+                ROLL_PID_KI = Double.parseDouble(values[4]);
+                ROLL_PID_KD = Double.parseDouble(values[5]);
+                PITCH_PID_KP = Double.parseDouble(values[6]);
+                PITCH_PID_KI = Double.parseDouble(values[7]);
+                PITCH_PID_KD = Double.parseDouble(values[8]);
+                Log.log(TAG, "Successfully loaded parameters from file: "+filename);
+
+            } catch (IOException e) {
+                Log.log(TAG, "Failed to load parameters from file: "+filename);
+                e.printStackTrace();
+            }
+        }
     }
 
     void setIOIO(IOIO ioio) {
         if (this.ioio == null || this.ioio.equals(ioio)) {
             this.ioio = ioio;
             try {
+//                Sequencer.ChannelConfigPwmSpeed motorFCconfig = new Sequencer.ChannelConfigPwmSpeed(Sequencer.Clock.CLK_62K5, 312, MOTOR_ZERO_LEVEL,  new DigitalOutput.Spec(34));
+//                Sequencer.ChannelConfigPwmSpeed motorFCCconfig = new Sequencer.ChannelConfigPwmSpeed(Sequencer.Clock.CLK_62K5, 312, MOTOR_ZERO_LEVEL,  new DigitalOutput.Spec(35));
+//                Sequencer.ChannelConfigPwmSpeed motorRCconfig = new Sequencer.ChannelConfigPwmSpeed(Sequencer.Clock.CLK_62K5, 312, MOTOR_ZERO_LEVEL,  new DigitalOutput.Spec(36));
+//                Sequencer.ChannelConfigPwmSpeed motorRCCconfig = new Sequencer.ChannelConfigPwmSpeed(Sequencer.Clock.CLK_62K5, 312, MOTOR_ZERO_LEVEL,  new DigitalOutput.Spec(37));
+//
+//                Sequencer.ChannelConfig[] config = new Sequencer.ChannelConfig[] {motorFCCconfig, motorFCconfig, motorRCCconfig, motorRCconfig};
+//                seq = ioio.openSequencer(config);
+//
+//                motorFCcue.pulseWidth = MOTOR_ZERO_LEVEL;
+//                motorFCCcue.pulseWidth = MOTOR_ZERO_LEVEL;
+//                motorRCcue.pulseWidth = MOTOR_ZERO_LEVEL;
+//                motorRCCcue.pulseWidth = MOTOR_ZERO_LEVEL;
+//
+//
+//                seq.manualStart(cue);
+
+
                 motorFC = ioio.openPwmOutput(34, 200);
                 motorFCC = ioio.openPwmOutput(35, 200);
                 motorRC = ioio.openPwmOutput(36, 200);
@@ -105,7 +174,7 @@ public class IOIOController {
                 motorFCC.setPulseWidth(MOTOR_ZERO_LEVEL);
                 motorRC.setPulseWidth(MOTOR_ZERO_LEVEL);
                 motorRCC.setPulseWidth(MOTOR_ZERO_LEVEL);
-//
+
                 Thread.sleep(1000);
 
                 if (thread != null) {
@@ -120,10 +189,12 @@ public class IOIOController {
 
 
                 Log.log(TAG, "IOIO is initialised");
-            } catch (ConnectionLostException | InterruptedException e) {
+            } catch (ConnectionLostException e) {
                 e.printStackTrace();
             } catch (IllegalArgumentException f) {
                 Log.log(TAG, "IOIO was already inited");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -145,7 +216,7 @@ public class IOIOController {
         if (bearing != null && position != null) {
             float[] data = bearing.getData();
             PositionGPS posData = position.getData();
-            
+
 
             // Compute the power of each motor.
             int tempPowerFCW = MOTOR_ZERO_LEVEL;
@@ -172,14 +243,11 @@ public class IOIOController {
             double pitchForce = pitchController.getInput(pitchAngleTarget, -data[AdaptorBearing.PITCH], dt);
             double rollForce = rollController.getInput(rollAngleTarget, data[AdaptorBearing.ROLL], dt);
 
-            double altitudeForce = (MOTOR_MAX_LEVEL-MOTOR_ZERO_LEVEL)*throttlePercentage;
-
-
+            double altitudeForce = throttleController.getInput(throttlePercentage, dt);
 
 
 //            //todo:
 //            int altitudeForce = 200;
-            System.out.println(rollForce+"\t"+pitchForce+"\t"+altitudeForce);
 
             tempPowerFCW += altitudeForce; // Vertical "force".
             tempPowerFCCW += altitudeForce; //
@@ -200,6 +268,8 @@ public class IOIOController {
 //            tempPowerFCCW -= yawForce; //
 //            tempPowerRCW += yawForce; //
 //            tempPowerRCCW -= yawForce; //
+
+            Log.log(TAG, currentTime + "," + pitchAngleTarget + "," + rollAngleTarget + "," + data[AdaptorBearing.PITCH] + "," + data[AdaptorBearing.ROLL] + "," + pitchForce + "," + rollForce + "," + altitudeForce + "," + tempPowerFCCW + "," + tempPowerFCW + "," + tempPowerRCCW + "," + tempPowerRCW);
 
 
             tempPowerFCW = correctRange(tempPowerFCW);
@@ -232,10 +302,10 @@ public class IOIOController {
                     fccRange >= 1000 && fccRange <= 2023 &&
                     rcRange >= 1000 && rcRange <= 2023 &&
                     rccRange >= 1000 && rccRange <= 2023) {
-                motorFC.setPulseWidth(fcRange);
-                motorFCC.setPulseWidth(fccRange);
-                motorRC.setPulseWidth(rcRange);
-                motorRCC.setPulseWidth(rccRange);
+                motorFC.setPulseWidth(MOTOR_ZERO_LEVEL);
+                motorFCC.setPulseWidth(MOTOR_ZERO_LEVEL);
+                motorRC.setPulseWidth(MOTOR_ZERO_LEVEL);
+                motorRCC.setPulseWidth(MOTOR_ZERO_LEVEL);
 
             } else
                 throw new IllegalArgumentException();
@@ -267,13 +337,14 @@ public class IOIOController {
     }
 
     public void setPitch(double angle) {
-        pitchAngleTarget = angle*15;
+        pitchAngleTarget = angle * 15;
     }
 
     public void setRoll(double angle) {
-        rollAngleTarget = angle*15;
+        rollAngleTarget = angle * 15;
 
     }
+
 
     private class ControllerThread implements Runnable {
         @Override

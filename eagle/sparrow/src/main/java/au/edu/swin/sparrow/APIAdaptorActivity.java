@@ -271,14 +271,14 @@ public class APIAdaptorActivity extends IOIOEagleActivity implements Acceleromet
     @Override
     public void onLogEntry(String tag, String message) {
         logMessages.add(tag + ": " + message);
-
-        if (webViewLog != null)
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    updateLogUI();
-                }
-            });
+//
+//        if (webViewLog != null)
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    updateLogUI();
+//                }
+//            });
     }
 
     public synchronized void updateLogUI() {
