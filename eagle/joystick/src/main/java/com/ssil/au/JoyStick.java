@@ -64,18 +64,10 @@ public class JoyStick {
         String address = scan.nextLine();
 
         pcb = new ProtocolBufferClient(address);
-        pcb.connectToServer();
-
-
-
     }
 
 
     public void run() {
-        if (!pcb.isConnected()) {
-            System.out.println("Not connected");
-            return;
-        }
         System.out.println("Hello LWJGL " + Sys.getVersion() + "!");
 
         try {
@@ -168,12 +160,29 @@ public class JoyStick {
 
             System.out.println(glfwGetJoystickName(id));
 
+            System.out.println("Connecting to drone");
+            while (!pcb.isConnected()) {
+                pcb.connectToServer();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("Connected");
+
             while (true) {
                 FloatBuffer fb = glfwGetJoystickAxes(id);
 //                System.out.println(fb.get(3));
-                pcb.sendMessage("SETROLL "+fb.get(0));
-                pcb.sendMessage("SETPITCH "+fb.get(1));
-                pcb.sendMessage("SETTHROTTLE "+-fb.get(3));
+                if (!pcb.sendMessage("SETROLL " + fb.get(0)) ||
+                        !pcb.sendMessage("SETPITCH " + fb.get(1)) ||
+                        !pcb.sendMessage("SETTHROTTLE " + -fb.get(3))) {
+                    System.out.println("Connection failed, Reconnecting");
+                    while (!pcb.isConnected()) {
+                        pcb.connectToServer();
+                    }
+                    System.out.println("Reconnected");
+                }
 
                 try {
                     Thread.sleep(20);
