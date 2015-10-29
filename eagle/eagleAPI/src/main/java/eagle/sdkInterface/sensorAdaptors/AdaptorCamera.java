@@ -18,6 +18,14 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCam
 public abstract class AdaptorCamera extends SensorAdaptor {
 
     protected HashSet<SensorAdaptorCameraLiveFeedCallback> sensorAdaptorCameraLiveFeedCallbacks;
+    protected int attitudeMinSpeed = 0;
+    protected int attitudeMaxSpeed = 0;
+    protected int attitudeMinRoll = 0;
+    protected int attitudeMaxRoll = 0;
+    protected int attitudeMinPitch = 0;
+    protected int attitudeMaxPitch = 0;
+    protected int attitudeMinYaw = 0;
+    protected int attitudeMaxYaw = 0;
 
     public AdaptorCamera(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
@@ -45,6 +53,11 @@ public abstract class AdaptorCamera extends SensorAdaptor {
     }
 
     public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, int roll, int pitch, int yaw){
+        if(sdkAdaptorCallback!=null)
+            sdkAdaptorCallback.onResult(false,"Function Not Implemented");
+    }
+
+    public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, int roll, int pitch, int yaw, int speed){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }

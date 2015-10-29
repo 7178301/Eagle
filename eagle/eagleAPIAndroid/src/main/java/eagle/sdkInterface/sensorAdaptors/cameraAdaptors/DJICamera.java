@@ -1,7 +1,10 @@
 package eagle.sdkInterface.sensorAdaptors.cameraAdaptors;
 
+import dji.sdk.api.Camera.DJICameraSettingsTypeDef;
 import dji.sdk.api.Camera.DJICameraSystemState;
+import dji.sdk.api.Camera.DJICameraTypeDef;
 import dji.sdk.api.DJIDrone;
+import dji.sdk.api.DJIDroneTypeDef;
 import dji.sdk.api.DJIError;
 import dji.sdk.api.Gimbal.DJIGimbalAttitude;
 import dji.sdk.api.Gimbal.DJIGimbalRotation;
@@ -27,6 +30,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     private DJICameraSystemState djiCameraSystemState = null;
     private DJIGimbalAttitude djiGimbalAttitude = null;
+    private DJICameraSettingsTypeDef.CameraVisionType cameraVisionType = null;
 
     public DJICamera() {
         super("DJI", "Camera", "0.0.1");
@@ -53,7 +57,24 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
         DJIDrone.getDjiCamera().setDjiCameraSystemStateCallBack(this);
         DJIDrone.getDjiGimbal().setGimbalUpdateAttitudeCallBack(this);
         DJIDrone.getDjiCamera().setReceivedVideoDataCallBack(this);
-        return DJIDrone.getDjiCamera().getCameraConnectIsOk();
+        if (DJIDrone.getDjiCamera().getCameraConnectIsOk()) {
+            while (DJIDrone.getDjiCamera().getCameraVersion().length() == 0) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            attitudeMaxPitch = DJIDrone.getDjiGimbal().getGimbalPitchMaxAngle();
+            attitudeMinPitch = DJIDrone.getDjiGimbal().getGimbalPitchMinAngle();
+            if (DJIDrone.getDjiCamera().getCameraVersion().contains("g")) {
+                cameraVisionType = DJICameraSettingsTypeDef.CameraVisionType.Camera_Type_Plus;
+                attitudeMaxSpeed = 900;
+            } else
+                cameraVisionType = DJICameraSettingsTypeDef.CameraVisionType.Camera_Type_Vision;
+            return true;
+        } else
+            return false;
     }
 
     @Override
@@ -151,68 +172,71 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
 
     @Override
     public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, final int roll, final int pitch, final int yaw) {
+        updateCameraAttitude(sdkAdaptorCallback, roll, pitch, yaw, attitudeMaxSpeed);
+    }
+
+    @Override
+    public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, final int roll, final int pitch, final int yaw, final int speed) {
         if (isConnectedToSensor()) {
-            DJIGimbalRotation djiGimbalRotationRoll;
-            DJIGimbalRotation djiGimbalRotationPitch;
-            DJIGimbalRotation djiGimbalRotationYaw;
-            if (roll != 0)
-                djiGimbalRotationRoll = new DJIGimbalRotation(true, true, true, roll);
-            else
-                djiGimbalRotationRoll = new DJIGimbalRotation(false, false, false, 0);
-            if (pitch != 0)
-                djiGimbalRotationPitch = new DJIGimbalRotation(true, true, true, pitch);
-            else
-                djiGimbalRotationPitch = new DJIGimbalRotation(false, false, false, 0);
-            if (yaw != 0)
-                djiGimbalRotationYaw = new DJIGimbalRotation(true, true, true, yaw);
-            else
-                djiGimbalRotationYaw = new DJIGimbalRotation(false, false, false, 0);
-            DJIDrone.getDjiGimbal().updateGimbalAttitude(djiGimbalRotationPitch, djiGimbalRotationRoll, djiGimbalRotationYaw);
-            if (sdkAdaptorCallback != null && djiGimbalAttitude != null) {
-                final boolean[] result = {false};
-                Thread gimbleUpdateThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean rollComplete = false, pitchComplete = false, yawComplete = false;
-                        if (0 == roll)
-                            rollComplete = true;
-                        if (0 == pitch)
-                            pitchComplete = true;
-                        if (0 == yaw)
-                            yawComplete = true;
-                        while (!rollComplete && !pitchComplete && !yawComplete) {
-                            if (Double.valueOf(djiGimbalAttitude.roll).shortValue() == roll)
-                                rollComplete = true;
-                            if (Double.valueOf(djiGimbalAttitude.pitch).shortValue() == pitch)
-                                pitchComplete = true;
-                            if (Double.valueOf(djiGimbalAttitude.yaw).shortValue() == yaw)
-                                yawComplete = true;
+            DJIGimbalRotation djiGimbalRotationRoll = null;
+            DJIGimbalRotation djiGimbalRotationPitch = null;
+            DJIGimbalRotation djiGimbalRotationYaw = null;
+            if (cameraVisionType == DJICameraSettingsTypeDef.CameraVisionType.Camera_Type_Vision) {
+                Log.log("DJICamera", "Camera Type Vision");
+                if (pitch != 0) {
+                    if (pitch > attitudeMaxPitch)
+                        djiGimbalRotationPitch = new DJIGimbalRotation(true, true, true, attitudeMaxPitch);
+                    else if (pitch < attitudeMinPitch)
+                        djiGimbalRotationPitch = new DJIGimbalRotation(true, true, true, attitudeMinPitch);
+                    else
+                        djiGimbalRotationPitch = new DJIGimbalRotation(true, true, true, pitch);
+                }
+                DJIDrone.getDjiGimbal().updateGimbalAttitude(djiGimbalRotationPitch, djiGimbalRotationRoll, djiGimbalRotationYaw);
+                if (sdkAdaptorCallback != null && djiGimbalAttitude != null) {
+                    Log.log("DJICamera", "Update Camera Attitude SUCCESS " + getCameraAttitude()[0] + "," + getCameraAttitude()[1] + "," + getCameraAttitude()[2]);
+                    sdkAdaptorCallback.onResult(true, "Update Camera Attitude SUCCESS " + getCameraAttitude()[0] + "," + getCameraAttitude()[1] + "," + getCameraAttitude()[2]);
+                } else if (sdkAdaptorCallback != null) {
+                    Log.log("DJICamera", "Update Camera Attitude FAIL - No Feedback From Gimbal");
+                    sdkAdaptorCallback.onResult(false, "Update Camera Attitude FAIL - No Feedback From Gimbal");
+                }
+            } else if (cameraVisionType == DJICameraSettingsTypeDef.CameraVisionType.Camera_Type_Plus) {
+                Log.log("DJICamera", "Camera Type Plus");
+                final DJIGimbalRotation djiGimbalRotationStop = new DJIGimbalRotation(true, false, false, 0);
+                final int pitchDifference;
+                if (pitch > attitudeMaxPitch)
+                    pitchDifference = (int) djiGimbalAttitude.pitch - attitudeMaxPitch;
+                else if (pitch < attitudeMinPitch)
+                    pitchDifference = (int) djiGimbalAttitude.pitch - attitudeMinPitch;
+                else
+                    pitchDifference = (int) djiGimbalAttitude.pitch - pitch;
+                if (pitch != 0 && pitchDifference > 0)
+                    djiGimbalRotationPitch = new DJIGimbalRotation(true, true, false, speed);
+                else if (pitch != 0)
+                    djiGimbalRotationPitch = new DJIGimbalRotation(true, false, false, speed);
+                DJIDrone.getDjiGimbal().updateGimbalAttitude(djiGimbalRotationPitch, djiGimbalRotationRoll, djiGimbalRotationYaw);
+                if (djiGimbalRotationPitch != null) {
+                    final DJIGimbalRotation finalDjiGimbalRotationPitch = djiGimbalRotationPitch;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
                             try {
-                                Thread.sleep(10);
+                                if (finalDjiGimbalRotationPitch.direction)
+                                    Thread.sleep(Math.abs(pitchDifference - 16));
+                                else
+                                    Thread.sleep(Math.abs(pitchDifference + 20));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            DJIDrone.getDjiGimbal().updateGimbalAttitude(djiGimbalRotationStop, djiGimbalRotationStop, djiGimbalRotationStop);
+                            Log.log("DJICamera", "Update Camera Attitude SUCCESS " + getCameraAttitude()[0] + "," + getCameraAttitude()[1] + "," + getCameraAttitude()[2]);
+                            sdkAdaptorCallback.onResult(true, "Update Camera Attitude SUCCESS " + getCameraAttitude()[0] + "," + getCameraAttitude()[1] + "," + getCameraAttitude()[2]);
                         }
-                        result[0] = true;
-                        Log.log("DJICamera", "Update Camera Attitude SUCCESS");
-                        sdkAdaptorCallback.onResult(true, "Update Camera Attitude SUCCESS");
-                    }
-                });
-                gimbleUpdateThread.start();
-                try {
-                    gimbleUpdateThread.join(20000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    }).start();
                 }
-                if (!result[0]) {
-                    Log.log("DJICamera", "Update Camera Attitude FAIL - TIMED OUT");
-                    sdkAdaptorCallback.onResult(false, "Update Camera Attitude FAIL - TIMED OUT");
-                }
-            } else if (sdkAdaptorCallback != null) {
-                Log.log("DJICamera", "Update Camera Attitude FAIL - No Feedback From Camera");
-                sdkAdaptorCallback.onResult(false, "Update Camera Attitude FAIL - No Feedback From Camera");
             }
-        } else if (sdkAdaptorCallback != null) {
+        } else if (sdkAdaptorCallback != null)
+
+        {
             Log.log("DJICamera", "Update Camera Attitude FAIL - Not Connected To The Camera");
             sdkAdaptorCallback.onResult(false, "Update Camera Attitude FAIL - Not Connected To The Camera");
         }
