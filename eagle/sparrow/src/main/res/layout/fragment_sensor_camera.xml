@@ -30,13 +30,11 @@
     </TableRow>
 
     <TableRow
-        style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/buttonCapture"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
@@ -45,7 +43,6 @@
 
         <Button
             android:id="@+id/buttonStartRecord"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -54,7 +51,6 @@
 
         <Button
             android:id="@+id/buttonStopRecord"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
@@ -64,13 +60,11 @@
     </TableRow>
 
     <TableRow
-        style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/buttonCameraUp"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
@@ -79,13 +73,76 @@
 
         <Button
             android:id="@+id/buttonCameraDown"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
             android:text="@string/down"
             android:visibility="gone" />
     </TableRow>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textViewSensorCameraAttitudeX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/x_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewSensorCameraAttitudeXData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textViewSensorCameraAttitudeX"
+            android:text="@string/x_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/textViewSensorCameraAttitudeY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textViewSensorCameraAttitudeXData"
+            android:text="@string/y_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewSensorCameraAttitudeYData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textViewSensorCameraAttitudeY"
+            android:text="@string/y_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/textViewSensorCameraAttitudeZ"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/textViewSensorCameraAttitudeYData"
+            android:text="@string/z_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/textViewSensorCameraAttitudeZData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/textViewSensorCameraAttitudeZ"
+            android:text="@string/z_axis_"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
 
     <dji.sdk.widget.DjiGLSurfaceView
         android:id="@+id/djiSurfaceView"

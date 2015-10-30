@@ -15,6 +15,7 @@ import dji.sdk.interfaces.DJIReceivedVideoDataCallBack;
 import eagle.Log;
 import eagle.sdkInterface.SDKAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCameraLiveFeedCallback;
 
 /**
@@ -70,6 +71,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
             if (DJIDrone.getDjiCamera().getCameraVersion().contains("g")) {
                 cameraVisionType = DJICameraSettingsTypeDef.CameraVisionType.Camera_Type_Plus;
                 attitudeMaxSpeed = 900;
+                DJIDrone.getDjiCamera().setStreamType(DJICameraSettingsTypeDef.CameraPreviewResolustionType.Resolution_Type_640x480_15fps);
             } else
                 cameraVisionType = DJICameraSettingsTypeDef.CameraVisionType.Camera_Type_Vision;
             return true;
@@ -178,6 +180,7 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     @Override
     public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, final int roll, final int pitch, final int yaw, final int speed) {
         if (isConnectedToSensor()) {
+            Log.log("DJICamera", "Updating Camera Attitude - Roll:"+roll+" Pitch:"+pitch+" Yaw:"+yaw);
             DJIGimbalRotation djiGimbalRotationRoll = null;
             DJIGimbalRotation djiGimbalRotationPitch = null;
             DJIGimbalRotation djiGimbalRotationYaw = null;
@@ -203,16 +206,16 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
                 Log.log("DJICamera", "Camera Type Plus");
                 final DJIGimbalRotation djiGimbalRotationStop = new DJIGimbalRotation(true, false, false, 0);
                 final int pitchDifference;
-                if (pitch > attitudeMaxPitch)
-                    pitchDifference = (int) djiGimbalAttitude.pitch - attitudeMaxPitch;
-                else if (pitch < attitudeMinPitch)
+                if (pitch <= attitudeMinPitch)
                     pitchDifference = (int) djiGimbalAttitude.pitch - attitudeMinPitch;
+                else if (pitch >= attitudeMaxPitch)
+                    pitchDifference = (int) djiGimbalAttitude.pitch - attitudeMaxPitch;
                 else
                     pitchDifference = (int) djiGimbalAttitude.pitch - pitch;
                 if (pitch != 0 && pitchDifference > 0)
-                    djiGimbalRotationPitch = new DJIGimbalRotation(true, true, false, speed);
+                    djiGimbalRotationPitch = new DJIGimbalRotation(true, true, false, speed);//DOWN
                 else if (pitch != 0)
-                    djiGimbalRotationPitch = new DJIGimbalRotation(true, false, false, speed);
+                    djiGimbalRotationPitch = new DJIGimbalRotation(true, false, false, speed);//UP
                 DJIDrone.getDjiGimbal().updateGimbalAttitude(djiGimbalRotationPitch, djiGimbalRotationRoll, djiGimbalRotationYaw);
                 if (djiGimbalRotationPitch != null) {
                     final DJIGimbalRotation finalDjiGimbalRotationPitch = djiGimbalRotationPitch;
@@ -264,6 +267,8 @@ public class DJICamera extends AdaptorCamera implements DJICameraSystemStateCall
     @Override
     public void onResult(DJIGimbalAttitude djiGimbalAttitude) {
         this.djiGimbalAttitude = djiGimbalAttitude;
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
+            currentSensorAdaptorCallback.onSensorChanged();
     }
 
     @Override

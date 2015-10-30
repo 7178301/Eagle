@@ -18,6 +18,7 @@ import eagle.Log;
 import eagle.sdkInterface.SDKAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
 import eagle.sdkInterface.sensorAdaptors.cameraAdaptors.DJICamera;
+import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCallback;
 import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCameraLiveFeedCallback;
 
 
@@ -39,6 +40,13 @@ public class CameraFragment extends SensorFragment {
     private Button captureButton = null;
     private Button startRecordButton = null;
     private Button stopRecordButton = null;
+
+    private TextView sensorCameraAttitudeX = null;
+    private TextView sensorCameraAttitudeXData = null;
+    private TextView sensorCameraAttitudeY = null;
+    private TextView sensorCameraAttitudeYData = null;
+    private TextView sensorCameraAttitudeZ = null;
+    private TextView sensorCameraAttitudeZData = null;
 
     private DjiGLSurfaceView djiGLSurfaceView = null;
     private SurfaceView surfaceView = null;
@@ -86,6 +94,13 @@ public class CameraFragment extends SensorFragment {
         captureButton = (Button) view.findViewById(R.id.buttonCapture);
         startRecordButton = (Button) view.findViewById(R.id.buttonStartRecord);
         stopRecordButton = (Button) view.findViewById(R.id.buttonStopRecord);
+
+        sensorCameraAttitudeX = (TextView) view.findViewById(R.id.textViewSensorCameraAttitudeX);
+        sensorCameraAttitudeXData = (TextView) view.findViewById(R.id.textViewSensorCameraAttitudeXData);
+        sensorCameraAttitudeY = (TextView) view.findViewById(R.id.textViewSensorCameraAttitudeY);
+        sensorCameraAttitudeYData = (TextView) view.findViewById(R.id.textViewSensorCameraAttitudeYData);
+        sensorCameraAttitudeZ = (TextView) view.findViewById(R.id.textViewSensorCameraAttitudeZ);
+        sensorCameraAttitudeZData = (TextView) view.findViewById(R.id.textViewSensorCameraAttitudeZData);
 
         djiGLSurfaceView = (DjiGLSurfaceView) this.view.findViewById(R.id.djiSurfaceView);
         surfaceView = (SurfaceView) this.view.findViewById(R.id.surfaceView);
@@ -193,9 +208,31 @@ public class CameraFragment extends SensorFragment {
 
     public void setCameraAdaptor(final AdaptorCamera camera) {
         this.camera = camera;
+        camera.addSensorAdaptorCallback(new SensorAdaptorCallback() {
+            @Override
+            public void onSensorChanged() {
+                updateData();
+            }
+        });
     }
 
     public void updateData() {
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (camera != null && camera.isConnectedToSensor() && camera.getCameraAttitude()!=null) {
+                        sensorCameraAttitudeXData.setText(String.valueOf(camera.getCameraAttitude()[0]));
+                        sensorCameraAttitudeYData.setText(String.valueOf(camera.getCameraAttitude()[1]));
+                        sensorCameraAttitudeZData.setText(String.valueOf(camera.getCameraAttitude()[2]));
+                    } else {
+                        sensorCameraAttitudeXData.setText("");
+                        sensorCameraAttitudeYData.setText("");
+                        sensorCameraAttitudeZData.setText("");
+                    }
+                }
+            });
+        }
     }
 
     private void displayCameraHUD() {
@@ -227,12 +264,12 @@ public class CameraFragment extends SensorFragment {
             upButton.setVisibility(View.VISIBLE);
             startRecordButton.setVisibility(View.VISIBLE);
             stopRecordButton.setVisibility(View.VISIBLE);
-        } else {
-            captureButton.setVisibility(View.GONE);
-            downButton.setVisibility(View.GONE);
-            upButton.setVisibility(View.GONE);
-            startRecordButton.setVisibility(View.GONE);
-            stopRecordButton.setVisibility(View.GONE);
+            sensorCameraAttitudeX.setVisibility(View.VISIBLE);
+            sensorCameraAttitudeXData.setVisibility(View.VISIBLE);
+            sensorCameraAttitudeY.setVisibility(View.VISIBLE);
+            sensorCameraAttitudeYData.setVisibility(View.VISIBLE);
+            sensorCameraAttitudeZ.setVisibility(View.VISIBLE);
+            sensorCameraAttitudeZData.setVisibility(View.VISIBLE);
         }
     }
 }
