@@ -45,7 +45,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
      */
     ViewPager mViewPager;
     private String serverAddress;
-    private ProtocolBufferClient protocolBufferClient;
+    private static ProtocolBufferClient protocolBufferClient;
     private RemoteControlFragment remoteControlFragment;
     private LoggingFragment logFragment;
     private ControllerActivity ca = this;
@@ -59,7 +59,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 ca.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.log("ControllerActivity","Command failed (" + response + "). Perhaps you need to connect first?");
+                        Log.log("ControllerActivity", "Command failed (" + response + "). Perhaps you need to connect first?");
                         Toast toast = Toast.makeText(ca, "Command failed (" + response + "). Perhaps you need to connect first?", Toast.LENGTH_LONG);
                         toast.show();
 
@@ -133,7 +133,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
 
     }
 
-    protected void onStart(){
+    protected void onStart() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onStart();
     }
@@ -194,36 +194,52 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
                 protocolBufferClient.sendMessage("DISCONNECTFROMDRONE", rcb);
                 break;
             case "/buttonUp":
-                protocolBufferClient.sendMessage("CHANGEALTITUDE -D 1", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[1].length() > 0)
+                    protocolBufferClient.sendMessage("CHANGEALTITUDE -D " + remoteControlFragment.getEditTextStrings()[1], rcb);
                 break;
             case "/buttonDown":
-                protocolBufferClient.sendMessage("CHANGEALTITUDE -D -1", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[1].length() > 0)
+                    protocolBufferClient.sendMessage("CHANGEALTITUDE -D -" + remoteControlFragment.getEditTextStrings()[1], rcb);
                 break;
             case "/buttonRotateLeft":
-                protocolBufferClient.sendMessage("CHANGEYAW -D -10", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[2].length() > 0)
+                    protocolBufferClient.sendMessage("CHANGEYAW -D -" + remoteControlFragment.getEditTextStrings()[2], rcb);
                 break;
             case "/buttonRotateRight":
-                protocolBufferClient.sendMessage("CHANGEYAW -D 10", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[2].length() > 0)
+                    protocolBufferClient.sendMessage("CHANGEYAW -D " + remoteControlFragment.getEditTextStrings()[2], rcb);
                 break;
             case "/buttonLeft":
-                latitude = 1 * Math.sin(Math.toRadians(bearingAngle));
-                longitude = -1 * Math.cos(Math.toRadians(bearingAngle));
-                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[0].length() > 0) {
+                    double distanceLatitudeLongitude = Double.parseDouble(remoteControlFragment.getEditTextStrings()[0]);
+                    latitude = distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle));
+                    longitude = -distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle));
+                    protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                }
                 break;
             case "/buttonRight":
-                latitude = -1 * Math.sin(Math.toRadians(bearingAngle));
-                longitude = 1 * Math.cos(Math.toRadians(bearingAngle));
-                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[0].length() > 0) {
+                    double distanceLatitudeLongitude = Double.parseDouble(remoteControlFragment.getEditTextStrings()[0]);
+                    latitude = -distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle));
+                    longitude = distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle));
+                    protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                }
                 break;
             case "/buttonForward":
-                latitude = 1 * Math.cos(Math.toRadians(bearingAngle));
-                longitude = 1 * Math.sin(Math.toRadians(bearingAngle));
-                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[0].length() > 0) {
+                    double distanceLatitudeLongitude = Double.parseDouble(remoteControlFragment.getEditTextStrings()[0]);
+                    latitude = distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle));
+                    longitude = distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle));
+                    protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                }
                 break;
             case "/buttonBackward":
-                latitude = -1 * Math.cos(Math.toRadians(bearingAngle));
-                longitude = -1 * Math.sin(Math.toRadians(bearingAngle));
-                protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                if (remoteControlFragment.getEditTextStrings().length == 3 && remoteControlFragment.getEditTextStrings()[0].length() > 0) {
+                    double distanceLatitudeLongitude = Double.parseDouble(remoteControlFragment.getEditTextStrings()[0]);
+                    latitude = -distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle));
+                    longitude = -distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle));
+                    protocolBufferClient.sendMessage("FLYTO -D " + latitude + " " + longitude + " 0 0", rcb);
+                }
                 break;
             case "/buttonGoHome":
                 protocolBufferClient.sendMessage("GOHOME", rcb);
@@ -292,7 +308,7 @@ public class ControllerActivity extends AppCompatActivity implements ActionBar.T
         boolean connected = protocolBufferClient.sendMessage("GETPOSITIONINFLIGHT", new ProtocolBufferClient.ResponseCallBack() {
             @Override
             public void handleResponse(String position) {
-                if (position != null&&!position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
+                if (position != null && !position.equals("POSITION IN FLIGHT NOT AVAILABLE")) {
                     String parts[] = position.split(" ");
                     if (parts.length != 6)
                         return;

@@ -58,5 +58,17 @@
     <string name="right">Right</string>
     <string name="rotate_left">Rotate Left</string>
     <string name="rotate_right">Rotate Right</string>
-    <string name="gohome">GOHOME</string>
+    <string name="goHome">GOHOME</string>
+
+    <string name="hintEnter_Number">Enter Number</string>
+
+    <color name="colourWhite">#FFFFFF</color>
+    <color name="colourBlack">#000000</color>
+    <color name="colourRed">#FF0000</color>
+    <color name="colourGreen">#00FF00</color>
+    <color name="colourBlue">#0000FF</color>
+    <color name="colourYellow">#FFFF00</color>
+    <color name="colourCyan">#00FFFF</color>
+    <color name="colourMagenta">#FF00FF</color>
+
 </resources>

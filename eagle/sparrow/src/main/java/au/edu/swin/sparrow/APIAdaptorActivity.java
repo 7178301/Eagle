@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -77,6 +78,10 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private GridLayout gridLayoutControls;
     private WebView webViewLog;
 
+    private EditText editTextDistanceLatitudeLongitude;
+    private EditText editTextDistanceAltitude;
+    private EditText editTextAngleYaw;
+
     private boolean isSensorsVisible = false;
     private boolean isControlsVisible = false;
     private boolean isLogVisible = false;
@@ -117,7 +122,7 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 1000);
 
-        if(drone.getSDKAdaptor().connectToDrone())
+        if (drone.getSDKAdaptor().connectToDrone())
             textViewConnectedStatus.setText(getResources().getString(R.string.connected));
     }
 
@@ -168,6 +173,14 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
 
         buttonExpandSensors = (Button) findViewById(R.id.buttonExpandSensors);
         linearLayoutSensors = (LinearLayout) findViewById(R.id.scrollViewSensors);
+
+        editTextAngleYaw = (EditText) findViewById(R.id.editTextAngleYaw);
+        editTextDistanceAltitude = (EditText) findViewById(R.id.editTextDistanceAltitude);
+        editTextDistanceLatitudeLongitude = (EditText) findViewById(R.id.editTextDistanceLatitudeLongitude);
+
+        editTextAngleYaw.setText(String.valueOf(45));
+        editTextDistanceAltitude.setText(String.valueOf(4));
+        editTextDistanceLatitudeLongitude.setText(String.valueOf(3));
 
         buttonExpandLog = (Button) findViewById(R.id.buttonExpandLog);
         webViewLog = (WebView) findViewById(R.id.webViewLog);
@@ -310,44 +323,56 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
                     textViewConnectedStatus.setText(getResources().getString(R.string.not_connected));
                 break;
             case R.id.buttonControlForward:
-                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(5 * Math.cos(Math.toRadians(bearingAngle)), 5 * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlBackward:
-                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-5 * Math.cos(Math.toRadians(bearingAngle)), -5 * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlLeft:
-                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(5 * Math.sin(Math.toRadians(bearingAngle)), -5 * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlRight:
-                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null) {
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-5 * Math.sin(Math.toRadians(bearingAngle)), 5 * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlRotateLeft:
-                if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(315));
+                if (drone != null && drone.getSDKAdaptor() != null && editTextAngleYaw.getText().toString().length() > 0) {
+                    int bearingAngle = Integer.parseInt(editTextAngleYaw.getText().toString());
+                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(-bearingAngle));
+                }
                 break;
             case R.id.buttonControlRotateRight:
-                if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(45));
+                if (drone != null && drone.getSDKAdaptor() != null && editTextAngleYaw.getText().toString().length() > 0) {
+                    int bearingAngle = Integer.parseInt(editTextAngleYaw.getText().toString());
+                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(bearingAngle));
+                }
                 break;
             case R.id.buttonControlUp:
-                if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, 2);
+                if (drone != null && drone.getSDKAdaptor() != null && editTextDistanceAltitude.getText().toString().length() > 0) {
+                    double distanceAltitude = Double.parseDouble(editTextDistanceAltitude.getText().toString());
+                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, distanceAltitude);
+                }
                 break;
             case R.id.buttonControlDown:
-                if (drone != null && drone.getSDKAdaptor() != null)
-                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, -2);
+                if (drone != null && drone.getSDKAdaptor() != null && editTextDistanceAltitude.getText().toString().length() > 0) {
+                    double distanceAltitude = Double.parseDouble(editTextDistanceAltitude.getText().toString());
+                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, -distanceAltitude);
+                }
                 break;
             case R.id.buttonControlGoHome:
                 if (drone != null && drone.getSDKAdaptor() != null)

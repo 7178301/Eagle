@@ -86,31 +86,16 @@
             android:inputType="text" />
     </GridLayout>
 
-    <GridLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
+        <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:useDefaultMargins="true">
 
         <Button
-            android:id="@+id/buttonDisconnect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="fill_horizontal"
-            android:layout_row="0"
-            android:text="@string/disconnect" />
-
-        <Button
-            android:id="@+id/buttonLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal"
-            android:layout_row="1"
-            android:text="@string/left" />
-
-        <Button
-            android:id="@+id/buttonConnect"
+            android:id="@+id/buttonControlConnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
@@ -119,89 +104,146 @@
             android:text="@string/connect" />
 
         <Button
-            android:id="@+id/buttonForward"
+            android:id="@+id/buttonControlForward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:layout_gravity="fill_horizontal"
             android:layout_row="0"
+            android:background="@color/colourCyan"
             android:text="@string/forward" />
 
         <Button
-            android:id="@+id/buttonBackward"
+            android:id="@+id/buttonControlDisconnect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="0"
+            android:text="@string/disconnect" />
+
+        <Button
+            android:id="@+id/buttonControlLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="1"
+            android:background="@color/colourCyan"
+            android:text="@string/left" />
+
+        <EditText
+            android:id="@+id/editTextDistanceLatitudeLongitude"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="1"
             android:layout_gravity="fill_horizontal"
-            android:layout_row="2"
-            android:text="@string/backward" />
+            android:layout_row="1"
+            android:background="@color/colourCyan"
+            android:hint="@string/hintEnter_Number"
+            android:inputType="numberDecimal|numberSigned"
+            android:maxLength="5"
+            android:singleLine="true" />
 
         <Button
-            android:id="@+id/buttonRight"
+            android:id="@+id/buttonControlRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
             android:layout_gravity="fill_horizontal"
             android:layout_row="1"
+            android:background="@color/colourCyan"
             android:text="@string/right" />
 
-        <Space
-            android:layout_column="0"
-            android:layout_row="3" />
-
-        <Space
+        <Button
+            android:id="@+id/buttonControlBackward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_column="1"
-            android:layout_row="3" />
-
-        <Space
-            android:layout_column="2"
-            android:layout_row="3" />
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="2"
+            android:background="@color/colourCyan"
+            android:text="@string/backward" />
 
         <Button
-            android:id="@+id/buttonRotateLeft"
+            android:id="@+id/buttonControlUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_gravity="fill_horizontal"
-            android:layout_row="5"
-            android:text="@string/rotate_left" />
-
-        <Button
-            android:id="@+id/buttonRotateRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="2"
-            android:layout_gravity="fill_horizontal"
-            android:layout_row="5"
-            android:text="@string/rotate_right" />
-
-        <Button
-            android:id="@+id/buttonUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="0"
-            android:layout_gravity="fill_horizontal"
-            android:layout_row="6"
+            android:layout_row="3"
+            android:background="@color/colourRed"
             android:text="@string/up" />
 
         <Button
-            android:id="@+id/buttonGoHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:layout_gravity="fill_horizontal"
-            android:layout_row="6"
-            android:text="@string/gohome" />
-
-        <Button
-            android:id="@+id/buttonDown"
+            android:id="@+id/buttonControlRotateRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_column="2"
             android:layout_gravity="fill_horizontal"
-            android:layout_row="6"
+            android:layout_row="3"
+            android:background="@color/colourYellow"
+            android:text="@string/rotate_right" />
+
+        <EditText
+            android:id="@+id/editTextDistanceAltitude"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="4"
+            android:background="@color/colourRed"
+            android:hint="@string/hintEnter_Number"
+            android:inputType="numberDecimal|numberSigned"
+            android:maxLength="5"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/editTextAngleYaw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="4"
+            android:background="@color/colourYellow"
+            android:digits="0123456789"
+            android:hint="@string/hintEnter_Number"
+            android:inputType="number"
+            android:maxLength="3"
+            android:singleLine="true" />
+
+        <Button
+            android:id="@+id/buttonControlDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="5"
+            android:background="@color/colourRed"
             android:text="@string/down" />
 
+        <Button
+            android:id="@+id/buttonControlGoHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="5"
+            android:background="@color/colourBlack"
+            android:text="@string/goHome"
+            android:textColor="@color/colourWhite" />
+
+        <Button
+            android:id="@+id/buttonControlRotateLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:layout_gravity="fill_horizontal"
+            android:layout_row="5"
+            android:background="@color/colourYellow"
+            android:text="@string/rotate_left" />
     </GridLayout>
+
+    </ScrollView>
 
 </LinearLayout>
