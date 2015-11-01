@@ -97,6 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/textViewSensorCameraAttitudeX"
+            android:layout_toRightOf="@id/textViewSensorCameraAttitudeX"
             android:text="@string/x_axis_"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone" />
@@ -107,7 +108,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_toEndOf="@id/textViewSensorCameraAttitudeXData"
+            android:layout_toRightOf="@id/textViewSensorCameraAttitudeXData"
             android:text="@string/y_axis_"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone" />
@@ -117,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/textViewSensorCameraAttitudeY"
+            android:layout_toRightOf="@id/textViewSensorCameraAttitudeY"
             android:text="@string/y_axis_"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone" />
@@ -127,7 +131,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_toEndOf="@id/textViewSensorCameraAttitudeYData"
+            android:layout_toRightOf="@id/textViewSensorCameraAttitudeYData"
             android:text="@string/z_axis_"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone" />
@@ -137,6 +143,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/textViewSensorCameraAttitudeZ"
+            android:layout_toRightOf="@id/textViewSensorCameraAttitudeZ"
             android:text="@string/z_axis_"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="gone" />
