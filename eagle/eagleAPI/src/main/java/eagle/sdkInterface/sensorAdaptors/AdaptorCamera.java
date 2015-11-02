@@ -18,6 +18,14 @@ import eagle.sdkInterface.sensorAdaptors.sensorAdaptorCallbacks.SensorAdaptorCam
 public abstract class AdaptorCamera extends SensorAdaptor {
 
     protected HashSet<SensorAdaptorCameraLiveFeedCallback> sensorAdaptorCameraLiveFeedCallbacks;
+    protected int attitudeMinSpeed = 0;
+    protected int attitudeMaxSpeed = 0;
+    protected int attitudeMinRoll = 0;
+    protected int attitudeMaxRoll = 0;
+    protected int attitudeMinPitch = 0;
+    protected int attitudeMaxPitch = 0;
+    protected int attitudeMinYaw = 0;
+    protected int attitudeMaxYaw = 0;
 
     public AdaptorCamera(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
         super(adaptorManufacturer, adaptorModel, adaptorVersion);
@@ -34,17 +42,22 @@ public abstract class AdaptorCamera extends SensorAdaptor {
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }
 
-    public void startTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback){
+    public void startRecord(final SDKAdaptorCallback sdkAdaptorCallback){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }
 
-    public void stopTakeVideo(final SDKAdaptorCallback sdkAdaptorCallback){
+    public void stopRecord(final SDKAdaptorCallback sdkAdaptorCallback){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }
 
     public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, int roll, int pitch, int yaw){
+        if(sdkAdaptorCallback!=null)
+            sdkAdaptorCallback.onResult(false,"Function Not Implemented");
+    }
+
+    public void updateCameraAttitude(final SDKAdaptorCallback sdkAdaptorCallback, int roll, int pitch, int yaw, int speed){
         if(sdkAdaptorCallback!=null)
             sdkAdaptorCallback.onResult(false,"Function Not Implemented");
     }
@@ -57,5 +70,9 @@ public abstract class AdaptorCamera extends SensorAdaptor {
         if (sensorAdaptorCameraLiveFeedCallbacks==null)
             sensorAdaptorCameraLiveFeedCallbacks = new HashSet<>();
         this.sensorAdaptorCameraLiveFeedCallbacks.add(sensorAdaptorCameraLiveFeedCallback);
+    }
+    public void removeSensorAdaptorCameraLiveFeedbackCallback(final SensorAdaptorCameraLiveFeedCallback sensorAdaptorCameraLiveFeedCallback){
+        if(sensorAdaptorCameraLiveFeedCallbacks.contains(sensorAdaptorCameraLiveFeedCallback))
+            sensorAdaptorCameraLiveFeedCallbacks.remove(sensorAdaptorCameraLiveFeedCallback);
     }
 }

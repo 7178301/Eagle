@@ -88,12 +88,13 @@ public class AndroidAccelerometer extends AdaptorAccelerometer implements Sensor
     public void onSensorChanged(SensorEvent event) {
         Sensor sensor = event.sensor;
         if (sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            accelerometerData = new float[3];
+            if(accelerometerData==null)
+                accelerometerData = new float[3];
             accelerometerData[0] = event.values[0];
             accelerometerData[1] = event.values[1];
             accelerometerData[2] = event.values[2];
         }
-        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
             currentSensorAdaptorCallback.onSensorChanged();
     }
 }

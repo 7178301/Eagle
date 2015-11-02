@@ -16,6 +16,7 @@
     <string name="x_axis_">X-Axis: </string>
     <string name="y_axis_">Y-Axis: </string>
     <string name="z_axis_">Z-Axis: </string>
+    <string name="azimuth_">Azimuth: </string>
     <string name="sensor_output_title">Sensor Output Title</string>
     <string name="sensor_output_1">Sensor Output 1</string>
     <string name="sensor_output_2">Sensor Output 2</string>
@@ -37,12 +38,37 @@
     <string name="log_data">Logs</string>
     <string name="collapseLog">Collapse Log</string>
     <string name="expandLog">Expand Log</string>
-    <string name="success">Success</string>
-    <string name="fail">Fail</string>
     <string name="camera">Camera</string>
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="capture">Capture</string>
     <string name="barometer">Barometer</string>
     <string name="pressure">Pressure</string>
+    <string name="startRecord">Start Record</string>
+    <string name="stopRecord">Stop Record</string>
+    <string name="controls">Controls</string>
+    <string name="collapseControls">Collapse Controls</string>
+    <string name="expandControls">Expand Controls</string>
+
+
+    <string name="disconnect">Disconnect</string>
+    <string name="left">Left</string>
+    <string name="forward">Forward</string>
+    <string name="backward">Backward</string>
+    <string name="right">Right</string>
+    <string name="rotate_left">Rotate Left</string>
+    <string name="rotate_right">Rotate Right</string>
+    <string name="goHome">GOHOME</string>
+
+    <string name="hintEnter_Number">Enter Number</string>
+
+    <color name="colourWhite">#FFFFFF</color>
+    <color name="colourBlack">#000000</color>
+    <color name="colourRed">#FF0000</color>
+    <color name="colourGreen">#00FF00</color>
+    <color name="colourBlue">#0000FF</color>
+    <color name="colourYellow">#FFFF00</color>
+    <color name="colourCyan">#00FFFF</color>
+    <color name="colourMagenta">#FF00FF</color>
+
 </resources>

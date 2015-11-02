@@ -2,7 +2,6 @@ package eagle;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -41,30 +40,35 @@ public class Log {
         }
     }
 
-    public synchronized static void addCallback(String tag, LogCallback callback) {
+    public synchronized static void addCallback(String tag, LogCallback logCallback) {
         if (logCallBack.containsKey(tag))
-            logCallBack.get(tag).add(callback);
+            logCallBack.get(tag).add(logCallback);
         else if (!logCallBack.containsKey(tag)) {
             Vector<LogCallback> initial = new Vector<>();
-            initial.add(callback);
+            initial.add(logCallback);
             logCallBack.put(tag, initial);
         }
         Log.log("LogCallback", "NEW CALLBACK ADDED TO " + tag);
     }
 
-    public synchronized static void addVerboseCallback(LogCallback callback) {
-        verboseLogCallback.add(callback);
+    public synchronized static void addVerboseCallback(LogCallback logCallback) {
+        verboseLogCallback.add(logCallback);
     }
 
-    public synchronized static void removeCallback(String tag, LogCallback callback) {
+    public synchronized static void removeCallback(String tag, LogCallback logCallback) {
         if (logCallBack.containsKey(tag)) {
-            logCallBack.get(tag).remove(callback);
+            logCallBack.get(tag).remove(logCallback);
             Log.log("LogCallback", "CALLBACK REMOVED FROM " + tag);
         }
     }
 
+    public synchronized static void removeVerboseCallback(LogCallback logCallback){
+        if (verboseLogCallback.contains(logCallback))
+            verboseLogCallback.remove(logCallback);
+    }
+
     public synchronized static ArrayList<String> getLog() {
-        return (ArrayList<String>) log.clone();
+        return new ArrayList<>(log);
     }
 
     public synchronized boolean setLogLimit(int logLimit){

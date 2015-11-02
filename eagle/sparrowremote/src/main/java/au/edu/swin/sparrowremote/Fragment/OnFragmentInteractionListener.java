@@ -1,4 +1,4 @@
-package ssil.swin.com.sparrowremote.Fragment;
+package au.edu.swin.sparrowremote.Fragment;
 
 import android.net.Uri;
 

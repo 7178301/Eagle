@@ -10,7 +10,7 @@
     <string name="ERR_DESCRIPTION_CAM_NOT_USB_STATE">Camera not usb state</string>
     <string name="ERR_DESCRIPTION_PLUS_GIMBAL_MOTOR">Gimbal Motor Error</string>
     <string name="ERR_DESCRIPTION_PLUS_REMOVE_LOCK">Remove Gimbal Clamp</string>
-    <string name="ERR_DESCRIPTION_CONNECTION_NOT_OK">Connection not ok</string>
+    <string name="ERR_DESCRIPTION_CONNECTION_NOT_OK">Connection not OK</string>
     <string name="ERR_DESCRIPTION_UNSUPPORTED">Not supported</string>
     <string name="ERR_DESCRIPTION_AUTH_FAILED">Auth failed</string>
     <string name="ERR_DESCRIPTION_CMD_RECEIVE_PACK_NULL">Receive pack null</string>

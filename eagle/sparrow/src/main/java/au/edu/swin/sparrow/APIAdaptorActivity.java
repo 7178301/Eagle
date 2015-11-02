@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,7 +19,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +36,8 @@ import au.edu.swin.sparrow.Fragment.UltrasonicFragment;
 import eagle.Drone;
 import eagle.Log;
 import eagle.LogCallback;
+import eagle.navigation.positioning.Angle;
+import eagle.navigation.positioning.PositionDisplacement;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
@@ -49,23 +52,43 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 public class APIAdaptorActivity extends Activity implements AccelerometerFragment.OnFragmentInteractionListener, View.OnClickListener, LogCallback {
 
 
-    Vector<SensorFragment> sensorFragments = new Vector<SensorFragment>();
+    Vector<SensorFragment> sensorFragments = new Vector<>();
 
     Drone drone = new Drone();
     TelnetServer telnet = null;
     ProtocolBufferServer protocolBufferServer = null;
 
+    private Button buttonExpandControls;
     private Button buttonExpandSensors;
-    private LinearLayout linearLayoutSensors;
-    private boolean sensorsCollapsed = false;
-
     private Button buttonExpandLog;
+
+    private Button buttonControlConnect;
+    private Button buttonControlForward;
+    private Button buttonControlDisconnect;
+    private Button buttonControlLeft;
+    private Button buttonControlRight;
+    private Button buttonControlBackward;
+    private Button buttonControlRotateRight;
+    private Button buttonControlRotateLeft;
+    private Button buttonControlUp;
+    private Button buttonControlGoHome;
+    private Button buttonControlDown;
+
+    private LinearLayout linearLayoutSensors;
+    private GridLayout gridLayoutControls;
     private WebView webViewLog;
-    private boolean logCollapsed = false;
+
+    private EditText editTextDistanceLatitudeLongitude;
+    private EditText editTextDistanceAltitude;
+    private EditText editTextAngleYaw;
+
+    private boolean isSensorsVisible = false;
+    private boolean isControlsVisible = false;
+    private boolean isLogVisible = false;
+
+    private TextView textViewConnectedStatus;
 
     private Timer myTimer;
-
-    private Vector<String> logMessages = new Vector<String>();
 
     @Override
     protected void onStart() {
@@ -79,18 +102,34 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
         protocolBufferServer = new ProtocolBufferServer(drone.getSDKAdaptor().scriptingEngine, 2324);
         Log.addVerboseCallback(this);
 
+        buttonExpandControls.setOnClickListener(this);
         buttonExpandSensors.setOnClickListener(this);
         buttonExpandLog.setOnClickListener(this);
+
+        buttonControlConnect.setOnClickListener(this);
+        buttonControlForward.setOnClickListener(this);
+        buttonControlDisconnect.setOnClickListener(this);
+        buttonControlLeft.setOnClickListener(this);
+        buttonControlRight.setOnClickListener(this);
+        buttonControlBackward.setOnClickListener(this);
+        buttonControlRotateRight.setOnClickListener(this);
+        buttonControlRotateLeft.setOnClickListener(this);
+        buttonControlUp.setOnClickListener(this);
+        buttonControlGoHome.setOnClickListener(this);
+        buttonControlDown.setOnClickListener(this);
 
         MyTimerTask myTask = new MyTimerTask();
         myTimer = new Timer();
         myTimer.schedule(myTask, 3000, 1000);
+
+        if (drone.getSDKAdaptor().connectToDrone())
+            textViewConnectedStatus.setText(getResources().getString(R.string.connected));
     }
 
     @Override
     protected void onDestroy() {
-        Log.removeCallback("TelnetServer", this);
         myTimer.cancel();
+        Log.removeVerboseCallback(this);
         super.onDestroy();
     }
 
@@ -114,23 +153,34 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     private void initializeUI() {
         TextView adaptorNameTextView = (TextView) findViewById(R.id.adaptorNameTextView);
         adaptorNameTextView.setText(drone.getSDKAdaptor().getAdaptorName());
-        Button selectAdaptorButton = (Button) findViewById(R.id.buttonConnect);
-        final TextView textViewConnectedStatus = (TextView) findViewById(R.id.textViewConnectedStatus);
-        selectAdaptorButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (drone.getSDKAdaptor().connectToDrone()) {
-                    textViewConnectedStatus.setText(getResources().getString(R.string.connected));
-                    Log.log("APIAdaptorActivity", "Drone Connect To Drone SUCCESS");
-                } else {
-                    textViewConnectedStatus.setText(getResources().getString(R.string.not_connected));
-                    Log.log("APIAdaptorActivity", "Drone Connect To Drone FAIL");
-                }
-            }
-        });
 
+        textViewConnectedStatus = (TextView) findViewById(R.id.textViewConnectedStatus);
+
+        buttonExpandControls = (Button) findViewById(R.id.buttonExpandControls);
+        gridLayoutControls = (GridLayout) findViewById(R.id.gridLayoutControls);
+
+        buttonControlConnect = (Button) findViewById(R.id.buttonControlConnect);
+        buttonControlForward = (Button) findViewById(R.id.buttonControlForward);
+        buttonControlDisconnect = (Button) findViewById(R.id.buttonControlDisconnect);
+        buttonControlLeft = (Button) findViewById(R.id.buttonControlLeft);
+        buttonControlRight = (Button) findViewById(R.id.buttonControlRight);
+        buttonControlBackward = (Button) findViewById(R.id.buttonControlBackward);
+        buttonControlRotateRight = (Button) findViewById(R.id.buttonControlRotateRight);
+        buttonControlRotateLeft = (Button) findViewById(R.id.buttonControlRotateLeft);
+        buttonControlUp = (Button) findViewById(R.id.buttonControlUp);
+        buttonControlDown = (Button) findViewById(R.id.buttonControlDown);
+        buttonControlGoHome = (Button) findViewById(R.id.buttonControlGoHome);
 
         buttonExpandSensors = (Button) findViewById(R.id.buttonExpandSensors);
         linearLayoutSensors = (LinearLayout) findViewById(R.id.scrollViewSensors);
+
+        editTextAngleYaw = (EditText) findViewById(R.id.editTextAngleYaw);
+        editTextDistanceAltitude = (EditText) findViewById(R.id.editTextDistanceAltitude);
+        editTextDistanceLatitudeLongitude = (EditText) findViewById(R.id.editTextDistanceLatitudeLongitude);
+
+        editTextAngleYaw.setText(String.valueOf(45));
+        editTextDistanceAltitude.setText(String.valueOf(4));
+        editTextDistanceLatitudeLongitude.setText(String.valueOf(3));
 
         buttonExpandLog = (Button) findViewById(R.id.buttonExpandLog);
         webViewLog = (WebView) findViewById(R.id.webViewLog);
@@ -227,37 +277,112 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonExpandSensors:
-                if (sensorsCollapsed) {
-                    buttonExpandSensors.setText(R.string.collapseSensors);
-                    linearLayoutSensors.setVisibility(View.VISIBLE);
-                    sensorsCollapsed = false;
+            case R.id.buttonExpandControls:
+                if (isControlsVisible) {
+                    buttonExpandControls.setText(R.string.expandControls);
+                    gridLayoutControls.setVisibility(View.GONE);
+                    isControlsVisible = false;
                 } else {
+                    buttonExpandControls.setText(R.string.collapseControls);
+                    gridLayoutControls.setVisibility(View.VISIBLE);
+                    isControlsVisible = true;
+                }
+                break;
+            case R.id.buttonExpandSensors:
+                if (isSensorsVisible) {
                     buttonExpandSensors.setText(R.string.expandSensors);
                     linearLayoutSensors.setVisibility(View.GONE);
-                    sensorsCollapsed = true;
+                    isSensorsVisible = false;
+                } else {
+                    buttonExpandSensors.setText(R.string.collapseSensors);
+                    linearLayoutSensors.setVisibility(View.VISIBLE);
+                    isSensorsVisible = true;
                 }
                 break;
             case R.id.buttonExpandLog:
-                if (logCollapsed) {
-                    buttonExpandLog.setText(R.string.collapseLog);
-                    webViewLog.setVisibility(View.VISIBLE);
-                    logCollapsed = false;
-                } else {
+                if (isLogVisible) {
                     buttonExpandLog.setText(R.string.expandLog);
                     webViewLog.setVisibility(View.GONE);
-                    logCollapsed = true;
+                    isLogVisible = false;
+                } else {
+                    buttonExpandLog.setText(R.string.collapseLog);
+                    webViewLog.setVisibility(View.VISIBLE);
+                    isLogVisible = true;
                 }
                 break;
-
-
+            case R.id.buttonControlConnect:
+                if (drone.getSDKAdaptor().connectToDrone())
+                    textViewConnectedStatus.setText(getResources().getString(R.string.connected));
+                else
+                    textViewConnectedStatus.setText(getResources().getString(R.string.not_connected));
+                break;
+            case R.id.buttonControlDisconnect:
+                if (!drone.getSDKAdaptor().disconnectFromDrone())
+                    textViewConnectedStatus.setText(getResources().getString(R.string.connected));
+                else
+                    textViewConnectedStatus.setText(getResources().getString(R.string.not_connected));
+                break;
+            case R.id.buttonControlForward:
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
+                    double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                }
+                break;
+            case R.id.buttonControlBackward:
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
+                    double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                }
+                break;
+            case R.id.buttonControlLeft:
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
+                    double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                }
+                break;
+            case R.id.buttonControlRight:
+                if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
+                    double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
+                    double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
+                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                }
+                break;
+            case R.id.buttonControlRotateLeft:
+                if (drone != null && drone.getSDKAdaptor() != null && editTextAngleYaw.getText().toString().length() > 0) {
+                    int bearingAngle = Integer.parseInt(editTextAngleYaw.getText().toString());
+                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(-bearingAngle));
+                }
+                break;
+            case R.id.buttonControlRotateRight:
+                if (drone != null && drone.getSDKAdaptor() != null && editTextAngleYaw.getText().toString().length() > 0) {
+                    int bearingAngle = Integer.parseInt(editTextAngleYaw.getText().toString());
+                    drone.getSDKAdaptor().changeYawDisplacement(null, new Angle(bearingAngle));
+                }
+                break;
+            case R.id.buttonControlUp:
+                if (drone != null && drone.getSDKAdaptor() != null && editTextDistanceAltitude.getText().toString().length() > 0) {
+                    double distanceAltitude = Double.parseDouble(editTextDistanceAltitude.getText().toString());
+                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, distanceAltitude);
+                }
+                break;
+            case R.id.buttonControlDown:
+                if (drone != null && drone.getSDKAdaptor() != null && editTextDistanceAltitude.getText().toString().length() > 0) {
+                    double distanceAltitude = Double.parseDouble(editTextDistanceAltitude.getText().toString());
+                    drone.getSDKAdaptor().changeAltitudeDisplacement(null, -distanceAltitude);
+                }
+                break;
+            case R.id.buttonControlGoHome:
+                if (drone != null && drone.getSDKAdaptor() != null)
+                    drone.getSDKAdaptor().goHome(null);
+                break;
         }
     }
 
     @Override
     public void onLogEntry(String tag, String message) {
-        logMessages.add(tag + ": " + message);
-
         if (webViewLog != null)
             runOnUiThread(new Runnable() {
                 @Override

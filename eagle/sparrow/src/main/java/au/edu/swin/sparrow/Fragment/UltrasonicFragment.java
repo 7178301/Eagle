@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 public class UltrasonicFragment extends SensorFragment {
 
     AdaptorUltrasonic ultrasonic = null;
+
+    private Activity activity;
+
+    private TextView sensorOutput1DataTextView = null;
 
     public static UltrasonicFragment newInstance() {
         UltrasonicFragment fragment = new UltrasonicFragment();
@@ -33,10 +38,15 @@ public class UltrasonicFragment extends SensorFragment {
 
         view = inflater.inflate(R.layout.fragment_sensor_1_output, container, false);
 
+        activity = getActivity();
+
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+
         sensorOutputTitleTextView.setText(getResources().getString(R.string.ultrasonic));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.distance_cm_));
+
+        sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
 
         return view;
     }
@@ -47,12 +57,16 @@ public class UltrasonicFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null) {
-            TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            if (ultrasonic.isConnectedToSensor())
-                sensorOutput1DataTextView.setText(String.valueOf(ultrasonic.getData()));
-            else
-                sensorOutput1DataTextView.setText("");
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (ultrasonic != null && ultrasonic.isConnectedToSensor() && ultrasonic.isDataReady())
+                        sensorOutput1DataTextView.setText(String.valueOf(ultrasonic.getData()));
+                    else
+                        sensorOutput1DataTextView.setText("");
+                }
+            });
         }
     }
 }

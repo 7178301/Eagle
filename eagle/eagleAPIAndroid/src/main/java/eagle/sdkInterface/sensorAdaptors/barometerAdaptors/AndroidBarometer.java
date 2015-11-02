@@ -88,7 +88,7 @@ public class AndroidBarometer extends AdaptorBarometer implements SensorEventLis
         if (sensor.getType() == Sensor.TYPE_PRESSURE) {
             accelerometerData = event.values[0];
         }
-        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallback)
+        for (SensorAdaptorCallback currentSensorAdaptorCallback : sensorAdaptorCallbacks)
             currentSensorAdaptorCallback.onSensorChanged();
     }
 }

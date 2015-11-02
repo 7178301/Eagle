@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,11 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 public class RPLIDARFragment extends SensorFragment {
 
     AdaptorLIDAR rplidar = null;
+
+    private Activity activity;
+
+    private TextView sensorOutput1DataTextView = null;
+    private TextView sensorOutput2DataTextView = null;
 
     public static RPLIDARFragment newInstance() {
         RPLIDARFragment fragment = new RPLIDARFragment();
@@ -32,12 +38,18 @@ public class RPLIDARFragment extends SensorFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_sensor_2_output, container, false);
 
+        activity = getActivity();
+
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
         TextView sensorOutput2TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Title);
+
         sensorOutputTitleTextView.setText(getResources().getString(R.string.rplidar));
         sensorOutput1TitleTextView.setText(getResources().getString(R.string.angle_degrees_));
         sensorOutput2TitleTextView.setText(getResources().getString(R.string.distance_cm_));
+
+        sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
+        sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
 
         return view;
     }
@@ -48,16 +60,19 @@ public class RPLIDARFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null) {
-            TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            TextView sensorOutput2DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput2Data);
-            if (rplidar.isConnectedToSensor()) {
-                sensorOutput1DataTextView.setText(String.valueOf(rplidar.getData()));
-                sensorOutput2DataTextView.setText(String.valueOf(rplidar.getData()));
-            } else {
-                sensorOutput1DataTextView.setText("");
-                sensorOutput2DataTextView.setText("");
-            }
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (rplidar != null && rplidar.isConnectedToSensor() && rplidar.isDataReady()) {
+                        sensorOutput1DataTextView.setText(String.valueOf(rplidar.getData()));
+                        sensorOutput2DataTextView.setText(String.valueOf(rplidar.getData()));
+                    } else {
+                        sensorOutput1DataTextView.setText("");
+                        sensorOutput2DataTextView.setText("");
+                    }
+                }
+            });
         }
     }
 }

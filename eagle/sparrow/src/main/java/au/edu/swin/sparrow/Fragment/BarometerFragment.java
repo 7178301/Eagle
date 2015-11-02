@@ -1,5 +1,6 @@
 package au.edu.swin.sparrow.Fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,10 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorBarometer;
 public class BarometerFragment extends SensorFragment {
 
     AdaptorBarometer barometer = null;
+
+    private Activity activity;
+
+    private TextView sensorOutput1DataTextView = null;
 
     public static BarometerFragment newInstance() {
         BarometerFragment fragment = new BarometerFragment();
@@ -33,10 +38,15 @@ public class BarometerFragment extends SensorFragment {
 
         view = inflater.inflate(R.layout.fragment_sensor_1_output, container, false);
 
+        activity = getActivity();
+
         TextView sensorOutputTitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutputTitle);
         TextView sensorOutput1TitleTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Title);
+
         sensorOutputTitleTextView.setText(R.string.barometer);
         sensorOutput1TitleTextView.setText(R.string.pressure);
+
+        sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
 
         return view;
     }
@@ -47,12 +57,16 @@ public class BarometerFragment extends SensorFragment {
 
     @Override
     public void updateData() {
-        if (view != null) {
-            TextView sensorOutput1DataTextView = (TextView) view.findViewById(R.id.textViewSensorOutput1Data);
-            if (barometer.isConnectedToSensor()&&barometer.isDataReady())
-                sensorOutput1DataTextView.setText(String.valueOf(barometer.getData()));
-            else
-                sensorOutput1DataTextView.setText("");
+        if (activity != null) {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (barometer != null && barometer.isConnectedToSensor() && barometer.isDataReady())
+                        sensorOutput1DataTextView.setText(String.valueOf(barometer.getData()));
+                    else
+                        sensorOutput1DataTextView.setText("");
+                }
+            });
         }
     }
 }

@@ -10,6 +10,11 @@ package eagle.sdkInterface.sensorAdaptors;
  * Date Modified	27/08/2015 - Nicholas
  */
 public abstract class AdaptorMagnetic extends SensorAdaptor {
+
+    public static final int AXISX = 0;
+    public static final int AXISY = 1;
+    public static final int AXISZ = 2;
+
     private float[] calibrationOffset = null;
 
     public AdaptorMagnetic(String adaptorManufacturer, String adaptorModel, String adaptorVersion) {
@@ -24,9 +29,9 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
             return null;
         else {
             float[] calibratedData = new float[3];
-            calibratedData[0] = value[0] - getCalibrationOffset()[0];
-            calibratedData[1] = value[1] - getCalibrationOffset()[1];
-            calibratedData[2] = value[2] - getCalibrationOffset()[2];
+            calibratedData[AXISX] = value[AXISX] - getCalibrationOffset()[AXISX];
+            calibratedData[AXISY] = value[AXISY] - getCalibrationOffset()[AXISY];
+            calibratedData[AXISZ] = value[AXISZ] - getCalibrationOffset()[AXISZ];
             return calibratedData;
         }
     }
@@ -62,11 +67,11 @@ public abstract class AdaptorMagnetic extends SensorAdaptor {
             sb.append("Calibrated Data: ");
         }
         sb.append("X-axis: ");
-        sb.append(data[0]);
+        sb.append(data[AXISX]);
         sb.append(" Y-axis: ");
-        sb.append(data[1]);
+        sb.append(data[AXISY]);
         sb.append(" Z-axis: ");
-        sb.append(data[2]);
+        sb.append(data[AXISZ]);
         return sb.toString();
     }
 }
