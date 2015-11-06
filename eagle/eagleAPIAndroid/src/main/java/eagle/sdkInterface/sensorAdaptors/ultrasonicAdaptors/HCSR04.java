@@ -36,7 +36,7 @@ public class HCSR04 extends AdaptorUltrasonic {
     /**
      * Connects the HCSR04 ultrasonic sensor to the IOIO board
      * Will return false unless setController(...) and setSensorPins(...) has both been called successfully
-     * @return true if connection was successful otherwise false
+     * @return true if connection is successful otherwise false
      */
     public boolean connectToSensor() {
         if (ioio == null || triggerPin == -1 || echoPin == -1) {
