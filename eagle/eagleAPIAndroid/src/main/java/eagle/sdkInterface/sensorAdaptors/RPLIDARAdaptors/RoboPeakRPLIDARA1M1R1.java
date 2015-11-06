@@ -60,6 +60,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     @Override
     public boolean connectToSensor() {
         if (ioio == null || rxPin == -1 || txPin == -1 || motorPin == -1) {
+            Log.log("RPLIDARConnectToSensor", "Checking IOIO Object & Pins FAIL: Not Set");
             return false;
         }
         try {
@@ -78,8 +79,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             adaptorHardwareFirmwareVersion = Integer.toString(infoPacket.getFirmware_version());
             adaptorHardwareVersion = Integer.toString(infoPacket.getHardware_version());
             adaptorHardwareSerialNumber = Arrays.toString(infoPacket.getSerialnum());
+            Log.log("RPLIDARConnectToSensor", "Connected To Sensor");
             return startScan();
         } catch (Exception e) {
+            Log.log("RPLIDARConnectToSensor", "UART Connection FAIL: Not Connected");
             return false;
         }
     }
@@ -107,8 +110,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
+            Log.log("RPLIDARSetIOIOController", "Set IOIO Object");
             return true;
         } else
+            Log.log("RPLIDARSetIOIOController", "Checking Object FAIL: Not Valid IOIO Object");
             return false;
     }
 
@@ -122,6 +127,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             getInfoPacket();
             return inputStream.available() == 0;
         } catch (Exception e) {
+            Log.log("RPLIDARIsConnectedToSensor", "Not Connected");
             return false;
         }
     }
@@ -158,6 +164,7 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.log("RPLIDARGetData", "FAIL: IO");
             }
             return RPLIDARData;
         }
