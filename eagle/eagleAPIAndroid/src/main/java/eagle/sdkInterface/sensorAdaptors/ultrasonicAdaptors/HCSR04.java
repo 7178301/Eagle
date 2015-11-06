@@ -32,6 +32,11 @@ public class HCSR04 extends AdaptorUltrasonic {
         super("HC-SR04", "HC-SR04", "0.0.1");
     }
 
+    /**
+     * Connects the HCSR04 ultrasonic sensor to the IOIO board
+     * Will return false unless setController(...) and setSensorPins(...) has both been called successfully
+     * @return true if connection was successful otherwise false
+     */
     public boolean connectToSensor() {
         if (ioio == null || triggerPin == -1 || echoPin == -1) {
             return false;
@@ -52,6 +57,11 @@ public class HCSR04 extends AdaptorUltrasonic {
         return false;
     }
 
+    /**
+     * Sets the IOIO object
+     * @param object must be a valid IOIO object
+     * @return true if the object is a valid IOIO object otherwise false
+     */
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
@@ -60,6 +70,10 @@ public class HCSR04 extends AdaptorUltrasonic {
             return false;
     }
 
+    /**
+     * Checks if a connection to the sensor is established
+     * @return true if connection is successful otherwise false
+     */
     @Override
     public boolean isConnectedToSensor() {
         if (trigger != null && echo != null) {
@@ -69,11 +83,20 @@ public class HCSR04 extends AdaptorUltrasonic {
         }
     }
 
+    /**
+     * Not relevant for this sensor
+     * @return true
+     */
     @Override
     public boolean isDataReady() {
         return true;
     }
 
+    /**
+     * Takes a sample from the sensor
+     * This function takes the readings as well as returns it, which results in a blocking for at least 6ms
+     * @return the distance measurement in metres
+     */
     @Override
     public float getData() {
         try {
@@ -92,6 +115,10 @@ public class HCSR04 extends AdaptorUltrasonic {
         return echoDistanceMetres;
     }
 
+    /**
+     * Gets the name of the pins used by the sensor
+     * @return Trigger Pin and Echo Pin
+     */
     @Override
     public String[] getSensorPinsDescription() {
         String[] temp = new String[2];
@@ -100,6 +127,12 @@ public class HCSR04 extends AdaptorUltrasonic {
         return temp;
     }
 
+    /**
+     * Sets the pin numbers
+     * Inputs must be the same order as getSensorPinsDescription()
+     * @param pins the pin numbers
+     * @return true if the input is valid (integer array of size 2) otherwise false
+     */
     @Override
     public boolean setSensorPins(int[] pins) {
         if (pins != null && pins.length == 2) {
