@@ -1,5 +1,6 @@
 package eagle.sdkInterface.sensorAdaptors.ultrasonicAdaptors;
 
+import eagle.Log;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 import ioio.lib.api.IOIO;
@@ -39,6 +40,7 @@ public class HCSR04 extends AdaptorUltrasonic {
      */
     public boolean connectToSensor() {
         if (ioio == null || triggerPin == -1 || echoPin == -1) {
+            Log.log("HC-SR04ConnectToSensor", "Checking IOIO Object & Pins FAIL: Not Set");
             return false;
         }
         try {
@@ -46,8 +48,10 @@ public class HCSR04 extends AdaptorUltrasonic {
             echo = ioio.openPulseInput(echoPin, PulseMode.POSITIVE);
         } catch (ConnectionLostException e) {
             e.printStackTrace();
+            Log.log("HC-SR04ConnectToSensor", "Checking IOIO Object & Pins FAIL: Connection Lost");
             return false;
         }
+        Log.log("HC-SR04ConnectToSensor", "Connected To Sensor");
         return true;
     }
 
@@ -65,8 +69,10 @@ public class HCSR04 extends AdaptorUltrasonic {
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
+            Log.log("HC-SR04SetIOIOController", "Set IOIO Object");
             return true;
         } else
+            Log.log("HC-SR04SetIOIOController", "Checking Object FAIL: Not Valid IOIO Object");
             return false;
     }
 
@@ -77,8 +83,10 @@ public class HCSR04 extends AdaptorUltrasonic {
     @Override
     public boolean isConnectedToSensor() {
         if (trigger != null && echo != null) {
+            Log.log("HC-SR04IsConnectedToSensor", "Connected");
             return true;
         } else {
+            Log.log("HC-SR04IsConnectedToSensor", "Not Connected");
             return false;
         }
     }
@@ -109,8 +117,12 @@ public class HCSR04 extends AdaptorUltrasonic {
             echoDistanceMetres = (echoSeconds / 29 / 2) / 100;
         } catch (ConnectionLostException e) {
             e.printStackTrace();
+            Log.log("HC-SR04GetData", "FAIL: Connection Lost");
+            return -1;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.log("HC-SR04GetData", "FAIL: Interrupted");
+            return -1;
         }
         return echoDistanceMetres;
     }
