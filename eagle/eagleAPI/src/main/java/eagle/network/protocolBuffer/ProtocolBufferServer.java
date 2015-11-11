@@ -12,7 +12,8 @@ import eagle.network.ScriptingEngine;
 
 
 /**
- * Network Server Class
+ * Protocol Buffer Client Class
+ * Uses protocol buffers to wrap commands and responses between the drone and a client. Much more reliable.
  *
  * @author Cameron Cross
  * @version 0.0.1
