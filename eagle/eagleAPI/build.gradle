@@ -7,3 +7,11 @@ dependencies {
     compile 'org.scream3r:jssc:2.8.0'
 }
 
+task generateJavadoc(type: Javadoc) {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+    options.links("http://docs.oracle.com/javase/7/docs/api/");
+    options.links("https://developers.google.com/protocol-buffers/docs/reference/java/");
+    options.links("http://java-simple-serial-connector.googlecode.com/svn/trunk/additional_content/javadoc/0.8/");
+}
+
