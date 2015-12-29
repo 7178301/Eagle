@@ -1,8 +1,9 @@
-package eagle;
+package eagle.network;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import eagle.Drone;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;

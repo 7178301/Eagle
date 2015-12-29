@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -21,22 +23,24 @@ import java.util.Vector;
  */
 public class Log {
 
-    private static ArrayList<String> log = new ArrayList<>();
+    private static List<String> log = new ArrayList<>();
     private static HashMap<String, Vector<LogCallback>> logCallBack = new HashMap<>();
     private static Vector<LogCallback> verboseLogCallback = new Vector<>();
-    private static int logLimit = 10000;
+    public static int logLimit = 5000;
 
 
     public synchronized static void log(String tag, String message) {
-        while (log.size() > logLimit) {
-            log.remove(0);
-        }
-        log.add(tag + ": " + message);
-        for (LogCallback vLogCallback : verboseLogCallback)
-            vLogCallback.onLogEntry(tag, message);
-        if (logCallBack.containsKey(tag)) {
-            for (LogCallback logcallback : logCallBack.get(tag))
-                logcallback.onLogEntry(tag, message);
+        if (tag != null && message != null) {
+            while (log.size() >= logLimit) {
+                log.remove(0);
+            }
+            log.add(tag + ": " + message);
+            for (LogCallback vLogCallback : verboseLogCallback)
+                vLogCallback.onLogEntry(tag, message);
+            if (logCallBack.containsKey(tag)) {
+                for (LogCallback logcallback : logCallBack.get(tag))
+                    logcallback.onLogEntry(tag, message);
+            }
         }
     }
 
@@ -62,20 +66,34 @@ public class Log {
         }
     }
 
-    public synchronized static void removeVerboseCallback(LogCallback logCallback){
+    public synchronized static void removeVerboseCallback(LogCallback logCallback) {
         if (verboseLogCallback.contains(logCallback))
             verboseLogCallback.remove(logCallback);
     }
 
-    public synchronized static ArrayList<String> getLog() {
-        return new ArrayList<>(log);
+    public synchronized static List<String> getLog() {
+        if (log instanceof ArrayList)
+            return new ArrayList<>(log);
+        else
+            return new LinkedList<>(log);
+
     }
 
-    public synchronized boolean setLogLimit(int logLimit){
-        if(logLimit>0){
-            Log.logLimit =logLimit;
+    public synchronized static boolean setLogLimit(int logLimit) {
+        if (logLimit > 0) {
+            if (logLimit >= 50000 && Log.logLimit < 50000) {
+                LinkedList<String> newLog = new LinkedList<>(log);
+                log = newLog;
+            } else if (logLimit < 50000 && Log.logLimit >= 50000) {
+                ArrayList<String> newLog = new ArrayList<>(log);
+                log = newLog;
+            }
+            Log.logLimit = logLimit;
+            while (log.size() >= logLimit) {
+                log.remove(0);
+            }
             return true;
-        }else
+        } else
             return false;
     }
 
