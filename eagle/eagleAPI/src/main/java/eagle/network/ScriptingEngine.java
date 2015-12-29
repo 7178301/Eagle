@@ -16,7 +16,14 @@ import eagle.sdkInterface.SDKAdaptor;
 import eagle.sdkInterface.SDKAdaptorCallback;
 
 /**
- * Created by Cameron on 4/09/2015.
+ * Scripting Engine for drone
+ * Should be reworked
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 04/09/2015
+ * <p/>
+ * Date Modified	04/09/2015 - Cameron
  */
 public class ScriptingEngine {
     private SDKAdaptor adaptor;
@@ -61,6 +68,12 @@ public class ScriptingEngine {
         this.adaptor = sdkAdaptor;
     }
 
+    /**
+     * Execute an instruction on the drone
+     * @param instruction
+     * @return string containing result of execution
+     * @throws InvalidInstructionException
+     */
     public String executeInstruction(final String instruction) throws InvalidInstructionException {
         if (adaptor == null) {
             return "NO DRONE ADAPTOR";
@@ -870,6 +883,10 @@ public class ScriptingEngine {
 
     }
 
+    /**
+     * Read a set of instructions from a file, execute all of them.
+     * @param filename
+     */
     public final void runRoutine(String filename) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(filename));

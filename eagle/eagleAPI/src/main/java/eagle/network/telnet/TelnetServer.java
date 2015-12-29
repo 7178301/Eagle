@@ -33,6 +33,9 @@ public class TelnetServer {
         serverThread.start();
     }
 
+    /**
+     * Listens for incoming connections, and passes them onto the TelnetServerCommunicationThread
+     */
     public class TelnetServerThread implements Runnable {
 
         public ServerSocket serverSocket = null;
@@ -60,6 +63,9 @@ public class TelnetServer {
         }
     }
 
+    /**
+     * Handles communication between the telnet client and the server.
+     */
     class TelnetServerCommunicationThread extends Thread {
         ScriptingEngine scriptingEngine;
         ServerSocket serverSocket;

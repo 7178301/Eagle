@@ -11,7 +11,14 @@ import java.util.Map;
 import eagle.Log;
 
 /**
- * Created by cameron on 9/2/15.
+ * Protocol Buffer Client Class
+ * Uses protocol buffers to wrap commands and responses between the drone and a client. Much more reliable.
+ *
+ * @author Cameron Cross
+ * @version 0.0.1
+ * @since 04/09/2015
+ * <p/>
+ * Date Modified	04/09/2015 - Cameron
  */
 public class ProtocolBufferClient {
     private Socket socket = null;
@@ -42,10 +49,21 @@ public class ProtocolBufferClient {
 
     }
 
+    /**
+     * Send a message to the client, disregard the response.
+     * @param message
+     * @return successfully sent message
+     */
     public synchronized boolean sendMessage(String message) {
         return sendMessage(message, null);
     }
 
+    /**
+     * Send a message to the client.
+     * @param message message to be sent
+     * @param rcb callback to contain the response
+     * @return successfully sent message
+     */
     public synchronized boolean sendMessage(String message, ResponseCallBack rcb) {
         if (!isConnected()) {
             return false;
@@ -58,6 +76,10 @@ public class ProtocolBufferClient {
         return true;
     }
 
+    /**
+     * Check if connected
+     * @return
+     */
     public boolean isConnected() {
         if (socket != null && !socket.isClosed())
             return true;
