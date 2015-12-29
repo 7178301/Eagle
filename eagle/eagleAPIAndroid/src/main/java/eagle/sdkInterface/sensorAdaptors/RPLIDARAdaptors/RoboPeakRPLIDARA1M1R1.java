@@ -52,9 +52,15 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
     private int motorPin = -1;
     private PwmOutput rplidarMotor = null;
 
+    /**
+     * Connects the RPLIDAR sensor to the IOIO board
+     * Will return false unless setController(...) and setSensorPins(...) has both been called successfully
+     * @return true if connection is successful otherwise false
+     */
     @Override
     public boolean connectToSensor() {
         if (ioio == null || rxPin == -1 || txPin == -1 || motorPin == -1) {
+            Log.log("RPLIDARConnectToSensor", "Checking IOIO Object & Pins FAIL: Not Set");
             return false;
         }
         try {
@@ -73,12 +79,18 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             adaptorHardwareFirmwareVersion = Integer.toString(infoPacket.getFirmware_version());
             adaptorHardwareVersion = Integer.toString(infoPacket.getHardware_version());
             adaptorHardwareSerialNumber = Arrays.toString(infoPacket.getSerialnum());
+            Log.log("RPLIDARConnectToSensor", "Connected To Sensor");
             return startScan();
         } catch (Exception e) {
+            Log.log("RPLIDARConnectToSensor", "UART Connection FAIL: Not Connected");
             return false;
         }
     }
 
+    /**
+     * Disconnects the sensor
+     * @return true if the disconnection was successful otherwise false
+     */
     @Override
     public boolean disconnectFromSensor() {
         try {
@@ -89,25 +101,41 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         }
     }
 
+    /**
+     * Sets the IOIO object
+     * @param object must be a valid IOIO object
+     * @return true if the object is a valid IOIO object otherwise false
+     */
     @Override
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
+            Log.log("RPLIDARSetIOIOController", "Set IOIO Object");
             return true;
         } else
+            Log.log("RPLIDARSetIOIOController", "Checking Object FAIL: Not Valid IOIO Object");
             return false;
     }
 
+    /**
+     * Checks if a connection to the sensor is established
+     * @return true if connection is successful otherwise false
+     */
     @Override
     public boolean isConnectedToSensor() {
         try {
             getInfoPacket();
             return inputStream.available() == 0;
         } catch (Exception e) {
+            Log.log("RPLIDARIsConnectedToSensor", "Not Connected");
             return false;
         }
     }
 
+    /**
+     * Checks if data is available in the buffer to create one packet
+     * @return true if at least one packet is available otherwise false
+     */
     @Override
     public boolean isDataReady() {
         try {
@@ -117,6 +145,11 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         }
     }
 
+    /**
+     * Takes a sample from the sensor
+     * Must be called within every 80ms to prevent buffer overflow
+     * @return a data packet of angle and distance in metres
+     */
     @Override
     public float[] getData() {
         if (!isDataReady())
@@ -131,11 +164,16 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                Log.log("RPLIDARGetData", "FAIL: IO");
             }
             return RPLIDARData;
         }
     }
 
+    /**
+     * Gets the name of the pins used by the sensor
+     * @return RX Pin, TX Pin and Motor Pin
+     */
     @Override
     public String[] getSensorPinsDescription() {
         String[] temp = new String[3];
@@ -145,6 +183,12 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return temp;
     }
 
+    /**
+     * Sets the pin numbers
+     * Inputs must be the same order as getSensorPinsDescription()
+     * @param pins the pin numbers
+     * @return true if the input is valid (integer array of size 3) otherwise false
+     */
     @Override
     public boolean setSensorPins(int[] pins) {
         if (pins != null && pins.length == 3) {
@@ -156,6 +200,9 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
             return false;
     }
 
+    /**
+     * Resets the sensor and empties the buffer
+     */
     private void reset() throws InterruptedException, IOException {
         sendRequest(RPLIDAR_CMD_RESET);
         Thread.sleep(1000);
@@ -164,12 +211,19 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         }
     }
 
+    /**
+     * Stops the sensor and motor
+     */
     private void stop() throws IOException, InterruptedException, ConnectionLostException {
         sendRequest(RPLIDAR_CMD_STOP);
         rplidarMotor.setDutyCycle(0);
         Thread.sleep(1);
     }
 
+    /**
+     * Start scan and force data output without checking if motor is stable
+     * @return false if sensor error otherwise true
+     */
     private boolean startForceScan() throws InterruptedException, TimeoutException, IOException {
         reset();
         if (getHealthPacket().getError() != 0) {
@@ -184,6 +238,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return true;
     }
 
+    /**
+     * Start scan when the motor is stable
+     * @return false if sensor error otherwise true
+     */
     private boolean startScan() throws InterruptedException, TimeoutException, IOException, ConnectionLostException {
         reset();
         rplidarMotor.setDutyCycle(1);
@@ -199,6 +257,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return true;
     }
 
+    /**
+     * Reads the response descriptor from the sensor
+     * @return the response descriptor
+     */
     private byte[] getResponseDescriptor() throws IOException, TimeoutException, InterruptedException {
         byte[] read = new byte[7];
         int readCount = 0;
@@ -221,11 +283,20 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return read;
     }
 
+    /**
+     * Sends requests to the sensor
+     * @param request the type of request (stop, reset, scan, force scan, get device info, get device health)
+     */
     private void sendRequest(int request) throws IOException {
         outputStream.write(RPLIDAR_CMD_SYNC_BYTE);
         outputStream.write(request);
     }
 
+    /**
+     * Read and checks the response descriptor if it's valid
+     * @param validDescriptor descriptor to compare
+     * @return true if the descriptor is valid otherwise false
+     */
     private boolean checkDescriptor(byte[] validDescriptor) {
         byte[] descriptor;
 
@@ -241,6 +312,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return true;
     }
 
+    /**
+     * Gets the device information packet (model, serial number, firmware/hardware version, serial number)
+     * @return the device information packet
+     */
     private RPLidar_InfoPacket getInfoPacket() throws IOException, TimeoutException, InterruptedException {
 
         byte[] data = new byte[20];
@@ -255,6 +330,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return new RPLidar_InfoPacket(data);
     }
 
+    /**
+     * Gets the device health status packet (status, error code)
+     * @return the device health status packet
+     */
     private RPLidar_HealthPacket getHealthPacket() throws IOException, TimeoutException, InterruptedException {
         byte[] data = new byte[3];
 
@@ -268,6 +347,10 @@ public class RoboPeakRPLIDARA1M1R1 extends AdaptorRPLIDAR {
         return new RPLidar_HealthPacket(data);
     }
 
+    /**
+     * Gets the data packet (quality, angle, distance)
+     * @return the data packet
+     */
     private RPLidar_DataPacket getDataPacket() throws IOException {
         byte[] data = new byte[5];
 

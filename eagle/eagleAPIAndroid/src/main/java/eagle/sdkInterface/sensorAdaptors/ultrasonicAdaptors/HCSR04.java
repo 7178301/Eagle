@@ -1,5 +1,6 @@
 package eagle.sdkInterface.sensorAdaptors.ultrasonicAdaptors;
 
+import eagle.Log;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 import ioio.lib.api.IOIO;
@@ -32,8 +33,14 @@ public class HCSR04 extends AdaptorUltrasonic {
         super("HC-SR04", "HC-SR04", "0.0.1");
     }
 
+    /**
+     * Connects the HCSR04 ultrasonic sensor to the IOIO board
+     * Will return false unless setController(...) and setSensorPins(...) has both been called successfully
+     * @return true if connection is successful otherwise false
+     */
     public boolean connectToSensor() {
         if (ioio == null || triggerPin == -1 || echoPin == -1) {
+            Log.log("HC-SR04ConnectToSensor", "Checking IOIO Object & Pins FAIL: Not Set");
             return false;
         }
         try {
@@ -41,8 +48,10 @@ public class HCSR04 extends AdaptorUltrasonic {
             echo = ioio.openPulseInput(echoPin, PulseMode.POSITIVE);
         } catch (ConnectionLostException e) {
             e.printStackTrace();
+            Log.log("HC-SR04ConnectToSensor", "Checking IOIO Object & Pins FAIL: Connection Lost");
             return false;
         }
+        Log.log("HC-SR04ConnectToSensor", "Connected To Sensor");
         return true;
     }
 
@@ -52,28 +61,50 @@ public class HCSR04 extends AdaptorUltrasonic {
         return false;
     }
 
+    /**
+     * Sets the IOIO object
+     * @param object must be a valid IOIO object
+     * @return true if the object is a valid IOIO object otherwise false
+     */
     public boolean setController(Object object) {
         if (object instanceof IOIO) {
             this.ioio = (IOIO) object;
+            Log.log("HC-SR04SetIOIOController", "Set IOIO Object");
             return true;
         } else
+            Log.log("HC-SR04SetIOIOController", "Checking Object FAIL: Not Valid IOIO Object");
             return false;
     }
 
+    /**
+     * Checks if a connection to the sensor is established
+     * @return true if connection is successful otherwise false
+     */
     @Override
     public boolean isConnectedToSensor() {
         if (trigger != null && echo != null) {
+            Log.log("HC-SR04IsConnectedToSensor", "Connected");
             return true;
         } else {
+            Log.log("HC-SR04IsConnectedToSensor", "Not Connected");
             return false;
         }
     }
 
+    /**
+     * Not relevant for this sensor
+     * @return true
+     */
     @Override
     public boolean isDataReady() {
         return true;
     }
 
+    /**
+     * Takes a sample from the sensor
+     * This function takes the readings as well as returns it, which results in a blocking for at least 6ms
+     * @return the distance measurement in metres
+     */
     @Override
     public float getData() {
         try {
@@ -86,12 +117,20 @@ public class HCSR04 extends AdaptorUltrasonic {
             echoDistanceMetres = (echoSeconds / 29 / 2) / 100;
         } catch (ConnectionLostException e) {
             e.printStackTrace();
+            Log.log("HC-SR04GetData", "FAIL: Connection Lost");
+            return -1;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Log.log("HC-SR04GetData", "FAIL: Interrupted");
+            return -1;
         }
         return echoDistanceMetres;
     }
 
+    /**
+     * Gets the name of the pins used by the sensor
+     * @return Trigger Pin and Echo Pin
+     */
     @Override
     public String[] getSensorPinsDescription() {
         String[] temp = new String[2];
@@ -100,6 +139,12 @@ public class HCSR04 extends AdaptorUltrasonic {
         return temp;
     }
 
+    /**
+     * Sets the pin numbers
+     * Inputs must be the same order as getSensorPinsDescription()
+     * @param pins the pin numbers
+     * @return true if the input is valid (integer array of size 2) otherwise false
+     */
     @Override
     public boolean setSensorPins(int[] pins) {
         if (pins != null && pins.length == 2) {
