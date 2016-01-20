@@ -38,7 +38,7 @@ import eagle.Drone;
 import eagle.Log;
 import eagle.LogCallback;
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.PositionDisplacement;
+import eagle.navigation.positioning.PositionMetricDisplacement;
 import eagle.network.protocolBuffer.ProtocolBufferServer;
 import eagle.network.telnet.TelnetServer;
 import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
@@ -327,28 +327,28 @@ public class APIAdaptorActivity extends Activity implements AccelerometerFragmen
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
                     double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionMetricDisplacement(distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlBackward:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
                     double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionMetricDisplacement(-distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlLeft:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
                     double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionMetricDisplacement(distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), -distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlRight:
                 if (drone != null && drone.getSDKAdaptor() != null && drone.getSDKAdaptor().getPositionInFlight() != null && editTextDistanceLatitudeLongitude.getText().toString().length() > 0) {
                     double bearingAngle = drone.getSDKAdaptor().getPositionInFlight().getYaw().getDegrees();
                     double distanceLatitudeLongitude = Double.parseDouble(editTextDistanceLatitudeLongitude.getText().toString());
-                    drone.getSDKAdaptor().flyTo(null, new PositionDisplacement(-distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
+                    drone.getSDKAdaptor().flyTo(null, new PositionMetricDisplacement(-distanceLatitudeLongitude * Math.sin(Math.toRadians(bearingAngle)), distanceLatitudeLongitude * Math.cos(Math.toRadians(bearingAngle)), 0, new Angle(0)));
                 }
                 break;
             case R.id.buttonControlRotateLeft:

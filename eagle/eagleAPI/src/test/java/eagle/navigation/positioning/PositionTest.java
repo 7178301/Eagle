@@ -2,11 +2,6 @@ package eagle.navigation.positioning;
 
 import org.junit.Test;
 
-import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.Position;
-import eagle.navigation.positioning.PositionDisplacement;
-import eagle.navigation.positioning.PositionMetric;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 

@@ -29,7 +29,7 @@ public final class PositionGPS extends Position {
     }
 
     @Override
-    public PositionGPS add(PositionDisplacement position) {
+    public PositionGPS add(PositionMetricDisplacement position) {
         double bearing = 0;
         if (position.getLongitude() > 0)
             bearing = 90 - Math.toDegrees(Math.atan((position.getLatitude()) / (position.getLongitude())));
@@ -56,7 +56,7 @@ public final class PositionGPS extends Position {
         );
     }
 
-    public PositionDisplacement compare(PositionGPS position) {
+    public PositionMetricDisplacement compare(PositionGPS position) {
         //code taken from org.apache.sis:sis-core:0.2-incubating: https://github.com/apache/sis/blob/trunk/core/sis-referencing/src/main/java/org/apache/sis/distance/DistanceUtils.java
         double latitudeRadians = Math.toRadians(latitude);
         double longitudeRadians = Math.toRadians(longitude);
@@ -73,7 +73,7 @@ public final class PositionGPS extends Position {
             longitudeDisplacement = -longitudeDisplacement;
         }
 
-        return new PositionDisplacement(latitudeDisplacement,
+        return new PositionMetricDisplacement(latitudeDisplacement,
                 longitudeDisplacement,
                 getAltitude() - position.getAltitude(),
                 getRoll().compare(position.getRoll()),

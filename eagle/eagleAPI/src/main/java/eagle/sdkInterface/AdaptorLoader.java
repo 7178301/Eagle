@@ -11,12 +11,14 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorBearing;
 import eagle.sdkInterface.sensorAdaptors.AdaptorCamera;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGPS;
 import eagle.sdkInterface.sensorAdaptors.AdaptorGyroscope;
+import eagle.sdkInterface.sensorAdaptors.AdaptorLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorMagnetic;
 import eagle.sdkInterface.sensorAdaptors.AdaptorRPLIDAR;
 import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
 
 /**
  * Adaptor Loader
+ * Used to retrieve the list of SDK & sensor adaptors and return a specific adaptor
  *
  * @author Nicholas Alards [7178301@student.swin.edu.au]
  * @version 0.0.1
@@ -26,8 +28,7 @@ import eagle.sdkInterface.sensorAdaptors.AdaptorUltrasonic;
  */
 public class AdaptorLoader {
 
-    private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision",
-            "Flyver.F450Flamewheel", "Simulator.Simulator"));
+    private HashSet<String> sdkAdaptorPaths = new HashSet<>(Arrays.asList("DJI.Phantom2Vision", "Flyver.F450Flamewheel", "Simulator.Simulator"));
     private HashSet<String> accelerometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidAccelerometer"));
     private HashSet<String> barometerAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBarometer"));
     private HashSet<String> bearingAdaptorPaths = new HashSet<>(Arrays.asList("AndroidBearing", "DJIBearing"));
@@ -39,6 +40,10 @@ public class AdaptorLoader {
     private HashSet<String> RPLIDARAdaptorPaths = new HashSet<>(Arrays.asList("RoboPeakRPLIDARA1M1R1"));
     private HashSet<String> ultrasonicAdaptorPaths = new HashSet<>(Arrays.asList("SeeedStudioSEN10737P"));
 
+    /**
+     * Returns a collection of the SDK adaptor paths
+     * @return Collection of SDK adaptor paths
+     */
     public HashMap getSDKAdaptorMap() {
         HashMap<String, SDKAdaptor> sdkAdaptors = new HashMap<>();
         for (String path : sdkAdaptorPaths)
@@ -46,6 +51,10 @@ public class AdaptorLoader {
         return sdkAdaptors;
     }
 
+    /**
+     * Returns a collection of the accelerometer adaptor paths
+     * @return Collection of accelerometer adaptor paths
+     */
     public HashMap getSensorAdaptorAccelerometerMap() {
         HashMap<String, AdaptorAccelerometer> accelerometerAdaptors = new HashMap<>();
         for (String path : accelerometerAdaptorPaths)
@@ -53,68 +62,110 @@ public class AdaptorLoader {
         return accelerometerAdaptors;
     }
 
-    public HashMap getSensorAdaptorListCamera() {
+    /**
+     * Returns a collection of the camera adaptor paths
+     * @return Collection of camera adaptor paths
+     */
+    public HashMap getSensorAdaptorCameraMap() {
         HashMap<String, AdaptorCamera> cameraAdaptors = new HashMap<>();
         for (String path : cameraAdaptorPaths)
             cameraAdaptors.put(path, getSensorAdaptorCamera(path));
         return cameraAdaptors;
     }
 
-    public HashMap getSensorAdaptorListBarometer() {
+    /**
+     * Returns a collection of the barometer adaptor paths
+     * @return Collection of barometer adaptor paths
+     */
+    public HashMap getSensorAdaptorBarometerMap() {
         HashMap<String, AdaptorBarometer> barometerAdaptors = new HashMap<>();
         for (String path : barometerAdaptorPaths)
             barometerAdaptors.put(path, getSensorAdaptorBarometer(path));
         return barometerAdaptors;
     }
 
-    public HashMap getSensorAdaptorListBearing() {
+    /**
+     * Returns a collection of the bearing adaptor paths
+     * @return Collection of bearing adaptor paths
+     */
+    public HashMap getSensorAdaptorBearingMap() {
         HashMap<String, AdaptorBearing> bearingAdaptors = new HashMap<>();
         for (String path : bearingAdaptorPaths)
             bearingAdaptors.put(path, getSensorAdaptorBearing(path));
         return bearingAdaptors;
     }
 
-    public HashMap getSensorAdaptorListGPS() {
+    /**
+     * Returns a collection of the GPS adaptor paths
+     * @return Collection of GPS adaptor paths
+     */
+    public HashMap getSensorAdaptorGPSMap() {
         HashMap<String, AdaptorGPS> gpsAdaptors = new HashMap<>();
         for (String path : gpsAdaptorPaths)
             gpsAdaptors.put(path, getSensorAdaptorGPS(path));
         return gpsAdaptors;
     }
 
-    public HashMap getSensorAdaptorListGyroscope() {
+    /**
+     * Returns a collection of the gyroscope adaptor paths
+     * @return Collection of gyroscope adaptor paths
+     */
+    public HashMap getSensorAdaptorGyroscopeMap() {
         HashMap<String, AdaptorGyroscope> gyroscopeAdaptors = new HashMap<>();
         for (String path : gyroscopeAdaptorPaths)
             gyroscopeAdaptors.put(path, getSensorAdaptorGyroscope(path));
         return gyroscopeAdaptors;
     }
 
-    /*public HashMap getSensorAdaptorListLIDAR(){
+    /**
+     * Returns a collection of the LIDAR adaptor paths
+     * @return Collection of gyroscope adaptor paths
+     */
+    /*public HashMap getSensorAdaptorLIDARMap(){
         HashMap<String,AdaptorLIDAR> LIDARAdaptors = new HashMap<>();
         for(String path:LIDARAdaptorPaths)
             LIDARAdaptors.put(path, getSensorAdaptorLIDAR(path));
         return LIDARAdaptors;
     }*/
-    public HashMap getSensorAdaptorListMagnetic() {
+
+    /**
+     * Returns a collection of the Magnetic adaptor paths
+     * @return Collection of magnetic adaptor paths
+     */
+    public HashMap getSensorAdaptorMagneticMap() {
         HashMap<String, AdaptorMagnetic> magneticAdaptors = new HashMap<>();
         for (String path : magneticAdaptorPaths)
             magneticAdaptors.put(path, getSensorAdaptorMagnetic(path));
         return magneticAdaptors;
     }
 
-    public HashMap getSensorAdaptorListRPLIDAR() {
+    /**
+     * Returns a collection of the RPLIDAR adaptor paths
+     * @return Collection of magnetic adaptor paths
+     */
+    public HashMap getSensorAdaptorRPLIDARMap() {
         HashMap<String, AdaptorRPLIDAR> RPLIDARAdaptors = new HashMap<>();
         for (String path : RPLIDARAdaptorPaths)
             RPLIDARAdaptors.put(path, getSensorAdaptorRPLIDAR(path));
         return RPLIDARAdaptors;
     }
 
-    public HashMap getSensorAdaptorListUltrasonic() {
+    /**
+     * Returns a collection of the ultrasonic adaptor paths
+     * @return Collection of ultrasonic adaptor paths
+     */
+    public HashMap getSensorAdaptorUltrasonicMap() {
         HashMap<String, AdaptorUltrasonic> ultrasonicAdaptors = new HashMap<>();
         for (String path : ultrasonicAdaptorPaths)
             ultrasonicAdaptors.put(path, getSensorAdaptorUltrasonic(path));
         return ultrasonicAdaptors;
     }
 
+    /**
+     * Returns the SDK adaptor for the provided path
+     * @param path SDK Adaptor path
+     * @return SDK Adaptor
+     */
     public SDKAdaptor getSDKAdaptor(String path) {
         SDKAdaptor result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -128,6 +179,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Returns the accelerometer adaptor for the provided path
+     * @param path Accelerometer adaptor path
+     * @return Accelerometer Adaptor
+     */
     public AdaptorAccelerometer getSensorAdaptorAccelerometer(String path) {
         AdaptorAccelerometer result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -141,6 +197,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Returns the barometer adaptor for the provided path
+     * @param path Barometer adaptor path
+     * @return Barometer adaptor
+     */
     public AdaptorBarometer getSensorAdaptorBarometer(String path) {
         AdaptorBarometer result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -154,6 +215,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Returns the bearing adaptor for the provided path
+     * @param path Bearing adaptor path
+     * @return Bearing adaptor
+     */
     public AdaptorBearing getSensorAdaptorBearing(String path) {
         AdaptorBearing result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -167,6 +233,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Returns the camera adaptor for the provided path
+     * @param path Camera adaptor path
+     * @return Camera adaptor
+     */
     public AdaptorCamera getSensorAdaptorCamera(String path) {
         AdaptorCamera result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -180,6 +251,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Returns the GPS adaptor for the provided path
+     * @param path GPS adaptor path
+     * @return GPS adaptor
+     */
     public AdaptorGPS getSensorAdaptorGPS(String path) {
         AdaptorGPS result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -193,6 +269,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Return the gyroscope adaptor for the provided path
+     * @param path Gyroscope adaptor path
+     * @return Gyroscope adaptor
+     */
     public AdaptorGyroscope getSensorAdaptorGyroscope(String path) {
         AdaptorGyroscope result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -206,6 +287,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Return the LIDAR adaptor for the provided path
+     * @param path LIDAR adaptor path
+     * @return LIDAR adaptor
+     */
     /*public AdaptorLIDAR getSensorAdaptorLIDAR(String path){
         AdaptorLIDAR result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -218,6 +304,12 @@ public class AdaptorLoader {
         }
         return result;
     }*/
+
+    /**
+     * Return the Magnetic adaptor for the provided path
+     * @param path Magnetic adaptor path
+     * @return Magnetic adaptor
+     */
     public AdaptorMagnetic getSensorAdaptorMagnetic(String path) {
         AdaptorMagnetic result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -231,6 +323,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Return the RPLIDAR adaptor for the provided path
+     * @param path RPLIDAR adaptor path
+     * @return RPLIDAR adaptor
+     */
     public AdaptorRPLIDAR getSensorAdaptorRPLIDAR(String path) {
         AdaptorRPLIDAR result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();
@@ -244,6 +341,11 @@ public class AdaptorLoader {
         return result;
     }
 
+    /**
+     * Return the ultrasonic adaptor for the provided path
+     * @param path Ultrasonic adaptor path
+     * @return Ultrasonic adaptor
+     */
     public AdaptorUltrasonic getSensorAdaptorUltrasonic(String path) {
         AdaptorUltrasonic result = null;
         ClassLoader classLoader = Drone.class.getClassLoader();

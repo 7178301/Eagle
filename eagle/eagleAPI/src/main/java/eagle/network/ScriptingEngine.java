@@ -9,7 +9,7 @@ import java.util.Map;
 import eagle.Log;
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.Position;
-import eagle.navigation.positioning.PositionDisplacement;
+import eagle.navigation.positioning.PositionMetricDisplacement;
 import eagle.navigation.positioning.PositionGPS;
 import eagle.navigation.positioning.PositionMetric;
 import eagle.sdkInterface.SDKAdaptor;
@@ -216,7 +216,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new PositionDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
+                                        }, new PositionMetricDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)));
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;
@@ -266,7 +266,7 @@ public class ScriptingEngine {
                                                 else
                                                     returnString[0] = stringResult;
                                             }
-                                        }, new PositionDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
+                                        }, new PositionMetricDisplacement(latitude, longitude, altitude, new Angle(0), new Angle(0), new Angle(bearing)), speed);
                                         break;
                                     default:
                                         ExceptionResult[0] = "Invalid Position Type:  " + instruction;

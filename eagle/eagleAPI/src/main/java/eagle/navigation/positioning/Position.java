@@ -74,7 +74,7 @@ public abstract class Position {
         return this.yaw;
     }
 
-    public abstract Position add(PositionDisplacement position);
+    public abstract Position add(PositionMetricDisplacement position);
 
     @Override
     public boolean equals(Object obj) {

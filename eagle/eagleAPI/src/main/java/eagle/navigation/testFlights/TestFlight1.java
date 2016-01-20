@@ -3,7 +3,7 @@ package eagle.navigation.testFlights;
 import eagle.Drone;
 import eagle.navigation.TestFlight;
 import eagle.navigation.positioning.Angle;
-import eagle.navigation.positioning.PositionDisplacement;
+import eagle.navigation.positioning.PositionMetricDisplacement;
 import eagle.sdkInterface.SDKAdaptorCallback;
 
 /**
@@ -29,8 +29,8 @@ public class TestFlight1 extends TestFlight {
 
         final int[] result = new int[1];
         //try {
-        getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, 1, new Angle(0), new Angle(0), new Angle(0)), 1000);
-        getDrone().getSDKAdaptor().sdkAdaptorStack.push(new PositionDisplacement(0, 0, -1, new Angle(0), new Angle(0), new Angle(0)), 1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.add(new PositionMetricDisplacement(0, 0, 1, new Angle(0), new Angle(0), new Angle(0)), 1000);
+        getDrone().getSDKAdaptor().sdkAdaptorStack.add(new PositionMetricDisplacement(0, 0, -1, new Angle(0), new Angle(0), new Angle(0)), 1000);
         getDrone().getSDKAdaptor().sdkAdaptorStack.run(new SDKAdaptorCallback() {
             @Override
             public void onResult(boolean booleanResult, String stringResult) {
@@ -38,7 +38,7 @@ public class TestFlight1 extends TestFlight {
                     result[0] = 1;
             }
         });
-        while (getDrone().getSDKAdaptor().sdkAdaptorStack.isAlive()) {
+        while (getDrone().getSDKAdaptor().sdkAdaptorStack.isPaused()) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

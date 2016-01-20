@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Java Logger
+ * Java Log
+ * Eagle API Java logger used to add entries, add/remove log callbacks and store a copy of the log
  *
  * @author Cameron Cross
  * @author Nicholas Alards [7178301@student.swin.edu.au]
@@ -28,7 +29,11 @@ public class Log {
     private static Vector<LogCallback> verboseLogCallback = new Vector<>();
     public static int logLimit = 5000;
 
-
+    /**
+     * Add a log entry
+     * @param tag Log entry Tag
+     * @param message Log entry Message
+     */
     public synchronized static void log(String tag, String message) {
         if (tag != null && message != null) {
             while (log.size() >= logLimit) {
@@ -44,6 +49,11 @@ public class Log {
         }
     }
 
+    /**
+     * Add a callback for a specific tag
+     * @param tag Log entry tag
+     * @param logCallback Callback for log entry tag
+     */
     public synchronized static void addCallback(String tag, LogCallback logCallback) {
         if (logCallBack.containsKey(tag))
             logCallBack.get(tag).add(logCallback);
@@ -55,10 +65,19 @@ public class Log {
         Log.log("LogCallback", "NEW CALLBACK ADDED TO " + tag);
     }
 
+    /**
+     * Add a callback for every tag
+     * @param logCallback Callback for log entries
+     */
     public synchronized static void addVerboseCallback(LogCallback logCallback) {
         verboseLogCallback.add(logCallback);
     }
 
+    /**
+     * Remove a callback for a specific tag
+     * @param tag Log entry tag
+     * @param logCallback Callback associated to the log entry tag
+     */
     public synchronized static void removeCallback(String tag, LogCallback logCallback) {
         if (logCallBack.containsKey(tag)) {
             logCallBack.get(tag).remove(logCallback);
@@ -66,11 +85,19 @@ public class Log {
         }
     }
 
+    /**
+     * Remove a callback for every tag
+     * @param logCallback Callback for log entries
+     */
     public synchronized static void removeVerboseCallback(LogCallback logCallback) {
         if (verboseLogCallback.contains(logCallback))
             verboseLogCallback.remove(logCallback);
     }
 
+    /**
+     * Returns a copy of every log entry in a List
+     * @return Returns a List of every log entry
+     */
     public synchronized static List<String> getLog() {
         if (log instanceof ArrayList)
             return new ArrayList<>(log);
@@ -79,6 +106,11 @@ public class Log {
 
     }
 
+    /**
+     * Set the limit for the amount of log entries
+     * @param logLimit New log entry limit
+     * @return Returns the result of setting the new limit
+     */
     public synchronized static boolean setLogLimit(int logLimit) {
         if (logLimit > 0) {
             if (logLimit >= 50000 && Log.logLimit < 50000) {
@@ -97,6 +129,11 @@ public class Log {
             return false;
     }
 
+    /**
+     * Save the log to file.
+     * @param filename filename including path
+     * @throws IOException
+     */
     public synchronized static void writeLogToFile(String filename) throws IOException {
         PrintWriter output = null;
         try {

@@ -29,7 +29,7 @@ public final class PositionMetric extends Position {
     }
 
     @Override
-    public PositionMetric add(PositionDisplacement position) {
+    public PositionMetric add(PositionMetricDisplacement position) {
         return new PositionMetric(
                 latitude + position.getLatitude(),
                 longitude + position.getLongitude(),
@@ -72,10 +72,10 @@ public final class PositionMetric extends Position {
      * Compare two metric positions
      *
      * @param positionMetric
-     * @return PositionDisplacement needed to move from this position to positionMetric
+     * @return PositionMetricDisplacement needed to move from this position to positionMetric
      */
-    public PositionDisplacement compare(PositionMetric positionMetric) {
-        return new PositionDisplacement(getLatitude() - positionMetric.getLatitude(),
+    public PositionMetricDisplacement compare(PositionMetric positionMetric) {
+        return new PositionMetricDisplacement(getLatitude() - positionMetric.getLatitude(),
                 getLongitude() - positionMetric.getLongitude(),
                 getAltitude() - positionMetric.getAltitude(),
                 getRoll().compare(positionMetric.getRoll()),
