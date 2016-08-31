@@ -1,6 +1,5 @@
 package au.edu.swin.sparrow.Fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
@@ -16,7 +15,7 @@ public abstract class SensorFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach((Activity) context);
+        super.onAttach(context);
         try {
             mListener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
