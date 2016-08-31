@@ -1,10 +1,13 @@
 package eagle.sdkInterface.sensorAdaptors.gpsAdaptors;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 
 import eagle.navigation.positioning.Angle;
 import eagle.navigation.positioning.PositionGPS;
@@ -32,6 +35,10 @@ public class AndroidGPS extends AdaptorGPS {
 
     public boolean connectToSensor() {
         if (this.context == null)
+            return false;
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission( context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             return false;
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager.isProviderEnabled(locationManager.GPS_PROVIDER)) {

@@ -6,8 +6,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 
-import eagle.sdkInterface.sensorAdaptors.AdaptorAccelerometer;
-
 /**
  * Created by Cameron on 28/08/2015.
  */
@@ -18,7 +16,7 @@ public abstract class SensorFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        super.onAttach(context);
+        super.onAttach((Activity) context);
         try {
             mListener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
